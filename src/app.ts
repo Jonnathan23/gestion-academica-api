@@ -1,4 +1,4 @@
-import { CorsConfig, envs } from "@/core/config";
+import { CorsConfig, environmentVariables } from "@/core/config";
 import { AppRouter, Server } from "@/core/server";
 
 (() => {
@@ -9,22 +9,24 @@ import { AppRouter, Server } from "@/core/server";
 async function main() {
     const routes = AppRouter.routes;
     const cors = new CorsConfig({
-        FRONTEND_URL: envs.FRONTEND_URL,
-        argv_2: envs.argv_2,
+        frontendUrl: environmentVariables.frontendUrl,
+        commandLineArgument: environmentVariables.argumentValue,
     })
     /*
         const db = new DatabaseConnection({
-            ulrDatabase: envs.DATABASE_URL,
+            ulrDatabase: environmentVariables.databaseUrl,
             logging: false// envs.DEVELOPMENT ? true : false
         })
     
         await db.connect()
     */
     const server = new Server({
-        port: envs.PORT,
+        port: environmentVariables.listeningPort,
         routes,
         cors
     })
+
+    console.log(environmentVariables.nodeEnvironment)
 
     await server.start();
 

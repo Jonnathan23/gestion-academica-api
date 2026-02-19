@@ -1,7 +1,9 @@
 import { get } from "env-var";
 
-export const envs = {
-    PORT: get('PORT').required().asPortNumber(), 
-    FRONTEND_URL: get('FRONTEND_URL').required().asString(),
-    argv_2: process.argv[2] ?? '',   
-}
+export const environmentVariables = {
+    listeningPort: get('PORT').required().asPortNumber(),
+    frontendUrl: get('FRONTEND_URL').required().asString(),
+    databaseUrl: get('DATABASE_URL').required().asString(),
+    nodeEnvironment: get('NODE_ENV').default('development').asString(),
+    argumentValue: process.argv[2] ?? ''
+};

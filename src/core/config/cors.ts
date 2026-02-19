@@ -1,30 +1,39 @@
-import type { CorsOptions } from "cors";
+import type { CorsOptions } from 'cors';
 
-interface Options {
-    FRONTEND_URL: string
-    argv_2: string
-    //NODE_ENV: string
+interface CorsConfigurationOptions {
+    frontendUrl: string;
+    commandLineArgument: string;
 }
 
 export class CorsConfig {
-    public corsOptions: CorsOptions;
+    public readonly corsOptions: CorsOptions;
 
-    constructor(options: Options) {
-        const { FRONTEND_URL, argv_2 } = options
+    constructor(options: CorsConfigurationOptions) {
+        const { frontendUrl, commandLineArgument } = options;
+
         this.corsOptions = {
-            origin: function (origin, callback) {
-                const whitelist: Array<string | undefined> = [FRONTEND_URL]
-                if (argv_2 === '--api') {
-                    whitelist.push(undefined)
+            origin: function (requestOrigin, callbackFunction) {
+                const allowedOrigins: Array<string | undefined> = [frontendUrl];
+
+                if (commandLineArgument === '--api') {
+                    allowedOrigins.push(undefined);
                 }
 
-                if (whitelist.includes(origin)) {
-                    callback(null, true)
+                if (allowedOrigins.includes(requestOrigin)) {
+                    callbackFunction(null, true);
                 } else {
-                    callback(new Error('No permitido por CORS'))
+                    callbackFunction(new Error('Origin not allowed by CORS policy'));
                 }
-            }
-        }
-    }
+            },
 
+            methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+
+            allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+
+            credentials: true,
+
+            //Soporte para navegadores antiguos (Smart TVs, IE11)
+            optionsSuccessStatus: 200
+        };
+    }
 }

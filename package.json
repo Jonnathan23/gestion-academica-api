@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "bun run --watch src/app.ts",
-    "dev:api": "bun run --watch src/app.ts --api"
+    "dev:api": "bun run --watch src/app.ts --api",
+    "dev:test": "bun --env-file=.env.test run --watch src/app.ts",
+    "test": "bun test"
   },
   "devDependencies": {
     "@types/bun": "latest",
