@@ -5,10 +5,13 @@ RESTful API backend designed to manage the academic and operational ecosystem of
 📝 **Comprehensive Documentation & Architecture Planning:**
 [View the full project documentation on Notion](https://www.notion.so/Backend-30830f3b03918075bb59eacddfbc1ed1?source=copy_link)
 
+📝 **Comprehensive Database Documentation:**
+[View the full database documentation on Notion](https://www.notion.so/Base-de-datos-30b30f3b0391804ca41fd92239fea414?source=copy_link)
+
 ## 🛠️ Tech Stack
 
 This project is built focusing on strict typing, high performance, and clean code practices:
-- **Runtime & Package Manager:** [Bun](https://bun.com) (v1.3+)
+- **Runtime & Package Manager:** [Bun](http://bun.com) (v1.3+)
 - **Language:** TypeScript
 - **Framework:** Express.js
 - **Database:** PostgreSQL
