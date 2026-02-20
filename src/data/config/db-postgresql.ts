@@ -1,4 +1,5 @@
 import { Sequelize } from "sequelize-typescript";
+
 import { ColorsAdapter } from "@/core/utils";
 import { User } from "@/data/models/Shared";
 import { Student, Module, StudentModule } from "@/data/models/AdminDesk";

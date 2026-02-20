@@ -1,7 +1,8 @@
 import { CorsConfig, environmentVariables } from "@/core/config";
 import { AppRouter, Server } from "@/core/server";
-import { DatabaseConnection } from "@/data/config/db";
+import { DatabaseConnection } from "@/data/config/db-postgresql";
 import { ColorsAdapter } from "@/core/utils";
+import { SequelizeErrorHandler } from "@/data/errors/SequelizeErrorHandler";
 
 (() => {
     main();
@@ -18,13 +19,15 @@ async function main() {
     })
 
     const db = new DatabaseConnection({ ulrDatabase: environmentVariables.databaseUrl })
+    const databaseErrorHandler = new SequelizeErrorHandler();
 
     await db.connect()
 
     const server = new Server({
         port: environmentVariables.listeningPort,
         routes,
-        cors
+        cors,
+        databaseErrorHandler
     })
 
     await server.start();
