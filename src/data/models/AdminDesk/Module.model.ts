@@ -29,7 +29,8 @@ class Module extends Model<ModuleAttributes> {
 
     @Column({
         type: DataType.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
     })
     declare mo_name: string;
 
