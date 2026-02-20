@@ -3,13 +3,32 @@
   "module": "index.ts",
   "private": true,
   "scripts": {
-    "dev": "bun run --watch src/index.ts",
-    "dev:api": "bun run --watch src/index.ts --api"
+    "dev": "bun run --watch src/app.ts",
+    "dev:api": "bun run --watch src/app.ts --api",
+    "dev:test": "bun --env-file=.env.test run --watch src/app.ts",
+    "test": "bun test"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/morgan": "^1.9.10",
+    "@types/swagger-ui-express": "^4.1.8"
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "cors": "^2.8.6",
+    "env-var": "^7.5.0",
+    "express": "^5.2.1",
+    "morgan": "^1.10.1",
+    "pg": "^8.18.0",
+    "pg-hstore": "^2.3.4",
+    "reflect-metadata": "^0.2.2",
+    "sequelize": "^6.37.7",
+    "sequelize-typescript": "^2.1.6",
+    "swagger-ui-express": "^5.0.1"
   }
 }
