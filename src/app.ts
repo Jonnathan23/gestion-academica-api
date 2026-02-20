@@ -3,6 +3,7 @@ import { AppRouter, Server } from "@/core/server";
 import { DatabaseConnection } from "@/data/config/db-postgresql";
 import { ColorsAdapter } from "@/core/utils";
 import { SequelizeErrorHandler } from "@/data/errors/SequelizeErrorHandler";
+import { SwaggerConfiguration } from "@/core/config/swagger";
 
 (() => {
     main();
@@ -16,6 +17,7 @@ async function main() {
     const cors = new CorsConfig({
         frontendUrl: environmentVariables.frontendUrl,
         commandLineArgument: environmentVariables.argumentValue,
+        documentationUrl: environmentVariables.documentationUrl
     })
 
     const db = new DatabaseConnection({ ulrDatabase: environmentVariables.databaseUrl })
@@ -23,11 +25,14 @@ async function main() {
 
     await db.connect()
 
+    const documentation = environmentVariables.nodeEnvironment === 'test' ? new SwaggerConfiguration() : undefined;
+
     const server = new Server({
         port: environmentVariables.listeningPort,
         routes,
         cors,
-        databaseErrorHandler
+        databaseErrorHandler,
+        documentation
     })
 
     await server.start();
