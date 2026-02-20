@@ -99,3 +99,61 @@ class AttendanceSession extends Model<AttendanceSessionAttributes> {
 
 
 export default AttendanceSession;
+
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     AttendanceSession:
+ *       type: object
+ *       required:
+ *         - at_se_id
+ *         - at_se_student_id
+ *         - at_se_session_date
+ *         - at_se_entry_time
+ *         - at_se_status
+ *       properties:
+ *         at_se_id:
+ *           type: string
+ *           format: uuid
+ *           description: Identificador único de la sesión de asistencia (Generado automáticamente)
+ *         at_se_student_id:
+ *           type: string
+ *           format: uuid
+ *           description: ID del estudiante al que pertenece la sesión (FK → Students)
+ *         at_se_teacher_id:
+ *           type: string
+ *           format: uuid
+ *           nullable: true
+ *           description: ID del docente que supervisó la sesión (FK → Users, opcional)
+ *         at_se_session_date:
+ *           type: string
+ *           format: date-time
+ *           description: Fecha en que se registró la sesión de asistencia
+ *         at_se_entry_time:
+ *           type: string
+ *           format: date-time
+ *           description: Hora de entrada del estudiante a la sesión
+ *         at_se_exit_time:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
+ *           description: Hora de salida del estudiante de la sesión (nulo si aún está en curso)
+ *         at_se_total_minutes:
+ *           type: integer
+ *           nullable: true
+ *           description: Total de minutos que duró la sesión (calculado al cerrar)
+ *         at_se_status:
+ *           type: string
+ *           enum: [IN_PROGRESS, PENDING_APPROVAL, APPROVED]
+ *           description: Estado actual de la sesión de asistencia
+ *         at_se_created_at:
+ *           type: string
+ *           format: date-time
+ *           description: Fecha y hora de creación del registro
+ *         at_se_updated_at:
+ *           type: string
+ *           format: date-time
+ *           description: Fecha y hora de la última actualización del registro
+ */

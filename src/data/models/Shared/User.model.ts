@@ -3,7 +3,6 @@ import StudentModule from "@/data/models/AdminDesk/StudentModule.model";
 import AttendanceSession from "@/data/models/ClassTrack/AttendanceSession.model";
 import RetentionAlert from "@/data/models/ClassTrack/RetentionAlert.model";
 
-
 const userRoles = {
     ADMIN: "ADMIN",
     TEACHER: "TEACHER"
@@ -76,3 +75,43 @@ class User extends Model<UserAttributes> {
 
 
 export default User;
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - us_id
+ *         - us_full_name
+ *         - us_email
+ *         - us_password_hash
+ *         - us_role
+ *       properties:
+ *         us_id:
+ *           type: string
+ *           format: uuid
+ *           description: Identificador único del usuario (Generado automáticamente)
+ *         us_full_name:
+ *           type: string
+ *           description: Nombre completo del usuario
+ *         us_email:
+ *           type: string
+ *           description: Correo electrónico del usuario (único)
+ *         us_password_hash:
+ *           type: string
+ *           description: Hash de la contraseña del usuario
+ *         us_role:
+ *           type: string
+ *           enum: [ADMIN, TEACHER]
+ *           description: Rol del usuario dentro del sistema
+ *         us_created_at:
+ *           type: string
+ *           format: date-time
+ *           description: Fecha y hora de creación del registro
+ *         us_updated_at:
+ *           type: string
+ *           format: date-time
+ *           description: Fecha y hora de la última actualización del registro
+ */

@@ -53,3 +53,39 @@ class LessonLog extends Model<LessonLogAttributes> {
 
 
 export default LessonLog;
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     LessonLog:
+ *       type: object
+ *       required:
+ *         - le_lo_id
+ *         - le_lo_attendance_session_id
+ *         - le_lo_lesson_number
+ *         - le_lo_notes
+ *       properties:
+ *         le_lo_id:
+ *           type: string
+ *           format: uuid
+ *           description: Identificador único del registro de lección (Generado automáticamente)
+ *         le_lo_attendance_session_id:
+ *           type: string
+ *           format: uuid
+ *           description: ID de la sesión de asistencia a la que pertenece este registro (FK → AttendanceSessions)
+ *         le_lo_lesson_number:
+ *           type: string
+ *           description: Número o identificador de la lección impartida durante la sesión
+ *         le_lo_notes:
+ *           type: string
+ *           description: Observaciones y notas del docente sobre el desarrollo de la lección
+ *         le_lo_created_at:
+ *           type: string
+ *           format: date-time
+ *           description: Fecha y hora de creación del registro
+ *         le_lo_updated_at:
+ *           type: string
+ *           format: date-time
+ *           description: Fecha y hora de la última actualización del registro
+ */

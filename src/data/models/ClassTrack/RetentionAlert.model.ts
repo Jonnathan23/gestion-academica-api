@@ -126,3 +126,77 @@ class RetentionAlert extends Model<RetentionAlertAttributes> {
 
 
 export default RetentionAlert;
+
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     RetentionAlert:
+ *       type: object
+ *       required:
+ *         - re_al_id
+ *         - re_al_student_id
+ *         - re_al_user_id
+ *         - re_al_contact_date
+ *         - re_al_has_responded
+ *         - re_al_days_absent
+ *         - re_al_is_justified
+ *         - re_al_observations
+ *         - re_al_status
+ *       properties:
+ *         re_al_id:
+ *           type: string
+ *           format: uuid
+ *           description: Identificador único de la alerta de retención (Generado automáticamente)
+ *         re_al_student_id:
+ *           type: string
+ *           format: uuid
+ *           description: ID del estudiante al que corresponde la alerta (FK → Students)
+ *         re_al_user_id:
+ *           type: string
+ *           format: uuid
+ *           description: ID del usuario (asesor) que gestionó la alerta (FK → Users)
+ *         re_al_contact_date:
+ *           type: string
+ *           format: date-time
+ *           description: Fecha en que se realizó el contacto con el estudiante
+ *         re_al_has_responded:
+ *           type: boolean
+ *           description: Indica si el estudiante respondió al contacto de retención
+ *         re_al_days_absent:
+ *           type: integer
+ *           description: Número de días que el estudiante ha estado ausente
+ *         re_al_is_justified:
+ *           type: boolean
+ *           description: Indica si la ausencia del estudiante fue justificada
+ *         re_al_justification_reason:
+ *           type: string
+ *           nullable: true
+ *           description: Motivo de justificación de la ausencia (opcional)
+ *         re_al_return_deadline:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
+ *           description: Fecha límite acordada para el regreso del estudiante (opcional)
+ *         re_al_observations:
+ *           type: string
+ *           description: Observaciones generales registradas durante la gestión de la alerta
+ *         re_al_status:
+ *           type: string
+ *           enum: [PENDING, RESOLVED, CLOSED_FROZEN]
+ *           description: Estado actual de la alerta de retención
+ *         re_al_resolution_date:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
+ *           description: Fecha en que la alerta fue resuelta o cerrada (opcional)
+ *         re_al_created_at:
+ *           type: string
+ *           format: date-time
+ *           description: Fecha y hora de creación del registro
+ *         re_al_updated_at:
+ *           type: string
+ *           format: date-time
+ *           description: Fecha y hora de la última actualización del registro
+ */

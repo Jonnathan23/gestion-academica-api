@@ -109,3 +109,58 @@ class Student extends Model<StudentAttributes> {
 
 
 export default Student;
+
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Student:
+ *       type: object
+ *       required:
+ *         - st_id
+ *         - st_identification_card
+ *         - st_full_name
+ *         - st_phone_number
+ *         - st_start_date
+ *         - st_is_graduated
+ *         - st_contract_status
+ *         - st_progress_category
+ *       properties:
+ *         st_id:
+ *           type: string
+ *           format: uuid
+ *           description: Identificador único del estudiante (Generado automáticamente)
+ *         st_identification_card:
+ *           type: string
+ *           description: Cédula de identidad del estudiante (única)
+ *         st_full_name:
+ *           type: string
+ *           description: Nombre completo del estudiante
+ *         st_phone_number:
+ *           type: string
+ *           description: Número de teléfono de contacto del estudiante
+ *         st_start_date:
+ *           type: string
+ *           format: date-time
+ *           description: Fecha de inicio del contrato o inscripción del estudiante
+ *         st_is_graduated:
+ *           type: boolean
+ *           description: Indica si el estudiante ha completado y graduado el programa
+ *         st_contract_status:
+ *           type: string
+ *           enum: [ACTIVE, FROZEN, INACTIVE]
+ *           description: Estado actual del contrato del estudiante
+ *         st_progress_category:
+ *           type: string
+ *           enum: [FAST, MODERATE, SLOW, NOT_ENOUGH_DATA]
+ *           description: Categoría de progreso académico del estudiante
+ *         st_created_at:
+ *           type: string
+ *           format: date-time
+ *           description: Fecha y hora de creación del registro
+ *         st_updated_at:
+ *           type: string
+ *           format: date-time
+ *           description: Fecha y hora de la última actualización del registro
+ */

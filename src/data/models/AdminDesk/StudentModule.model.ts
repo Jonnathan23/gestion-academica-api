@@ -85,3 +85,52 @@ class StudentModule extends Model<StudentModuleAttributes> {
 
 
 export default StudentModule;
+
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     StudentModule:
+ *       type: object
+ *       required:
+ *         - st_mod_id
+ *         - st_mod_student_id
+ *         - st_mod_module_id
+ *         - st_mod_seller_id
+ *         - st_mod_status
+ *         - st_mod_purchase_date
+ *       properties:
+ *         st_mod_id:
+ *           type: string
+ *           format: uuid
+ *           description: Identificador único de la relación estudiante-módulo (Generado automáticamente)
+ *         st_mod_student_id:
+ *           type: string
+ *           format: uuid
+ *           description: ID del estudiante asociado (FK → Students)
+ *         st_mod_module_id:
+ *           type: string
+ *           format: uuid
+ *           description: ID del módulo adquirido (FK → Modules)
+ *         st_mod_seller_id:
+ *           type: string
+ *           format: uuid
+ *           description: ID del usuario (asesor/vendedor) que gestionó la venta (FK → Users)
+ *         st_mod_status:
+ *           type: string
+ *           enum: [ACTIVE, CLOSED, LOCKED]
+ *           description: Estado actual del módulo para el estudiante
+ *         st_mod_purchase_date:
+ *           type: string
+ *           format: date-time
+ *           description: Fecha en que el estudiante adquirió el módulo
+ *         st_mod_created_at:
+ *           type: string
+ *           format: date-time
+ *           description: Fecha y hora de creación del registro
+ *         st_mod_updated_at:
+ *           type: string
+ *           format: date-time
+ *           description: Fecha y hora de la última actualización del registro
+ */
