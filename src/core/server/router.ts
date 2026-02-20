@@ -1,3 +1,4 @@
+import { CustomError } from "@/core/error";
 import { Router } from "express";
 
 
@@ -7,7 +8,8 @@ export class AppRouter {
         const router = Router();
 
         router.get('/', (req, res) => {
-            res.send('Hello World!');
+            
+            throw CustomError.badRequest('Bad request');
         });
 
         return router;
