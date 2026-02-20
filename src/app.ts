@@ -1,6 +1,6 @@
 import { CorsConfig, environmentVariables } from "@/core/config";
 import { AppRouter, Server } from "@/core/server";
-import { DatabaseConnection } from "@/data/db";
+import { DatabaseConnection } from "@/data/config/db";
 import { ColorsAdapter } from "@/core/utils";
 
 (() => {
