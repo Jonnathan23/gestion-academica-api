@@ -1,12 +1,8 @@
 import { Sequelize } from "sequelize-typescript";
 import { ColorsAdapter } from "@/core/utils";
-import User from "@/data/models/Shared/User.model";
-import Student from "@/data/models/AdminDesk/Student.model";
-import Module from "@/data/models/AdminDesk/Module.model";
-import StudentModule from "@/data/models/AdminDesk/StudentModule.model";
-import AttendanceSession from "@/data/models/ClassTrack/AttendanceSession.model";
-import RetentionAlert from "@/data/models/ClassTrack/RetentionAlert.model";
-import LessonLog from "@/data/models/ClassTrack/LessonLog.model";
+import { User } from "@/data/models/Shared";
+import { Student, Module, StudentModule } from "@/data/models/AdminDesk";
+import { AttendanceSession, LessonLog, RetentionAlert } from "@/data/models/ClassTrack";
 
 
 interface Options {
