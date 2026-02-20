@@ -1,8 +1,10 @@
 import express, { Router } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import { ColorsAdapter } from "../utils/adapters/colors";
-import type { CorsConfig } from "../config/cors";
+
+import { ColorsAdapter } from "@/core/utils";
+import type { CorsConfig } from "@/core/config";
+import { globalErrorHandler } from '@/core/middleware';
 
 
 
@@ -34,6 +36,7 @@ export class Server {
         const corsOptions = this.cors.corsOptions
         this.app.use(cors(corsOptions))
         this.app.use(this.routes)
+        this.app.use(globalErrorHandler);
 
         this.app.listen(this.port, () => {
             console.log(ColorsAdapter.setCyanBold(`Server running on port ${this.port}`));

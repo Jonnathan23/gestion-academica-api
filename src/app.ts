@@ -24,9 +24,7 @@ async function main() {
         port: environmentVariables.listeningPort,
         routes,
         cors
-    })
-
-    console.log(environmentVariables.nodeEnvironment)
+    })    
 
     await server.start();
 
