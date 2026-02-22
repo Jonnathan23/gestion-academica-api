@@ -1,0 +1,4 @@
+[test]
+# Use dedicated tsconfig that includes __tests__ and *.test.ts files
+# (the main tsconfig.json intentionally excludes them)
+tsconfig = "./tsconfig.test.json"

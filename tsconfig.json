@@ -11,8 +11,14 @@
     "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": [
+        "src/*"
+      ]
     },
+    // Tipos nativos de Bun para el IDE
+    "types": [
+      "bun-types"
+    ],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     // Bundler mode
@@ -20,14 +26,12 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "noEmit": true,
-
     // Best practices
     "strict": true,
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
-    
     // Some stricter flags (disabled by default)
     "noUnusedLocals": false,
     "noUnusedParameters": false,
@@ -39,8 +43,7 @@
   "exclude": [
     "node_modules",
     "dist",
-    "coverage",
-    "**/__tests__/**/*",
-    "**/*.test.ts"
+    "coverage"
+    // Hemos eliminado las exclusiones de los tests para que TS los lea
   ]
 }
