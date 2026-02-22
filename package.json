@@ -5,8 +5,9 @@
   "scripts": {
     "dev": "bun run --watch src/app.ts",
     "dev:api": "bun run --watch src/app.ts --api",
-    "dev:test": "bun --env-file=.env.test run --watch src/app.ts",
-    "test": "bun test"
+    "dev:test": "bun --env-file=.env.test run --watch src/app.ts --api",
+    "test": "bun test",
+    "test:coverage": "bun test --coverage"
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -19,6 +20,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@types/swagger-jsdoc": "^6.0.4",
     "colors": "^1.4.0",
     "cors": "^2.8.6",
     "env-var": "^7.5.0",
@@ -29,6 +31,7 @@
     "reflect-metadata": "^0.2.2",
     "sequelize": "^6.37.7",
     "sequelize-typescript": "^2.1.6",
+    "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   }
 }

@@ -3,13 +3,14 @@ import type { CorsOptions } from 'cors';
 interface CorsConfigurationOptions {
     frontendUrl: string;
     commandLineArgument: string;
+    documentationUrl: string;
 }
 
 export class CorsConfig {
     public readonly corsOptions: CorsOptions;
 
     constructor(options: CorsConfigurationOptions) {
-        const { frontendUrl, commandLineArgument } = options;
+        const { frontendUrl, commandLineArgument, documentationUrl } = options;
 
         this.corsOptions = {
             origin: function (requestOrigin, callbackFunction) {
@@ -17,6 +18,10 @@ export class CorsConfig {
 
                 if (commandLineArgument === '--api') {
                     allowedOrigins.push(undefined);
+                }
+
+                if (documentationUrl) {
+                    allowedOrigins.push(documentationUrl);
                 }
 
                 if (allowedOrigins.includes(requestOrigin)) {

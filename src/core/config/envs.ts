@@ -4,6 +4,7 @@ export const environmentVariables = {
     listeningPort: get('PORT').required().asPortNumber(),
     frontendUrl: get('FRONTEND_URL').required().asString(),
     databaseUrl: get('DATABASE_URL').required().asString(),
-    nodeEnvironment: get('NODE_ENV').default('development').asString(),
+    nodeEnvironment: get('NODE_ENV').default('development').asString(),    
+    documentationUrl: get('DOCUMENTATION_URL').asString() ?? '',
     argumentValue: process.argv[2] ?? ''
 };

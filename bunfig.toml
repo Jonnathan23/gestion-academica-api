@@ -1,0 +1,3 @@
+[test]
+# Requerir un 75% de cobertura en líneas y funciones
+coverageThreshold = 0.80
