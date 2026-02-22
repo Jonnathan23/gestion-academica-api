@@ -1,4 +1,3 @@
 [test]
-# Use dedicated tsconfig that includes __tests__ and *.test.ts files
-# (the main tsconfig.json intentionally excludes them)
-tsconfig = "./tsconfig.test.json"
+# Requerir un 75% de cobertura en líneas y funciones
+coverageThreshold = 0.80
