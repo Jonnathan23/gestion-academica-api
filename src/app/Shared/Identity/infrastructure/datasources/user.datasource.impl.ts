@@ -41,11 +41,11 @@ export class UserDataSourceImpl implements UserDataSource {
         throw new Error("Method not implemented.");
     }
 
-    async update(user: UpdateUserDto): Promise<UserEntity> {
+    async update(id: string, user: UpdateUserDto): Promise<UserEntity> {
         const { us_full_name, us_email, us_role } = user;
 
         try {
-            const userExist = await User.findOne({ where: { us_email } });
+            const userExist = await User.findOne({ where: { us_id: id } });
             if (!userExist) {
                 throw CustomError.notFound("User not found");
             }

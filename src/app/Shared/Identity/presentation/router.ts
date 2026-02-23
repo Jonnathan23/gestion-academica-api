@@ -13,7 +13,14 @@ export class UserRouter {
         const userRespository = new UserRepositoryImpl(userDatasource);
         const userController = new UserController(userRespository);
 
+        // Posts
         router.post("/", userController.registerUser);
+
+        // Gets
+        router.get("/", userController.findAll);
+
+        // Patchs
+        router.patch("/:id", userController.update);
 
         return router;
     }

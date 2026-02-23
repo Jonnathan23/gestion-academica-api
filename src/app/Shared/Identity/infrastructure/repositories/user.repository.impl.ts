@@ -19,8 +19,8 @@ export class UserRepositoryImpl implements UserRepository {
         return this.userDataSource.login(user);
     }
 
-    update(user: UpdateUserDto): Promise<UserEntity> {
-        return this.userDataSource.update(user);
+    update(id: string, user: UpdateUserDto): Promise<UserEntity> {
+        return this.userDataSource.update(id, user);
     }
 
     changePassword(id: string, password: string): Promise<UserEntity> {
