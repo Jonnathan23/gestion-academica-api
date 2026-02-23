@@ -1,0 +1,1 @@
+export * from '@/app/Shared/Identity/domain/entities/User.entity';

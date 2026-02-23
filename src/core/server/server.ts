@@ -50,7 +50,7 @@ export class Server {
             this.app.use('/docs', this.documentation.serve, this.documentation.setup());
         }
 
-        this.app.use(this.routes);
+        this.app.use('/api', this.routes);
 
         // Pasamos la dependencia al Factory del middleware global
         this.app.use(createGlobalErrorHandler(this.databaseErrorHandler));

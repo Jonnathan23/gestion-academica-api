@@ -2,13 +2,14 @@ import { Column, Table, DataType, Model, HasMany } from "sequelize-typescript";
 import StudentModule from "@/data/models/AdminDesk/StudentModule.model";
 import AttendanceSession from "@/data/models/ClassTrack/AttendanceSession.model";
 import RetentionAlert from "@/data/models/ClassTrack/RetentionAlert.model";
+import type { Optional } from "sequelize";
 
 const userRoles = {
     ADMIN: "ADMIN",
     TEACHER: "TEACHER"
 } as const
 
-export type UserRoles = typeof userRoles[keyof typeof userRoles]
+type UserRoles = typeof userRoles[keyof typeof userRoles]
 
 interface UserAttributes {
     us_id: string;
@@ -16,10 +17,12 @@ interface UserAttributes {
     us_email: string;
     us_password_hash: string;
     us_role: UserRoles;
+    us_is_active: boolean;
     us_created_at: Date;
     us_updated_at: Date;
 }
 
+interface UserCreationAttributes extends Optional<UserAttributes, "us_id" | "us_is_active" | "us_created_at" | "us_updated_at"> {}
 
 @Table({
     tableName: "Users",
@@ -27,7 +30,7 @@ interface UserAttributes {
     createdAt: 'us_created_at',
     updatedAt: 'us_updated_at'
 })
-class User extends Model<UserAttributes> {
+class User extends Model<UserAttributes, UserCreationAttributes> {
     @Column({
         type: DataType.UUID,
         allowNull: false,
@@ -62,6 +65,13 @@ class User extends Model<UserAttributes> {
         allowNull: false
     })
     declare us_role: UserRoles;
+
+    @Column({
+        type: DataType.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
+    })
+    declare us_is_active: boolean;
 
     @HasMany(() => StudentModule, 'st_mod_seller_id')
     declare sold_modules: StudentModule[];
