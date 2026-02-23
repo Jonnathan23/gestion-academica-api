@@ -1,12 +1,14 @@
-import { compareSync, hashSync } from 'bcryptjs';
 
 
 export const BcryptAdapter = {
-    hash(password: string): string {
-        return hashSync(password);
+    async hash(password: string): Promise<string> {
+        return await Bun.password.hash(password, {
+            algorithm: "bcrypt",
+            cost: 10
+        });
     },
 
-    compare(password: string, hashedPassword: string): boolean {
-        return compareSync(password, hashedPassword);
+    async compare(password: string, hashedPassword: string): Promise<boolean> {
+        return await Bun.password.verify(password, hashedPassword);
     }
 }
