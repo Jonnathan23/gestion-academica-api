@@ -1,6 +1,6 @@
 import { UserDataSourceImpl } from "@/app/Shared/Identity/infrastructure/datasources/user.datasource.impl";
 import { UserRepositoryImpl } from "@/app/Shared/Identity/infrastructure/repositories/user.repository.impl";
-import { UserController } from "@/app/Shared/Identity/presentation/User.Controller";
+import { UserController } from "@/app/Shared/Identity/presentation/controllers/User.Controller";
 import { Router } from "express";
 
 

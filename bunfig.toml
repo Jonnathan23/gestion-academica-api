@@ -1,3 +1,9 @@
 [test]
-# Requerir un 75% de cobertura en líneas y funciones
-coverageThreshold = 0.80
+# Ignorar archivos de configuración, modelos de BD y routers en el reporte de cobertura
+coverageIgnore = [
+  "src/data/models/**/*.ts", 
+  "src/core/config/**/*.ts", 
+  "**/*/router.ts",
+  "**/*/*.model.ts"  
+]
+coverageThreshold = 0.8
