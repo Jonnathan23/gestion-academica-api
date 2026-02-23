@@ -2,12 +2,10 @@ import type { Request, Response, NextFunction } from "express";
 
 import type { UserRepository } from "@/app/Shared/Identity/domain/repositories/user.repository";
 import { RegisterUserDto, UpdateUserDto } from "@/app/Shared/Identity/domain/dtos";
-import { RegisterUser } from "@/app/Shared/Identity/application/useCases/registerUser.use-case";
 import { SuccessResponse } from "@/core/utils";
 import { CustomError } from "@/core/error";
-import { UpdateUser } from "@/app/Shared/Identity/application/useCases/updateUser.use-cases";
-import { FindAllUsers } from "@/app/Shared/Identity/application/useCases/findAllUsers.use-case";
 import { UserEntity } from "@/app/Shared/Identity/domain/entities";
+import { ChangePassword, ChangeStateActive, FindAllUsers, FindUserById, RegisterUser, UpdateUser } from "@/app/Shared/Identity/application";
 
 
 export class UserController {
@@ -45,6 +43,59 @@ export class UserController {
             .then(() => {
                 const succesMessage = "User updated successfully";
                 SuccessResponse.ok(res, succesMessage);
+            })
+            .catch(error => { next(error); });
+    }
+
+    login = (req: Request, res: Response, next: NextFunction) => {
+        //TODO: implementar loggin
+    }
+
+    changePassword = (req: Request, res: Response, next: NextFunction) => {
+        const { id } = req.params;
+        const { password } = req.body;
+
+        if (!id) throw CustomError.badRequest("User is required");
+        if (!password) throw CustomError.badRequest("Password is required");
+        if(password.length < 6) throw CustomError.badRequest("Password must be at least 6 characters long");
+
+        const changePassword = new ChangePassword(this.userRepository);
+
+        changePassword.execute(id.toString(), password)
+            .then(() => {
+                const succesMessage = "Password changed successfully";
+                SuccessResponse.ok(res, succesMessage);
+            })
+            .catch(error => { next(error); });
+    }
+
+    changeStateActive = (req: Request, res: Response, next: NextFunction) => {        
+        const { id } = req.params;        
+
+        if (!id) throw CustomError.badRequest("User is required");        
+
+        const changeStateActive = new ChangeStateActive(this.userRepository);
+
+        changeStateActive.execute(id.toString())
+            .then(() => {
+                const succesMessage = "State changed successfully";
+                SuccessResponse.ok(res, succesMessage);
+            })
+            .catch(error => { next(error); });
+    }
+    
+
+    findById = (req: Request, res: Response, next: NextFunction) => {
+        const { id } = req.params;
+
+        if (!id) throw CustomError.badRequest("User is required");
+
+        const findById = new FindUserById(this.userRepository);
+
+        findById.execute(id.toString())
+            .then((user) => {
+                const succesMessage = "User found successfully";
+                SuccessResponse.ok<UserEntity>(res, succesMessage, user);
             })
             .catch(error => { next(error); });
     }

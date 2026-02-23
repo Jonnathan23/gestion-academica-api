@@ -18,9 +18,12 @@ export class UserRouter {
 
         // Gets
         router.get("/", userController.findAll);
+        router.get('/:id', userController.findById);
 
         // Patchs
         router.patch("/:id", userController.update);
+        router.patch('/:id/state', userController.changeStateActive);
+        router.patch('/:id/password', userController.changePassword);
 
         return router;
     }

@@ -24,7 +24,7 @@ export class UserDataSourceImpl implements UserDataSource {
             if (userExist) {
                 throw CustomError.badRequest("User already exists");
             }
-            const passwordHash = this.hashFunction(us_password_hash);
+            const passwordHash = await this.hashFunction(us_password_hash);
 
             const user = await User.create({ us_full_name, us_email, us_password_hash: passwordHash, us_role });
 
@@ -70,7 +70,7 @@ export class UserDataSourceImpl implements UserDataSource {
                 throw CustomError.notFound("User not found");
             }
 
-            const passwordHash = this.hashFunction(password);
+            const passwordHash = await this.hashFunction(password);
             await userExist.update({ us_password_hash: passwordHash });
 
             return this.userEntityFromObject(userExist);
