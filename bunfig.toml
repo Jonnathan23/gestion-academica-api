@@ -4,6 +4,6 @@ coverageIgnore = [
   "src/data/models/**/*.ts", 
   "src/core/config/**/*.ts", 
   "**/*/router.ts",
-  "**/*/*.model.ts"  
+  "**/*.model.ts"  
 ]
 coverageThreshold = 0.8
