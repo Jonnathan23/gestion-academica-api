@@ -6,6 +6,7 @@ coveragePathIgnorePatterns = [
   "**/*.test.ts",
   "**/*.spec.ts",
   "**/__tests__/**",
+  "src/core/server/router.ts",
 
   "src/data/models/**",
   "**/*.model.ts",

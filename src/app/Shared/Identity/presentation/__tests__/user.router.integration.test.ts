@@ -7,6 +7,7 @@ import { environmentVariables } from "@/core/config/envs";
 import { DatabaseConnection } from "@/data/config/db-postgresql";
 import { createGlobalErrorHandler } from "@/core/middleware";
 import { SequelizeErrorHandler } from "@/data/errors/SequelizeErrorHandler";
+import { testGlobalErrorHandler } from "@/__test__/configTest";
 
 // ------------------------------------------------------------------ //
 // Micro-application: real router + real error handler
@@ -14,7 +15,7 @@ import { SequelizeErrorHandler } from "@/data/errors/SequelizeErrorHandler";
 const testingApp = express();
 testingApp.use(express.json());
 testingApp.use("/api/users", UserRouter.routes);
-testingApp.use(createGlobalErrorHandler(new SequelizeErrorHandler()));
+testingApp.use(testGlobalErrorHandler());
 
 // ------------------------------------------------------------------ //
 // Database: force-sync drops and recreates all tables before the suite

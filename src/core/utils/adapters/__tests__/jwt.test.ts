@@ -1,26 +1,7 @@
-import { describe, test, expect, mock } from "bun:test";
+import { describe, test, expect } from "bun:test";
+import jwt from "jsonwebtoken";
 
-// ------------------------------------------------------------------ //
-// IMPORTANT: mock.module must be called BEFORE importing JwtAdapter,
-// because jwt.ts reads JWT_SEED from environmentVariables at module
-// evaluation time. The mock intercepts that import first.
-// ------------------------------------------------------------------ //
-const TEST_JWT_SEED = "super-secret-test-seed-for-unit-tests";
-
-mock.module("@/core/config", () => ({
-    environmentVariables: {
-        JWT_SEED: TEST_JWT_SEED,
-        listeningPort: 3000,
-        frontendUrl: "http://localhost:3000",
-        databaseUrl: "postgres://localhost/test",
-        nodeEnvironment: "test",
-        documentationUrl: "",
-        argumentValue: "",
-    },
-}));
-
-// Import AFTER the mock is registered
-const { JwtAdapter } = await import("@/core/utils/adapters/jwt");
+import { JwtAdapter } from "@/core/utils/adapters/jwt";
 
 // ------------------------------------------------------------------ //
 // Test interfaces
@@ -124,11 +105,11 @@ describe("JwtAdapter", () => {
         });
 
         test("should return null for a token signed with a different secret", async () => {
-            // Manually craft a token with a different seed using jsonwebtoken
-            const jwt = await import("jsonwebtoken");
-            const foreignToken = jwt.default.sign(validPayload, "totally-different-secret", {
-                expiresIn: "1h",
-            });
+            const foreignToken = jwt.sign(
+                { ...validPayload },
+                "totally-different-secret",
+                { expiresIn: "1h" }
+            );
 
             const result = await JwtAdapter.validateToken<UserTokenPayload>(foreignToken);
 
@@ -136,11 +117,14 @@ describe("JwtAdapter", () => {
         });
 
         test("should return null for a structurally-valid but expired token", async () => {
-            // Generate a token that expires immediately (1 ms in the past)
-            const jwt = await import("jsonwebtoken");
-            const expiredToken = jwt.default.sign(validPayload, TEST_JWT_SEED, {
-                expiresIn: -1,
-            });
+            // We need the real JWT_SEED to craft an expired token that would
+            // otherwise be valid. Import it from the real config.
+            const { environmentVariables } = await import("@/core/config");
+            const expiredToken = jwt.sign(
+                { ...validPayload },
+                environmentVariables.JWT_SEED,
+                { expiresIn: -1 }
+            );
 
             const result = await JwtAdapter.validateToken<UserTokenPayload>(expiredToken);
 
