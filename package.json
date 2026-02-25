@@ -7,7 +7,9 @@
     "dev:api": "bun run --watch src/app.ts --api",
     "dev:test": "bun --env-file=.env.test run --watch src/app.ts --api",
     "test": "bun test",
-    "test:coverage": "bun test --coverage"
+    "test:integration": "bun test ./**/*.integration.test.ts",
+    "test:unit": "bun test --exclude ./**/*.integration.test.ts",
+    "test:coverage": "bun test --coverage --exclude ./**/*.integration.test.ts"
   },
   "devDependencies": {
     "@types/bcryptjs": "^3.0.0",
@@ -16,7 +18,9 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/morgan": "^1.9.10",
-    "@types/swagger-ui-express": "^4.1.8"
+    "@types/supertest": "^6.0.3",
+    "@types/swagger-ui-express": "^4.1.8",
+    "supertest": "^7.2.2"
   },
   "peerDependencies": {
     "typescript": "^5"

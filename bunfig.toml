@@ -1,9 +1,14 @@
 [test]
-# Ignorar archivos de configuración, modelos de BD y routers en el reporte de cobertura
-coverageIgnore = [
-  "src/data/models/**/*.ts", 
-  "src/core/config/**/*.ts", 
-  "**/*/router.ts",
-  "**/*.model.ts"  
-]
 coverageThreshold = 0.8
+
+# Ignorar archivos
+coveragePathIgnorePatterns = [
+  "**/*.test.ts",
+  "**/*.spec.ts",
+  "**/__tests__/**",
+
+  "src/data/models/**",
+  "**/*.model.ts",
+
+  "src/core/config/**"  
+]
