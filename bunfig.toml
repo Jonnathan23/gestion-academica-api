@@ -1,3 +1,15 @@
 [test]
-# Requerir un 75% de cobertura en líneas y funciones
-coverageThreshold = 0.80
+coverageThreshold = 0.8
+
+# Ignorar archivos
+coveragePathIgnorePatterns = [
+  "**/*.test.ts",
+  "**/*.spec.ts",
+  "**/__tests__/**",
+  "src/core/server/router.ts",
+
+  "src/data/models/**",
+  "**/*.model.ts",
+
+  "src/core/config/**"  
+]

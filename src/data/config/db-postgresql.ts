@@ -6,46 +6,52 @@ import { Student, Module, StudentModule } from "@/data/models/AdminDesk";
 import { AttendanceSession, LessonLog, RetentionAlert } from "@/data/models/ClassTrack";
 
 
-interface Options {
-    ulrDatabase: string
-    logging?: boolean
+interface DatabaseConnectionOptions {
+    databaseUrl: string; // Ojo: tenías un pequeño typo (ulrDatabase)
+    enableLogging?: boolean;
+    forceSynchronization?: boolean; // Lo inyectamos como configuración
 }
 
 export class DatabaseConnection {
-    private readonly db: Sequelize;
+    
+    private readonly sequelizeInstance: Sequelize;
+    private readonly forceSynchronization: boolean;
 
-    constructor({ ulrDatabase, logging = false }: Options) {
+    constructor(options: DatabaseConnectionOptions) {
+        const { databaseUrl, enableLogging = false, forceSynchronization = false } = options;
 
-        const db = new Sequelize(ulrDatabase, {
+        this.sequelizeInstance = new Sequelize(databaseUrl, {
             models: [
-                User, //Shared
-                Student, Module, StudentModule, //AdminDesk
-                AttendanceSession, RetentionAlert, LessonLog //ClassTrack
+                User,
+                Student, Module, StudentModule,
+                AttendanceSession, RetentionAlert, LessonLog
             ],
-            logging: logging
-        })
+            logging: enableLogging
+        });
 
-        this.db = db
+        this.forceSynchronization = forceSynchronization;
     }
 
-    async connect(force: boolean = false) {
-        console.log(ColorsAdapter.setYellow('Conectando a la BD...\n'))
+    async connect(): Promise<void> {
+        console.log(ColorsAdapter.setYellow('Connecting to the database...\n'));
         try {
-            await this.db.authenticate()
-            await this.db.sync({ force })
-            console.log(ColorsAdapter.setBlueBold('Conexion exitosa a la BD'))
+            await this.sequelizeInstance.authenticate();
+            
+            // Usamos la configuración inyectada
+            await this.sequelizeInstance.sync({ force: this.forceSynchronization });
+            
+            console.log(ColorsAdapter.setBlueBold('Successful connection to the database'));
         } catch (error) {
-            console.log(ColorsAdapter.setRedBold('Error al conectar a la BD'))
-            console.log(error)
+            console.log(ColorsAdapter.setRedBold('Error connecting to the database'));
+            console.log(error);
         }
     }
 
-    async disconnect() {
-        await this.db.close()
+    async disconnect(): Promise<void> {
+        await this.sequelizeInstance.close();
     }
 
-    getConnection() {
-        return this.db
+    getConnection(): Sequelize {
+        return this.sequelizeInstance;
     }
-
 }

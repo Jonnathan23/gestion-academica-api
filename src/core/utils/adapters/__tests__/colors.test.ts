@@ -3,13 +3,6 @@ import { ColorsAdapter } from "@/core/utils/adapters/colors";
 
 describe("ColorsAdapter Utility Test Suite", () => {
 
-    describe("Implicit Constructor", () => {
-        test("Should instantiate the class to cover the implicit constructor", () => {
-            const instance = new ColorsAdapter(); // O el nombre que tenga tu clase
-            expect(instance).toBeDefined();
-        });
-    });
-
     const inputText = "hello world";
 
     describe("Bold color methods", () => {

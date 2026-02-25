@@ -20,10 +20,17 @@ async function main() {
         documentationUrl: environmentVariables.documentationUrl
     })
 
-    const db = new DatabaseConnection({ ulrDatabase: environmentVariables.databaseUrl })
-    const databaseErrorHandler = new SequelizeErrorHandler();
+    const isTestEnvironment = environmentVariables.nodeEnvironment === 'test';
 
-    await db.connect()
+    const databaseConnection = new DatabaseConnection({ 
+        databaseUrl: environmentVariables.databaseUrl,
+        forceSynchronization: isTestEnvironment
+    });
+
+    await databaseConnection.connect()
+
+
+    const databaseErrorHandler = new SequelizeErrorHandler();
 
     const documentation = environmentVariables.nodeEnvironment === 'test' ? new SwaggerConfiguration() : undefined;
 
