@@ -15,8 +15,6 @@ export class UserRouter {
         const userRespository = new UserRepositoryImpl(userDatasource);
         const userController = new UserController(userRespository);
 
-
-
         // Posts
         router.post("/",
             AuthMiddleware.validateJWT,
