@@ -1,11 +1,11 @@
 import type { Request, Response, NextFunction } from "express";
 
 import type { UserRepository } from "@/app/Shared/Identity/domain/repositories/user.repository";
-import { RegisterUserDto, UpdateUserDto } from "@/app/Shared/Identity/domain/dtos";
+import { LoginUserDto, RegisterUserDto, UpdateUserDto } from "@/app/Shared/Identity/domain/dtos";
 import { SuccessResponse } from "@/core/utils";
 import { CustomError } from "@/core/error";
 import { UserEntity } from "@/app/Shared/Identity/domain/entities";
-import { ChangePassword, ChangeStateActive, FindAllUsers, FindUserById, RegisterUser, UpdateUser } from "@/app/Shared/Identity/application";
+import { ChangePassword, ChangeStateActive, FindAllUsers, FindUserById, LoginUser, RegisterUser, UpdateUser } from "@/app/Shared/Identity/application";
 
 
 export class UserController {
@@ -48,7 +48,18 @@ export class UserController {
     }
 
     login = (req: Request, res: Response, next: NextFunction) => {
-        //TODO: implementar loggin
+        const [error, loginUserDto] = LoginUserDto.create(req.body);
+
+        if (error) throw CustomError.badRequest(error);
+
+        const loginUser = new LoginUser(this.userRepository);
+
+        loginUser.execute(loginUserDto!)
+            .then((user) => {
+                const succesMessage = "User logged in successfully";
+                SuccessResponse.ok(res, succesMessage, user);
+            })
+            .catch(error => { next(error); });
     }
 
     changePassword = (req: Request, res: Response, next: NextFunction) => {

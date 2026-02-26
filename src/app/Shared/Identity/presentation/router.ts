@@ -15,6 +15,7 @@ export class UserRouter {
 
         // Posts
         router.post("/", userController.registerUser);
+        router.post("/login", userController.login);
 
         // Gets
         router.get("/", userController.findAll);
