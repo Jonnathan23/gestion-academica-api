@@ -1,7 +1,9 @@
+import { Router } from "express";
+
 import { UserDataSourceImpl } from "@/app/Shared/Identity/infrastructure/datasources/user.datasource.impl";
 import { UserRepositoryImpl } from "@/app/Shared/Identity/infrastructure/repositories/user.repository.impl";
 import { UserController } from "@/app/Shared/Identity/presentation/controllers/User.Controller";
-import { Router } from "express";
+import { AuthMiddleware } from "@/core/middleware";
 
 
 export class UserRouter {
@@ -13,18 +15,41 @@ export class UserRouter {
         const userRespository = new UserRepositoryImpl(userDatasource);
         const userController = new UserController(userRespository);
 
+
+
         // Posts
-        router.post("/", userController.registerUser);
+        router.post("/",
+            AuthMiddleware.validateJWT,
+            userController.registerUser
+        );
+        
         router.post("/login", userController.login);
 
         // Gets
-        router.get("/", userController.findAll);
-        router.get('/:id', userController.findById);
+        router.get("/",
+            AuthMiddleware.validateJWT,
+            userController.findAll);
+
+        router.get('/:id',
+            AuthMiddleware.validateJWT,
+            userController.findById
+        );
 
         // Patchs
-        router.patch("/:id", userController.update);
-        router.patch('/:id/state', userController.changeStateActive);
-        router.patch('/:id/password', userController.changePassword);
+        router.patch("/:id",
+            AuthMiddleware.validateJWT,
+            userController.update
+        );
+
+        router.patch('/:id/state',
+            AuthMiddleware.validateJWT,
+            userController.changeStateActive
+        );
+
+        router.patch('/:id/password',
+            AuthMiddleware.validateJWT,
+            userController.changePassword
+        );
 
         return router;
     }

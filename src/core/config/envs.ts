@@ -7,5 +7,6 @@ export const environmentVariables = {
     nodeEnvironment: get('NODE_ENV').default('development').asString(),
     documentationUrl: get('DOCUMENTATION_URL').asString() ?? '',
     JWT_SEED: get('JWT_SEED').required().asString(),
+    JWT_STUDENT_SEED: get('JWT_STUDENT_SEED').required().asString(),
     argumentValue: process.argv[2] ?? ''
 };
