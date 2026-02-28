@@ -1,11 +1,11 @@
 import { Op } from "sequelize";
 
 import type { StudentDataSource } from "@/app/AdminDesk/students/domain/datasource/student.datasource";
-import type { RegisterStudentDto, StudentEntity } from "@/app/AdminDesk/students/domain";
+import type { RegisterStudentDto, UpdateStudentDto, ChangeContractStatusDto, StudentEntity } from "@/app/AdminDesk/students/domain";
 import { StudentMapper } from "@/app/AdminDesk/students/infrastructure/mappers/student.mapper";
 import { CustomError } from "@/core/error";
 import { Student } from "@/data/models/AdminDesk";
-import { studentContractStatus, studentProgressCategory} from "@/app/AdminDesk/students/domain/interfaces/Students.interface";
+import { studentContractStatus, studentProgressCategory } from "@/app/AdminDesk/students/domain/interfaces/Students.interface";
 
 
 
@@ -55,6 +55,59 @@ export class StudentDataSourceImpl implements StudentDataSource {
             });
 
             return students.map(student => this.studentEntityFromObject(student));
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async update(id: string, dto: UpdateStudentDto): Promise<StudentEntity> {
+        try {
+            const student = await Student.findByPk(id);
+            if (!student) throw CustomError.notFound("Student not found");
+
+            await student.update(dto.value);
+
+            return this.studentEntityFromObject(student);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async changeContractStatus(id: string, dto: ChangeContractStatusDto): Promise<StudentEntity> {
+        try {
+            const { contractStatus } = dto;
+            const student = await Student.findByPk(id);
+            if (!student) throw CustomError.notFound("Student not found");
+
+            await student.update({ st_contract_status: contractStatus });
+
+            return this.studentEntityFromObject(student);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async toggleGraduated(id: string): Promise<StudentEntity> {
+        try {
+            const student = await Student.findByPk(id);
+            if (!student) throw CustomError.notFound("Student not found");
+
+            await student.update({ st_is_graduated: !student.st_is_graduated });
+
+            return this.studentEntityFromObject(student);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async deactivate(id: string): Promise<StudentEntity> {
+        try {
+            const student = await Student.findByPk(id);
+            if (!student) throw CustomError.notFound("Student not found");
+
+            await student.update({ st_contract_status: studentContractStatus.INACTIVE });
+
+            return this.studentEntityFromObject(student);
         } catch (error) {
             throw error;
         }

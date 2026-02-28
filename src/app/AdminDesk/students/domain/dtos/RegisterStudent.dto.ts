@@ -19,6 +19,7 @@ export class RegisterStudentDto {
 
         if (identificationCard.length !== 10) return ['Invalid identificationCard'];
         if (phoneNumber.length !== 10) return ['Invalid phoneNumber'];
+        if(fullName.length < 3) return ['Invalid fullName'];
         if (!Validators.isIdentificationCard(identificationCard)) return ['Invalid identificationCard'];
         if (!Validators.isPhoneNumber(phoneNumber)) return ['Invalid phoneNumber'];
 

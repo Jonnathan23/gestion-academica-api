@@ -3,7 +3,7 @@ import { Router } from "express";
 import { StudentDataSourceImpl } from "@/app/AdminDesk/students/infrastructure/datasource/student.datasource.impl";
 import { StudentRepositoryImpl } from "@/app/AdminDesk/students/infrastructure/repositories/student.repository.impl";
 import { StudentController } from "@/app/AdminDesk/students/presentation/controllers/Student.Controller";
-import { AuthMiddleware, RoleMiddleware } from "@/core/middleware";
+import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
 
 export class StudentsRouter {
 
@@ -23,6 +23,20 @@ export class StudentsRouter {
 
         // GET /search?q=nombre_o_ci
         router.get("/search", studentController.search);
+
+        router.param('id', VerifyUUID.validate);
+
+        // PATCH /:id
+        router.patch("/:id", studentController.update);
+
+        // PATCH /:id/contract-status
+        router.patch("/:id/contract-status", studentController.changeContractStatus);
+
+        // PATCH /:id/graduated
+        router.patch("/:id/graduated", studentController.toggleGraduated);
+
+        // PATCH /:id/deactivate
+        router.patch("/:id/deactivate", studentController.deactivate);
 
         return router;
     }
