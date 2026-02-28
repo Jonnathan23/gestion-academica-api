@@ -1,7 +1,7 @@
 import type { ModuleDataSource } from "@/app/AdminDesk/modules/domain/datasource/module.datasource";
 import type { CreateModuleDto, UpdateModuleDto } from "@/app/AdminDesk/modules/domain/dtos";
 import type { ModuleEntity } from "@/app/AdminDesk/modules/domain/entities/Module.entity";
-import { ModuleMapper } from "@/app/AdminDesk/modules/infrastructure/mapprers/module.mapper";
+import { ModuleMapper } from "@/app/AdminDesk/modules/infrastructure/mappers/module.mapper";
 import { CustomError } from "@/core/error";
 import { Module } from "@/data/models/AdminDesk";
 
@@ -54,17 +54,13 @@ export class ModuleDataSourceImpl implements ModuleDataSource {
     }
 
     async updateModule(id: string, module: UpdateModuleDto): Promise<void> {
-        const { mo_name, mo_description } = module
         try {
             const moduleExist = await Module.findOne({ where: { mo_id: id } });
             if (!moduleExist) {
                 throw CustomError.notFound("Module not found");
             }
 
-            await moduleExist.update({
-                mo_name: mo_name ?? moduleExist.mo_name,
-                mo_description: mo_description ?? moduleExist.mo_description
-            })
+            await moduleExist.update(module.values)
 
         } catch (error) {
             throw error;

@@ -66,11 +66,7 @@ export class UserDataSourceImpl implements UserDataSource {
                 throw CustomError.notFound("User not found");
             }
 
-            await userExist.update({
-                us_full_name: us_full_name ? us_full_name : userExist.us_full_name,
-                us_email: us_email ? us_email : userExist.us_email,
-                us_role: us_role ? us_role : userExist.us_role
-            })
+            await userExist.update(user.values)
 
             return this.userEntityFromObject(userExist);
 

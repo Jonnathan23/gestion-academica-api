@@ -12,7 +12,7 @@ const studentContractStatus = {
     INACTIVE: "INACTIVE"
 } as const
 
-export type StudentContractStatus = typeof studentContractStatus[keyof typeof studentContractStatus]
+type StudentContractStatus = typeof studentContractStatus[keyof typeof studentContractStatus]
 
 const studentProgressCategory = {
     FAST: "FAST",
@@ -21,7 +21,7 @@ const studentProgressCategory = {
     NOT_ENOUGH_DATA: "NOT_ENOUGH_DATA"
 } as const
 
-export type StudentProgressCategory = typeof studentProgressCategory[keyof typeof studentProgressCategory]
+type StudentProgressCategory = typeof studentProgressCategory[keyof typeof studentProgressCategory]
 
 interface StudentAttributes {
     st_id: string;
@@ -36,6 +36,7 @@ interface StudentAttributes {
     st_updated_at: Date;
 }
 
+interface StudentCreationAttributes extends Omit<StudentAttributes, "st_id" | "st_created_at" | "st_updated_at"> { }
 
 @Table({
     tableName: "Students",
@@ -43,7 +44,7 @@ interface StudentAttributes {
     createdAt: 'st_created_at',
     updatedAt: 'st_updated_at'
 })
-class Student extends Model<StudentAttributes> {
+class Student extends Model<StudentAttributes, StudentCreationAttributes> {
     @Column({
         type: DataType.UUID,
         allowNull: false,

@@ -20,5 +20,17 @@ export const Validators = {
         const uuidRegex: RegExp = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
         return uuidRegex.test(identifier);
+    },
+
+    isIdentificationCard: (identificationCard: string): boolean => {
+        const identificationCardRegex: RegExp = /^[0-9]{10}$/;
+        return identificationCardRegex.test(identificationCard);
+    },
+
+    isPhoneNumber: (phoneNumber: string): boolean => {
+        const phoneNumberRegex: RegExp = /^[0-9]{10}$/;
+        return phoneNumberRegex.test(phoneNumber);
     }
+
+    
 };

@@ -23,6 +23,8 @@ interface StudentModuleAttributes {
     st_mod_updated_at: Date;
 }
 
+interface StudentModuleCreationAttributes extends Omit<StudentModuleAttributes, "st_mod_id" | "st_mod_created_at" | "st_mod_updated_at"> { }
+
 
 @Table({
     tableName: "StudentModules",
@@ -30,7 +32,7 @@ interface StudentModuleAttributes {
     createdAt: 'st_mod_created_at',
     updatedAt: 'st_mod_updated_at'
 })
-class StudentModule extends Model<StudentModuleAttributes> {
+class StudentModule extends Model<StudentModuleAttributes, StudentModuleCreationAttributes> {
     @Column({
         type: DataType.UUID,
         allowNull: false,

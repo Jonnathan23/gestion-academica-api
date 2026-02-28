@@ -1,0 +1,16 @@
+export const studentContractStatus = {
+    ACTIVE: "ACTIVE",
+    FROZEN: "FROZEN",
+    INACTIVE: "INACTIVE"
+} as const
+
+export type StudentContractStatus = typeof studentContractStatus[keyof typeof studentContractStatus]
+
+export const studentProgressCategory = {
+    FAST: "FAST",
+    MODERATE: "MODERATE",
+    SLOW: "SLOW",
+    NOT_ENOUGH_DATA: "NOT_ENOUGH_DATA"
+} as const
+
+export type StudentProgressCategory = typeof studentProgressCategory[keyof typeof studentProgressCategory]
