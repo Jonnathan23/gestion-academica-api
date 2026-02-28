@@ -1,4 +1,5 @@
-import { userRoles } from "@/app/Shared/Identity/domain/entities/User.entity";
+import { userRoles } from "@/core/interfaces";
+
 
 
 export const Validators = {

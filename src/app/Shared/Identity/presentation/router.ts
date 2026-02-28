@@ -3,7 +3,7 @@ import { Router } from "express";
 import { UserDataSourceImpl } from "@/app/Shared/Identity/infrastructure/datasources/user.datasource.impl";
 import { UserRepositoryImpl } from "@/app/Shared/Identity/infrastructure/repositories/user.repository.impl";
 import { UserController } from "@/app/Shared/Identity/presentation/controllers/User.Controller";
-import { AuthMiddleware, VerifyUUID } from "@/core/middleware";
+import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
 
 
 
@@ -18,39 +18,29 @@ export class UserRouter {
 
         router.param('id', VerifyUUID.validate);
 
-        // Posts
-        router.post("/",
-            AuthMiddleware.validateJWT,
-            userController.registerUser
-        );
-
+        // 🔓 RUTAS PÚBLICAS
         router.post("/login", userController.login);
 
-        // Gets
-        router.get("/",
-            AuthMiddleware.validateJWT,
-            userController.findAll);
+        // 🔐 RUTAS PRIVADAS (Solo Usuarios Logueados)
+        router.get("/:id", AuthMiddleware.validateJWT, userController.findById);
+        router.patch("/:id/password", AuthMiddleware.validateJWT, userController.changePassword);
 
-        router.get('/:id',
-            AuthMiddleware.validateJWT,
-            userController.findById
-        );
+        // 🛑 RUTAS SÚPER PRIVADAS (Solo Administradores)
+        //* Posts
+        /**
+         * TODO: Agregar validaciones para registrar usuarios
+         * * Preguntar al administrador:
+         * ? ¿Como desea permitir el registro de usuarios?
+         * ? ¿Debe tener doble verificación?
+         */
+        router.post("/", [AuthMiddleware.validateJWT, RoleMiddleware.isAdmin], userController.registerUser);
 
-        // Patchs
-        router.patch("/:id",
-            AuthMiddleware.validateJWT,
-            userController.update
-        );
+        //* Gets
+        router.get("/", [AuthMiddleware.validateJWT, RoleMiddleware.isAdmin], userController.findAll);
 
-        router.patch('/:id/state',
-            AuthMiddleware.validateJWT,
-            userController.changeStateActive
-        );
-
-        router.patch('/:id/password',
-            AuthMiddleware.validateJWT,
-            userController.changePassword
-        );
+        //* Patches
+        router.patch("/:id", [AuthMiddleware.validateJWT, RoleMiddleware.isAdmin], userController.update);
+        router.patch("/:id/state", [AuthMiddleware.validateJWT, RoleMiddleware.isAdmin], userController.changeStateActive);
 
         return router;
     }
