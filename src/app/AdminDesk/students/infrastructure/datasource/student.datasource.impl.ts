@@ -1,0 +1,62 @@
+import { Op } from "sequelize";
+
+import type { StudentDataSource } from "@/app/AdminDesk/students/domain/datasource/student.datasource";
+import type { RegisterStudentDto, StudentEntity } from "@/app/AdminDesk/students/domain";
+import { StudentMapper } from "@/app/AdminDesk/students/infrastructure/mappers/student.mapper";
+import { CustomError } from "@/core/error";
+import { Student } from "@/data/models/AdminDesk";
+import { studentContractStatus, studentProgressCategory} from "@/app/AdminDesk/students/domain/interfaces/Students.interface";
+
+
+
+type studentEntityFromObject = typeof StudentMapper.studentModelToEntity;
+
+export class StudentDataSourceImpl implements StudentDataSource {
+
+    constructor(
+        private readonly studentEntityFromObject: studentEntityFromObject = StudentMapper.studentModelToEntity
+    ) { }
+
+    async register(dto: RegisterStudentDto): Promise<StudentEntity> {
+        const { identificationCard, fullName, phoneNumber, startDate } = dto;
+        try {
+            const studentExist = await Student.findOne({ where: { st_identification_card: identificationCard } });
+            if (studentExist) {
+                throw CustomError.badRequest("Student already exists with that identification card");
+            }
+
+            const newStudent = await Student.create({
+                st_identification_card: identificationCard,
+                st_full_name: fullName,
+                st_phone_number: phoneNumber,
+                st_start_date: startDate,
+                st_contract_status: studentContractStatus.ACTIVE,
+                st_progress_category: studentProgressCategory.NOT_ENOUGH_DATA,
+                st_is_graduated: false
+            });
+
+            return this.studentEntityFromObject(newStudent);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async search(query: string): Promise<StudentEntity[]> {
+        try {
+            const searchCondition = query ? {
+                [Op.or]: [
+                    { st_identification_card: { [Op.iLike]: `%${query}%` } },
+                    { st_full_name: { [Op.iLike]: `%${query}%` } }
+                ]
+            } : {};
+
+            const students = await Student.findAll({
+                where: searchCondition
+            });
+
+            return students.map(student => this.studentEntityFromObject(student));
+        } catch (error) {
+            throw error;
+        }
+    }
+}

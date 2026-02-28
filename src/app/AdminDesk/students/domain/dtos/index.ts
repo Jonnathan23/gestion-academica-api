@@ -1,0 +1,1 @@
+export * from '@/app/AdminDesk/students/domain/dtos/RegisterStudent.dto';

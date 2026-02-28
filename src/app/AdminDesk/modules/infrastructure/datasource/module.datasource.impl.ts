@@ -1,7 +1,7 @@
 import type { ModuleDataSource } from "@/app/AdminDesk/modules/domain/datasource/module.datasource";
 import type { CreateModuleDto, UpdateModuleDto } from "@/app/AdminDesk/modules/domain/dtos";
 import type { ModuleEntity } from "@/app/AdminDesk/modules/domain/entities/Module.entity";
-import { ModuleMapper } from "@/app/AdminDesk/modules/infrastructure/mapprers/module.mapper";
+import { ModuleMapper } from "@/app/AdminDesk/modules/infrastructure/mappers/module.mapper";
 import { CustomError } from "@/core/error";
 import { Module } from "@/data/models/AdminDesk";
 
