@@ -1,4 +1,5 @@
-import type { UserRoles } from "@/app/Shared/Identity/domain/entities";
+
+import type { UserRoles } from "@/core/interfaces";
 import { Validators } from "@/core/utils";
 
 

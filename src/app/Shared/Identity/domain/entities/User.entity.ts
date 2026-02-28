@@ -1,9 +1,5 @@
-export const userRoles = {
-    ADMIN: "ADMIN",
-    TEACHER: "TEACHER"
-} as const
+import type { UserRoles } from "@/core/interfaces";
 
-export type UserRoles = typeof userRoles[keyof typeof userRoles]
 
 export class UserEntity {
     constructor(
@@ -11,7 +7,7 @@ export class UserEntity {
         public us_full_name: string,
         public us_email: string,
         public us_password_hash: string,
-        public us_role: string,
+        public us_role: UserRoles,
         public us_is_active: string,
         public us_created_at: string,
         public us_updated_at: string,
