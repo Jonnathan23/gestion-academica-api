@@ -54,17 +54,13 @@ export class ModuleDataSourceImpl implements ModuleDataSource {
     }
 
     async updateModule(id: string, module: UpdateModuleDto): Promise<void> {
-        const { mo_name, mo_description } = module
         try {
             const moduleExist = await Module.findOne({ where: { mo_id: id } });
             if (!moduleExist) {
                 throw CustomError.notFound("Module not found");
             }
 
-            await moduleExist.update({
-                mo_name: mo_name ?? moduleExist.mo_name,
-                mo_description: mo_description ?? moduleExist.mo_description
-            })
+            await moduleExist.update(module.values)
 
         } catch (error) {
             throw error;
