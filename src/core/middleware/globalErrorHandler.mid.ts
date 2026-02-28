@@ -9,8 +9,7 @@ import type { DatabaseErrorHandler } from "@/core/interfaces/DatabaseErrorHandle
 export const createGlobalErrorHandler = (databaseErrorHandler: DatabaseErrorHandler) => {
     
     return (error: unknown, request: Request, response: Response, nextFunction: NextFunction) => {
-        // Errores de Dominio / Negocio
-        console.error(error)
+        // Errores de Dominio / Negocio        
         if (error instanceof CustomError) {
             return response.status(error.statusCode).json({ 
                 errors: error.errors 
