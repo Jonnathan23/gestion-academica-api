@@ -10,6 +10,7 @@ export const createGlobalErrorHandler = (databaseErrorHandler: DatabaseErrorHand
     
     return (error: unknown, request: Request, response: Response, nextFunction: NextFunction) => {
         // Errores de Dominio / Negocio
+        console.error(error)
         if (error instanceof CustomError) {
             return response.status(error.statusCode).json({ 
                 errors: error.errors 

@@ -1,5 +1,6 @@
 import { Column, Table, DataType, Model, HasMany } from "sequelize-typescript";
 import StudentModule from "@/data/models/AdminDesk/StudentModule.model";
+import type { Optional } from "sequelize";
 
 
 interface ModuleAttributes {
@@ -10,6 +11,7 @@ interface ModuleAttributes {
     mo_updated_at: Date;
 }
 
+interface ModuleCreationAttributes extends Optional<ModuleAttributes, 'mo_id' | 'mo_created_at' | 'mo_updated_at'> {}
 
 @Table({
     tableName: "Modules",
@@ -17,7 +19,7 @@ interface ModuleAttributes {
     createdAt: 'mo_created_at',
     updatedAt: 'mo_updated_at'
 })
-class Module extends Model<ModuleAttributes> {
+class Module extends Model<ModuleAttributes, ModuleCreationAttributes> {
     @Column({
         type: DataType.UUID,
         allowNull: false,

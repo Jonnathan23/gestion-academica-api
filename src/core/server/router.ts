@@ -1,5 +1,5 @@
+import { ModulesRouter } from "@/app/AdminDesk/modules/presentation/router";
 import { UserRouter } from "@/app/Shared/Identity/presentation/router";
-import { CustomError } from "@/core/error";
 import { Router } from "express";
 
 
@@ -9,6 +9,8 @@ export class AppRouter {
         const router = Router();
 
         router.use('/user', UserRouter.routes);
+
+        router.use('/modules', ModulesRouter.routes);
 
         return router;
     }

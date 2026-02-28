@@ -3,7 +3,8 @@ import { Router } from "express";
 import { UserDataSourceImpl } from "@/app/Shared/Identity/infrastructure/datasources/user.datasource.impl";
 import { UserRepositoryImpl } from "@/app/Shared/Identity/infrastructure/repositories/user.repository.impl";
 import { UserController } from "@/app/Shared/Identity/presentation/controllers/User.Controller";
-import { AuthMiddleware } from "@/core/middleware";
+import { AuthMiddleware, VerifyUUID } from "@/core/middleware";
+
 
 
 export class UserRouter {
@@ -15,12 +16,14 @@ export class UserRouter {
         const userRespository = new UserRepositoryImpl(userDatasource);
         const userController = new UserController(userRespository);
 
+        router.param('id', VerifyUUID.validate);
+
         // Posts
         router.post("/",
             AuthMiddleware.validateJWT,
             userController.registerUser
         );
-        
+
         router.post("/login", userController.login);
 
         // Gets
