@@ -40,7 +40,7 @@ describe("JwtAdapter", () => {
             expect(parts).toHaveLength(3);
         });
 
-        test("should return a token with the default 2-hour expiry when no duration is specified", async () => {
+        test("should return a token with the default 20-hour expiry when no duration is specified", async () => {
             const token = await JwtAdapter.generateToken(validPayload) as string;
 
             // Decode the payload segment (middle part) without verifying the signature
@@ -48,11 +48,11 @@ describe("JwtAdapter", () => {
                 Buffer.from(token.split(".")[1]!, "base64url").toString("utf8")
             );
 
-            // iat and exp should both be present; exp - iat ≈ 7200 seconds (2 hours)
+            // iat and exp should both be present; exp - iat ≈ 72000 seconds (20 hours)
             expect(decodedPayload).toHaveProperty("iat");
             expect(decodedPayload).toHaveProperty("exp");
             const durationInSeconds = decodedPayload.exp - decodedPayload.iat;
-            expect(durationInSeconds).toBe(7200);
+            expect(durationInSeconds).toBe(72000);
         });
 
         test("should embed the payload fields inside the token", async () => {
