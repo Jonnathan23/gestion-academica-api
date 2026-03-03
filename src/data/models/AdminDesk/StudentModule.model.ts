@@ -6,7 +6,7 @@ import User from "@/data/models/Shared/User.model";
 
 const studentModuleStatus = {
     ACTIVE: "ACTIVE",
-    CLOSED: "CLOSED",
+    APPROVED: "APPROVED",
     LOCKED: "LOCKED"
 } as const
 
@@ -42,6 +42,19 @@ class StudentModule extends Model<StudentModuleAttributes, StudentModuleCreation
     })
     declare st_mod_id: string;
 
+    @Column({
+        type: DataType.ENUM(...Object.values(studentModuleStatus)),
+        allowNull: false
+    })
+    declare st_mod_status: StudentModuleStatus;
+
+    @Column({
+        type: DataType.DATE,
+        allowNull: false
+    })
+    declare st_mod_purchase_date: Date;
+
+    //* Foreign Keys
     @ForeignKey(() => Student)
     @Column({
         type: DataType.UUID,
@@ -72,17 +85,6 @@ class StudentModule extends Model<StudentModuleAttributes, StudentModuleCreation
     @BelongsTo(() => User)
     declare seller: User;
 
-    @Column({
-        type: DataType.ENUM(...Object.values(studentModuleStatus)),
-        allowNull: false
-    })
-    declare st_mod_status: StudentModuleStatus;
-
-    @Column({
-        type: DataType.DATE,
-        allowNull: false
-    })
-    declare st_mod_purchase_date: Date;
 }
 
 

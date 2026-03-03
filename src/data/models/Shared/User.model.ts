@@ -73,6 +73,8 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
     })
     declare us_is_active: boolean;
 
+    //* Has Many
+
     @HasMany(() => StudentModule, 'st_mod_seller_id')
     declare sold_modules: StudentModule[];
 
