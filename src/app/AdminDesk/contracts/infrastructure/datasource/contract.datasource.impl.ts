@@ -26,27 +26,71 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
 
             const transaction = await sequelize.transaction();
             try {
-                const recordsToInsert = modulesFromDb.map((currentModule, index) => ({
+                // 1. Insertamos todos los nuevos módulos como LOCKED temporalmente
+                const recordsToInsert = modulesFromDb.map(currentModule => ({
                     st_mod_student_id: studentId,
                     st_mod_module_id: currentModule.mo_id,
                     st_mod_seller_id: sellerId,
-                    st_mod_status: index === 0 ? studentModuleStatus.ACTIVE : studentModuleStatus.LOCKED,
+                    st_mod_status: studentModuleStatus.LOCKED,
                     st_mod_purchase_date: new Date()
                 }));
 
                 const createdContracts = await StudentModule.bulkCreate(recordsToInsert, { transaction });
 
+                // 2. Traemos TODOS los niveles del estudiante (historial + los recién insertados)
+                // IMPORTANTE: Le pasamos la 'transaction' para que pueda leer los que acabamos de hacer bulkCreate
+                const allStudentContracts = await StudentModule.findAll({
+                    where: { st_mod_student_id: studentId },
+                    include: [{ model: Module }],
+                    order: [[Module, 'mo_name', 'ASC']],
+                    transaction 
+                });
+
+                const updatePromises: Promise<any>[] = [];
+                let isProgressionActive = false;
+
+                // 3. Algoritmo de Auto-Sanación Universal
+                for (let currentIndex = 0; currentIndex < allStudentContracts.length; currentIndex++) {
+                    const currentContract = allStudentContracts[currentIndex];
+                    if (!currentContract) continue;
+
+                    let newContractStatus: StudentModuleStatus = currentContract.st_mod_status as StudentModuleStatus;
+
+                    if (!isProgressionActive) {
+                        // El primero que NO esté aprobado, será el ACTIVE
+                        if (currentContract.st_mod_status !== studentModuleStatus.APPROVED) {
+                            newContractStatus = studentModuleStatus.ACTIVE;
+                            isProgressionActive = true;
+                        }
+                    } else {                        
+                        newContractStatus = studentModuleStatus.LOCKED;
+                    }
+
+                    // Actualizamos si el algoritmo detectó una anomalía temporal (ej: B2 estaba ACTIVE pero insertamos B1)
+                    if (currentContract.st_mod_status !== newContractStatus) {
+                        updatePromises.push(
+                            currentContract.update(
+                                { st_mod_status: newContractStatus },
+                                { transaction }
+                            )
+                        );
+                    }
+                }
+
+                // Ejecutamos la sanación en paralelo
+                await Promise.all(updatePromises);
+                
                 await transaction.commit();
 
+                // 4. Retornamos la respuesta (Solo los módulos que el estudiante acaba de comprar, pero con su estado ya corregido)
                 const createdContractIds = createdContracts.map(contract => contract.st_mod_id);
-
-                const completeStudentLevels = await StudentModule.findAll({
+                const finalPurchasedLevels = await StudentModule.findAll({
                     where: { st_mod_id: createdContractIds },
                     include: [{ model: Module }],
                     order: [[Module, 'mo_name', 'ASC']]
                 });
 
-                return completeStudentLevels.map(studentLevel =>
+                return finalPurchasedLevels.map(studentLevel => 
                     StudentLevelMapper.studentLevelEntityFromObject(studentLevel.toJSON())
                 );
 
@@ -248,7 +292,7 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
 
                 // Ejecutamos las actualizaciones de sanación en paralelo
                 await Promise.all(updatePromises);
-                
+
                 await transaction.commit();
 
                 return true;
