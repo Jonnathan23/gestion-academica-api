@@ -17,7 +17,7 @@ export class AppRouter {
 
         router.use('/students', StudentsRouter.routes);
 
-        router.use('/contracts', ContractsRouter.routes);
+        router.use('/student-levels', ContractsRouter.routes);
 
         return router;
     }
