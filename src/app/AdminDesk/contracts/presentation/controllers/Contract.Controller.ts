@@ -64,12 +64,11 @@ export class ContractController {
     }
 
     updateStudentLevel = (req: Request, res: Response, next: NextFunction) => {
-        const { contractId, studentId } = req.params;
+        const { contractId } = req.params;
 
         const [error, updateStudentLevelDto] = UpdateStudentLevelDto.create({
             ...req.body,
             contractId: contractId?.toString(),
-            studentId: studentId?.toString()
         });
 
         if (error) throw CustomError.badRequest(error);

@@ -41,9 +41,9 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
                 // IMPORTANTE: Le pasamos la 'transaction' para que pueda leer los que acabamos de hacer bulkCreate
                 const allStudentContracts = await StudentModule.findAll({
                     where: { st_mod_student_id: studentId },
-                    include: [{ model: Module }],
-                    order: [[Module, 'mo_name', 'ASC']],
-                    transaction 
+                    include: [{ model: Module, as: 'module' }],
+                    order: [[{ model: Module, as: 'module' }, 'mo_name', 'ASC']],
+                    transaction
                 });
 
                 const updatePromises: Promise<any>[] = [];
@@ -62,7 +62,7 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
                             newContractStatus = studentModuleStatus.ACTIVE;
                             isProgressionActive = true;
                         }
-                    } else {                        
+                    } else {
                         newContractStatus = studentModuleStatus.LOCKED;
                     }
 
@@ -79,18 +79,18 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
 
                 // Ejecutamos la sanación en paralelo
                 await Promise.all(updatePromises);
-                
+
                 await transaction.commit();
 
                 // 4. Retornamos la respuesta (Solo los módulos que el estudiante acaba de comprar, pero con su estado ya corregido)
                 const createdContractIds = createdContracts.map(contract => contract.st_mod_id);
                 const finalPurchasedLevels = await StudentModule.findAll({
                     where: { st_mod_id: createdContractIds },
-                    include: [{ model: Module }],
-                    order: [[Module, 'mo_name', 'ASC']]
+                    include: [{ model: Module, as: 'module' }],
+                    order: [[{ model: Module, as: 'module' }, 'mo_name', 'ASC']]
                 });
 
-                return finalPurchasedLevels.map(studentLevel => 
+                return finalPurchasedLevels.map(studentLevel =>
                     StudentLevelMapper.studentLevelEntityFromObject(studentLevel.toJSON())
                 );
 
@@ -109,7 +109,7 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
             const contracts = await StudentModule.findAll({
                 where: { st_mod_student_id: studentId },
                 include: [
-                    { model: Module }, // optional: attributes: [] to limit
+                    { model: Module, as: 'module' }, // optional: attributes: [] to limit
                     { model: User, as: 'seller' } // Based on the association we might need this
                 ]
             });
@@ -127,7 +127,7 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
             const allModulesBought = await StudentModule.findAll({
                 where: { st_mod_student_id: studentId },
                 include: [
-                    { model: Module }
+                    { model: Module, as: 'module' }
                 ]
             });
 
@@ -239,8 +239,8 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
             // 2. Traemos TODOS los contratos del estudiante con su módulo anidado
             const allStudentContracts = await StudentModule.findAll({
                 where: { st_mod_student_id: studentId },
-                include: [{ model: Module }],
-                order: [[Module, 'mo_name', 'ASC']]
+                include: [{ model: Module, as: 'module' }],
+                order: [[{ model: Module, as: 'module' }, 'mo_name', 'ASC']]
             });
 
             // 3. Filtramos en memoria para obtener los contratos RESTANTES

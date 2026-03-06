@@ -8,6 +8,15 @@ export class UpdateStudentLevelDto {
         public readonly status: StudentModuleStatus
     ) { }
 
+    get values() {
+        const returnObject: { [key: string]: any } = {};
+        if (this.contractId) returnObject.contractId = this.contractId;
+        if (this.studentId) returnObject.studentId = this.studentId;
+        if (this.status) returnObject.status = this.status;
+        return returnObject;
+    }
+
+
     static create(object: { [key: string]: any }): [string?, UpdateStudentLevelDto?] {
         const { contractId, studentId, status } = object;
 
