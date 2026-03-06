@@ -2,7 +2,8 @@
 node_modules
 
 # output
-out
+out.log
+out2.log
 dist
 *.tgz
 
@@ -36,3 +37,6 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 #test
 test_output.txt
+
+#docs
+/docs/tests/*.md

@@ -147,12 +147,18 @@
  *             type: object
  *             required:
  *               - status
+ *               - studentId
  *             properties:
  *               status:
  *                 type: string
  *                 enum: [ACTIVE, APPROVED, LOCKED]
  *                 description: New status for the level
  *                 example: "APPROVED"
+ *               studentId:
+ *                 type: string
+ *                 format: uuid
+ *                 description: Unique identifier of the student associated with this level
+ *                 example: "uuid-student-123"
  *     responses:
  *       200:
  *         description: Student level status updated successfully.
