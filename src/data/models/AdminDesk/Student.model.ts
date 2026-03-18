@@ -2,32 +2,44 @@ import { Column, Table, DataType, Model, HasMany } from "sequelize-typescript";
 import AttendanceSession from "@/data/models/ClassTrack/AttendanceSession.model";
 import RetentionAlert from "@/data/models/ClassTrack/RetentionAlert.model";
 import StudentModule from "@/data/models/AdminDesk/StudentModule.model";
+// import PaymentPlan from './PaymentPlan.model'; // Descomentaremos esto cuando creemos la tabla
 
 
 
-
-const studentContractStatus = {
+export const studentContractStatus = {
     ACTIVE: "ACTIVE",
     FROZEN: "FROZEN",
     INACTIVE: "INACTIVE"
-} as const
+} as const;
 
-type StudentContractStatus = typeof studentContractStatus[keyof typeof studentContractStatus]
+export type StudentContractStatus = typeof studentContractStatus[keyof typeof studentContractStatus];
 
-const studentProgressCategory = {
+export const studentProgressCategory = {
     FAST: "FAST",
     MODERATE: "MODERATE",
     SLOW: "SLOW",
     NOT_ENOUGH_DATA: "NOT_ENOUGH_DATA"
-} as const
+} as const;
 
-type StudentProgressCategory = typeof studentProgressCategory[keyof typeof studentProgressCategory]
+export type StudentProgressCategory = typeof studentProgressCategory[keyof typeof studentProgressCategory];
+
+export const certificateType = {
+    ONE_TONNE: "ONE_TONNE",
+    TOEFL: "TOEFL",
+    OTHER: "OTHER"
+} as const;
+
+export type CertificateType = typeof certificateType[keyof typeof certificateType];
 
 interface StudentAttributes {
     st_id: string;
     st_identification_card: string;
     st_full_name: string;
     st_phone_number: string;
+    st_email: string;
+    st_date_of_birth: Date;
+    st_nationality: string;
+    st_certificate_type: CertificateType;
     st_start_date: Date;
     st_is_graduated: boolean;
     st_contract_status: StudentContractStatus;
@@ -74,6 +86,31 @@ class Student extends Model<StudentAttributes, StudentCreationAttributes> {
     declare st_phone_number: string;
 
     @Column({
+        type: DataType.STRING,
+        allowNull: false,
+        unique: true
+    })
+    declare st_email: string;
+
+    @Column({
+        type: DataType.DATEONLY,
+        allowNull: false
+    })
+    declare st_date_of_birth: Date;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false
+    })
+    declare st_nationality: string;
+
+    @Column({
+        type: DataType.ENUM(...Object.values(certificateType)),
+        allowNull: false
+    })
+    declare st_certificate_type: CertificateType;
+
+    @Column({
         type: DataType.DATE,
         allowNull: false
     })
@@ -98,6 +135,8 @@ class Student extends Model<StudentAttributes, StudentCreationAttributes> {
     })
     declare st_progress_category: StudentProgressCategory;
 
+    //* Relaciones (Has Many)
+
     @HasMany(() => StudentModule)
     declare student_modules: StudentModule[];
 
@@ -106,8 +145,13 @@ class Student extends Model<StudentAttributes, StudentCreationAttributes> {
 
     @HasMany(() => RetentionAlert)
     declare retention_alerts: RetentionAlert[];
-}
 
+    /* * Preparación para el nuevo módulo de facturación.
+     * Un estudiante puede tener múltiples planes de pago a lo largo de su vida académica.
+     */
+    // @HasMany(() => PaymentPlan, 'pp_student_id')
+    // declare payment_plans: PaymentPlan[];
+}
 
 export default Student;
 

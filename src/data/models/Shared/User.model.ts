@@ -4,12 +4,14 @@ import AttendanceSession from "@/data/models/ClassTrack/AttendanceSession.model"
 import RetentionAlert from "@/data/models/ClassTrack/RetentionAlert.model";
 import type { Optional } from "sequelize";
 
-const userRoles = {
+export const userRoles = {
     ADMIN: "ADMIN",
-    TEACHER: "TEACHER"
-} as const
+    TEACHER: "TEACHER",
+    ADVISOR: "ADVISOR",
+    ACADEMIC_DIRECTOR: "ACADEMIC_DIRECTOR"
+} as const;
 
-type UserRoles = typeof userRoles[keyof typeof userRoles]
+export type UserRoles = typeof userRoles[keyof typeof userRoles];
 
 interface UserAttributes {
     us_id: string;
@@ -73,7 +75,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
     })
     declare us_is_active: boolean;
 
-    //* Has Many
+    //* Relaciones (Has Many)
 
     @HasMany(() => StudentModule, 'st_mod_seller_id')
     declare sold_modules: StudentModule[];
@@ -83,6 +85,12 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
 
     @HasMany(() => RetentionAlert, 're_al_user_id')
     declare retention_alerts: RetentionAlert[];
+
+    /* * Preparación para el nuevo módulo de facturación.
+     * Un usuario (Asesor/Admin) puede generar múltiples planes de pago.
+     */
+    // @HasMany(() => PaymentPlan, 'pp_seller_id')
+    // declare created_payment_plans: PaymentPlan[];
 }
 
 
