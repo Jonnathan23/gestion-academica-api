@@ -4,6 +4,8 @@ import { ColorsAdapter } from "@/core/utils";
 import { User } from "@/data/models/Shared";
 import { Student, Module, StudentModule } from "@/data/models/AdminDesk";
 import { AttendanceSession, LessonLog, RetentionAlert } from "@/data/models/ClassTrack";
+import PaymentQuota from "@/data/models/AdminDesk/PaymentQuota.model";
+import PaymentPlan from "@/data/models/AdminDesk/PaymentPlan.model";
 
 
 interface DatabaseConnectionOptions {
@@ -23,8 +25,8 @@ export class DatabaseConnection {
         this.sequelizeInstance = new Sequelize(databaseUrl, {
             models: [
                 User,
-                Student, Module, StudentModule,
-                AttendanceSession, RetentionAlert, LessonLog
+                Student, Module, StudentModule,PaymentPlan, PaymentQuota,
+                AttendanceSession, RetentionAlert, LessonLog,                
             ],
             logging: enableLogging
         });

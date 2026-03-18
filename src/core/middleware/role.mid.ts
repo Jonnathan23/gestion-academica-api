@@ -2,37 +2,35 @@ import type { Response, NextFunction } from "express";
 
 import { CustomError } from "@/core/error";
 import type { AuthRequest } from "@/core/middleware";
-import { userRoles } from "@/core/interfaces";
+import { rolePermissionsMapping, type SystemPermission } from "@/core/constants";
 
 export class RoleMiddleware {
 
-    public static isAdmin(req: AuthRequest, res: Response, next: NextFunction) {
-        // Verificamos que el AuthMiddleware haya hecho su trabajo previo
-        if (!req.userSession) {
-            return next(CustomError.internalServer("User session missing. Verify AuthMiddleware execution order."));
-        }
+    /**
+     * Middleware de autorización granular.
+     * @param requiredPermissions Arreglo de permisos necesarios para acceder a la ruta.
+     */
+    public static requirePermissions(requiredPermissions: SystemPermission[]) {
 
-        // Validamos el rol exacto
-        if (req.userSession.role !== userRoles.ADMIN) {
-            return next(CustomError.forbidden("Access denied: Administrator privileges required"));
-        }
+        return (req: AuthRequest, res: Response, next: NextFunction) => {
 
-        // Si es ADMIN, lo dejamos pasar al Controlador
-        next();
-    }
+            if (!req.userSession) {
+                return next(CustomError.internalServer("User session missing. Verify AuthMiddleware execution order."));
+            }
 
-    public static isTeacher(req: AuthRequest, res: Response, next: NextFunction) {
-        // Verificamos que el AuthMiddleware haya hecho su trabajo previo
-        if (!req.userSession) {
-            return next(CustomError.internalServer("User session missing. Verify AuthMiddleware execution order."));
-        }
+            const currentUserRole = req.userSession.role;
 
-        // Validamos el rol exacto
-        if (req.userSession.role !== userRoles.TEACHER) {
-            return next(CustomError.forbidden("Access denied: Teacher privileges required"));
-        }
+            const userAssignedPermissions = rolePermissionsMapping[currentUserRole] || [];
 
-        // Si es TEACHER, lo dejamos pasar al Controlador
-        next();
+            const hasRequiredPermissions = requiredPermissions.every(permission =>
+                userAssignedPermissions.includes(permission)
+            );
+
+            if (!hasRequiredPermissions) {
+                return next(CustomError.forbidden("Access denied: You lack the required permissions for this action."));
+            }
+
+            next();
+        };
     }
 }
