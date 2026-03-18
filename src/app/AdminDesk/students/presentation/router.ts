@@ -4,6 +4,7 @@ import { StudentDataSourceImpl } from "@/app/AdminDesk/students/infrastructure/d
 import { StudentRepositoryImpl } from "@/app/AdminDesk/students/infrastructure/repositories/student.repository.impl";
 import { StudentController } from "@/app/AdminDesk/students/presentation/controllers/Student.Controller";
 import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
+import { systemPermissions } from "@/core/constants";
 
 export class StudentsRouter {
 
@@ -15,28 +16,63 @@ export class StudentsRouter {
         const studentController = new StudentController(studentRepository);
 
         // Protect all routes
+        router.param('id', VerifyUUID.validate);
         router.use(AuthMiddleware.validateJWT);
-        router.use(RoleMiddleware.isAdmin);
 
         // POST /register
-        router.post("/register", studentController.register);
+        router.post("/register",
+            RoleMiddleware.requirePermissions([
+                systemPermissions.ADMINDESK_STUDENTS_READ,
+                systemPermissions.ADMINDESK_STUDENTS_WRITE
+            ]),
+            studentController.register
+        );
 
         // GET /search?q=nombre_o_ci
-        router.get("/search", studentController.search);
+        router.get("/search",
+            RoleMiddleware.requirePermissions([
+                systemPermissions.ADMINDESK_STUDENTS_READ
+            ]),
+            studentController.search
+        );
 
-        router.param('id', VerifyUUID.validate);
+
 
         // PATCH /:id
-        router.patch("/:id", studentController.update);
+        router.patch("/:id",
+            RoleMiddleware.requirePermissions([
+                systemPermissions.ADMINDESK_STUDENTS_READ,
+                systemPermissions.ADMINDESK_STUDENTS_WRITE
+            ]),
+            studentController.update
+        );
 
         // PATCH /:id/contract-status
-        router.patch("/:id/contract-status", studentController.changeContractStatus);
+        router.patch("/:id/contract-status",
+            RoleMiddleware.requirePermissions([
+                systemPermissions.ADMINDESK_STUDENTS_READ,
+                systemPermissions.ADMINDESK_STUDENTS_WRITE
+            ]),
+            studentController.changeContractStatus
+        );
 
         // PATCH /:id/graduated
-        router.patch("/:id/graduated", studentController.toggleGraduated);
+        router.patch("/:id/graduated",
+            RoleMiddleware.requirePermissions([
+                systemPermissions.ADMINDESK_STUDENTS_READ,
+                systemPermissions.ADMINDESK_STUDENTS_WRITE
+            ]),
+            studentController.toggleGraduated
+        );
 
         // PATCH /:id/deactivate
-        router.patch("/:id/deactivate", studentController.deactivate);
+        router.patch("/:id/deactivate",
+            RoleMiddleware.requirePermissions([
+                systemPermissions.ADMINDESK_STUDENTS_READ,
+                systemPermissions.ADMINDESK_STUDENTS_WRITE
+            ]),
+            studentController.deactivate
+        );
 
         return router;
     }

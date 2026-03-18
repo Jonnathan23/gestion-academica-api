@@ -4,6 +4,7 @@ import { StudentLevelDataSourceImpl } from "@/app/AdminDesk/contracts/infrastruc
 import { StudentLevelRepositoryImpl } from "@/app/AdminDesk/contracts/infrastructure/repositories/contract.repository.impl";
 import { ContractController } from "@/app/AdminDesk/contracts/presentation/controllers/Contract.Controller";
 import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
+import { systemPermissions } from "@/core/constants";
 
 export class ContractsRouter {
 
@@ -16,7 +17,6 @@ export class ContractsRouter {
 
         // Required middleware for all routes in this module
         router.use(AuthMiddleware.validateJWT);
-        router.use(RoleMiddleware.isAdmin); // or whatever appropriate role
 
         // Router-level params validation
         router.param('studentId', VerifyUUID.validate);
@@ -24,16 +24,39 @@ export class ContractsRouter {
         router.param('studentLevelId', VerifyUUID.validate);
 
         // POST /api/contracts/student/:studentId
-        router.post("/student/:studentId", contractController.purchaseModules);
+        router.post("/student/:studentId",
+            RoleMiddleware.requirePermissions([
+                systemPermissions.ADMINDESK_CONTRACTS_READ,
+                systemPermissions.ADMINDESK_CONTRACTS_WRITE
+            ]),
+            contractController.purchaseModules
+        );
 
         // GET /api/contracts/student/:studentId
-        router.get("/student/:studentId", contractController.getStudentContracts);
+        router.get("/student/:studentId",
+            RoleMiddleware.requirePermissions([
+                systemPermissions.ADMINDESK_CONTRACTS_READ
+            ]),
+            contractController.getStudentContracts
+        );
 
         // PATCH /api/contracts/:contractId/status
-        router.patch("/:contractId/status", contractController.updateStudentLevel);
+        router.patch("/:contractId/status",
+            RoleMiddleware.requirePermissions([
+                systemPermissions.ADMINDESK_CONTRACTS_READ,
+                systemPermissions.ADMINDESK_CONTRACTS_WRITE
+            ]),
+            contractController.updateStudentLevel
+        );
 
         // DELETE /api/contracts/:studentLevelId
-        router.delete("/:studentLevelId", contractController.deleteStudentLevel);
+        router.delete("/:studentLevelId",
+            RoleMiddleware.requirePermissions([
+                systemPermissions.ADMINDESK_CONTRACTS_READ,
+                systemPermissions.ADMINDESK_CONTRACTS_WRITE
+            ]),
+            contractController.deleteStudentLevel
+        );
 
         return router;
     }

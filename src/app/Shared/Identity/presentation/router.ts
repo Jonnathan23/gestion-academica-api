@@ -4,6 +4,7 @@ import { UserDataSourceImpl } from "@/app/Shared/Identity/infrastructure/datasou
 import { UserRepositoryImpl } from "@/app/Shared/Identity/infrastructure/repositories/user.repository.impl";
 import { UserController } from "@/app/Shared/Identity/presentation/controllers/User.Controller";
 import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
+import { systemPermissions } from "@/core/constants";
 
 
 
@@ -21,26 +22,65 @@ export class UserRouter {
         // 🔓 RUTAS PÚBLICAS
         router.post("/login", userController.login);
 
-        // 🔐 RUTAS PRIVADAS (Solo Usuarios Logueados)
-        router.get("/:id", AuthMiddleware.validateJWT, userController.findById);
+        // 🔐 RUTAS PRIVADAS (Solo Usuarios Logueados)        
+        /**
+         * TODO: Agregar validaciones para cambiar contraseña
+         * * Preguntar al usuario:
+         * ? ¿Como desea cambiar la contraseña?
+         * ? ¿Debe tener doble verificación (uso de algun Token?
+         */
         router.patch("/:id/password", AuthMiddleware.validateJWT, userController.changePassword);
 
         // 🛑 RUTAS SÚPER PRIVADAS (Solo Administradores)
         //* Posts
-        /**
-         * TODO: Agregar validaciones para registrar usuarios
-         * * Preguntar al administrador:
-         * ? ¿Como desea permitir el registro de usuarios?
-         * ? ¿Debe tener doble verificación?
-         */
-        router.post("/", [AuthMiddleware.validateJWT, RoleMiddleware.isAdmin], userController.registerUser);
+        router.post("/", [
+
+            AuthMiddleware.validateJWT,
+            RoleMiddleware.requirePermissions([
+                systemPermissions.SHARED_IDENTITY_WRITE,
+                systemPermissions.SHARED_IDENTITY_READ
+            ])
+        ],
+            userController.registerUser
+        );
+
+        router.post("/:id/state", [
+            AuthMiddleware.validateJWT,
+            RoleMiddleware.requirePermissions([
+                systemPermissions.SHARED_IDENTITY_WRITE,
+                systemPermissions.SHARED_IDENTITY_READ
+            ])
+        ],
+            userController.changeStateActive
+        );
 
         //* Gets
-        router.get("/", [AuthMiddleware.validateJWT, RoleMiddleware.isAdmin], userController.findAll);
+        router.get("/", [
+            AuthMiddleware.validateJWT,
+            RoleMiddleware.requirePermissions([
+                systemPermissions.SHARED_IDENTITY_READ,
+            ])
+        ], userController.findAll
+        );
+
+        router.get("/:id", [
+            AuthMiddleware.validateJWT,
+            RoleMiddleware.requirePermissions([
+                systemPermissions.SHARED_IDENTITY_READ
+            ])
+        ], userController.findById);
 
         //* Patches     
-        router.patch("/:id", [AuthMiddleware.validateJWT, RoleMiddleware.isAdmin], userController.update);
-        router.post("/:id/state", [AuthMiddleware.validateJWT, RoleMiddleware.isAdmin], userController.changeStateActive);
+        router.patch("/:id", [
+            AuthMiddleware.validateJWT,
+            RoleMiddleware.requirePermissions([
+                systemPermissions.SHARED_IDENTITY_WRITE,
+                systemPermissions.SHARED_IDENTITY_READ
+            ])
+        ],
+            userController.update
+        );
+
 
         return router;
     }

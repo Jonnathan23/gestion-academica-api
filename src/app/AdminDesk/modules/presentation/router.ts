@@ -3,7 +3,8 @@ import { Router } from "express";
 import { ModuleDataSourceImpl } from "@/app/AdminDesk/modules/infrastructure/datasource/module.datasource.impl";
 import { ModuleRepositoryImpl } from "@/app/AdminDesk/modules/infrastructure/repositories/module.repository.impl";
 import { ModuleController } from "@/app/AdminDesk/modules/presentation/controllers/Module.controller";
-import { AuthMiddleware, VerifyUUID } from "@/core/middleware";
+import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
+import { systemPermissions } from "@/core/constants";
 
 
 export class ModulesRouter {
@@ -19,17 +20,47 @@ export class ModulesRouter {
         router.param('id', VerifyUUID.validate);
 
         //Posts
-        router.post("/", moduleController.createModule);
+        router.post("/",
+            RoleMiddleware.requirePermissions([
+                systemPermissions.ADMINDESK_MODULES_READ,
+                systemPermissions.ADMINDESK_MODULES_WRITE
+            ]),
+            moduleController.createModule
+        );
 
         //Gets
-        router.get("/", moduleController.getAllModules);
-        router.get("/:id", moduleController.getModuleById);
+        router.get("/",
+            RoleMiddleware.requirePermissions([
+                systemPermissions.ADMINDESK_MODULES_READ,
+            ]),
+            moduleController.getAllModules
+        );
+
+        router.get("/:id",
+            RoleMiddleware.requirePermissions([
+                systemPermissions.ADMINDESK_MODULES_READ,
+
+            ]),
+            moduleController.getModuleById
+        );
 
         //PATCH
-        router.patch("/:id", moduleController.updateModule);
+        router.patch("/:id",
+            RoleMiddleware.requirePermissions([
+                systemPermissions.ADMINDESK_MODULES_READ,
+                systemPermissions.ADMINDESK_MODULES_WRITE
+            ]),
+            moduleController.updateModule
+        );
 
         //DELETE
-        router.delete("/:id", moduleController.deleteModule);
+        router.delete("/:id",
+            RoleMiddleware.requirePermissions([
+                systemPermissions.ADMINDESK_MODULES_READ,
+                systemPermissions.ADMINDESK_MODULES_WRITE
+            ]),
+            moduleController.deleteModule
+        );
 
 
         return router
