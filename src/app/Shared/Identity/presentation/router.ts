@@ -38,9 +38,9 @@ export class UserRouter {
         //* Gets
         router.get("/", [AuthMiddleware.validateJWT, RoleMiddleware.isAdmin], userController.findAll);
 
-        //* Patches
+        //* Patches     
         router.patch("/:id", [AuthMiddleware.validateJWT, RoleMiddleware.isAdmin], userController.update);
-        router.patch("/:id/state", [AuthMiddleware.validateJWT, RoleMiddleware.isAdmin], userController.changeStateActive);
+        router.post("/:id/state", [AuthMiddleware.validateJWT, RoleMiddleware.isAdmin], userController.changeStateActive);
 
         return router;
     }

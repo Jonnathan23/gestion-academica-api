@@ -153,9 +153,9 @@ describe("Integration Tests: User Router (Authenticated)", () => {
             expect(res.body).toHaveProperty("error");
         });
 
-        test("[400] PATCH /api/users/:id/state with numeric string ID should return 400", async () => {
+        test("[400] POST /api/users/:id/state with numeric string ID should return 400", async () => {
             const res = await request(testingApp)
-                .patch("/api/users/12345/state")
+                .post("/api/users/12345/state")
                 .set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(400);
@@ -378,13 +378,13 @@ describe("Integration Tests: User Router (Authenticated)", () => {
     });
 
     // ---------------------------------------------------------------- //
-    // PATCH /api/users/:id/state — Toggle active state (Admin only)
+    // POST /api/users/:id/state — Toggle active state (Admin only)
     // ---------------------------------------------------------------- //
-    describe("PATCH /api/users/:id/state", () => {
+    describe("POST /api/users/:id/state", () => {
 
         test("[200] Should toggle us_is_active and return success", async () => {
             const res = await request(testingApp)
-                .patch(`/api/users/${createdUserId}/state`)
+                .post(`/api/users/${createdUserId}/state`)
                 .set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(200);
@@ -394,7 +394,7 @@ describe("Integration Tests: User Router (Authenticated)", () => {
 
         test("[404] Toggle on non-existent user should return 'User not found'", async () => {
             const res = await request(testingApp)
-                .patch(`/api/users/${NON_EXISTENT_UUID}/state`)
+                .post(`/api/users/${NON_EXISTENT_UUID}/state`)
                 .set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(404);

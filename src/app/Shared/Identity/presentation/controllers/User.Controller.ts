@@ -63,6 +63,8 @@ export class UserController {
     }
 
     changePassword = (req: Request, res: Response, next: NextFunction) => {
+
+        //TODO: refactorizar a un Dto con sus debidas validaciones
         const { id } = req.params;
         const { password } = req.body;
 
