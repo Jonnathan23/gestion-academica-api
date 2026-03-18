@@ -542,4 +542,63 @@ describe("Integration Tests: User Router (Authenticated)", () => {
             expect(loginData.user.us_role).toBe("ADMIN");
         });
     });
+
+    // ---------------------------------------------------------------- //
+    // Authorization & Permissions (RBAC)
+    // ---------------------------------------------------------------- //
+    describe("Authorization & Permissions (RBAC)", () => {
+        let teacherToken: string;
+
+        beforeAll(async () => {
+            const teacherUser = await User.create({
+                us_full_name: "Teacher RBAC Tester",
+                us_email: "teacher.users.rbac@test.com",
+                us_password_hash: "MockHash123!",
+                us_role: "TEACHER",
+            });
+            teacherToken = (await JwtAdapter.generateToken({
+                id: teacherUser.us_id,
+                email: teacherUser.us_email,
+                role: teacherUser.us_role,
+            })) as string;
+        });
+
+        test("[403] Should deny access to POST /api/users if user lacks SHARED_IDENTITY_WRITE permission", async () => {
+            const res = await request(testingApp)
+                .post("/api/users")
+                .set("Authorization", `Bearer ${teacherToken}`)
+                .send({ ...NEW_USER_PAYLOAD, us_email: "rbac.test@test.com" });
+
+            expect(res.status).toBe(403);
+            expect(res.body.errors[0].message).toContain("Access denied");
+        });
+
+        test("[403] Should deny access to GET /api/users if user lacks SHARED_IDENTITY_READ permission", async () => {
+            const res = await request(testingApp)
+                .get("/api/users")
+                .set("Authorization", `Bearer ${teacherToken}`);
+
+            expect(res.status).toBe(403);
+            expect(res.body.errors[0].message).toContain("Access denied");
+        });
+
+        test("[403] Should deny access to PATCH /api/users/:id if user lacks SHARED_IDENTITY_WRITE permission", async () => {
+            const res = await request(testingApp)
+                .patch(`/api/users/${createdUserId}`)
+                .set("Authorization", `Bearer ${teacherToken}`)
+                .send({ us_full_name: "Forbidden Update" });
+
+            expect(res.status).toBe(403);
+            expect(res.body.errors[0].message).toContain("Access denied");
+        });
+        
+        test("[403] Should deny access to POST /api/users/:id/state if user lacks SHARED_IDENTITY_WRITE permission", async () => {
+            const res = await request(testingApp)
+                .post(`/api/users/${createdUserId}/state`)
+                .set("Authorization", `Bearer ${teacherToken}`);
+
+            expect(res.status).toBe(403);
+            expect(res.body.errors[0].message).toContain("Access denied");
+        });
+    });
 });

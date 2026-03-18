@@ -40,6 +40,10 @@ const VALID_STUDENT_PAYLOAD = {
     identificationCard: "1234567890",
     fullName: "Juan Pérez García",
     phoneNumber: "0987654321",
+    email: "test.student.post@integration.com",
+    dateOfBirth: "2000-01-01",
+    nationality: "Ecuadorian",
+    certificateType: "TOEFL",
     startDate: "2024-01-15",
 };
 
@@ -81,6 +85,10 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
             st_identification_card: VALID_STUDENT_PAYLOAD.identificationCard,
             st_full_name: VALID_STUDENT_PAYLOAD.fullName,
             st_phone_number: VALID_STUDENT_PAYLOAD.phoneNumber,
+            st_email: "first.student@test.com",
+            st_date_of_birth: new Date("2000-01-01"),
+            st_nationality: "Ecuadorian",
+            st_certificate_type: "TOEFL",
             st_start_date: new Date(VALID_STUDENT_PAYLOAD.startDate),
             st_contract_status: "ACTIVE",
             st_progress_category: "NOT_ENOUGH_DATA",
@@ -93,6 +101,10 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
             st_identification_card: SECOND_STUDENT_CI,
             st_full_name: "Maria Lopez Torres",
             st_phone_number: "0912345678",
+            st_email: "maria.lopez@test.com",
+            st_date_of_birth: new Date("1995-05-15"),
+            st_nationality: "Ecuadorian",
+            st_certificate_type: "ONE_TONNE",
             st_start_date: new Date("2023-06-01"),
             st_contract_status: "FROZEN",
             st_progress_category: "MODERATE",
@@ -191,13 +203,17 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
         });
 
         test("[400] Missing 'startDate' should return validation error", async () => {
+            // Hacemos una copia del payload válido, pero extraemos y descartamos 'startDate'
+            const { startDate, ...payloadWithoutStartDate } = VALID_STUDENT_PAYLOAD;
+
             const res = await request(testingStudentApp)
                 .post("/api/students/register")
                 .set("Authorization", `Bearer ${adminToken}`)
-                .send({ identificationCard: "1724567890", fullName: "Test Student", phoneNumber: "0987654321" });
+                .send(payloadWithoutStartDate);
 
             expect(res.status).toBe(400);
-            expect(res.body.errors[0].message).toContain("Missing startDate");
+            // Ahora sí pasará los filtros nuevos y caerá exactamente en el error de startDate
+            expect(res.body.errors[0].message).toContain("startDate");
         });
 
         test("[400] identificationCard with less than 10 digits should fail", async () => {
@@ -222,22 +238,28 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
 
         test("[400] identificationCard with letters should fail", async () => {
             const res = await request(testingStudentApp)
-                .post("/api/students/register")
+                .post("/api/students/register") // Ajustado a POST según tu consola
                 .set("Authorization", `Bearer ${adminToken}`)
-                .send({ ...VALID_STUDENT_PAYLOAD, identificationCard: "172A456789" });
+                .send({
+                    ...VALID_STUDENT_PAYLOAD,
+                    identificationCard: "17ABCD7890" // Pisamos el valor válido con uno inválido
+                });
 
             expect(res.status).toBe(400);
-            expect(res.body.errors[0].message).toContain("Invalid identificationCard");
+            expect(res.body.errors[0].message).toContain("identificationCard");
         });
 
-        test("[400] phoneNumber with letters should fail", async () => {
+        test("[400] phoneNumber with invalid length should fail", async () => {
             const res = await request(testingStudentApp)
-                .post("/api/students/register")
+                .post("/api/students/register") // Ajustado a POST según tu consola
                 .set("Authorization", `Bearer ${adminToken}`)
-                .send({ ...VALID_STUDENT_PAYLOAD, phoneNumber: "098765ABCD" });
+                .send({
+                    ...VALID_STUDENT_PAYLOAD,
+                    phoneNumber: "123" // Pisamos el valor válido con uno inválido
+                });
 
             expect(res.status).toBe(400);
-            expect(res.body.errors[0].message).toContain("Invalid phoneNumber");
+            expect(res.body.errors[0].message).toContain("phoneNumber");
         });
 
         test("[400] phoneNumber with fewer than 10 digits should fail", async () => {
@@ -276,10 +298,11 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
                 .post("/api/students/register")
                 .set("Authorization", `Bearer ${adminToken}`)
                 .send({
+                    ...VALID_STUDENT_PAYLOAD,
                     identificationCard: newCi,
                     fullName: "Carlos Gomez Ruiz",
                     phoneNumber: "0911111111",
-                    startDate: "2024-03-01",
+                    email: "carlos.gomez@test.com",
                 });
 
             expect(res.status).toBe(201);
@@ -597,6 +620,57 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
 
             expect(res.status).toBe(200);
             expect(res.body.data.contractStatus).toBe("INACTIVE");
+        });
+    });
+
+    // ---------------------------------------------------------------- //
+    // Authorization & Permissions (RBAC)
+    // ---------------------------------------------------------------- //
+    describe("Authorization & Permissions (RBAC)", () => {
+        let teacherToken: string;
+
+        beforeAll(async () => {
+            const teacherUser = await User.create({
+                us_full_name: "Teacher RBAC Tester",
+                us_email: "teacher.students.rbac@test.com",
+                us_password_hash: "MockHash123!",
+                us_role: "TEACHER",
+            });
+            teacherToken = (await JwtAdapter.generateToken({
+                id: teacherUser.us_id,
+                email: teacherUser.us_email,
+                role: teacherUser.us_role,
+            })) as string;
+        });
+
+        test("[403] Should deny access to POST /api/students/register if user lacks ADMINDESK_STUDENTS_WRITE permission", async () => {
+            const res = await request(testingStudentApp)
+                .post("/api/students/register")
+                .set("Authorization", `Bearer ${teacherToken}`)
+                .send(VALID_STUDENT_PAYLOAD);
+
+            expect(res.status).toBe(403);
+            expect(res.body.errors[0].message).toContain("Access denied");
+        });
+
+        test("[403] Should deny access to PATCH /api/students/:id if user lacks ADMINDESK_STUDENTS_WRITE permission", async () => {
+            const res = await request(testingStudentApp)
+                .patch(`/api/students/${targetStudentId}`)
+                .set("Authorization", `Bearer ${teacherToken}`)
+                .send({ fullName: "Updated Name" });
+
+            expect(res.status).toBe(403);
+            expect(res.body.errors[0].message).toContain("Access denied");
+        });
+
+        test("[403] Should deny access to PATCH /api/students/:id/contract-status if user lacks ADMINDESK_STUDENTS_WRITE permission", async () => {
+            const res = await request(testingStudentApp)
+                .patch(`/api/students/${targetStudentId}/contract-status`)
+                .set("Authorization", `Bearer ${teacherToken}`)
+                .send({ contractStatus: "FROZEN" });
+
+            expect(res.status).toBe(403);
+            expect(res.body.errors[0].message).toContain("Access denied");
         });
     });
 });

@@ -345,4 +345,54 @@ describe("Integration Tests: Module Router (Authenticated)", () => {
             expect(res.body.errors[0].message).toBe("Module not found");
         });
     });
+
+    // ---------------------------------------------------------------- //
+    // Authorization & Permissions (RBAC)
+    // ---------------------------------------------------------------- //
+    describe("Authorization & Permissions (RBAC)", () => {
+        let teacherToken: string;
+
+        beforeAll(async () => {
+            const teacherUser = await User.create({
+                us_full_name: "Teacher RBAC Tester",
+                us_email: "teacher.modules.rbac@test.com",
+                us_password_hash: "MockHash123!",
+                us_role: "TEACHER",
+            });
+            teacherToken = (await JwtAdapter.generateToken({
+                id: teacherUser.us_id,
+                email: teacherUser.us_email,
+                role: teacherUser.us_role,
+            })) as string;
+        });
+
+        test("[403] Should deny access to POST /api/modules if user lacks ADMINDESK_MODULES_WRITE permission", async () => {
+            const res = await request(testingModuleApp)
+                .post("/api/modules")
+                .set("Authorization", `Bearer ${teacherToken}`)
+                .send(VALID_MODULE_PAYLOAD);
+
+            expect(res.status).toBe(403);
+            expect(res.body.errors[0].message).toContain("Access denied");
+        });
+
+        test("[403] Should deny access to PATCH /api/modules/:id if user lacks ADMINDESK_MODULES_WRITE permission", async () => {
+            const res = await request(testingModuleApp)
+                .patch(`/api/modules/${createdModuleId}`)
+                .set("Authorization", `Bearer ${teacherToken}`)
+                .send({ mo_name: "Forbidden Update" });
+
+            expect(res.status).toBe(403);
+            expect(res.body.errors[0].message).toContain("Access denied");
+        });
+
+        test("[403] Should deny access to DELETE /api/modules/:id if user lacks ADMINDESK_MODULES_WRITE permission", async () => {
+            const res = await request(testingModuleApp)
+                .delete(`/api/modules/${createdModuleId}`)
+                .set("Authorization", `Bearer ${teacherToken}`);
+
+            expect(res.status).toBe(403);
+            expect(res.body.errors[0].message).toContain("Access denied");
+        });
+    });
 });

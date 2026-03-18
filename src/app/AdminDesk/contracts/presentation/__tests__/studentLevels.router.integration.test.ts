@@ -78,6 +78,10 @@ describe("Integration Tests: Student Levels Router (Contracts)", () => {
             st_full_name: "John Test",
             st_identification_card: "0999999999",
             st_phone_number: "0999999999",
+            st_email: "john.test@contracts.com",
+            st_date_of_birth: new Date("1998-10-10"),
+            st_nationality: "Ecuadorian",
+            st_certificate_type: "OTHER",
             st_start_date: new Date("2024-01-01T00:00:00.000Z"),
             st_is_graduated: false,
             st_contract_status: "ACTIVE",
@@ -279,6 +283,56 @@ describe("Integration Tests: Student Levels Router (Contracts)", () => {
 
             expect(remainingA2).toBeDefined();
             expect(remainingA2.status).toBe("ACTIVE");
+        });
+    });
+
+    // ---------------------------------------------------------------- //
+    // Authorization & Permissions (RBAC)
+    // ---------------------------------------------------------------- //
+    describe("Authorization & Permissions (RBAC)", () => {
+        let teacherToken: string;
+
+        beforeAll(async () => {
+            const teacherUser = await User.create({
+                us_full_name: "Teacher RBAC Tester",
+                us_email: "teacher.contracts.rbac@test.com",
+                us_password_hash: "MockHash123!",
+                us_role: userRoles.TEACHER,
+            });
+            teacherToken = (await JwtAdapter.generateToken({
+                id: teacherUser.us_id,
+                email: teacherUser.us_email,
+                role: teacherUser.us_role,
+            })) as string;
+        });
+
+        test("[403] Should deny access to POST /api/student-levels/student/:studentId if user lacks ADMINDESK_CONTRACTS_WRITE permission", async () => {
+            const res = await request(testingContractsApp)
+                .post(`/api/student-levels/student/${testStudentId}`)
+                .set("Authorization", `Bearer ${teacherToken}`)
+                .send({ moduleIds: [moduleB1Id] });
+
+            expect(res.status).toBe(403);
+            expect(res.body.errors[0].message).toContain("Access denied");
+        });
+
+        test("[403] Should deny access to PATCH /api/student-levels/:studentLevelId/status if user lacks ADMINDESK_CONTRACTS_WRITE permission", async () => {
+            const res = await request(testingContractsApp)
+                .patch(`/api/student-levels/${studentLevelA1Id}/status`)
+                .set("Authorization", `Bearer ${teacherToken}`)
+                .send({ status: "APPROVED", studentId: testStudentId });
+
+            expect(res.status).toBe(403);
+            expect(res.body.errors[0].message).toContain("Access denied");
+        });
+        
+        test("[403] Should deny access to DELETE /api/student-levels/:studentLevelId if user lacks ADMINDESK_CONTRACTS_WRITE permission", async () => {
+            const res = await request(testingContractsApp)
+                .delete(`/api/student-levels/${studentLevelA1Id}`)
+                .set("Authorization", `Bearer ${teacherToken}`);
+
+            expect(res.status).toBe(403);
+            expect(res.body.errors[0].message).toContain("Access denied");
         });
     });
 });
