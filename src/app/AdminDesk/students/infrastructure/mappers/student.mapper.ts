@@ -6,11 +6,12 @@ import { CustomError } from "@/core/error";
 export const StudentMapper = {
     studentModelToEntity(object: { [key: string]: any }): StudentEntity {
         const { st_id, st_identification_card, st_full_name, st_phone_number,
+            st_email, st_date_of_birth, st_nationality, st_certificate_type,
             st_start_date, st_is_graduated, st_contract_status, st_progress_category,
             st_created_at, st_updated_at } = object;
 
 
-        if (!st_id || !st_identification_card || !st_full_name || !st_phone_number || !st_start_date || st_is_graduated === undefined || !st_contract_status || !st_progress_category || !st_created_at || !st_updated_at) {
+        if (!st_id || !st_identification_card || !st_full_name || !st_phone_number || !st_email || !st_date_of_birth || !st_nationality || !st_certificate_type || !st_start_date || st_is_graduated === undefined || !st_contract_status || !st_progress_category || !st_created_at || !st_updated_at) {
             throw CustomError.internalServer('Invalid student model');
         }
 
@@ -27,6 +28,10 @@ export const StudentMapper = {
             st_identification_card,
             st_full_name,
             st_phone_number,
+            st_email,
+            new Date(st_date_of_birth),
+            st_nationality,
+            st_certificate_type,
             new Date(st_start_date),
             st_is_graduated,
             st_contract_status as StudentContractStatus,

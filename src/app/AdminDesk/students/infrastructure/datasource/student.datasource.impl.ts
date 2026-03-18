@@ -18,7 +18,7 @@ export class StudentDataSourceImpl implements StudentDataSource {
     ) { }
 
     async register(dto: RegisterStudentDto): Promise<StudentEntity> {
-        const { identificationCard, fullName, phoneNumber, startDate } = dto;
+        const { identificationCard, fullName, phoneNumber, email, dateOfBirth, nationality, certificateType, startDate } = dto;
         try {
             const studentExist = await Student.findOne({ where: { st_identification_card: identificationCard } });
             if (studentExist) {
@@ -29,6 +29,10 @@ export class StudentDataSourceImpl implements StudentDataSource {
                 st_identification_card: identificationCard,
                 st_full_name: fullName,
                 st_phone_number: phoneNumber,
+                st_email: email,
+                st_date_of_birth: dateOfBirth,
+                st_nationality: nationality,
+                st_certificate_type: certificateType as any,
                 st_start_date: startDate,
                 st_contract_status: studentContractStatus.ACTIVE,
                 st_progress_category: studentProgressCategory.NOT_ENOUGH_DATA,
