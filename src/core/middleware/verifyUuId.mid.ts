@@ -1,3 +1,4 @@
+import { CustomError } from "@/core/error";
 import type { Request, Response, NextFunction } from "express";
 
 
@@ -8,12 +9,10 @@ export class VerifyUUID {
         if (uuidRegex.test(identifier)) {
             next();
         } else {
-            /* * Si el formato es incorrecto, cortamos el flujo aquí mismo 
-             * y respondemos al cliente.
+            /* * Si el formato es incorrecto, delegamos el error a nuestro manejador global
+             * usando nuestra clase CustomError.
              */
-            response.status(400).json({
-                error: `Your Item is not valid`
-            });
+            next(CustomError.badRequest(`Invalid Item`));
         }
     }
 }

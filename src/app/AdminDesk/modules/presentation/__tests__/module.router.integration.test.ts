@@ -241,7 +241,7 @@ describe("Integration Tests: Module Router (Authenticated)", () => {
                 .set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(400);
-            expect(res.body).toHaveProperty("error");
+            expect(res.body.errors[0].message.toLowerCase()).toContain("invalid item");
         });
     });
 
@@ -299,7 +299,7 @@ describe("Integration Tests: Module Router (Authenticated)", () => {
                 .send({ mo_name: "Fake Module" });
 
             expect(res.status).toBe(400);
-            expect(res.body).toHaveProperty("error");
+            expect(res.body.errors[0].message.toLowerCase()).toContain("invalid item");
         });
     });
 
@@ -323,7 +323,7 @@ describe("Integration Tests: Module Router (Authenticated)", () => {
                 .set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(400);
-            expect(res.body).toHaveProperty("error");
+            expect(res.body.errors[0].message.toLowerCase()).toContain("invalid item");
         });
 
         test("[200] Valid ID should delete the module successfully", async () => {

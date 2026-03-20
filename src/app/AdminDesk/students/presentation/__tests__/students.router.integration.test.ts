@@ -399,7 +399,7 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
                 .send({ fullName: "Someone" });
 
             expect(res.status).toBe(400);
-            expect(res.body).toHaveProperty("error");
+            expect(res.body.errors[0].message.toLowerCase()).toContain("invalid item");
         });
 
         test("[400] Empty body should return 'No data provided to update'", async () => {
@@ -478,7 +478,7 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
                 .send({ contractStatus: "FROZEN" });
 
             expect(res.status).toBe(400);
-            expect(res.body).toHaveProperty("error");
+            expect(res.body.errors[0].message.toLowerCase()).toContain("invalid item");
         });
 
         test("[400] Missing contractStatus payload should fail", async () => {
@@ -545,7 +545,7 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
                 .set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(400);
-            expect(res.body).toHaveProperty("error");
+            expect(res.body.errors[0].message.toLowerCase()).toContain("invalid item");
         });
 
         test("[200] Toggle graduated (false → true) should invert the boolean", async () => {
@@ -590,7 +590,7 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
                 .set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(400);
-            expect(res.body).toHaveProperty("error");
+            expect(res.body.errors[0].message.toLowerCase()).toContain("invalid item");
         });
 
         test("[404] Deactivate on non-existent UUID should return 'Student not found'", async () => {

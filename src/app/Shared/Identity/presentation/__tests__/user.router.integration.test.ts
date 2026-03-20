@@ -140,7 +140,7 @@ describe("Integration Tests: User Router (Authenticated)", () => {
                 .set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(400);
-            expect(res.body).toHaveProperty("error");
+            expect(res.body.errors[0].message.toLowerCase()).toContain("invalid item");
         });
 
         test("[400] PATCH /api/users/:id with malformed ID should return 400", async () => {
@@ -150,7 +150,7 @@ describe("Integration Tests: User Router (Authenticated)", () => {
                 .set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(400);
-            expect(res.body).toHaveProperty("error");
+            expect(res.body.errors[0].message.toLowerCase()).toContain("invalid item");
         });
 
         test("[400] POST /api/users/:id/state with numeric string ID should return 400", async () => {
@@ -159,7 +159,7 @@ describe("Integration Tests: User Router (Authenticated)", () => {
                 .set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(400);
-            expect(res.body).toHaveProperty("error");
+            expect(res.body.errors[0].message.toLowerCase()).toContain("invalid item");
         });
 
         test("[400] PATCH /api/users/:id/password with malformed ID should return 400", async () => {
@@ -169,7 +169,7 @@ describe("Integration Tests: User Router (Authenticated)", () => {
                 .set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(400);
-            expect(res.body).toHaveProperty("error");
+            expect(res.body.errors[0].message.toLowerCase()).toContain("invalid item");
         });
     });
 
