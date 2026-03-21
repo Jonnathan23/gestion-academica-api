@@ -17,22 +17,24 @@ export interface AuthRequest extends Request {
 export class AuthMiddleware {
 
     public static async validateJWT(req: AuthRequest, res: Response, next: NextFunction) {
-        const authorization = req.header("Authorization");
+        let token = req.cookies?.auth_token;
 
-        if (!authorization) {
+        if (!token) {
+            const authorization = req.header("Authorization");
+            if (authorization && authorization.startsWith("Bearer ")) {
+                token = authorization.split(" ").at(1);
+            }
+        }
+
+        if (!token) {
             return next(CustomError.unauthorized("You must be logged in"));
         }
 
-        if (!authorization.startsWith("Bearer ")) {
-            return next(CustomError.unauthorized("You are not authorized"));
-        }
-
-        const token = authorization.split(" ").at(1) || "";
         try {
             const payload = await JwtAdapter.validateToken<UserTokenPayload>(token);
 
             if (!payload) {
-                return next(CustomError.unauthorized("Invalid or Your sesion has expired"));
+                return next(CustomError.unauthorized("Invalid or your session has expired"));
             }
 
             req.userSession = payload;
@@ -40,7 +42,7 @@ export class AuthMiddleware {
             next();
         } catch (error) {
             console.error(error);
-            next(CustomError.serviceUnavailable("Internal server error validating"));
+            next(CustomError.serviceUnavailable("Internal server error validating token"));
         }
     }
 }

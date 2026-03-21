@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 
 import { ColorsAdapter } from "@/core/utils";
 import type { CorsConfig } from "@/core/config";
@@ -41,10 +42,11 @@ export class Server {
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true })); // x-www-form-urlencoded
         
+        this.app.use(cookieParser()); 
+        
         const corsOptions = this.cors.corsOptions;
         this.app.use(cors(corsOptions));        
         
-        // Swagger
         if (this.documentation) {
             this.app.use(express.static('public'));
             this.app.use('/docs', this.documentation.serve, this.documentation.setup());
@@ -52,7 +54,6 @@ export class Server {
 
         this.app.use('/api', this.routes);
 
-        // Pasamos la dependencia al Factory del middleware global
         this.app.use(createGlobalErrorHandler(this.databaseErrorHandler));
 
         this.app.listen(this.port, () => {

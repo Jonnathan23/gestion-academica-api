@@ -55,9 +55,17 @@ export class UserController {
         const loginUser = new LoginUser(this.userRepository);
 
         loginUser.execute(loginUserDto!)
-            .then((user) => {
-                const succesMessage = "User logged in successfully";
-                SuccessResponse.ok(res, succesMessage, user);
+            .then((loginResponse) => {
+                res.cookie('auth_token', loginResponse.token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    sameSite: 'strict',
+                    maxAge: 18 * 60 * 60 * 1000
+                });
+
+                const successMessage = "User logged in successfully";
+
+                SuccessResponse.ok(res, successMessage, loginResponse.user);
             })
             .catch(error => { next(error); });
     }
@@ -70,7 +78,7 @@ export class UserController {
 
         if (!id) throw CustomError.badRequest("User is required");
         if (!password) throw CustomError.badRequest("Password is required");
-        if(password.length < 6) throw CustomError.badRequest("Password must be at least 6 characters long");
+        if (password.length < 6) throw CustomError.badRequest("Password must be at least 6 characters long");
 
         const changePassword = new ChangePassword(this.userRepository);
 
@@ -82,10 +90,10 @@ export class UserController {
             .catch(error => { next(error); });
     }
 
-    changeStateActive = (req: Request, res: Response, next: NextFunction) => {        
-        const { id } = req.params;        
+    changeStateActive = (req: Request, res: Response, next: NextFunction) => {
+        const { id } = req.params;
 
-        if (!id) throw CustomError.badRequest("User is required");        
+        if (!id) throw CustomError.badRequest("User is required");
 
         const changeStateActive = new ChangeStateActive(this.userRepository);
 
@@ -96,7 +104,7 @@ export class UserController {
             })
             .catch(error => { next(error); });
     }
-    
+
 
     findById = (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
