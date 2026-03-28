@@ -15,7 +15,9 @@ export class ModuleDataSourceImpl implements ModuleDataSource {
 
     async getAllModules(): Promise<ModuleEntity[]> {
         try {
-            const modules = await Module.findAll();
+            const modules = await Module.findAll(
+                { order: [['mo_name', 'ASC']] }
+            );
             return modules.map(module => this.moduleEntityFromObject(module));
         } catch (error) {
             throw error
