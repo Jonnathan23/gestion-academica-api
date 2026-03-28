@@ -1,4 +1,4 @@
-import { userRoles } from "@/core/interfaces";
+import { userRoles, type UserRoles } from "@/core/interfaces";
 
 
 
@@ -13,7 +13,7 @@ export const Validators = {
     },
 
     isRole: (role: string): boolean => {
-        return role === userRoles.ADMIN || role === userRoles.TEACHER;
+        return Object.values(userRoles).includes(role as UserRoles);
     },
 
     IsUUID: (identifier: string): boolean => {
