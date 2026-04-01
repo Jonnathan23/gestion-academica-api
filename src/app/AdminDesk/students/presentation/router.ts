@@ -56,7 +56,7 @@ export class StudentsRouter {
             studentController.changeContractStatus
         );
 
-        // PATCH /:id/graduated
+        // POST /:id/graduated
         router.patch("/:id/graduated",
             RoleMiddleware.requirePermissions([
                 systemPermissions.ADMINDESK_STUDENTS_READ,
