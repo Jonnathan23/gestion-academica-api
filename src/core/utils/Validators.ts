@@ -1,3 +1,4 @@
+import type { CertificateType } from "@/app/AdminDesk/students/domain/interfaces/Students.interface";
 import { userRoles, type UserRoles } from "@/core/interfaces";
 
 
@@ -30,7 +31,18 @@ export const Validators = {
     isPhoneNumber: (phoneNumber: string): boolean => {
         const phoneNumberRegex: RegExp = /^[0-9]{10}$/;
         return phoneNumberRegex.test(phoneNumber);
+    },
+
+    isMinValidateAge: (date: string | Date, minAge: number = 4): boolean => {
+        const today = new Date();
+        const birthDate = new Date(date);
+        const age = today.getFullYear() - birthDate.getFullYear();
+        return age >= minAge;
+    },
+
+    isCertificateType: (certificateType: string): boolean => {
+        return Object.values(certificateType).includes(certificateType as CertificateType);
     }
 
-    
+
 };

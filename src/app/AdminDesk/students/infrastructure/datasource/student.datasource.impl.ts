@@ -6,6 +6,7 @@ import { StudentMapper } from "@/app/AdminDesk/students/infrastructure/mappers/s
 import { CustomError } from "@/core/error";
 import { Student } from "@/data/models/AdminDesk";
 import { studentContractStatus, studentProgressCategory } from "@/app/AdminDesk/students/domain/interfaces/Students.interface";
+import { Validators } from "@/core/utils";
 
 
 
@@ -45,19 +46,33 @@ export class StudentDataSourceImpl implements StudentDataSource {
         }
     }
 
-    async search(query: string): Promise<StudentEntity[]> {
+    async search(searchQuery: string): Promise<StudentEntity[]> {
         try {
-            const searchCondition = query ? {
-                [Op.or]: [
-                    { st_identification_card: { [Op.iLike]: `%${query}%` } },
-                    { st_full_name: { [Op.iLike]: `%${query}%` } }
-                ]
-            } : {};
+
+            const isUuidValid = Validators.IsUUID(searchQuery);
+
+            const searchConditions: any[] = [
+                { st_identification_card: { [Op.iLike]: `%${searchQuery}%` } },
+                { st_full_name: { [Op.iLike]: `%${searchQuery}%` } }
+            ];
+
+            if (isUuidValid) searchConditions.push({ st_id: { [Op.eq]: searchQuery } });
+
+            const finalCondition = searchQuery ? { [Op.or]: searchConditions } : {};
 
             const students = await Student.findAll({
-                where: searchCondition
+                where: finalCondition
             });
 
+            return students.map(student => this.studentEntityFromObject(student));
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getAllStudents(): Promise<StudentEntity[]> {
+        try {
+            const students = await Student.findAll();
             return students.map(student => this.studentEntityFromObject(student));
         } catch (error) {
             throw error;

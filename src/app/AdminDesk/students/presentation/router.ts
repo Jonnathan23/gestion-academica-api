@@ -36,6 +36,14 @@ export class StudentsRouter {
             studentController.search
         );
 
+        // GET /
+        router.get("/",
+            RoleMiddleware.requirePermissions([
+                systemPermissions.ADMINDESK_STUDENTS_READ
+            ]),
+            studentController.getAllStudents
+        );
+
 
 
         // PATCH /:id

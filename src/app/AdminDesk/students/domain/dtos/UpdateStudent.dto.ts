@@ -9,6 +9,7 @@ export class UpdateStudentDto {
         public readonly startDate?: Date,
         public readonly contractStatus?: StudentContractStatus,
         public readonly isGraduated?: boolean
+        //TODO: Agregar los otros campos: certificateType, nationality, email, dateOfBirth
     ) { }
 
     get value() {

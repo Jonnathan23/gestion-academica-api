@@ -6,6 +6,7 @@ import { RegisterStudent, SearchStudents, UpdateStudent, ChangeContractStatus, T
 import { CustomError } from "@/core/error";
 import { SuccessResponse } from "@/core/utils";
 import type { StudentEntity } from "@/app/AdminDesk/students/domain/entities/Student.entity";
+import { GetAllStudents } from "@/app/AdminDesk/students/application/useCases/getAllStudents.use-case";
 
 export class StudentController {
 
@@ -28,8 +29,21 @@ export class StudentController {
             .catch(error => { next(error); });
     }
 
+    getAllStudents = (req: Request, res: Response, next: NextFunction) => {
+        const getAllStudents = new GetAllStudents(this.studentRepository);
+
+        getAllStudents.execute()
+            .then(students => {
+                const successMessage = "Students found successfully";
+                SuccessResponse.ok<StudentEntity[]>(res, successMessage, students);
+            })
+            .catch(error => { next(error); });
+    }
+
     search = (req: Request, res: Response, next: NextFunction) => {
         const query = req.query.q as string || "";
+
+        console.log(query);
 
         const searchStudents = new SearchStudents(this.studentRepository);
 

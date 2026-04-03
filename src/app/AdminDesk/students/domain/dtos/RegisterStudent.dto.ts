@@ -1,4 +1,5 @@
 import { Validators } from "@/core/utils";
+import type { CertificateType } from "@/data/models/AdminDesk/Student.model";
 
 export class RegisterStudentDto {
     private constructor(
@@ -8,7 +9,7 @@ export class RegisterStudentDto {
         public readonly email: string,
         public readonly dateOfBirth: Date,
         public readonly nationality: string,
-        public readonly certificateType: string,
+        public readonly certificateType: CertificateType,
         public readonly startDate: Date
     ) { }
 
@@ -34,8 +35,12 @@ export class RegisterStudentDto {
         const parsedBirthDate = new Date(dateOfBirth);
         if (isNaN(parsedBirthDate.getTime())) return ['Invalid dateOfBirth'];
 
+        if (!Validators.isMinValidateAge(parsedBirthDate)) return ['Invalid dateOfBirth'];
+
         const parsedStartDate = new Date(startDate);
         if (isNaN(parsedStartDate.getTime())) return ['Invalid startDate'];
+
+        if (!Validators.isCertificateType(certificateType)) return ['Invalid certificateType'];
 
         return [undefined, new RegisterStudentDto(
             identificationCard,

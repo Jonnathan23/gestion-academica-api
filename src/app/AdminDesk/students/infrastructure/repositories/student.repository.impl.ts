@@ -16,6 +16,10 @@ export class StudentRepositoryImpl implements StudentRepository {
         return this.datasource.search(query);
     }
 
+    getAllStudents(): Promise<StudentEntity[]> {
+        return this.datasource.getAllStudents();
+    }
+
     update(id: string, dto: UpdateStudentDto): Promise<StudentEntity> {
         return this.datasource.update(id, dto);
     }
