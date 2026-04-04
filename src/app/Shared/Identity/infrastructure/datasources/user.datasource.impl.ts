@@ -6,7 +6,6 @@ import { CustomError } from "@/core/error";
 import { BcryptAdapter } from "@/core/utils";
 import { User } from "@/data/models/Shared";
 import { UserDataMapper } from "../mappers/userData.mapper";
-import { userState } from "../../domain/interfaces/user.interfaces";
 
 type HashFunction = typeof BcryptAdapter.hash;
 type CompareFunction = typeof BcryptAdapter.compare;
@@ -131,20 +130,6 @@ export class UserDataSourceImpl implements UserDataSource {
         try {
             const users = await User.findAll();
             return users.map(user => this.userDataEntityFromObject(user));
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async checkUserActiveStatus(id: string): Promise<boolean> {
-        try {
-            const user = await User.findByPk(id, {
-                attributes: ['us_is_active']
-            });
-
-            if (!user) return false;
-
-            return user.us_is_active;
         } catch (error) {
             throw error;
         }

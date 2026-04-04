@@ -7,7 +7,6 @@ export abstract class UserDataSource {
     abstract update(id: string, user: UpdateUserDto): Promise<void>;
     abstract changePassword(id: string, password: string): Promise<void>;
     abstract changeStateActive(id: string): Promise<void>;
-    abstract checkUserActiveStatus(id: string): Promise<boolean>;
     abstract findById(id: string): Promise<UserDataEntity>;
     abstract findAll(): Promise<UserDataEntity[]>;
 }
