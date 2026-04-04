@@ -5,7 +5,6 @@ import type { RegisterStudentDto, UpdateStudentDto, ChangeContractStatusDto, Stu
 export abstract class StudentDataSource {
     abstract register(dto: RegisterStudentDto): Promise<StudentEntity>;
     abstract search(query: string): Promise<StudentEntity[]>;
-    //abstract findById(id: string): Promise<StudentEntity>;
     abstract getAllStudents(): Promise<StudentEntity[]>;
     abstract update(id: string, dto: UpdateStudentDto): Promise<StudentEntity>;
     abstract changeContractStatus(id: string, dto: ChangeContractStatusDto): Promise<StudentEntity>;

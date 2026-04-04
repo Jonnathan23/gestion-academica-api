@@ -5,13 +5,14 @@ import { rolePermissionsMapping } from "@/core/constants";
 import { CustomError } from "@/core/error";
 import type { UserTokenPayload } from "@/core/middleware";
 import { JwtAdapter } from "@/core/utils";
+import { userState, type UserState } from "../../domain/interfaces/user.interfaces";
 
 interface UserResponse {
     us_id: string;
     us_full_name: string;
     us_email: string;
     us_role: string;
-    us_is_active: string;
+    us_is_active: UserState;
     permissions: string[];
 }
 
@@ -45,7 +46,7 @@ export class LoginUser implements LoginUserUseCase {
             us_full_name: userExist.us_full_name,
             us_email: userExist.us_email,
             us_role: userExist.us_role,
-            us_is_active: userExist.us_is_active ? "activo" : "inactivo",
+            us_is_active: userExist.us_is_active ? userState.ACTIVE : userState.INACTIVE,
             permissions: assignedPermissions
         }
 
