@@ -101,7 +101,6 @@ export class UserDataSourceImpl implements UserDataSource {
 
 
     async changeStateActive(id: string): Promise<void> {
-        //TODO: Implementar el cerrar sesion si se desactiva el usuario
         try {
             const userExist = await User.findOne({ where: { us_id: id } });
             if (!userExist) {
