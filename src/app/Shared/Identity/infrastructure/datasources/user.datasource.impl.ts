@@ -1,21 +1,24 @@
 import type { UserDataSource } from "@/app/Shared/Identity/domain/datasource/user.datasource";
 import type { LoginUserDto, RegisterUserDto, UpdateUserDto } from "@/app/Shared/Identity/domain/dtos";
-import type { UserEntity } from "@/app/Shared/Identity/domain/entities";
+import type { UserDataEntity, UserEntity } from "@/app/Shared/Identity/domain/entities";
 import { UserMapper } from "@/app/Shared/Identity/infrastructure/mappers/user.mapper";
 import { CustomError } from "@/core/error";
 import { BcryptAdapter } from "@/core/utils";
 import { User } from "@/data/models/Shared";
+import { UserDataMapper } from "../mappers/userData.mapper";
 
 type HashFunction = typeof BcryptAdapter.hash;
 type CompareFunction = typeof BcryptAdapter.compare;
 type UserEntityFromObject = typeof UserMapper.userModelToEntity;
+type UserDataEntityFromObject = typeof UserDataMapper.userModelToEntity;
 
 export class UserDataSourceImpl implements UserDataSource {
 
     constructor(
         private readonly hashFunction: HashFunction = BcryptAdapter.hash,
         private readonly userEntityFromObject: UserEntityFromObject = UserMapper.userModelToEntity,
-        private readonly compareFunction: CompareFunction = BcryptAdapter.compare
+        private readonly compareFunction: CompareFunction = BcryptAdapter.compare,
+        private readonly userDataEntityFromObject: UserDataEntityFromObject = UserDataMapper.userModelToEntity
     ) { }
 
 
@@ -57,7 +60,7 @@ export class UserDataSourceImpl implements UserDataSource {
         }
     }
 
-    async update(id: string, user: UpdateUserDto): Promise<UserEntity> {
+    async update(id: string, user: UpdateUserDto): Promise<void> {
         const { us_full_name, us_email, us_role } = user;
 
         try {
@@ -68,14 +71,13 @@ export class UserDataSourceImpl implements UserDataSource {
 
             await userExist.update(user.values)
 
-            return this.userEntityFromObject(userExist);
-
+            return;
         } catch (error) {
             throw error;
         }
     }
 
-    async changePassword(id: string, password: string): Promise<UserEntity> {
+    async changePassword(id: string, password: string): Promise<void> {
         try {
             const userExist = await User.findOne({ where: { us_id: id } });
             if (!userExist) {
@@ -85,7 +87,7 @@ export class UserDataSourceImpl implements UserDataSource {
             const passwordHash = await this.hashFunction(password);
             await userExist.update({ us_password_hash: passwordHash });
 
-            return this.userEntityFromObject(userExist);
+            return;
         } catch (error) {
             throw error;
         }
@@ -93,7 +95,7 @@ export class UserDataSourceImpl implements UserDataSource {
 
 
 
-    async changeStateActive(id: string): Promise<UserEntity> {
+    async changeStateActive(id: string): Promise<void> {
         try {
             const userExist = await User.findOne({ where: { us_id: id } });
             if (!userExist) {
@@ -101,29 +103,29 @@ export class UserDataSourceImpl implements UserDataSource {
             }
 
             await userExist.update({ us_is_active: !userExist.us_is_active });
-            return this.userEntityFromObject(userExist);
+            return;
         } catch (error) {
             throw error;
         }
     }
 
-    async findById(id: string): Promise<UserEntity> {
+    async findById(id: string): Promise<UserDataEntity> {
         try {
             const userFound = await User.findOne({ where: { us_id: id } });
             if (!userFound) {
                 throw CustomError.notFound("User not found");
             }
 
-            return this.userEntityFromObject(userFound);
+            return this.userDataEntityFromObject(userFound);
         } catch (error) {
             throw (error);
         }
     }
 
-    async findAll(): Promise<UserEntity[]> {
+    async findAll(): Promise<UserDataEntity[]> {
         try {
             const users = await User.findAll();
-            return users.map(user => this.userEntityFromObject(user));
+            return users.map(user => this.userDataEntityFromObject(user));
         } catch (error) {
             throw error;
         }

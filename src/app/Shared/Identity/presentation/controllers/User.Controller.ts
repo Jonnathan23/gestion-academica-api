@@ -4,7 +4,7 @@ import type { UserRepository } from "@/app/Shared/Identity/domain/repositories/u
 import { LoginUserDto, RegisterUserDto, UpdateUserDto } from "@/app/Shared/Identity/domain/dtos";
 import { SuccessResponse } from "@/core/utils";
 import { CustomError } from "@/core/error";
-import { UserEntity } from "@/app/Shared/Identity/domain/entities";
+import { UserDataEntity, UserEntity } from "@/app/Shared/Identity/domain/entities";
 import { ChangePassword, ChangeStateActive, FindAllUsers, FindUserById, LoginUser, RegisterUser, UpdateUser } from "@/app/Shared/Identity/application";
 
 
@@ -116,7 +116,7 @@ export class UserController {
         findById.execute(id.toString())
             .then((user) => {
                 const succesMessage = "User found successfully";
-                SuccessResponse.ok<UserEntity>(res, succesMessage, user);
+                SuccessResponse.ok<UserDataEntity>(res, succesMessage, user);
             })
             .catch(error => { next(error); });
     }
@@ -127,7 +127,7 @@ export class UserController {
         findAll.execute()
             .then((users) => {
                 const succesMessage = "Users found successfully";
-                SuccessResponse.ok<UserEntity[]>(res, succesMessage, users);
+                SuccessResponse.ok<UserDataEntity[]>(res, succesMessage, users);
             })
             .catch(error => { next(error); });
     }
