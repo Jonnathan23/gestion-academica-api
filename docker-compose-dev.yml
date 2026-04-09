@@ -1,0 +1,38 @@
+services:
+  # Backend
+  gestion-academica-api-dev:
+    build:
+      context: .
+      target: development
+      dockerfile: dockerfile
+    container_name: gestion-academica-api-dev
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    volumes:
+      - backend-data:/app
+      - /app/node_modules
+    depends_on:
+      - postgres-db
+
+  # Base de Datos
+  postgres-db:
+    image: postgres:17
+    restart: always
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  # Backend
+  backend-data:
+  # Base de Datos
+  postgres-data:

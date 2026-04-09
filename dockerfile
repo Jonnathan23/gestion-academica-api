@@ -1,28 +1,29 @@
-# ---- Base Stage ----
+# Etapa 1: Base (Configuración compartida)
 FROM oven/bun:1 AS base
 WORKDIR /app
 COPY package.json bun.lockb ./
 
-# ---- Development Stage ----
+# Etapa 2: Desarrollo
 FROM base AS development
-# Install all dependencies (including devDependencies)
 RUN bun install
 COPY . .
-# Start development server with hot-reload
-CMD ["bun", "run", "dev"]
+# Llamamos al script optimizado para Docker
+CMD ["bun", "run", "dev:docker"]
 
-# ---- Testing Stage ----
+
+# Etapa 3: Testing
+
 FROM base AS testing
 RUN bun install
 COPY . .
-# We don't define a CMD here usually, as we pass it via docker-compose
-# but we can set a default test command
-CMD ["bun", "run", "test"]
+# En el Docker compose de test, podemos sobreescribir el comando a test:docker
+CMD ["bun", "run", "test:docker"]
 
-# ---- Production Stage ----
+
+# Etapa 4: Producción
 FROM base AS production
-# Install ONLY production dependencies
+# Instalamos SOLO las dependencias necesarias para producción
 RUN bun install --production
 COPY . .
-# Start the production-ready server
-CMD ["bun", "run", "start"]
+# Ejecutamos el archivo principal directamente
+CMD ["bun", "run", "src/app.ts"]
