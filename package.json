@@ -3,11 +3,15 @@
   "module": "index.ts",
   "private": true,
   "scripts": {
-    "dev": "bun run --watch src/app.ts",
-    "dev:api": "bun run --watch src/app.ts --api",
-    "dev:test": "bun --env-file=.env.test run --watch src/app.ts --api",
-    "test": "bun test",
-    "test:coverage": "bun test --coverage"
+    "dev:docker": "bun run --watch src/app.ts --api",
+    "test:docker": "bun test",
+    "test:coverage:docker": "bun test --coverage",
+
+    "dev:local": "bun --env-file=.env run --watch src/app.ts --api",
+    "test:local": "bun --env-file=.env.test test",
+    "test:coverage:local": "bun --env-file=.env.test test --coverage",
+    
+    "start": "bun run src/app.ts"
   },
   "devDependencies": {
     "@types/bcryptjs": "3.0.0",
