@@ -42,9 +42,7 @@ export class StudentController {
 
     search = (req: Request, res: Response, next: NextFunction) => {
         const query = req.query.q as string || "";
-
-        console.log(query);
-
+        
         const searchStudents = new SearchStudents(this.studentRepository);
 
         searchStudents.execute(query)

@@ -1,4 +1,4 @@
-import type { CertificateType } from "@/app/AdminDesk/students/domain/interfaces/Students.interface";
+import { certificateType, type CertificateType } from "@/app/AdminDesk/students/domain/interfaces/Students.interface";
 import { userRoles, type UserRoles } from "@/core/interfaces";
 
 
@@ -40,8 +40,8 @@ export const Validators = {
         return age >= minAge;
     },
 
-    isCertificateType: (certificateType: string): boolean => {
-        return Object.values(certificateType).includes(certificateType as CertificateType);
+    isCertificateType: (certificate: string): boolean => {
+        return Object.values(certificateType).includes(certificate as CertificateType);
     }
 
 

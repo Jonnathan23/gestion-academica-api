@@ -1,9 +1,9 @@
-import type { UserEntity } from "@/app/Shared/Identity/domain/entities";
+import type { UserDataEntity, UserEntity } from "@/app/Shared/Identity/domain/entities";
 import type { UserRepository } from "@/app/Shared/Identity/domain/repositories/user.repository";
 
 
 interface FindAllUsersUseCase {
-    execute(): Promise<UserEntity[]>;
+    execute(): Promise<UserDataEntity[]>;
 }
 
 export class FindAllUsers implements FindAllUsersUseCase {
@@ -11,7 +11,7 @@ export class FindAllUsers implements FindAllUsersUseCase {
         private readonly userRepository: UserRepository
     ) { }
 
-    async execute(): Promise<UserEntity[]> {
+    async execute(): Promise<UserDataEntity[]> {
         return await this.userRepository.findAll();
     }
 }
