@@ -12,7 +12,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - backend-data:/app
+      - ./:/app
       - /app/node_modules
     depends_on:
       - postgres-db
