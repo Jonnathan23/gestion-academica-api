@@ -1,38 +1,32 @@
+name: gestion-academica-api-test
+
 services:
-  # Backend
-  gestion-academica-api-testing:
+  # Backend Testing
+  gestion-academica-api-test:
     build:
       context: .
       target: testing
-      dockerfile: dockerfile
-    container_name: gestion-academica-api-testing
+      dockerfile: Dockerfile
+    container_name: gestion-academica-api-test
     restart: always
     env_file:
       - .env.test
     ports:
-      - "3000:3000"
-    volumes:
-      - backend-data:/app
-      - /app/node_modules
+      - "3001:3000"
     depends_on:
-      - postgres-db
+      - postgres-db-test
 
-  # Base de Datos
-  postgres-db:
+  # Base de Datos Testing
+  postgres-db-test:
     image: postgres:17
     restart: always
-    container_name: postgres-db
-    environment:
-      POSTGRES_USER: ${DATABASE_USER}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_DB: ${DATABASE_NAME}
+    container_name: postgres-db-test
+    env_file:
+      - .env.test            # Postgres usa las credenciales de testing
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgres-test-data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5434:5432"
 
 volumes:
-  # Backend
-  backend-data:
-  # Base de Datos
-  postgres-data:
+  postgres-test-data:        # Volumen exclusivo para que las pruebas no rompan la BD principal

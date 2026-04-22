@@ -7,41 +7,75 @@ RESTful API backend designed to manage the academic and operational ecosystem of
 
 ### Prerequisites
 - Install [Bun](https://bun.sh/)
-- Have a running instance of PostgreSQL.
+- Install Docker & Docker Compose [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
-### 1. Install Dependencies
+### 1. Install Dependencies (Local)
+If you plan to run the project locally outside of Docker, install the dependencies:
 
 ```bash
 bun install
 ```
+
 ### 2. Configure Environment Variables
+Copy the ``.env.template`` file to ``.env`` (for development) and ``.env.test`` (for testing). Fill in the required values.
 
-Copy the `.env.template` file to `.env` and fill in the required values.
+**Note:** If using Docker, ensure your DATABASE_URL points to the container names (e.g., postgres-db-dev) instead of localhost.
 
-### 3. Run the server & Available Scripts
+---
 
-We use specific scripts to manage CORS policies and environments efficiently during development:
+## 🐳 Running with Docker (Recommended)
 
-- `bun run dev`: Starts the development server with strict CORS. It only accepts requests from the configured `FRONTEND_URL`. (Use this when working with the React frontend).
+We use Docker Compose to guarantee consistent environments across development and testing.
+
+### Development Environment (Backend + Database)
+To spin up the entire ecosystem (PostgreSQL database and the Bun backend API) with hot-reloading enabled:
 
 ```bash
-bun run dev
+docker compose -f docker-compose-dev.yml up -d
 ```
 
-- `bun run dev:api`: Starts the server in API mode by passing the `--api` flag. This relaxes CORS to allow `undefined` origins, which is perfect for testing endpoints using tools like Postman or Insomnia.
+The backend will automatically use the `dev:docker` script and read from the `.env` file.
+
+### Database-Only Mode (Hybrid Approach)
+If you prefer to run the backend natively on your machine (e.g., for faster debugging) but still want Docker to handle the database:
+
 ```bash
-bun run dev:api
+docker compose -f docker-compose-dev.yml up postgres-db-dev -d
 ```
 
-- `bun run dev:test`: Forces the application to use the `.env.test` file. Useful for manual testing against a separate test database without affecting local development data.
+Once the database is running, you can start your local server using:
+
 ```bash
-bun run dev:test
+bun run dev:local
 ```
 
-- `bun run test`: Executes the automated test suite using Bun's native test runner (it automatically reads the `.env.test` environment).
+### Testing Environment (Isolated)
+To run the automated test suite in a completely isolated environment that will not affect your development data:
+
 ```bash
-bun run test
+docker compose -f docker-compose-test.yml up --build
 ```
+
+This spins up a separate database and runs the `test:docker` script using the `.env.test` file.
+
+### Stopping the Containers
+To stop and remove the containers, networks, and volumes for a specific environment:
+
+```bash
+docker compose -f docker-compose-dev.yml down
+```
+
+---
+
+## 💻 Running Locally (Without Docker)
+
+If you are running the backend directly on your machine (ensure your local database is running or you used the Database-Only Docker command), use the following scripts:
+
+- `bun run dev:local`: Starts the development server with strict CORS, reading from the physical `.env` file.
+- `bun run dev:api:local`: Starts the server in API mode (`--api` flag), relaxing CORS for tools like Postman.
+- `bun run test:local`: Executes the test suite reading from `.env.test`.
+
+---
 
 ## 🛠️ Tech Stack
 

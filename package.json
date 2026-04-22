@@ -3,11 +3,13 @@
   "module": "index.ts",
   "private": true,
   "scripts": {
-    "dev:docker": "bun run --watch src/app.ts --api",
+    "dev:docker": "bun run --watch src/app.ts",
+    "dev:api:docker": "bun run --watch src/app.ts --api",
     "test:docker": "bun test",
     "test:coverage:docker": "bun test --coverage",
 
-    "dev:local": "bun --env-file=.env run --watch src/app.ts --api",
+    "dev:local": "bun --env-file=.env run --watch src/app.ts",
+    "dev:api:local": "bun --env-file=.env run --watch src/app.ts --api",
     "test:local": "bun --env-file=.env.test test",
     "test:coverage:local": "bun --env-file=.env.test test --coverage",
     

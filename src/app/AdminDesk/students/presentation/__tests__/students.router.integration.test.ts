@@ -21,11 +21,15 @@ testingStudentApp.use(testGlobalErrorHandler());
 // ------------------------------------------------------------------ //
 // Database: force-sync drops and recreates all tables
 // ------------------------------------------------------------------ //
+
+console.log('environmentVariables.databaseUrl');
+console.log(environmentVariables.databaseUrl);
 const testDatabase = new DatabaseConnection({
     databaseUrl: environmentVariables.databaseUrl,
     enableLogging: false,
     forceSynchronization: true,
 });
+
 
 // ------------------------------------------------------------------ //
 // Shared constants
