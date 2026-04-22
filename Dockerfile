@@ -8,7 +8,7 @@ FROM base AS development
 RUN bun install
 COPY . .
 
-CMD ["bun", "run", "dev:api:docker"]
+CMD ["bun", "run", "dev:api"]
 
 
 # Etapa 3: Testing
@@ -16,7 +16,7 @@ FROM base AS testing
 RUN bun install
 COPY . .
 
-CMD ["bun", "run", "test:docker"]
+CMD ["bun", "run", "test"]
 
 
 # Etapa 4: Producción

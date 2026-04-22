@@ -3,16 +3,18 @@
   "module": "index.ts",
   "private": true,
   "scripts": {
-    "dev:docker": "bun run --watch src/app.ts",
-    "dev:api:docker": "bun run --watch src/app.ts --api",
-    "test:docker": "bun test",
-    "test:coverage:docker": "bun test --coverage",
-
-    "dev:local": "bun --env-file=.env run --watch src/app.ts",
-    "dev:api:local": "bun --env-file=.env run --watch src/app.ts --api",
-    "test:local": "bun --env-file=.env.test test",
-    "test:coverage:local": "bun --env-file=.env.test test --coverage",
+    "docker:dev": "docker compose -f docker-compose-dev.yml up",
+    "docker:test": "docker compose -f docker-compose-test.yml up --build --exit-code-from gestion-academica-api-test --abort-on-container-exit",
+    "docker:stop": "docker compose -f docker-compose-dev.yml stop",
+    "docker:down": "docker compose -f docker-compose-dev.yml down",
+    "docker:stop:test": "docker compose -f docker-compose-test.yml stop",
+    "docker:down:test": "docker compose -f docker-compose-test.yml down",
     
+    "dev": "bun run --watch src/app.ts",
+    "dev:api": "bun run --watch src/app.ts --api",
+    "test": "bun test",
+    "test:coverage": "bun test --coverage",
+
     "start": "bun run src/app.ts"
   },
   "devDependencies": {
@@ -51,5 +53,4 @@
   "engines": {
     "node": "22.x.x"
   }
-
 }
