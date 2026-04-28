@@ -1,6 +1,7 @@
 import { describe, test, expect, beforeAll, afterAll, spyOn } from "bun:test";
 import request from "supertest";
 import express from "express";
+import cookieParser from "cookie-parser";
 
 import { ContractsRouter } from "@/app/AdminDesk/contracts/presentation/router";
 import { environmentVariables } from "@/core/config";
@@ -10,12 +11,14 @@ import { User } from "@/data/models/Shared";
 import { Student, Module, StudentModule } from "@/data/models/AdminDesk";
 import { JwtAdapter, BcryptAdapter } from "@/core/utils";
 import { userRoles } from "@/core/interfaces/Roles.interfaces";
+import { AuthMiddleware } from "@/core/middleware/auth.mid";
 
 // ------------------------------------------------------------------ //
 // Micro-application: only the Contracts (Student Levels) router
 // ------------------------------------------------------------------ //
 const testingContractsApp = express();
 testingContractsApp.use(express.json());
+testingContractsApp.use(cookieParser());
 testingContractsApp.use("/api/student-levels", ContractsRouter.routes);
 testingContractsApp.use(testGlobalErrorHandler());
 
@@ -53,6 +56,11 @@ describe("Integration Tests: Student Levels Router (Contracts)", () => {
 
     beforeAll(async () => {
         await testDatabase.connect();
+
+        AuthMiddleware.configure(async (userId: string) => {
+            const user = await User.findByPk(userId);
+            return user ? user.us_is_active : false;
+        });
 
         // Inject an Admin user directly via Sequelize
         const hashedPassword = await BcryptAdapter.hash(ADMIN_PASSWORD);
@@ -101,6 +109,37 @@ describe("Integration Tests: Student Levels Router (Contracts)", () => {
 
     afterAll(async () => {
         await testDatabase.disconnect();
+    });
+
+    // ---------------------------------------------------------------- //
+    // AUTH — [401] Unauthenticated access
+    // ---------------------------------------------------------------- //
+    describe("Authentication guard", () => {
+        test("[401] Active false user should return 'Your account has been deactivated...' and clear cookies", async () => {
+            const deactivatedUser = await User.create({
+                us_full_name: "Deactivated Contracts Tester",
+                us_email: "deact.contract@test.com",
+                us_password_hash: "MockHash123!",
+                us_role: "TEACHER",
+                us_is_active: false
+            });
+            const deactivatedToken = await JwtAdapter.generateToken({
+                id: deactivatedUser.us_id,
+                email: deactivatedUser.us_email,
+                role: deactivatedUser.us_role,
+            });
+
+            const res = await request(testingContractsApp)
+                .post(`/api/student-levels/student/${testStudentId}`)
+                .set("Cookie", [`auth_token=${deactivatedToken}`])
+                .send({ moduleIds: [moduleB1Id] });
+
+            expect(res.status).toBe(401);
+            expect(res.body.errors[0].message).toBe("Your account has been deactivated by an administrator");
+            const cookies = res.headers["set-cookie"];
+            expect(cookies).toBeDefined();
+            expect(cookies![0]).toContain("auth_token=;");
+        });
     });
 
     // ---------------------------------------------------------------- //

@@ -9,6 +9,7 @@ import { testGlobalErrorHandler } from "@/__test__/configTest";
 import { User } from "@/data/models/Shared";
 import { Student } from "@/data/models/AdminDesk";
 import { JwtAdapter, BcryptAdapter } from "@/core/utils";
+import { AuthMiddleware } from "@/core/middleware/auth.mid";
 
 // ------------------------------------------------------------------ //
 // Micro-application: only the Students router (no other routes needed)
@@ -64,6 +65,11 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
 
     beforeAll(async () => {
         await testDatabase.connect();
+
+        AuthMiddleware.configure(async (userId: string) => {
+            const user = await User.findByPk(userId);
+            return user ? user.us_is_active : false;
+        });
 
         // Inject an Admin user directly via Sequelize
         const hashedPassword = await BcryptAdapter.hash(ADMIN_PASSWORD);
@@ -158,7 +164,7 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
                 .set("Authorization", adminToken);
 
             expect(res.status).toBe(401);
-            expect(res.body.errors[0].message).toBe("You are not authorized");
+            expect(res.body.errors[0].message).toBe("You must be logged in");
         });
 
         test("[401] GET /api/students/search with invalid token should return unauthorized", async () => {
@@ -168,6 +174,28 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
 
             expect(res.status).toBe(401);
             expect(res.body).toHaveProperty("errors");
+        });
+
+        test("[401] Active false user should return 'Your account has been deactivated...'", async () => {
+            const deactivatedUser = await User.create({
+                us_full_name: "Deactivated Tester",
+                us_email: "deact.student@test.com",
+                us_password_hash: "MockHash123!",
+                us_role: "TEACHER",
+                us_is_active: false
+            });
+            const deactivatedToken = await JwtAdapter.generateToken({
+                id: deactivatedUser.us_id,
+                email: deactivatedUser.us_email,
+                role: deactivatedUser.us_role,
+            });
+
+            const res = await request(testingStudentApp)
+                .get("/api/students/search?q=Juan")
+                .set("Authorization", `Bearer ${deactivatedToken}`);
+
+            expect(res.status).toBe(401);
+            expect(res.body.errors[0].message).toBe("Your account has been deactivated by an administrator");
         });
     });
 
