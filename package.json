@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "docker:dev": "docker compose -f docker-compose-dev.yml up",
-    "docker:test": "docker compose -f docker-compose-test.yml up --build --exit-code-from gestion-academica-api-test --abort-on-container-exit",
+    "docker:test": "docker compose -f docker-compose-test.yml up --build",
     "docker:stop": "docker compose -f docker-compose-dev.yml stop",
     "docker:down": "docker compose -f docker-compose-dev.yml down",
     "docker:stop:test": "docker compose -f docker-compose-test.yml stop",
@@ -15,6 +15,10 @@
     "test": "bun test",
     "test:coverage": "bun test --coverage",
 
+    "dev:local": "bun run --env-file=.env.local --watch src/app.ts --api",
+    "test:local": "bun test --env-file=.env.test.local",
+    "test:coverage:local": "bun test --coverage --env-file=.env.test.local",
+    
     "start": "bun run src/app.ts"
   },
   "devDependencies": {
