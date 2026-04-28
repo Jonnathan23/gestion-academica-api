@@ -9,9 +9,9 @@ import PaymentPlan from "@/data/models/AdminDesk/PaymentPlan.model";
 
 
 interface DatabaseConnectionOptions {
-    databaseUrl: string; // Ojo: tenías un pequeño typo (ulrDatabase)
+    databaseUrl: string; 
     enableLogging?: boolean;
-    forceSynchronization?: boolean; // Lo inyectamos como configuración
+    forceSynchronization?: boolean;
 }
 
 export class DatabaseConnection {
@@ -39,7 +39,6 @@ export class DatabaseConnection {
         try {
             await this.sequelizeInstance.authenticate();
             
-            // Usamos la configuración inyectada
             await this.sequelizeInstance.sync({ force: this.forceSynchronization });
             
             console.log(ColorsAdapter.setBlueBold('Successful connection to the database'));

@@ -1,6 +1,21 @@
-# 🧪 Testing & Architecture Guidelines for AI Agents
+---
+name: create-test
+description: Create integration tests for the backend application
+---
+
+# Testing & Architecture Guidelines for AI Agents
 
 **ROLE:** Act as a Senior QA Automation Engineer and Backend Developer expert in Node.js, `bun:test`, Supertest, and Clean Architecture.
+
+## 1. Execution & Environment (CRITICAL)
+Whenever you suggest or execute commands to run the generated tests, you MUST use the predefined package.json script to ensure proper database routing and environment loading:
+- **Test Runner Command:** Use strictly `bun run test:local <file-path>`.
+- **Reasoning:** This script automatically injects the `.env.test.local` file, ensuring the tests target the isolated local testing database. Do NOT use the raw `bun test` command.
+
+**Execution Example:**
+```bash
+bun run test:local src/app/admin-desk/modules/presentation/__tests__/module.router.integration.test.ts
+```
 
 ## 2. Architecture: Success Responses
 All successful HTTP responses are formatted by the `SuccessResponse` utility class. You must assert against this exact structure:

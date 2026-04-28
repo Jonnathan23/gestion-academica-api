@@ -8,6 +8,7 @@ import { DatabaseConnection } from "@/data/config/db-postgresql";
 import { testGlobalErrorHandler } from "@/__test__/configTest";
 import { User } from "@/data/models/Shared";
 import { JwtAdapter, BcryptAdapter } from "@/core/utils";
+import { AuthMiddleware } from "@/core/middleware/auth.mid";
 
 // ------------------------------------------------------------------ //
 // Micro-application: real router + real error handler
@@ -53,6 +54,11 @@ describe("Integration Tests: User Router (Authenticated)", () => {
 
     beforeAll(async () => {
         await testDatabase.connect();
+
+        AuthMiddleware.configure(async (userId: string) => {
+            const user = await User.findByPk(userId);
+            return user ? user.us_is_active : false;
+        });
 
         // Inject a SuperAdmin directly via Sequelize
         const hashedPassword = await BcryptAdapter.hash(SUPER_ADMIN_PASSWORD);
@@ -125,7 +131,29 @@ describe("Integration Tests: User Router (Authenticated)", () => {
                 .set("Authorization", adminToken);
 
             expect(res.status).toBe(401);
-            expect(res.body.errors[0].message).toBe("You are not authorized");
+            expect(res.body.errors[0].message).toBe("You must be logged in");
+        });
+
+        test("[401] Active false user should return 'Your account has been deactivated...'", async () => {
+            const deactivatedUser = await User.create({
+                us_full_name: "Deactivated User",
+                us_email: "deactivated@test.com",
+                us_password_hash: "MockHash123!",
+                us_role: "TEACHER",
+                us_is_active: false
+            });
+            const deactivatedToken = await JwtAdapter.generateToken({
+                id: deactivatedUser.us_id,
+                email: deactivatedUser.us_email,
+                role: deactivatedUser.us_role,
+            });
+
+            const res = await request(testingApp)
+                .get("/api/users")
+                .set("Authorization", `Bearer ${deactivatedToken}`);
+
+            expect(res.status).toBe(401);
+            expect(res.body.errors[0].message).toBe("Your account has been deactivated by an administrator");
         });
     });
 
@@ -530,16 +558,17 @@ describe("Integration Tests: User Router (Authenticated)", () => {
             expect(res.body.success).toBe(true);
             expect(res.body.message).toBe("User logged in successfully");
 
-            // Verify the response data contains user info and token
+            // Verify the response data contains user info
             const loginData = res.body.data;
-            expect(loginData).toHaveProperty("token");
-            expect(typeof loginData.token).toBe("string");
-            expect(loginData.token.split(".")).toHaveLength(3);
+            expect(loginData).not.toHaveProperty("token");
+            expect(loginData.us_email).toBe(SUPER_ADMIN_EMAIL);
+            expect(loginData.us_full_name).toBe("Super Admin");
+            expect(loginData.us_role).toBe("ADMIN");
 
-            expect(loginData).toHaveProperty("user");
-            expect(loginData.user.us_email).toBe(SUPER_ADMIN_EMAIL);
-            expect(loginData.user.us_full_name).toBe("Super Admin");
-            expect(loginData.user.us_role).toBe("ADMIN");
+            // Verify the token is set in the cookies
+            const cookies = res.headers["set-cookie"];
+            expect(cookies).toBeDefined();
+            expect(cookies![0]).toContain("auth_token=");
         });
     });
 
