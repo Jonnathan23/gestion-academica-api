@@ -20,6 +20,7 @@ export class AuthMiddleware {
     public static configure(validator: (userId: string) => Promise<boolean>) {
         this.validateUserActiveStatus = validator;
     }
+    
     public static async validateJWT(req: AuthRequest, res: Response, next: NextFunction) {
         let token = req.cookies?.auth_token;
 
