@@ -1,5 +1,4 @@
 name: gestion-academica-api-test
-
 services:
   # Backend Testing
   gestion-academica-api-test:
