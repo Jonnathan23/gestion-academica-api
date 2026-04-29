@@ -6,6 +6,8 @@ import { Student, Module, StudentModule } from "@/data/models/AdminDesk";
 import { AttendanceSession, LessonLog, RetentionAlert } from "@/data/models/ClassTrack";
 import PaymentQuota from "@/data/models/AdminDesk/PaymentQuota.model";
 import PaymentPlan from "@/data/models/AdminDesk/PaymentPlan.model";
+import { CustomPostgresDatabaseConnectionError } from "../errors/CustomPostgresDatabaseError";
+
 
 
 interface DatabaseConnectionOptions {
@@ -43,9 +45,10 @@ export class DatabaseConnection {
             
             console.log(ColorsAdapter.setBlueBold('Successful connection to the database'));
         } catch (error) {
-            console.log(ColorsAdapter.setRedBold('Error connecting to the database'));
-            console.log(error);
+            console.log(ColorsAdapter.setRedBold('\n[FATAL] Error connecting to the database during startup:'));
+            CustomPostgresDatabaseConnectionError.getErrorDetails(error);
         }
+
     }
 
     async disconnect(): Promise<void> {

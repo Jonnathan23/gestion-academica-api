@@ -209,7 +209,7 @@ describe("Integration Tests: Student Levels Router (Contracts)", () => {
             studentLevelA2Id = contractA2.id;
         });
 
-        test("[500] PRUEBA DE ATOMICIDAD (ROLLBACK): Falla forzada en BD y evita incremento", async () => {
+        test("[503] PRUEBA DE ATOMICIDAD (ROLLBACK): Falla forzada en BD y evita incremento", async () => {
             const bulkCreateSpy = spyOn(StudentModule, "bulkCreate").mockImplementation(() => {
                 throw new Error("Forced DB Error");
             });
@@ -222,7 +222,7 @@ describe("Integration Tests: Student Levels Router (Contracts)", () => {
                 .set("Authorization", `Bearer ${adminToken}`)
                 .send({ moduleIds: [moduleB1Id] });
 
-            expect(res.status).toBe(500);
+            expect(res.status).toBe(503);
 
             const countAfter = await StudentModule.count();
             expect(countAfter).toBe(countBefore);

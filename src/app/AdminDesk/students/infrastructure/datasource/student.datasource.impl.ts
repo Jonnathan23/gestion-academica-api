@@ -2,10 +2,10 @@ import { Op } from "sequelize";
 
 import type { StudentDataSource } from "@/app/AdminDesk/students/domain/datasource/student.datasource";
 import type { RegisterStudentDto, UpdateStudentDto, ChangeContractStatusDto, StudentEntity } from "@/app/AdminDesk/students/domain";
-import { StudentMapper } from "@/app/AdminDesk/students/infrastructure/mappers/student.mapper";
-import { CustomError } from "@/core/error";
-import { Student } from "@/data/models/AdminDesk";
 import { studentContractStatus, studentProgressCategory } from "@/app/AdminDesk/students/domain/interfaces/Students.interface";
+import { StudentMapper } from "@/app/AdminDesk/students/infrastructure/mappers/student.mapper";
+import { Student } from "@/data/models/AdminDesk";
+import { CustomError } from "@/core/error";
 import { Validators } from "@/core/utils";
 
 
