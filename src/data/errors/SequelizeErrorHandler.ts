@@ -1,8 +1,7 @@
-import { ValidationError, UniqueConstraintError, ForeignKeyConstraintError, DatabaseError } from 'sequelize';
+import { ValidationError, UniqueConstraintError, ForeignKeyConstraintError } from 'sequelize';
 
 import type { DatabaseErrorHandler, FormattedErrorResponse } from '@/core/interfaces/DatabaseErrorHandler.interface';
-
-
+import { CustomPostgresDatabaseConnectionError } from './CustomPostgresDatabaseError';
 
 export class SequelizeErrorHandler implements DatabaseErrorHandler {
     public handleDatabaseError(error: unknown): FormattedErrorResponse | null {
@@ -40,15 +39,11 @@ export class SequelizeErrorHandler implements DatabaseErrorHandler {
             };
         }
 
-        if (error instanceof DatabaseError) {
-            console.error('💥 [CRITICAL DATABASE ERROR]:', error.message);
-            return {
-                statusCode: 503,
-                errors: [{ message: 'Database service encountered an unexpected error.' }]
-            };
-        }
+        const customError = CustomPostgresDatabaseConnectionError.getErrorDetails(error);
 
-        // Si no es un error de Sequelize, retornamos null para que el middleware global decida qué hacer
-        return null;
+        return {
+            statusCode: customError.statusCode,
+            errors: customError.errors
+        };
     }
 }

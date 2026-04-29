@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { StudentLevelDataSourceImpl } from "@/app/AdminDesk/contracts/infrastructure/datasource/contract.datasource.impl";
+import { StudentLevelDataSourceImpl } from "@/app/AdminDesk/contracts/infrastructure/datasource/StudentLevel.datasource.impl";
 import { StudentLevelRepositoryImpl } from "@/app/AdminDesk/contracts/infrastructure/repositories/contract.repository.impl";
 import { ContractController } from "@/app/AdminDesk/contracts/presentation/controllers/Contract.Controller";
 import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
