@@ -49,7 +49,7 @@ class StudentModule extends Model<StudentModuleAttributes, StudentModuleCreation
     declare st_mod_status: StudentModuleStatus;
 
     @Column({
-        type: DataType.DATE,
+        type: DataType.DATEONLY,
         allowNull: false
     })
     declare st_mod_purchase_date: Date;

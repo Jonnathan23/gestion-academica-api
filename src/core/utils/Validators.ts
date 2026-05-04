@@ -42,7 +42,17 @@ export const Validators = {
 
     isCertificateType: (certificate: string): boolean => {
         return Object.values(certificateType).includes(certificate as CertificateType);
-    }
+    },
+
+    isDate: (dateValue: any): boolean => {
+        if (dateValue === undefined || dateValue === null) {
+            return false;
+        }
+
+        const parsedDate = new Date(dateValue);
+        // getTime() devuelve NaN si la fecha es inválida, e isNaN() lo detecta
+        return !isNaN(parsedDate.getTime());
+    },
 
 
 };

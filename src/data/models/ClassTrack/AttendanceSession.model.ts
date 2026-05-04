@@ -63,19 +63,19 @@ class AttendanceSession extends Model<AttendanceSessionAttributes> {
     declare teacher: User;
 
     @Column({
-        type: DataType.DATE,
+        type: DataType.DATEONLY,
         allowNull: false
     })
     declare at_se_session_date: Date;
 
     @Column({
-        type: DataType.DATE,
+        type: DataType.DATEONLY,
         allowNull: false
     })
     declare at_se_entry_time: Date;
 
     @Column({
-        type: DataType.DATE,
+        type: DataType.DATEONLY,
         allowNull: true
     })
     declare at_se_exit_time: Date;

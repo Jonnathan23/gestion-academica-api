@@ -7,10 +7,10 @@ export class RegisterStudentDto {
         public readonly fullName: string,
         public readonly phoneNumber: string,
         public readonly email: string,
+        public readonly startDate: Date,
         public readonly dateOfBirth: Date,
         public readonly nationality: string,
         public readonly certificateType: CertificateType,
-        public readonly startDate: Date
     ) { }
 
     static create(object: { [key: string]: any }): [string?, RegisterStudentDto?] {
@@ -47,10 +47,10 @@ export class RegisterStudentDto {
             fullName,
             phoneNumber,
             email,
+            parsedStartDate,
             parsedBirthDate,
             nationality,
             certificateType,
-            parsedStartDate
         )];
     }
 }
