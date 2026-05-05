@@ -16,9 +16,15 @@ export class ModuleDataSourceImpl implements ModuleDataSource {
     async getAllModules(): Promise<ModuleEntity[]> {
         try {
             const modules = await Module.findAll(
-                { order: [['mo_name', 'ASC']] }
+                { order: [['mo_level', 'ASC']] }
             );
-            return modules.map(module => this.moduleEntityFromObject(module));
+
+            console.log(modules);
+
+          const moduleEntities = modules.map(module => this.moduleEntityFromObject(module));
+          console.log(moduleEntities);
+          return moduleEntities;
+          
         } catch (error) {
             throw error
         }
@@ -38,7 +44,7 @@ export class ModuleDataSourceImpl implements ModuleDataSource {
     }
 
     async createModule(module: CreateModuleDto): Promise<void> {
-        const { mo_name, mo_description } = module
+        const { mo_name, mo_description, mo_level } = module
         try {
             const moduleExist = await Module.findOne({ where: { mo_name } });
             if (moduleExist) {
@@ -47,7 +53,8 @@ export class ModuleDataSourceImpl implements ModuleDataSource {
 
             await Module.create({
                 mo_name: mo_name,
-                mo_description: mo_description
+                mo_description: mo_description,
+                mo_level: mo_level
             });
 
         } catch (error) {

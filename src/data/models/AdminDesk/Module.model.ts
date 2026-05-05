@@ -7,6 +7,7 @@ interface ModuleAttributes {
     mo_id: string;
     mo_name: string;
     mo_description: string;
+    mo_level: number;
     mo_created_at: Date;
     mo_updated_at: Date;
 }
@@ -41,6 +42,13 @@ class Module extends Model<ModuleAttributes, ModuleCreationAttributes> {
         allowNull: false
     })
     declare mo_description: string;
+
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+        unique: true
+    })
+    declare mo_level: number;
 
     @HasMany(() => StudentModule)
     declare student_modules: StudentModule[];
