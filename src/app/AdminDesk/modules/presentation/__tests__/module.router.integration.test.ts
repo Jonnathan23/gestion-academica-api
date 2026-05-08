@@ -38,6 +38,7 @@ const ADMIN_PASSWORD = "AdminPass1!";
 const VALID_MODULE_PAYLOAD = {
     mo_name: "A2",
     mo_description: "Module for intermediate learners",
+    mo_level: 2,
 };
 
 const NON_EXISTENT_UUID = "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d";
@@ -174,7 +175,7 @@ describe("Integration Tests: Module Router (Authenticated)", () => {
             const res = await request(testingModuleApp)
                 .post("/api/modules")
                 .set("Authorization", `Bearer ${adminToken}`)
-                .send({ mo_description: "Some description" });
+                .send({ mo_description: "Some description", mo_level: 2 });
 
             expect(res.status).toBe(400);
             expect(res.body.errors[0].message).toContain("Missing name");
@@ -184,10 +185,20 @@ describe("Integration Tests: Module Router (Authenticated)", () => {
             const res = await request(testingModuleApp)
                 .post("/api/modules")
                 .set("Authorization", `Bearer ${adminToken}`)
-                .send({ mo_name: "B1" });
+                .send({ mo_name: "B1", mo_level: 2 });
 
             expect(res.status).toBe(400);
             expect(res.body.errors[0].message).toContain("Missing description");
+        });
+
+        test("[400] Missing 'mo_level' should return validation error", async () => {
+            const res = await request(testingModuleApp)
+                .post("/api/modules")
+                .set("Authorization", `Bearer ${adminToken}`)
+                .send({ mo_name: "B1", mo_description: "Some description" });
+
+            expect(res.status).toBe(400);
+            expect(res.body.errors[0].message).toContain("Missing level");
         });
 
         test("[400] Empty body should return validation error", async () => {

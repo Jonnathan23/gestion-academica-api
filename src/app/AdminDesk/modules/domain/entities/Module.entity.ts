@@ -1,8 +1,4 @@
 
-interface StudenModules {
-    //TODO: cambiar por la entidad de student_module
- }
-
 export class ModuleEntity {
 
     constructor(

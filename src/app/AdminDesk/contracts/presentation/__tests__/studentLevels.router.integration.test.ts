@@ -98,9 +98,9 @@ describe("Integration Tests: Student Levels Router (Contracts)", () => {
         testStudentId = testStudent.st_id;
 
         // Crea TRES Module de prueba con mo_name estricto
-        const moduleA1 = await Module.create({ mo_name: "A1", mo_description: "Beginner Level" });
-        const moduleA2 = await Module.create({ mo_name: "A2", mo_description: "Elementary Level" });
-        const moduleB1 = await Module.create({ mo_name: "B1", mo_description: "Intermediate Level" });
+        const moduleA1 = await Module.create({ mo_name: "A1", mo_description: "Beginner Level", mo_level: 1 });
+        const moduleA2 = await Module.create({ mo_name: "A2", mo_description: "Elementary Level", mo_level: 2 });
+        const moduleB1 = await Module.create({ mo_name: "B1", mo_description: "Intermediate Level", mo_level: 3 });
 
         moduleA1Id = moduleA1.mo_id;
         moduleA2Id = moduleA2.mo_id;
