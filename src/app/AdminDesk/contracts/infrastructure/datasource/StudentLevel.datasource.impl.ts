@@ -9,7 +9,7 @@ import type { PurchaseModulesDto, UpdateStudentLevelDto } from "@/app/AdminDesk/
 import { StudentLevelMapper } from "@/app/AdminDesk/contracts/infrastructure/mappers/contract.mapper";
 import type { StudentLevelEntity } from "@/app/AdminDesk/contracts/domain/entities/Contract.entity";
 import { studentModuleStatus, type StudentModuleStatus } from "@/app/AdminDesk/contracts/domain";
-import { StudentModule, Module } from "@/data/models/AdminDesk";
+import { StudentModule, Module, Student } from "@/data/models/AdminDesk";
 import { User } from "@/data/models/Shared";
 import { CustomError } from "@/core/error";
 
@@ -227,7 +227,7 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
         return await StudentModule.findAll({
             where: { st_mod_id: createdContractIds },
             include: [{ model: Module, as: 'module' }],
-            order: [[{ model: Module, as: 'module' }, 'mo_name', 'ASC']]
+            order: [[{ model: Module, as: 'module' }, 'mo_level', 'ASC']]
         });
     }
 
@@ -242,7 +242,11 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
             where: { st_mod_student_id: studentId },
             include: [
                 { model: Module, as: "module" },
-                { model: User, as: "seller" }
+                { model: User, as: "seller" },
+                { model: Student, as: "student" }
+            ],
+            order: [
+                [{ model: Module, as: "module" }, 'mo_level', 'ASC']
             ]
         });
     }
