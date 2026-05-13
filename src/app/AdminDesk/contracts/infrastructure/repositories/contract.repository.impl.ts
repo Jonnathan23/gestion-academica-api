@@ -1,6 +1,7 @@
 import type { StudentLevelDataSource } from "@/app/AdminDesk/contracts/domain/datasource/contract.datasource";
 import type { PurchaseModulesDto, UpdateStudentLevelDto } from "@/app/AdminDesk/contracts/domain/dtos";
 import type { StudentLevelEntity } from "@/app/AdminDesk/contracts/domain/entities/Contract.entity";
+import type { StudentLevelDetailsProjection } from "@/app/AdminDesk/contracts/domain/projections/ContractDetails.projection";
 import type { StudentLevelRepository } from "@/app/AdminDesk/contracts/domain/repositories/contract.repository";
 
 export class StudentLevelRepositoryImpl implements StudentLevelRepository {
@@ -12,7 +13,7 @@ export class StudentLevelRepositoryImpl implements StudentLevelRepository {
         return this.datasource.purchaseModules(dto);
     }
 
-    getStudentContracts(studentId: string): Promise<StudentLevelEntity[]> {
+    getStudentContracts(studentId: string): Promise<StudentLevelDetailsProjection[]> {
         return this.datasource.getStudentContracts(studentId);
     }
 

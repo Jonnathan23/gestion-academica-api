@@ -12,6 +12,7 @@ import { studentModuleStatus, type StudentModuleStatus } from "@/app/AdminDesk/c
 import { StudentModule, Module, Student } from "@/data/models/AdminDesk";
 import { User } from "@/data/models/Shared";
 import { CustomError } from "@/core/error";
+import type { StudentLevelDetailsProjection } from "@/app/AdminDesk/contracts/domain/projections/ContractDetails.projection";
 
 
 
@@ -19,11 +20,13 @@ import { CustomError } from "@/core/error";
 export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
 
     //* Public methods
-    async getStudentContracts(studentId: string): Promise<StudentLevelEntity[]> {
+    async getStudentContracts(studentId: string): Promise<StudentLevelDetailsProjection[]> {
         try {
             const studentContracts = await this.fetchAllStudentContractsWithSellers(studentId);
-            return await this.convertToEntity(studentContracts);
+            return await this.convertToDetailsEntity(studentContracts);
         } catch (error) {
+            console.log('\nerror')
+            console.log(error)
             throw error;
         }
     }
@@ -235,6 +238,14 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
         return contracts.map(contract =>
             StudentLevelMapper.studentLevelEntityFromObject(contract.toJSON())
         );
+    }
+
+    private async convertToDetailsEntity(contracts: StudentModule[]): Promise<StudentLevelDetailsProjection[]> {
+        const detailsEntity = contracts.map(contract =>
+            StudentLevelMapper.studentLevelDetailsEntityFromObject(contract.toJSON())
+        );
+
+        return detailsEntity;
     }
 
     private async fetchAllStudentContractsWithSellers(studentId: string): Promise<StudentModule[]> {
