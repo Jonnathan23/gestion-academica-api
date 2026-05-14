@@ -42,11 +42,12 @@ export class ContractController {
 
         getStudentContracts.execute(studentId as string)
             .then(contracts => {
-                SuccessResponse.ok<StudentLevelDetailsProjection[]>(res, "Contracts retrieved successfully", contracts);
+
+                const successMessage = "Contracts retrieved successfully";
+                SuccessResponse.ok<StudentLevelDetailsProjection[]>(res, successMessage, contracts);
             })
             .catch(error => {
-                console.log('\nerror')
-                console.log(error)
+
                 next(error);
             });
     }

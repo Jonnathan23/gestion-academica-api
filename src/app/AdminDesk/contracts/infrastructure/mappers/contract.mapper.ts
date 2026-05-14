@@ -4,6 +4,9 @@ import {
 import { StudentLevelEntity } from "@/app/AdminDesk/contracts/domain/entities/Contract.entity";
 import { pickFields } from "@/core/utils/object-tools";
 import { CustomError } from "@/core/error";
+import { ModuleMapper } from "@/app/AdminDesk/modules/infrastructure/mappers/module.mapper";
+import { UserMapper } from "@/app/Shared/Identity/infrastructure/mappers/user.mapper";
+import { StudentMapper } from "@/app/AdminDesk/students/infrastructure/mappers/student.mapper";
 
 export class StudentLevelMapper {
     static studentLevelEntityFromObject(object: { [key: string]: any }): StudentLevelEntity {
@@ -35,14 +38,24 @@ export class StudentLevelMapper {
             throw CustomError.internalServer("Missing required contract fields");
         }
 
+        if (!module) throw CustomError.internalServer("Missing module");
+        if (!seller) throw CustomError.internalServer("Missing seller");
+        if (!student) throw CustomError.internalServer("Missing student");
 
-        return new StudentLevelDetailsProjection(
+        const moduleEntity = ModuleMapper.moduleModelToEntity(module);
+        const sellerEntity = UserMapper.userModelToEntity(seller);
+        const studentEntity = StudentMapper.studentModelToEntity(student);
+
+        const newStudentLevelDetailsProjection = new StudentLevelDetailsProjection(
             st_mod_id,
             st_mod_status,
             st_mod_purchase_date ? new Date(st_mod_purchase_date) : new Date(),
-            pickFields({ objectToFilter: module, fieldsToKeep: moduleRelationFields }),
-            pickFields({ objectToFilter: seller, fieldsToKeep: sellerRelationFields }),
-            pickFields({ objectToFilter: student, fieldsToKeep: studentRelationFields })
+            pickFields({ objectToFilter: moduleEntity, fieldsToKeep: moduleRelationFields }),
+            pickFields({ objectToFilter: sellerEntity, fieldsToKeep: sellerRelationFields }),
+            pickFields({ objectToFilter: studentEntity, fieldsToKeep: studentRelationFields })
         );
+        console.log('newStudentLevelDetailsProjection')
+        console.log(newStudentLevelDetailsProjection)
+        return newStudentLevelDetailsProjection;
     }
 }

@@ -13,17 +13,29 @@ import { StudentModule, Module, Student } from "@/data/models/AdminDesk";
 import { User } from "@/data/models/Shared";
 import { CustomError } from "@/core/error";
 import type { StudentLevelDetailsProjection } from "@/app/AdminDesk/contracts/domain/projections/ContractDetails.projection";
+import type { ModuleEntity } from "@/app/AdminDesk/modules/domain/entities/Module.entity";
+import { ModuleMapper } from "@/app/AdminDesk/modules/infrastructure/mappers/module.mapper";
+import { StudentMapper } from "@/app/AdminDesk/students/infrastructure/mappers/student.mapper";
+import type { StudentEntity } from "@/app/AdminDesk/students/domain";
+import type { UserEntity } from "@/app/Shared/Identity/domain/entities";
+import { UserMapper } from "@/app/Shared/Identity/infrastructure/mappers/user.mapper";
 
 
 
 
 export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
 
+
+
     //* Public methods
     async getStudentContracts(studentId: string): Promise<StudentLevelDetailsProjection[]> {
         try {
             const studentContracts = await this.fetchAllStudentContractsWithSellers(studentId);
-            return await this.convertToDetailsEntity(studentContracts);
+            const detailsEntities = await this.convertToDetailsEntity(studentContracts);
+            console.log('\ndetailsEntities')
+            console.log(detailsEntities)
+            console.log('-------x--------')
+            return detailsEntities
         } catch (error) {
             console.log('\nerror')
             console.log(error)
@@ -34,6 +46,8 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
 
     async purchaseModules(dto: PurchaseModulesDto): Promise<StudentLevelEntity[]> {
         const { studentId, sellerId, moduleIds } = dto;
+        //TODO: validar que no puede comprar un modulo si ya lo tiene
+        //TODO: validar que no puede comprar un modulo posterior a uno que no ha adquirido, por ejemplo no puede adquirir el 3 si ha adquirido el 1 pero no el 2
 
         try {
             const sequelize = StudentModule.sequelize;
@@ -240,11 +254,14 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
         );
     }
 
-    private async convertToDetailsEntity(contracts: StudentModule[]): Promise<StudentLevelDetailsProjection[]> {
+    private async convertToDetailsEntity(contracts: StudentModule[]): Promise<StudentLevelDetailsProjection[]> {        
+
         const detailsEntity = contracts.map(contract =>
             StudentLevelMapper.studentLevelDetailsEntityFromObject(contract.toJSON())
         );
 
+        console.log('detailsEntity')
+        console.log(detailsEntity)
         return detailsEntity;
     }
 
