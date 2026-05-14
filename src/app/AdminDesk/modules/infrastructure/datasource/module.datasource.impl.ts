@@ -18,13 +18,7 @@ export class ModuleDataSourceImpl implements ModuleDataSource {
             const modules = await Module.findAll(
                 { order: [['mo_level', 'ASC']] }
             );
-
-            console.log(modules);
-
-          const moduleEntities = modules.map(module => this.moduleEntityFromObject(module));
-          console.log(moduleEntities);
-          return moduleEntities;
-          
+            return modules.map(module => this.moduleEntityFromObject(module));
         } catch (error) {
             throw error
         }

@@ -31,14 +31,8 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
     async getStudentContracts(studentId: string): Promise<StudentLevelDetailsProjection[]> {
         try {
             const studentContracts = await this.fetchAllStudentContractsWithSellers(studentId);
-            const detailsEntities = await this.convertToDetailsEntity(studentContracts);
-            console.log('\ndetailsEntities')
-            console.log(detailsEntities)
-            console.log('-------x--------')
-            return detailsEntities
+            return await this.convertToDetailsEntity(studentContracts);
         } catch (error) {
-            console.log('\nerror')
-            console.log(error)
             throw error;
         }
     }
@@ -254,15 +248,10 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
         );
     }
 
-    private async convertToDetailsEntity(contracts: StudentModule[]): Promise<StudentLevelDetailsProjection[]> {        
-
-        const detailsEntity = contracts.map(contract =>
+    private async convertToDetailsEntity(contracts: StudentModule[]): Promise<StudentLevelDetailsProjection[]> {
+        return contracts.map(contract =>
             StudentLevelMapper.studentLevelDetailsEntityFromObject(contract.toJSON())
         );
-
-        console.log('detailsEntity')
-        console.log(detailsEntity)
-        return detailsEntity;
     }
 
     private async fetchAllStudentContractsWithSellers(studentId: string): Promise<StudentModule[]> {

@@ -9,9 +9,18 @@ import { UserMapper } from "@/app/Shared/Identity/infrastructure/mappers/user.ma
 import { StudentMapper } from "@/app/AdminDesk/students/infrastructure/mappers/student.mapper";
 
 export class StudentLevelMapper {
-    static studentLevelEntityFromObject(object: { [key: string]: any }): StudentLevelEntity {
-        const { st_mod_id, st_mod_student_id, st_mod_module_id, st_mod_seller_id,
-            st_mod_status, st_mod_purchase_date, st_mod_created_at, st_mod_updated_at, } = object;
+    public static studentLevelEntityFromObject(object: { [key: string]: any }): StudentLevelEntity {
+        //TODO: cambiar por mensajes no relevativos y más amigables al cliente
+        const {
+            st_mod_id,
+            st_mod_student_id,
+            st_mod_module_id,
+            st_mod_seller_id,
+            st_mod_status,
+            st_mod_purchase_date,
+            st_mod_created_at,
+            st_mod_updated_at
+        } = object;
 
         if (!st_mod_id) throw CustomError.internalServer("Missing st_mod_id");
         if (!st_mod_student_id) throw CustomError.internalServer("Missing st_mod_student_id");
@@ -31,8 +40,18 @@ export class StudentLevelMapper {
         );
     }
 
-    static studentLevelDetailsEntityFromObject(object: { [key: string]: any }): StudentLevelDetailsProjection {
-        const { st_mod_id, st_mod_status, st_mod_purchase_date, module, seller, student } = object;
+    public static studentLevelDetailsEntityFromObject(object: { [key: string]: any }): StudentLevelDetailsProjection {
+        // Añadimos st_mod_created_at y st_mod_updated_at para extraerlas del objeto
+        const {
+            st_mod_id,
+            st_mod_status,
+            st_mod_purchase_date,
+            st_mod_created_at,
+            st_mod_updated_at,
+            module,
+            seller,
+            student
+        } = object;
 
         if (!st_mod_id || !st_mod_status) {
             throw CustomError.internalServer("Missing required contract fields");
@@ -46,16 +65,18 @@ export class StudentLevelMapper {
         const sellerEntity = UserMapper.userModelToEntity(seller);
         const studentEntity = StudentMapper.studentModelToEntity(student);
 
+        // Reorganizamos los argumentos para que coincidan exactamente con la firma del constructor
         const newStudentLevelDetailsProjection = new StudentLevelDetailsProjection(
             st_mod_id,
-            st_mod_status,
-            st_mod_purchase_date ? new Date(st_mod_purchase_date) : new Date(),
+            pickFields({ objectToFilter: studentEntity, fieldsToKeep: studentRelationFields }),
             pickFields({ objectToFilter: moduleEntity, fieldsToKeep: moduleRelationFields }),
             pickFields({ objectToFilter: sellerEntity, fieldsToKeep: sellerRelationFields }),
-            pickFields({ objectToFilter: studentEntity, fieldsToKeep: studentRelationFields })
+            st_mod_status,
+            st_mod_purchase_date ? new Date(st_mod_purchase_date) : new Date(),
+            st_mod_created_at ? new Date(st_mod_created_at) : new Date(),
+            st_mod_updated_at ? new Date(st_mod_updated_at) : new Date()
         );
-        console.log('newStudentLevelDetailsProjection')
-        console.log(newStudentLevelDetailsProjection)
+
         return newStudentLevelDetailsProjection;
     }
 }

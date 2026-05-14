@@ -28,13 +28,6 @@ export class CreateModuleDto {
         if(parsedMoLevel < 1) return ['Level must be greater than 0'];
         if(parsedMoLevel > 6) return ['Level must be less than or equal to 6'];
 
-        console.log('object');
-        console.log({
-           mo_name, mo_description, parsedMoLevel 
-        });
-        console.log('---------------\n');
-
-
         return [undefined, new CreateModuleDto(mo_name, mo_description, parsedMoLevel)];
 
     }

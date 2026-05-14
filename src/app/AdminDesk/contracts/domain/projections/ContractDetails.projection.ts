@@ -31,11 +31,13 @@ export type StudentRelation = Pick<StudentEntity, typeof studentRelationFields[n
 
 export class StudentLevelDetailsProjection {
     constructor(
-        public readonly contractIdentifier: string,
-        public readonly contractStatus: StudentModuleStatus,
+        public readonly id: string,
+        public readonly student: StudentRelation,
+        public readonly module: ModuleRelation,
+        public readonly seller: SellerRelation,
+        public readonly status: StudentModuleStatus,
         public readonly purchaseDate: Date,
-        public readonly moduleInfo: ModuleRelation,
-        public readonly sellerInfo: SellerRelation,
-        public readonly studentInfo: StudentRelation,
+        public readonly createdAt: Date,
+        public readonly updatedAt: Date
     ) { }
 }

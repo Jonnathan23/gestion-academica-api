@@ -48,8 +48,6 @@ export class UpdateStudentDto {
         if (startDate && !Validators.isDate(startDate)) return ['Invalid startDate'];
         if (dateOfBirth && !Validators.isDate(dateOfBirth)) return ['Invalid dateOfBirth'];
 
-        console.log('Object', object);
-
         return [undefined, new UpdateStudentDto(
                 identificationCard,
                 fullName,
