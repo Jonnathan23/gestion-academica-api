@@ -15,9 +15,9 @@
         "src/*"
       ]
     },
-    // Tipos nativos de Bun para el IDE
+    // Tipos nativos de Bun para el IDE (Corregido para @types/bun)
     "types": [
-      "bun-types"
+      "bun"
     ],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -44,6 +44,5 @@
     "node_modules",
     "dist",
     "coverage"
-    // Hemos eliminado las exclusiones de los tests para que TS los lea
   ]
 }

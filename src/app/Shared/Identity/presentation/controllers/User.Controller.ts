@@ -1,11 +1,11 @@
 import type { Request, Response, NextFunction } from "express";
 
-import type { UserRepository } from "@/app/Shared/Identity/domain/repositories/user.repository";
-import { LoginUserDto, RegisterUserDto, UpdateUserDto } from "@/app/Shared/Identity/domain/dtos";
+import type { UserRepository } from "@/app/shared/Identity/domain/repositories/user.repository";
+import { LoginUserDto, RegisterUserDto, UpdateUserDto } from "@/app/shared/Identity/domain/dtos";
 import { SuccessResponse } from "@/core/utils";
 import { CustomError } from "@/core/error";
-import { UserDataEntity, UserEntity } from "@/app/Shared/Identity/domain/entities";
-import { ChangePassword, ChangeStateActive, FindAllUsers, FindUserById, LoginUser, RegisterUser, UpdateUser } from "@/app/Shared/Identity/application";
+import { UserDataEntity, UserEntity } from "@/app/shared/Identity/domain/entities";
+import { ChangePassword, ChangeStateActive, FindAllUsers, FindUserById, LoginUser, RegisterUser, UpdateUser } from "@/app/shared/Identity/application";
 
 
 export class UserController {

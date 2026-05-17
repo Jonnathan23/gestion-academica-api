@@ -1,6 +1,6 @@
-import type { LoginUserDto } from "@/app/Shared/Identity/domain/dtos";
-import type { UserEntity } from "@/app/Shared/Identity/domain/entities";
-import type { UserRepository } from "@/app/Shared/Identity/domain/repositories/user.repository";
+import type { LoginUserDto } from "@/app/shared/Identity/domain/dtos";
+import type { UserEntity } from "@/app/shared/Identity/domain/entities";
+import type { UserRepository } from "@/app/shared/Identity/domain/repositories/user.repository";
 import { rolePermissionsMapping } from "@/core/constants";
 import { CustomError } from "@/core/error";
 import type { UserTokenPayload } from "@/core/middleware";

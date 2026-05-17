@@ -1,12 +1,12 @@
 import { Router } from "express";
 
-import { ModulesRouter } from "@/app/AdminDesk/modules/presentation/router";
-import { StudentsRouter } from "@/app/AdminDesk/students/presentation/router";
-import { ContractsRouter } from "@/app/AdminDesk/contracts/presentation/router";
-import { UserRouter } from "@/app/Shared/Identity/presentation/router";
-import { PaymentRouter } from "@/app/AdminDesk/payments/presentation/router";
+import { ModulesRouter } from "@/app/admin-desk/modules/presentation/router";
+import { StudentsRouter } from "@/app/admin-desk/students/presentation/router";
+import { ContractsRouter } from "@/app/admin-desk/student-level/presentation/router";
+import { UserRouter } from "@/app/shared/Identity/presentation/router";
+import { PaymentRouter } from "@/app/admin-desk/payments/presentation/router";
 import { AuthMiddleware } from "@/core/middleware";
-import { UserSegurityDataSourceImpl } from "@/app/Shared/Identity/infrastructure/datasources/userSegurity.datasource.impl";
+import { UserSegurityDataSourceImpl } from "@/app/shared/Identity/infrastructure/datasources/userSegurity.datasource.impl";
 
 
 export class AppRouter {
