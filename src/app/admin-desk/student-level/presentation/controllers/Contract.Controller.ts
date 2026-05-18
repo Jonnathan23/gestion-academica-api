@@ -1,16 +1,17 @@
+import { DeleteStudentLevel, GetStudentContracts, PurchaseModules, UpdateStudentLevel } from "@/app/admin-desk/student-level/application/useCases";
+import { DeleteStudentLevelDto, PurchaseModulesDto, UpdateStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos";
+import type { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/StudentLevel.entity";
+import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-level/domain/projections/ContractDetails.projection";
+import type { StudentLevelRepositoryImpl } from "@/app/admin-desk/student-level/infrastructure/repositories/contract.repository.impl";
+import { CustomError } from "@/core/error";
+import { SuccessResponse } from "@/core/utils";
 import type { Request, Response, NextFunction } from "express";
 
-import { PurchaseModules, GetStudentContracts, UpdateStudentLevel, DeleteStudentLevel } from "@/app/admin-desk/student-level/application";
-import { PurchaseModulesDto, UpdateStudentLevelDto, DeleteStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos";
-import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-level/domain/projections/ContractDetails.projection";
-import type { StudentLevelRepository } from "@/app/admin-desk/student-level/domain/repositories/studentLevel.repository";
-import type { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/StudentLevel.entity";
-import { SuccessResponse } from "@/core/utils";
-import { CustomError } from "@/core/error";
+
 
 export class ContractController {
     constructor(
-        private readonly StudentLevelRepository: StudentLevelRepository
+        private readonly StudentLevelRepository: StudentLevelRepositoryImpl
     ) { }
 
     purchaseModules = (req: Request, res: Response, next: NextFunction) => {
