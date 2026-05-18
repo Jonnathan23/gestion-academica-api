@@ -1,27 +1,6 @@
 name: gestion-academica-api-dev
 
 services:
-  # Backend
-  gestion-academica-api-dev:
-    build:
-      context: .
-      target: development
-      dockerfile: Dockerfile
-    container_name: gestion-academica-api-dev
-    restart: always
-    tty: true
-    stdin_open: true
-    environment:
-      - FORCE_COLOR=1
-    env_file:
-      - .env
-    ports:
-      - "${PORT}:${PORT}"
-    volumes:
-      - ./:/app
-      - /app/node_modules
-    depends_on:
-      - postgres-db-dev
 
   # Base de Datos
   postgres-db-dev:

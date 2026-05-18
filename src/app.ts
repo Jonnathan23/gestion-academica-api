@@ -15,14 +15,17 @@ async function main() {
 
     const routes = AppRouter.routes;
     const cors = new CorsConfig({
-        frontendUrl: environmentVariables.frontendUrl,
+        frontendUrls: [
+            environmentVariables.adminDeskUrl,
+            environmentVariables.classTrackUrl
+        ],
         commandLineArgument: environmentVariables.argumentValue,
         documentationUrl: environmentVariables.documentationUrl
     })
 
     const isTestEnvironment = environmentVariables.nodeEnvironment === 'test';
 
-    const databaseConnection = new DatabaseConnection({ 
+    const databaseConnection = new DatabaseConnection({
         databaseUrl: environmentVariables.databaseUrl,
         forceSynchronization: isTestEnvironment
     });
