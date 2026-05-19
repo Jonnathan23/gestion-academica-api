@@ -1,7 +1,7 @@
 export const paymentPlanStatus = {
-    PENDING: "PENDING",
-    COMPLETED: "COMPLETED",
-    CANCELLED: "CANCELLED"
+    Pending: "PENDING",
+    Completed: "COMPLETED",
+    Cancelled: "CANCELLED",
 } as const;
 
-export type PaymentPlanStatus = typeof paymentPlanStatus[keyof typeof paymentPlanStatus];
+export type PaymentPlanStatus = (typeof paymentPlanStatus)[keyof typeof paymentPlanStatus];

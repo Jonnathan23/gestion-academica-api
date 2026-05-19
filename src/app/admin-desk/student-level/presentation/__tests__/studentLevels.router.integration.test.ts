@@ -43,7 +43,6 @@ const MALFORMED_ID = "not-a-uuid";
 // Test suite
 // ------------------------------------------------------------------ //
 describe("Integration Tests: Student Levels Router (Contracts)", () => {
-
     let adminToken: string;
     let testStudentId: string;
 
@@ -121,7 +120,7 @@ describe("Integration Tests: Student Levels Router (Contracts)", () => {
                 us_email: "deact.contract@test.com",
                 us_password_hash: "MockHash123!",
                 us_role: "TEACHER",
-                us_is_active: false
+                us_is_active: false,
             });
             const deactivatedToken = await JwtAdapter.generateToken({
                 id: deactivatedUser.us_id,
@@ -146,7 +145,6 @@ describe("Integration Tests: Student Levels Router (Contracts)", () => {
     // 1. Pruebas de Compra (POST /api/student-levels/student/:studentId)
     // ---------------------------------------------------------------- //
     describe("POST /api/student-levels/student/:studentId", () => {
-
         test("[400] Falla si el studentId o los moduleIds son invalidos, estan vacios o faltan", async () => {
             // Falla por moduleIds faltantes
             const resNoModules = await request(testingContractsApp)
@@ -235,7 +233,6 @@ describe("Integration Tests: Student Levels Router (Contracts)", () => {
     // 2. Pruebas de Cascada (PATCH /api/student-levels/:studentLevelId/status)
     // ---------------------------------------------------------------- //
     describe("PATCH /api/student-levels/:studentLevelId/status", () => {
-
         test("[400] Falla si el estado enviado no es valido o falta", async () => {
             // Falla por falta de estado
             const resNoStatus = await request(testingContractsApp)
@@ -292,7 +289,6 @@ describe("Integration Tests: Student Levels Router (Contracts)", () => {
     // 3. Pruebas de Auto-Sanacion (DELETE /api/student-levels/:studentLevelId)
     // ---------------------------------------------------------------- //
     describe("DELETE /api/student-levels/:studentLevelId", () => {
-
         test("[404] Falla si el UUID no existe", async () => {
             const res = await request(testingContractsApp)
                 .delete(`/api/student-levels/${NON_EXISTENT_UUID}`)

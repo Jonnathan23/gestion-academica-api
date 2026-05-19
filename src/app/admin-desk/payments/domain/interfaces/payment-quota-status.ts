@@ -1,9 +1,8 @@
 export const paymentQuotaStatus = {
-    PENDING: "PENDING",
-    PARTIAL: "PARTIAL",
-    PAID: "PAID",
-    OVERDUE: "OVERDUE"
+    Pending: "PENDING",
+    Partial: "PARTIAL",
+    Paid: "PAID",
+    Overdue: "OVERDUE",
 } as const;
 
-export type PaymentQuotaStatus = typeof paymentQuotaStatus[keyof typeof paymentQuotaStatus];
-
+export type PaymentQuotaStatus = (typeof paymentQuotaStatus)[keyof typeof paymentQuotaStatus];

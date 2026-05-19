@@ -8,15 +8,10 @@ import { Student } from "@/data/models/AdminDesk";
 import { CustomError } from "@/core/error";
 import { Validators } from "@/core/utils";
 
-
-
 type studentEntityFromObject = typeof StudentMapper.studentModelToEntity;
 
 export class StudentDataSourceImpl implements StudentDataSource {
-
-    constructor(
-        private readonly studentEntityFromObject: studentEntityFromObject = StudentMapper.studentModelToEntity
-    ) { }
+    constructor(private readonly studentEntityFromObject: studentEntityFromObject = StudentMapper.studentModelToEntity) {}
 
     async register(dto: RegisterStudentDto): Promise<StudentEntity> {
         const { identificationCard, fullName, phoneNumber, email, dateOfBirth, nationality, certificateType, startDate } = dto;
@@ -35,9 +30,9 @@ export class StudentDataSourceImpl implements StudentDataSource {
                 st_nationality: nationality,
                 st_certificate_type: certificateType as any,
                 st_start_date: startDate,
-                st_contract_status: studentContractStatus.ACTIVE,
-                st_progress_category: studentProgressCategory.NOT_ENOUGH_DATA,
-                st_is_graduated: false
+                st_contract_status: studentContractStatus.Active,
+                st_progress_category: studentProgressCategory.NotEnoughData,
+                st_is_graduated: false,
             });
 
             return this.studentEntityFromObject(newStudent);
@@ -48,12 +43,11 @@ export class StudentDataSourceImpl implements StudentDataSource {
 
     async search(searchQuery: string): Promise<StudentEntity[]> {
         try {
-
             const isUuidValid = Validators.IsUUID(searchQuery);
 
             const searchConditions: any[] = [
                 { st_identification_card: { [Op.iLike]: `%${searchQuery}%` } },
-                { st_full_name: { [Op.iLike]: `%${searchQuery}%` } }
+                { st_full_name: { [Op.iLike]: `%${searchQuery}%` } },
             ];
 
             if (isUuidValid) searchConditions.push({ st_id: { [Op.eq]: searchQuery } });
@@ -61,10 +55,10 @@ export class StudentDataSourceImpl implements StudentDataSource {
             const finalCondition = searchQuery ? { [Op.or]: searchConditions } : {};
 
             const students = await Student.findAll({
-                where: finalCondition
+                where: finalCondition,
             });
 
-            return students.map(student => this.studentEntityFromObject(student));
+            return students.map((student) => this.studentEntityFromObject(student));
         } catch (error) {
             throw error;
         }
@@ -73,7 +67,7 @@ export class StudentDataSourceImpl implements StudentDataSource {
     async getAllStudents(): Promise<StudentEntity[]> {
         try {
             const students = await Student.findAll();
-            return students.map(student => this.studentEntityFromObject(student));
+            return students.map((student) => this.studentEntityFromObject(student));
         } catch (error) {
             throw error;
         }
@@ -124,7 +118,7 @@ export class StudentDataSourceImpl implements StudentDataSource {
             const student = await Student.findByPk(id);
             if (!student) throw CustomError.notFound("Student not found");
 
-            await student.update({ st_contract_status: studentContractStatus.INACTIVE });
+            await student.update({ st_contract_status: studentContractStatus.Inactive });
 
             return this.studentEntityFromObject(student);
         } catch (error) {

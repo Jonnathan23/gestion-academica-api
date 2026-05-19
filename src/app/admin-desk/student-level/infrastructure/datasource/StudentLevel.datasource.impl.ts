@@ -1,8 +1,10 @@
 import type { Transaction } from "sequelize";
 
 import type {
-    BuildStatusUpdatePromisesProps, BulkCreateContractsProps, CalculateNewStudentModuleStatusProps,
-    SelfHealingAlgorithmProps
+    BuildStatusUpdatePromisesProps,
+    BulkCreateContractsProps,
+    CalculateNewStudentModuleStatusProps,
+    SelfHealingAlgorithmProps,
 } from "@/app/admin-desk/student-level/infrastructure/interfaces/StudentLevelDatasource.interface";
 import type { StudentLevelDataSource } from "@/app/admin-desk/student-level/domain/datasource/studentLevel.datasource";
 import type { PurchaseModulesDto, UpdateStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos";
@@ -16,58 +18,40 @@ import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-lev
 import { studentModuleStatus } from "@/app/admin-desk/student-level/domain/interfaces/Contracts.interface";
 import type { StudentModuleStatus } from "@/data/models/AdminDesk/StudentModule.model";
 
-
-
-
 export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
-
-
-
     //* Public methods
     async getStudentContracts(studentId: string): Promise<StudentLevelDetailsProjection[]> {
-        try {
-            const studentContracts = await this.fetchAllStudentContractsWithSellers(studentId);
-            return await this.convertToDetailsEntity(studentContracts);
-        } catch (error) {
-            throw error;
-        }
+        const studentContracts = await this.fetchAllStudentContractsWithSellers(studentId);
+        return await this.convertToDetailsEntity(studentContracts);
     }
-
 
     async purchaseModules(dto: PurchaseModulesDto): Promise<StudentLevelEntity[]> {
         const { studentId, sellerId, moduleIds } = dto;
         //TODO: validar que no puede comprar un modulo si ya lo tiene
         //TODO: validar que no puede comprar un modulo posterior a uno que no ha adquirido, por ejemplo no puede adquirir el 3 si ha adquirido el 1 pero no el 2
 
+        const sequelize = StudentModule.sequelize;
+        if (!sequelize) throw CustomError.serviceUnavailable("Sequelize instance not found");
+
+        const modulesFromDb = await this.searchModules(moduleIds);
+
+        const transaction = await sequelize.transaction();
         try {
-            const sequelize = StudentModule.sequelize;
-            if (!sequelize) throw CustomError.serviceUnavailable("Sequelize instance not found");
+            const createdContracts = await this.bulkCreateContracts({ studentId, sellerId, modulesFromDb, transaction });
 
-            const modulesFromDb = await this.searchModules(moduleIds);
+            const allStudentContracts = await this.getAllStudentContracts(studentId, transaction);
 
-            const transaction = await sequelize.transaction();
-            try {
+            const updatePromises: Promise<unknown>[] = await this.selfHealingAlgorithm({ allStudentContracts, transaction });
 
-                const createdContracts = await this.bulkCreateContracts({ studentId, sellerId, modulesFromDb, transaction });
+            await Promise.all(updatePromises);
 
-                const allStudentContracts = await this.getAllStudentContracts(studentId, transaction);
+            await transaction.commit();
 
-                const updatePromises: Promise<any>[] = await this.selfHealingAlgorithm({ allStudentContracts, transaction });
+            const finalPurchasedLevels = await this.getFinalPurchasedLevels(createdContracts);
 
-                await Promise.all(updatePromises);
-
-                await transaction.commit();
-
-                const finalPurchasedLevels = await this.getFinalPurchasedLevels(createdContracts);
-
-                return this.convertToEntity(finalPurchasedLevels);
-
-            } catch (error) {
-                await transaction.rollback();
-                throw error;
-            }
-
+            return this.convertToEntity(finalPurchasedLevels);
         } catch (error) {
+            await transaction.rollback();
             throw error;
         }
     }
@@ -75,99 +59,77 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
     async updateStudentLevel(dto: UpdateStudentLevelDto): Promise<StudentLevelEntity[]> {
         const { contractId, status, studentId } = dto;
 
+        const studentModulesOrdered = await this.fetchOrderedStudentModules(studentId);
+        const targetContract = this.findTargetContract(studentModulesOrdered, contractId);
+
+        const sequelize = StudentModule.sequelize;
+        if (!sequelize) {
+            throw CustomError.serviceUnavailable("Sequelize instance not found");
+        }
+
+        const transaction = await sequelize.transaction();
+
         try {
-            const studentModulesOrdered = await this.fetchOrderedStudentModules(studentId);
-            const targetContract = this.findTargetContract(studentModulesOrdered, contractId);
+            const targetModuleIndex = studentModulesOrdered.findIndex(
+                (contractItem) => contractItem.st_mod_id === targetContract.st_mod_id,
+            );
 
-            const sequelize = StudentModule.sequelize;
-            if (!sequelize) {
-                throw CustomError.serviceUnavailable("Sequelize instance not found");
-            }
+            const updatePromises = this.buildStatusUpdatePromises({
+                studentModules: studentModulesOrdered,
+                targetModuleIndex,
+                statusRequested: status,
+                transaction,
+            });
 
-            const transaction = await sequelize.transaction();
+            await Promise.all(updatePromises);
 
-            try {
-                const targetModuleIndex = studentModulesOrdered.findIndex(
-                    contractItem => contractItem.st_mod_id === targetContract.st_mod_id
-                );
+            await transaction.commit();
 
-                const updatePromises = this.buildStatusUpdatePromises({
-                    studentModules: studentModulesOrdered,
-                    targetModuleIndex,
-                    statusRequested: status,
-                    transaction
-                });
+            await targetContract.reload();
 
-                await Promise.all(updatePromises);
-
-                await transaction.commit();
-
-                await targetContract.reload();
-
-                return await this.convertToEntity(studentModulesOrdered);
-
-            } catch (error) {
-                await transaction.rollback();
-                throw error;
-            }
-
+            return await this.convertToEntity(studentModulesOrdered);
         } catch (error) {
+            await transaction.rollback();
             throw error;
         }
     }
 
     async deleteStudentLevel(contractId: string): Promise<boolean> {
+        const targetContract = await this.fetchContractById(contractId);
+        const studentId = targetContract.st_mod_student_id;
+
+        const allStudentContracts = await this.fetchStudentContractsOrderedByName(studentId);
+
+        const remainingContracts = allStudentContracts.filter((contractItem) => contractItem.st_mod_id !== contractId);
+
+        const sequelize = StudentModule.sequelize;
+        if (!sequelize) {
+            throw CustomError.serviceUnavailable("Sequelize instance not found");
+        }
+
+        const transaction = await sequelize.transaction();
+
         try {
-            const targetContract = await this.fetchContractById(contractId);
-            const studentId = targetContract.st_mod_student_id;
+            await targetContract.destroy({ transaction });
 
-            const allStudentContracts = await this.fetchStudentContractsOrderedByName(studentId);
+            const updatePromises = await this.selfHealingAlgorithm({ allStudentContracts: remainingContracts, transaction });
 
-            const remainingContracts = allStudentContracts.filter(
-                contractItem => contractItem.st_mod_id !== contractId
-            );
+            await Promise.all(updatePromises);
 
-            const sequelize = StudentModule.sequelize;
-            if (!sequelize) {
-                throw CustomError.serviceUnavailable("Sequelize instance not found");
-            }
+            await transaction.commit();
 
-            const transaction = await sequelize.transaction();
-
-            try {
-                await targetContract.destroy({ transaction });
-
-                const updatePromises = await this.selfHealingAlgorithm({ allStudentContracts: remainingContracts, transaction });
-
-                await Promise.all(updatePromises);
-
-                await transaction.commit();
-
-                return true;
-
-            } catch (error) {
-                await transaction.rollback();
-                throw error;
-            }
-
+            return true;
         } catch (error) {
+            await transaction.rollback();
             throw error;
         }
     }
 
     async finishCurrentLevel(studentLevelId: string): Promise<boolean> {
-        try {
-            const targetLevel = await this.fetchContractById(studentLevelId);
+        //TODO: implementar la logica de finalizacion de contrato
+        //const targetLevel = await this.fetchContractById(studentLevelId);
 
-
-
-
-
-
-            return true;
-        } catch (error) {
-            throw error;
-        }
+        return true;
     }
 
     private async updateStudentLevelStatus() {
@@ -180,7 +142,7 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
     private async searchModules(moduleIds: string[]): Promise<Module[]> {
         const modulesFromDb = await Module.findAll({
             where: { mo_id: moduleIds },
-            order: [['mo_level', 'ASC']]
+            order: [["mo_level", "ASC"]],
         });
 
         if (modulesFromDb.length !== moduleIds.length) {
@@ -193,11 +155,10 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
     private async getAllStudentContracts(studentId: string, transaction: Transaction): Promise<StudentModule[]> {
         return await StudentModule.findAll({
             where: { st_mod_student_id: studentId },
-            include: [{ model: Module, as: 'module' }],
-            order: [[{ model: Module, as: 'module' }, 'mo_level', 'ASC']],
-            transaction
+            include: [{ model: Module, as: "module" }],
+            order: [[{ model: Module, as: "module" }, "mo_level", "ASC"]],
+            transaction,
         });
-
     }
     private async fetchAllStudentContractsWithSellers(studentId: string): Promise<StudentModule[]> {
         return await StudentModule.findAll({
@@ -205,33 +166,27 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
             include: [
                 { model: Module, as: "module" },
                 { model: User, as: "seller" },
-                { model: Student, as: "student" }
+                { model: Student, as: "student" },
             ],
-            order: [
-                [{ model: Module, as: "module" }, 'mo_level', 'ASC']
-            ]
+            order: [[{ model: Module, as: "module" }, "mo_level", "ASC"]],
         });
     }
 
     private async fetchOrderedStudentModules(studentId: string): Promise<StudentModule[]> {
         const studentModules = await StudentModule.findAll({
             where: { st_mod_student_id: studentId },
-            include: [{ model: Module, as: "module" }]
+            include: [{ model: Module, as: "module" }],
         });
 
         if (!studentModules.length) {
             throw CustomError.notFound("Student modules not found");
         }
 
-        return studentModules.sort((firstModule, secondModule) =>
-            firstModule.module.mo_name.localeCompare(secondModule.module.mo_name)
-        );
+        return studentModules.sort((firstModule, secondModule) => firstModule.module.mo_name.localeCompare(secondModule.module.mo_name));
     }
 
     private findTargetContract(studentModules: StudentModule[], contractId: string): StudentModule {
-        const targetContract = studentModules.find(
-            contractItem => contractItem.st_mod_id === contractId
-        );
+        const targetContract = studentModules.find((contractItem) => contractItem.st_mod_id === contractId);
 
         if (!targetContract) {
             throw CustomError.notFound("Contract not found");
@@ -254,17 +209,17 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
         return await StudentModule.findAll({
             where: { st_mod_student_id: studentId },
             include: [{ model: Module, as: "module" }],
-            order: [[{ model: Module, as: "module" }, "mo_name", "ASC"]]
+            order: [[{ model: Module, as: "module" }, "mo_name", "ASC"]],
         });
     }
 
     private async getFinalPurchasedLevels(createdContracts: StudentModule[]) {
-        const createdContractIds = createdContracts.map(contract => contract.st_mod_id);
+        const createdContractIds = createdContracts.map((contract) => contract.st_mod_id);
 
         return await StudentModule.findAll({
             where: { st_mod_id: createdContractIds },
-            include: [{ model: Module, as: 'module' }],
-            order: [[{ model: Module, as: 'module' }, 'mo_level', 'ASC']]
+            include: [{ model: Module, as: "module" }],
+            order: [[{ model: Module, as: "module" }, "mo_level", "ASC"]],
         });
     }
 
@@ -273,30 +228,28 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
     private calculateNewStudentModuleStatus(calcylateProps: CalculateNewStudentModuleStatusProps): StudentModuleStatus {
         const { statusRequested, currentIndex, targetModuleIndex, currentStatus } = calcylateProps;
 
-        if (statusRequested === studentModuleStatus.APPROVED) {
+        if (statusRequested === studentModuleStatus.Approved) {
             if (currentIndex <= targetModuleIndex) {
-                return studentModuleStatus.APPROVED;
+                return studentModuleStatus.Approved;
             } else if (currentIndex === targetModuleIndex + 1) {
-                return studentModuleStatus.ACTIVE;
+                return studentModuleStatus.Active;
             }
-            return studentModuleStatus.LOCKED;
-        } else if (statusRequested === studentModuleStatus.ACTIVE) {
+            return studentModuleStatus.Locked;
+        } else if (statusRequested === studentModuleStatus.Active) {
             if (currentIndex < targetModuleIndex) {
-                return studentModuleStatus.APPROVED;
+                return studentModuleStatus.Approved;
             } else if (currentIndex === targetModuleIndex) {
-                return studentModuleStatus.ACTIVE;
+                return studentModuleStatus.Active;
             }
-            return studentModuleStatus.LOCKED;
+            return studentModuleStatus.Locked;
         } else {
-            return currentIndex === targetModuleIndex
-                ? statusRequested
-                : currentStatus;
+            return currentIndex === targetModuleIndex ? statusRequested : currentStatus;
         }
     }
 
-    private buildStatusUpdatePromises(buildProps: BuildStatusUpdatePromisesProps): Promise<any>[] {
+    private buildStatusUpdatePromises(buildProps: BuildStatusUpdatePromisesProps): Promise<unknown>[] {
         const { studentModules, targetModuleIndex, statusRequested, transaction } = buildProps;
-        const updatePromises: Promise<any>[] = [];
+        const updatePromises: Promise<unknown>[] = [];
 
         for (let currentIndex = 0; currentIndex < studentModules.length; currentIndex++) {
             const currentStudentModule = studentModules[currentIndex];
@@ -310,16 +263,11 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
                 statusRequested,
                 currentIndex,
                 targetModuleIndex,
-                currentStatus
+                currentStatus,
             });
 
             if (currentStatus !== newContractStatus) {
-                updatePromises.push(
-                    currentStudentModule.update(
-                        { st_mod_status: newContractStatus },
-                        { transaction }
-                    )
-                );
+                updatePromises.push(currentStudentModule.update({ st_mod_status: newContractStatus }, { transaction }));
             }
         }
 
@@ -329,20 +277,20 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
     private async bulkCreateContracts(props: BulkCreateContractsProps): Promise<StudentModule[]> {
         const { studentId, sellerId, modulesFromDb, transaction } = props;
 
-        const recordsToInsert = modulesFromDb.map(currentModule => ({
+        const recordsToInsert = modulesFromDb.map((currentModule) => ({
             st_mod_student_id: studentId,
             st_mod_module_id: currentModule.mo_id,
             st_mod_seller_id: sellerId,
-            st_mod_status: studentModuleStatus.LOCKED,
-            st_mod_purchase_date: new Date()
+            st_mod_status: studentModuleStatus.Locked,
+            st_mod_purchase_date: new Date(),
         }));
 
         return await StudentModule.bulkCreate(recordsToInsert, { transaction });
     }
 
-    private async selfHealingAlgorithm(selfHealProps: SelfHealingAlgorithmProps): Promise<Promise<any>[]> {
+    private async selfHealingAlgorithm(selfHealProps: SelfHealingAlgorithmProps): Promise<Promise<unknown>[]> {
         const { allStudentContracts, transaction } = selfHealProps;
-        const updatePromises: Promise<any>[] = [];
+        const updatePromises: Promise<unknown>[] = [];
         let isProgressionActive = false;
 
         for (let currentIndex = 0; currentIndex < allStudentContracts.length; currentIndex++) {
@@ -353,22 +301,17 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
 
             if (!isProgressionActive) {
                 // El primero que NO esté aprobado, será el ACTIVE
-                if (currentContract.st_mod_status !== studentModuleStatus.APPROVED) {
-                    newContractStatus = studentModuleStatus.ACTIVE;
+                if (currentContract.st_mod_status !== studentModuleStatus.Approved) {
+                    newContractStatus = studentModuleStatus.Active;
                     isProgressionActive = true;
                 }
             } else {
-                newContractStatus = studentModuleStatus.LOCKED;
+                newContractStatus = studentModuleStatus.Locked;
             }
 
             // Actualizamos si el algoritmo detectó una anomalía temporal (ej: B2 estaba ACTIVE pero insertamos B1)
             if (currentContract.st_mod_status !== newContractStatus) {
-                updatePromises.push(
-                    currentContract.update(
-                        { st_mod_status: newContractStatus },
-                        { transaction }
-                    )
-                );
+                updatePromises.push(currentContract.update({ st_mod_status: newContractStatus }, { transaction }));
             }
         }
 
@@ -377,14 +320,10 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
 
     // Use Mappers
     private async convertToEntity(contracts: StudentModule[]): Promise<StudentLevelEntity[]> {
-        return contracts.map(contract =>
-            StudentLevelMapper.studentLevelEntityFromObject(contract.toJSON())
-        );
+        return contracts.map((contract) => StudentLevelMapper.studentLevelEntityFromObject(contract.toJSON()));
     }
 
     private async convertToDetailsEntity(contracts: StudentModule[]): Promise<StudentLevelDetailsProjection[]> {
-        return contracts.map(contract =>
-            StudentLevelMapper.studentLevelDetailsEntityFromObject(contract.toJSON())
-        );
+        return contracts.map((contract) => StudentLevelMapper.studentLevelDetailsEntityFromObject(contract.toJSON()));
     }
 }

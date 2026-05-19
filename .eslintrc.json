@@ -27,6 +27,11 @@
                 "leadingUnderscore": "allow"
             },
             {
+                "selector": "import",
+                "format": ["camelCase", "PascalCase"],
+                "leadingUnderscore": "allow"
+            },
+            {
                 "selector": ["class", "interface", "typeAlias", "enum", "typeParameter"],
                 "format": ["PascalCase"]
             },
@@ -49,11 +54,14 @@
                 "*.mapper.ts",
                 "*.mappers.ts",
                 "*.datasource.ts",
+                "*.datasource.impl.ts",
                 "*.datasources.ts",
                 "*.model.ts",
                 "*.models.ts",
                 "*.entity.ts",
-                "*.entities.ts"
+                "*.entities.ts",
+                "*.error.ts",
+                "*.integration.test.ts"
             ],
             "rules": {
                 "@typescript-eslint/naming-convention": [
@@ -66,6 +74,11 @@
                     {
                         "selector": "variable",
                         "format": ["camelCase", "UPPER_CASE", "snake_case"],
+                        "leadingUnderscore": "allow"
+                    },
+                    {
+                        "selector": "import",
+                        "format": ["camelCase", "PascalCase"],
                         "leadingUnderscore": "allow"
                     },
                     {
@@ -86,7 +99,7 @@
             }
         },
         {
-            "files": ["*.dto.ts", "*.dtos.ts", "*.mapper.ts", "*.mappers.ts"],
+            "files": ["*.dto.ts", "*.dtos.ts", "*.mapper.ts", "*.mappers.ts", "*.test.ts", "*.test.ts", "*.error.ts"],
             "rules": {
                 "@typescript-eslint/no-explicit-any": "off"
             }

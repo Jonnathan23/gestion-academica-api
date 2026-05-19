@@ -1,7 +1,7 @@
 export const studentModuleStatus = {
-    ACTIVE: "ACTIVE",
-    APPROVED: "APPROVED",
-    LOCKED: "LOCKED"
-} as const
+    Active: "ACTIVE",
+    Approved: "APPROVED",
+    Locked: "LOCKED",
+} as const;
 
-export type StudentModuleStatus = typeof studentModuleStatus[keyof typeof studentModuleStatus]
+export type StudentModuleStatus = (typeof studentModuleStatus)[keyof typeof studentModuleStatus];

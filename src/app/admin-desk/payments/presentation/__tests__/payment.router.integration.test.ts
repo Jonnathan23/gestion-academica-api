@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeAll, afterAll } from "bun:test";
+import { describe, test, expect, beforeAll } from "bun:test";
 import request from "supertest";
 import express from "express";
 
@@ -9,7 +9,6 @@ import { testGlobalErrorHandler } from "@/__test__/configTest";
 import { User } from "@/data/models/Shared";
 import { Student } from "@/data/models/AdminDesk";
 import { JwtAdapter, BcryptAdapter } from "@/core/utils";
-import { systemPermissions } from "@/core/constants";
 import { userRoles } from "@/core/interfaces";
 import PaymentQuota from "@/data/models/AdminDesk/PaymentQuota.model";
 
@@ -40,8 +39,8 @@ const TEST_PASSWORD = "AdminPass1!";
 const NON_EXISTENT_UUID = "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d";
 
 const VALID_PLAN_PAYLOAD = {
-    totalAmount: 1200.00,
-    enrollmentFee: 50.00,
+    totalAmount: 1200.0,
+    enrollmentFee: 50.0,
     isSinglePayment: false,
     numberOfQuotas: 12,
     firstQuotaDueDate: "2024-04-01T00:00:00.000Z",
@@ -51,7 +50,6 @@ const VALID_PLAN_PAYLOAD = {
 // Test suite
 // ------------------------------------------------------------------ //
 describe("Integration Tests: Payments Router", () => {
-
     let adminToken: string;
     let teacherToken: string;
     let testStudentId: string;
@@ -70,11 +68,12 @@ describe("Integration Tests: Payments Router", () => {
             us_role: userRoles.ADMIN,
         });
 
-        adminToken = (await JwtAdapter.generateToken({
-            id: adminUser.us_id,
-            email: adminUser.us_email,
-            role: adminUser.us_role,
-        })) || "";
+        adminToken =
+            (await JwtAdapter.generateToken({
+                id: adminUser.us_id,
+                email: adminUser.us_email,
+                role: adminUser.us_role,
+            })) || "";
 
         // 2. Inject Teacher user (Unauthorized for payments)
         const hashedTeacherPassword = await BcryptAdapter.hash(TEST_PASSWORD);
@@ -85,11 +84,12 @@ describe("Integration Tests: Payments Router", () => {
             us_role: userRoles.TEACHER,
         });
 
-        teacherToken = (await JwtAdapter.generateToken({
-            id: teacherUser.us_id,
-            email: teacherUser.us_email,
-            role: teacherUser.us_role,
-        })) || "";
+        teacherToken =
+            (await JwtAdapter.generateToken({
+                id: teacherUser.us_id,
+                email: teacherUser.us_email,
+                role: teacherUser.us_role,
+            })) || "";
 
         // 3. Inject a Test Student
         const student = await Student.create({
@@ -167,11 +167,17 @@ describe("Integration Tests: Payments Router", () => {
         });
 
         test("[400] Should fail if totalAmount is missing", async () => {
-            const { totalAmount, ...payloadWithoutTotal } = VALID_PLAN_PAYLOAD;
+            const { enrollmentFee, isSinglePayment, numberOfQuotas, firstQuotaDueDate } = VALID_PLAN_PAYLOAD;
+
             const res = await request(testingPaymentApp)
                 .post(`/api/payments/student/${testStudentId}/plan`)
                 .set("Authorization", `Bearer ${adminToken}`)
-                .send(payloadWithoutTotal);
+                .send({
+                    enrollmentFee,
+                    isSinglePayment,
+                    numberOfQuotas,
+                    firstQuotaDueDate,
+                });
 
             expect(res.status).toBe(400);
             expect(res.body.errors[0].message).toContain("totalAmount");
@@ -196,7 +202,6 @@ describe("Integration Tests: Payments Router", () => {
             expect(res.status).toBe(400);
             expect(res.body.errors[0].message).toContain("firstQuotaDueDate format");
         });
-
     });
 
     // --- GET PLANS SUITE ---
@@ -224,7 +229,7 @@ describe("Integration Tests: Payments Router", () => {
                 .set("Authorization", `Bearer ${adminToken}`)
                 .send({
                     amountPaid: totalToPay,
-                    paymentMethod: "TRANSFER"
+                    paymentMethod: "TRANSFER",
                 });
 
             expect(res.status).toBe(200);
@@ -243,7 +248,7 @@ describe("Integration Tests: Payments Router", () => {
                 .set("Authorization", `Bearer ${adminToken}`)
                 .send({
                     amountPaid: tooMuch,
-                    paymentMethod: "CASH"
+                    paymentMethod: "CASH",
                 });
 
             expect(res.status).toBe(400);
@@ -256,7 +261,7 @@ describe("Integration Tests: Payments Router", () => {
                 .set("Authorization", `Bearer ${adminToken}`)
                 .send({
                     amountPaid: 10,
-                    paymentMethod: "BITCOIN"
+                    paymentMethod: "BITCOIN",
                 });
 
             expect(res.status).toBe(400);
@@ -302,5 +307,4 @@ describe("Integration Tests: Payments Router", () => {
             expect(res.body.errors[0].message.toLowerCase()).toContain("invalid item");
         });
     });
-
 });

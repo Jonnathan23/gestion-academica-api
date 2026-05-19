@@ -16,7 +16,7 @@ export class PayQuotaDto {
         if (!amountPaid || amountPaid <= 0) return ["amountPaid must be greater than 0"];
 
         if (!method || !Object.values(paymentMethod).includes(method as any)) {
-            return ["Invalid paymentMethod. Must be CASH, TRANSFER, CREDIT_CARD or MIXED"];
+            return ["Invalid paymentMethod. Must be CASH, TRANSFER, CreditCard or MIXED"];
         }
 
         return [undefined, new PayQuotaDto(quotaId, amountPaid, method)];

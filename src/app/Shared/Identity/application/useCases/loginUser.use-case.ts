@@ -30,10 +30,8 @@ type funtionGenerateToken = typeof JwtAdapter.generateToken;
 export class LoginUser implements LoginUserUseCase {
     constructor(
         private readonly userRepository: UserRepository,
-        private readonly generateJWT: funtionGenerateToken = JwtAdapter.generateToken
-    ) { }
-
-
+        private readonly generateJWT: funtionGenerateToken = JwtAdapter.generateToken,
+    ) {}
 
     async execute(user: LoginUserDto): Promise<LoginResponse> {
         const userExist = await this.userRepository.login(user);
@@ -46,15 +44,15 @@ export class LoginUser implements LoginUserUseCase {
             us_full_name: userExist.us_full_name,
             us_email: userExist.us_email,
             us_role: userExist.us_role,
-            us_is_active: userExist.us_is_active ? userState.ACTIVE : userState.INACTIVE,
-            permissions: assignedPermissions
-        }
+            us_is_active: userExist.us_is_active ? userState.Active : userState.Inactive,
+            permissions: assignedPermissions,
+        };
 
         const token = await this.generateToken(userExist);
 
         return {
             user: userResponse,
-            token
+            token,
         };
     }
 
@@ -62,7 +60,7 @@ export class LoginUser implements LoginUserUseCase {
         const payload: UserTokenPayload = {
             id: user.us_id,
             email: user.us_email,
-            role: user.us_role
+            role: user.us_role,
         };
 
         const token = await this.generateJWT(payload);

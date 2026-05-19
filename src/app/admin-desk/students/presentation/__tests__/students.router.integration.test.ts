@@ -10,6 +10,7 @@ import { User } from "@/data/models/Shared";
 import { Student } from "@/data/models/AdminDesk";
 import { JwtAdapter, BcryptAdapter } from "@/core/utils";
 import { AuthMiddleware } from "@/core/middleware/auth.mid";
+import { certificateType } from "@/data/models/AdminDesk/Student.model";
 
 // ------------------------------------------------------------------ //
 // Micro-application: only the Students router (no other routes needed)
@@ -23,14 +24,11 @@ testingStudentApp.use(testGlobalErrorHandler());
 // Database: force-sync drops and recreates all tables
 // ------------------------------------------------------------------ //
 
-console.log('environmentVariables.databaseUrl');
-console.log(environmentVariables.databaseUrl);
 const testDatabase = new DatabaseConnection({
     databaseUrl: environmentVariables.databaseUrl,
     enableLogging: false,
     forceSynchronization: true,
 });
-
 
 // ------------------------------------------------------------------ //
 // Shared constants
@@ -58,7 +56,6 @@ const SECOND_STUDENT_CI = "0987654321";
 // Test suite
 // ------------------------------------------------------------------ //
 describe("Integration Tests: Students Router (Authenticated)", () => {
-
     let adminToken: string;
     let targetStudentId: string;
     let secondStudentId: string;
@@ -114,7 +111,7 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
             st_email: "maria.lopez@test.com",
             st_date_of_birth: new Date("1995-05-15"),
             st_nationality: "Ecuadorian",
-            st_certificate_type: "ONE_TONNE",
+            st_certificate_type: certificateType.Toefl,
             st_start_date: new Date("2023-06-01"),
             st_contract_status: "FROZEN",
             st_progress_category: "MODERATE",
@@ -131,46 +128,36 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
     // AUTH — [401] Unauthenticated access
     // ---------------------------------------------------------------- //
     describe("Authentication guard", () => {
-
         test("[401] POST /api/students/register without token should be rejected", async () => {
-            const res = await request(testingStudentApp)
-                .post("/api/students/register")
-                .send(VALID_STUDENT_PAYLOAD);
+            const res = await request(testingStudentApp).post("/api/students/register").send(VALID_STUDENT_PAYLOAD);
 
             expect(res.status).toBe(401);
             expect(res.body.errors[0].message).toBe("You must be logged in");
         });
 
         test("[401] GET /api/students/search without token should be rejected", async () => {
-            const res = await request(testingStudentApp)
-                .get("/api/students/search?q=Juan");
+            const res = await request(testingStudentApp).get("/api/students/search?q=Juan");
 
             expect(res.status).toBe(401);
             expect(res.body.errors[0].message).toBe("You must be logged in");
         });
 
         test("[401] PATCH /api/students/:id without token should be rejected", async () => {
-            const res = await request(testingStudentApp)
-                .patch(`/api/students/${NON_EXISTENT_UUID}`)
-                .send({ fullName: "Hacker" });
+            const res = await request(testingStudentApp).patch(`/api/students/${NON_EXISTENT_UUID}`).send({ fullName: "Hacker" });
 
             expect(res.status).toBe(401);
             expect(res.body.errors[0].message).toBe("You must be logged in");
         });
 
         test("[401] Authorization header without 'Bearer ' prefix should be rejected", async () => {
-            const res = await request(testingStudentApp)
-                .get("/api/students/search")
-                .set("Authorization", adminToken);
+            const res = await request(testingStudentApp).get("/api/students/search").set("Authorization", adminToken);
 
             expect(res.status).toBe(401);
             expect(res.body.errors[0].message).toBe("You must be logged in");
         });
 
         test("[401] GET /api/students/search with invalid token should return unauthorized", async () => {
-            const res = await request(testingStudentApp)
-                .get("/api/students/search")
-                .set("Authorization", "Bearer this.is.not.valid");
+            const res = await request(testingStudentApp).get("/api/students/search").set("Authorization", "Bearer this.is.not.valid");
 
             expect(res.status).toBe(401);
             expect(res.body).toHaveProperty("errors");
@@ -182,7 +169,7 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
                 us_email: "deact.student@test.com",
                 us_password_hash: "MockHash123!",
                 us_role: "TEACHER",
-                us_is_active: false
+                us_is_active: false,
             });
             const deactivatedToken = await JwtAdapter.generateToken({
                 id: deactivatedUser.us_id,
@@ -203,7 +190,6 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
     // POST /api/students/register — Register student
     // ---------------------------------------------------------------- //
     describe("POST /api/students/register", () => {
-
         test("[400] Missing 'identificationCard' should return validation error", async () => {
             const res = await request(testingStudentApp)
                 .post("/api/students/register")
@@ -236,12 +222,17 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
 
         test("[400] Missing 'startDate' should return validation error", async () => {
             // Hacemos una copia del payload válido, pero extraemos y descartamos 'startDate'
-            const { startDate, ...payloadWithoutStartDate } = VALID_STUDENT_PAYLOAD;
+            const { identificationCard, fullName, phoneNumber, email, dateOfBirth, nationality, certificateType } = VALID_STUDENT_PAYLOAD;
 
-            const res = await request(testingStudentApp)
-                .post("/api/students/register")
-                .set("Authorization", `Bearer ${adminToken}`)
-                .send(payloadWithoutStartDate);
+            const res = await request(testingStudentApp).post("/api/students/register").set("Authorization", `Bearer ${adminToken}`).send({
+                identificationCard,
+                fullName,
+                phoneNumber,
+                email,
+                dateOfBirth,
+                nationality,
+                certificateType,
+            });
 
             expect(res.status).toBe(400);
             // Ahora sí pasará los filtros nuevos y caerá exactamente en el error de startDate
@@ -274,7 +265,7 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
                 .set("Authorization", `Bearer ${adminToken}`)
                 .send({
                     ...VALID_STUDENT_PAYLOAD,
-                    identificationCard: "17ABCD7890" // Pisamos el valor válido con uno inválido
+                    identificationCard: "17ABCD7890", // Pisamos el valor válido con uno inválido
                 });
 
             expect(res.status).toBe(400);
@@ -287,7 +278,7 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
                 .set("Authorization", `Bearer ${adminToken}`)
                 .send({
                     ...VALID_STUDENT_PAYLOAD,
-                    phoneNumber: "123" // Pisamos el valor válido con uno inválido
+                    phoneNumber: "123", // Pisamos el valor válido con uno inválido
                 });
 
             expect(res.status).toBe(400);
@@ -363,11 +354,8 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
     // GET /api/students/search — Search students
     // ---------------------------------------------------------------- //
     describe("GET /api/students/search", () => {
-
         test("[200] Search by name should return matching students", async () => {
-            const res = await request(testingStudentApp)
-                .get("/api/students/search?q=Juan")
-                .set("Authorization", `Bearer ${adminToken}`);
+            const res = await request(testingStudentApp).get("/api/students/search?q=Juan").set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(200);
             expect(res.body.success).toBe(true);
@@ -389,9 +377,7 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
         });
 
         test("[200] Search with Maria should return the second student", async () => {
-            const res = await request(testingStudentApp)
-                .get("/api/students/search?q=Maria")
-                .set("Authorization", `Bearer ${adminToken}`);
+            const res = await request(testingStudentApp).get("/api/students/search?q=Maria").set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(200);
             expect(Array.isArray(res.body.data)).toBe(true);
@@ -409,9 +395,7 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
         });
 
         test("[200] Search with empty query should return all students", async () => {
-            const res = await request(testingStudentApp)
-                .get("/api/students/search")
-                .set("Authorization", `Bearer ${adminToken}`);
+            const res = await request(testingStudentApp).get("/api/students/search").set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(200);
             expect(Array.isArray(res.body.data)).toBe(true);
@@ -423,7 +407,6 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
     // PATCH /api/students/:id — Partial update
     // ---------------------------------------------------------------- //
     describe("PATCH /api/students/:id", () => {
-
         test("[400] Malformed UUID should return 400 (VerifyUUID)", async () => {
             const res = await request(testingStudentApp)
                 .patch(`/api/students/${MALFORMED_ID}`)
@@ -502,7 +485,6 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
     // PATCH /api/students/:id/contract-status — Change contract status
     // ---------------------------------------------------------------- //
     describe("PATCH /api/students/:id/contract-status", () => {
-
         test("[400] Malformed UUID should return 400 (VerifyUUID)", async () => {
             const res = await request(testingStudentApp)
                 .patch(`/api/students/${MALFORMED_ID}/contract-status`)
@@ -570,7 +552,6 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
     // PATCH /api/students/:id/graduated — Toggle graduated status
     // ---------------------------------------------------------------- //
     describe("PATCH /api/students/:id/graduated", () => {
-
         test("[400] Malformed UUID should return 400 (VerifyUUID)", async () => {
             const res = await request(testingStudentApp)
                 .patch(`/api/students/${MALFORMED_ID}/graduated`)
@@ -615,7 +596,6 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
     // PATCH /api/students/:id/deactivate — Deactivate student
     // ---------------------------------------------------------------- //
     describe("PATCH /api/students/:id/deactivate", () => {
-
         test("[400] Malformed UUID should return 400 (VerifyUUID)", async () => {
             const res = await request(testingStudentApp)
                 .patch(`/api/students/${MALFORMED_ID}/deactivate`)

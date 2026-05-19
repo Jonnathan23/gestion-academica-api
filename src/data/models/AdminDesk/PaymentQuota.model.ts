@@ -1,27 +1,25 @@
-import PaymentPlan from '@/data/models/AdminDesk/PaymentPlan.model';
-import type { Optional } from 'sequelize';
+import PaymentPlan from "@/data/models/AdminDesk/PaymentPlan.model";
+import type { Optional } from "sequelize";
 
-import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
-
-
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from "sequelize-typescript";
 
 export const paymentQuotaStatus = {
-    PENDING: "PENDING",
-    PARTIAL: "PARTIAL",
-    PAID: "PAID",
-    OVERDUE: "OVERDUE"
+    Pending: "PENDING",
+    Partial: "PARTIAL",
+    Paid: "PAID",
+    Overdue: "OVERDUE",
 } as const;
 
-export type PaymentQuotaStatus = typeof paymentQuotaStatus[keyof typeof paymentQuotaStatus];
+export type PaymentQuotaStatus = (typeof paymentQuotaStatus)[keyof typeof paymentQuotaStatus];
 
 export const paymentMethod = {
-    CASH: "CASH",
-    TRANSFER: "TRANSFER",
-    CREDIT_CARD: "CREDIT_CARD",
-    MIXED: "MIXED"
+    Cash: "CASH",
+    Transfer: "TRANSFER",
+    CreditCard: "CreditCard",
+    Mixed: "MIXED",
 } as const;
 
-export type PaymentMethod = typeof paymentMethod[keyof typeof paymentMethod];
+export type PaymentMethod = (typeof paymentMethod)[keyof typeof paymentMethod];
 
 interface PaymentQuotaAttributes {
     pq_id: string;
@@ -38,13 +36,16 @@ interface PaymentQuotaAttributes {
     pq_updated_at: Date;
 }
 
-interface PaymentQuotaCreationAttributes extends Optional<PaymentQuotaAttributes, "pq_id" | "pq_payment_method" | "pq_amount_paid" | "pq_created_at" | "pq_updated_at"> {}
+interface PaymentQuotaCreationAttributes extends Optional<
+    PaymentQuotaAttributes,
+    "pq_id" | "pq_payment_method" | "pq_amount_paid" | "pq_created_at" | "pq_updated_at"
+> {}
 
 @Table({
     tableName: "PaymentQuotas",
     timestamps: true,
-    createdAt: 'pq_created_at',
-    updatedAt: 'pq_updated_at'
+    createdAt: "pq_created_at",
+    updatedAt: "pq_updated_at",
 })
 class PaymentQuota extends Model<PaymentQuotaAttributes, PaymentQuotaCreationAttributes> {
     @Column({
@@ -52,71 +53,71 @@ class PaymentQuota extends Model<PaymentQuotaAttributes, PaymentQuotaCreationAtt
         allowNull: false,
         primaryKey: true,
         unique: true,
-        defaultValue: DataType.UUIDV4
+        defaultValue: DataType.UUIDV4,
     })
     declare pq_id: string;
 
     @ForeignKey(() => PaymentPlan)
     @Column({
         type: DataType.UUID,
-        allowNull: false
+        allowNull: false,
     })
     declare pq_payment_plan_id: string;
 
     @Column({
         type: DataType.INTEGER,
-        allowNull: false
+        allowNull: false,
     })
     declare pq_quota_number: number;
 
     @Column({
         type: DataType.ENUM(...Object.values(paymentMethod)),
-        allowNull: true // Es nulo hasta que el estudiante realice el pago
+        allowNull: true, // Es nulo hasta que el estudiante realice el pago
     })
     declare pq_payment_method: PaymentMethod;
 
     @Column({
         type: DataType.DECIMAL(10, 2),
-        allowNull: false
+        allowNull: false,
     })
     declare pq_base_amount: number;
 
     @Column({
         type: DataType.DECIMAL(10, 2),
         allowNull: false,
-        defaultValue: 0.00
+        defaultValue: 0.0,
     })
     declare pq_rollover_debt: number;
 
     @Column({
         type: DataType.DECIMAL(10, 2),
-        allowNull: false
+        allowNull: false,
     })
     declare pq_total_expected: number;
 
     @Column({
         type: DataType.DECIMAL(10, 2),
         allowNull: false,
-        defaultValue: 0.00
+        defaultValue: 0.0,
     })
     declare pq_amount_paid: number;
 
     @Column({
         type: DataType.DATEONLY, // DATEONLY para evitar problemas de horas con los vencimientos
-        allowNull: false
+        allowNull: false,
     })
     declare pq_due_date: Date;
 
     @Column({
         type: DataType.ENUM(...Object.values(paymentQuotaStatus)),
         allowNull: false,
-        defaultValue: paymentQuotaStatus.PENDING
+        defaultValue: paymentQuotaStatus.Pending,
     })
     declare pq_status: PaymentQuotaStatus;
 
     //* Relaciones
 
-    @BelongsTo(() => PaymentPlan, 'pq_payment_plan_id')
+    @BelongsTo(() => PaymentPlan, "pq_payment_plan_id")
     declare payment_plan: PaymentPlan;
 }
 

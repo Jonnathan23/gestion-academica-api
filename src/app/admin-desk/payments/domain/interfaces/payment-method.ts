@@ -1,8 +1,8 @@
 export const paymentMethod = {
     CASH: "CASH",
     TRANSFER: "TRANSFER",
-    CREDIT_CARD: "CREDIT_CARD",
-    MIXED: "MIXED"
+    CreditCard: "CreditCard",
+    MIXED: "MIXED",
 } as const;
 
-export type PaymentMethod = typeof paymentMethod[keyof typeof paymentMethod];
+export type PaymentMethod = (typeof paymentMethod)[keyof typeof paymentMethod];
