@@ -1,10 +1,12 @@
 import type { Request, Response, NextFunction } from "express";
-import type { StudentLevelRepository } from "@/app/AdminDesk/contracts/domain/repositories/contract.repository";
-import { PurchaseModulesDto, UpdateStudentLevelDto, DeleteStudentLevelDto } from "@/app/AdminDesk/contracts/domain/dtos";
+
 import { PurchaseModules, GetStudentContracts, UpdateStudentLevel, DeleteStudentLevel } from "@/app/AdminDesk/contracts/application";
-import { CustomError } from "@/core/error";
-import { SuccessResponse } from "@/core/utils";
+import { PurchaseModulesDto, UpdateStudentLevelDto, DeleteStudentLevelDto } from "@/app/AdminDesk/contracts/domain/dtos";
+import type { StudentLevelDetailsProjection } from "@/app/AdminDesk/contracts/domain/projections/ContractDetails.projection";
+import type { StudentLevelRepository } from "@/app/AdminDesk/contracts/domain/repositories/contract.repository";
 import type { StudentLevelEntity } from "@/app/AdminDesk/contracts/domain/entities/Contract.entity";
+import { SuccessResponse } from "@/core/utils";
+import { CustomError } from "@/core/error";
 
 export class ContractController {
     constructor(
@@ -40,9 +42,14 @@ export class ContractController {
 
         getStudentContracts.execute(studentId as string)
             .then(contracts => {
-                SuccessResponse.ok<StudentLevelEntity[]>(res, "Contracts retrieved successfully", contracts);
+
+                const successMessage = "Contracts retrieved successfully";
+                SuccessResponse.ok<StudentLevelDetailsProjection[]>(res, successMessage, contracts);
             })
-            .catch(error => { next(error); });
+            .catch(error => {
+
+                next(error);
+            });
     }
 
     deleteStudentLevel = (req: Request, res: Response, next: NextFunction) => {

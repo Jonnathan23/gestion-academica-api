@@ -46,7 +46,7 @@ export class UserDataSourceImpl implements UserDataSource {
         try {
             const userExist = await User.findOne({ where: { us_email } });
             if (!userExist) {
-                throw CustomError.notFound("User not found");
+                throw CustomError.notFound("Invalid credentials");
             }
 
             if (!userExist.us_is_active) {

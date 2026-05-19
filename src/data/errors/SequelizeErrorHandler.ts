@@ -30,6 +30,7 @@ export class SequelizeErrorHandler implements DatabaseErrorHandler {
 
         if (error instanceof ValidationError) {
             console.warn('⚠️ [Missing Validation]: Null or type validation caught by Database.');
+            console.log(error);
             return {
                 statusCode: 400,
                 errors: error.errors.map(validationErrorItem => ({

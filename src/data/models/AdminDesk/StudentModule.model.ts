@@ -13,6 +13,7 @@ const studentModuleStatus = {
 export type StudentModuleStatus = typeof studentModuleStatus[keyof typeof studentModuleStatus]
 
 interface StudentModuleAttributes {
+    //TODO: Crear un nuevo campo en la BD para identificar el nivel y no depender del orden de nombres que nos de la BD
     st_mod_id: string;
     st_mod_student_id: string;
     st_mod_module_id: string;
@@ -33,6 +34,7 @@ interface StudentModuleCreationAttributes extends Omit<StudentModuleAttributes, 
     updatedAt: 'st_mod_updated_at'
 })
 class StudentModule extends Model<StudentModuleAttributes, StudentModuleCreationAttributes> {
+    //TODO: Crear un nuevo campo en la BD para identificar el nivel y no depender del orden de nombres que nos de la BD
     @Column({
         type: DataType.UUID,
         allowNull: false,
@@ -49,7 +51,7 @@ class StudentModule extends Model<StudentModuleAttributes, StudentModuleCreation
     declare st_mod_status: StudentModuleStatus;
 
     @Column({
-        type: DataType.DATE,
+        type: DataType.DATEONLY,
         allowNull: false
     })
     declare st_mod_purchase_date: Date;

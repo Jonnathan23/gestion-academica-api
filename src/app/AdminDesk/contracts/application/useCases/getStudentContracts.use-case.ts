@@ -1,8 +1,8 @@
-import type { StudentLevelEntity } from "@/app/AdminDesk/contracts/domain/entities/Contract.entity";
+import type { StudentLevelDetailsProjection } from "@/app/AdminDesk/contracts/domain/projections/ContractDetails.projection";
 import type { StudentLevelRepository } from "@/app/AdminDesk/contracts/domain/repositories/contract.repository";
 
 export interface GetStudentContractsUseCase {
-    execute(studentId: string): Promise<StudentLevelEntity[]>;
+    execute(studentId: string): Promise<StudentLevelDetailsProjection[]>;
 }
 
 export class GetStudentContracts implements GetStudentContractsUseCase {
@@ -10,7 +10,7 @@ export class GetStudentContracts implements GetStudentContractsUseCase {
         private readonly repository: StudentLevelRepository
     ) { }
 
-    execute(studentId: string): Promise<StudentLevelEntity[]> {
+    execute(studentId: string): Promise<StudentLevelDetailsProjection[]> {
         return this.repository.getStudentContracts(studentId);
     }
 }

@@ -111,7 +111,7 @@ class Student extends Model<StudentAttributes, StudentCreationAttributes> {
     declare st_certificate_type: CertificateType;
 
     @Column({
-        type: DataType.DATE,
+        type: DataType.DATEONLY,
         allowNull: false
     })
     declare st_start_date: Date;

@@ -66,7 +66,7 @@ class RetentionAlert extends Model<RetentionAlertAttributes> {
     declare user: User;
 
     @Column({
-        type: DataType.DATE,
+        type: DataType.DATEONLY,
         allowNull: false
     })
     declare re_al_contact_date: Date;
@@ -99,7 +99,7 @@ class RetentionAlert extends Model<RetentionAlertAttributes> {
     declare re_al_justification_reason: string;
 
     @Column({
-        type: DataType.DATE,
+        type: DataType.DATEONLY,
         allowNull: true
     })
     declare re_al_return_deadline: Date;
@@ -118,7 +118,7 @@ class RetentionAlert extends Model<RetentionAlertAttributes> {
     declare re_al_status: RetentionAlertStatus;
 
     @Column({
-        type: DataType.DATE,
+        type: DataType.DATEONLY,
         allowNull: true
     })
     declare re_al_resolution_date: Date;
