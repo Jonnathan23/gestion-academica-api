@@ -1,4 +1,4 @@
-import { UserEntity } from "@/app/Shared/Identity/domain/entities";
+import { UserEntity } from "@/app/shared/Identity/domain/entities";
 import { CustomError } from "@/core/error";
 
 

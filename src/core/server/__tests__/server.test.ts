@@ -6,28 +6,23 @@ import type { DatabaseErrorHandler } from "@/core/interfaces/DatabaseErrorHandle
 import type { SwaggerConfiguration } from "@/core/config/swagger";
 import { Server } from "@/core/server";
 
-
-
-
 describe("Server Class Test Suite", () => {
-
     test("Should initialize the server with the correct port and configurations", async () => {
-
         // 1. Arrange: Preparamos dependencias falsas (Dummies)
         const listeningPort = 8080;
         const routerDummy = Router();
 
         const corsConfigMock = {
-            corsOptions: { origin: "*" }
+            corsOptions: { origin: "*" },
         } as unknown as CorsConfig;
 
         const databaseErrorHandlerMock = {
-            handleDatabaseError: mock()
+            handleDatabaseError: mock(),
         } as DatabaseErrorHandler;
 
         const swaggerConfigurationMock = {
             serve: mock(),
-            setup: mock().mockReturnValue(mock())
+            setup: mock().mockReturnValue(mock()),
         } as unknown as SwaggerConfiguration;
 
         // Instanciamos nuestro servidor
@@ -36,7 +31,7 @@ describe("Server Class Test Suite", () => {
             routes: routerDummy,
             cors: corsConfigMock,
             databaseErrorHandler: databaseErrorHandlerMock,
-            documentation: swaggerConfigurationMock
+            documentation: swaggerConfigurationMock,
         });
 
         // ¡EL TRUCO DE MAGIA!: Interceptamos el método listen de Express para que no abra el puerto real

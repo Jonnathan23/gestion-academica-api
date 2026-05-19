@@ -1,20 +1,17 @@
-import { Table, Column, Model, DataType, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
-import type { Optional } from 'sequelize';
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo, HasMany } from "sequelize-typescript";
+import type { Optional } from "sequelize";
 
-import Student from '@/data/models/AdminDesk/Student.model';
-import { User } from '@/data/models/Shared';
-import PaymentQuota from '@/data/models/AdminDesk/PaymentQuota.model';
-
-
-
+import Student from "@/data/models/AdminDesk/Student.model";
+import { User } from "@/data/models/Shared";
+import PaymentQuota from "@/data/models/AdminDesk/PaymentQuota.model";
 
 export const paymentPlanStatus = {
-    PENDING: "PENDING",
-    COMPLETED: "COMPLETED",
-    CANCELLED: "CANCELLED"
+    Pending: "PENDING",
+    Completed: "Completed",
+    Cancelled: "CANCELLED",
 } as const;
 
-export type PaymentPlanStatus = typeof paymentPlanStatus[keyof typeof paymentPlanStatus];
+export type PaymentPlanStatus = (typeof paymentPlanStatus)[keyof typeof paymentPlanStatus];
 
 interface PaymentPlanAttributes {
     pp_id: string;
@@ -33,8 +30,8 @@ interface PaymentPlanCreationAttributes extends Optional<PaymentPlanAttributes, 
 @Table({
     tableName: "PaymentPlans",
     timestamps: true,
-    createdAt: 'pp_created_at',
-    updatedAt: 'pp_updated_at'
+    createdAt: "pp_created_at",
+    updatedAt: "pp_updated_at",
 })
 class PaymentPlan extends Model<PaymentPlanAttributes, PaymentPlanCreationAttributes> {
     @Column({
@@ -42,60 +39,60 @@ class PaymentPlan extends Model<PaymentPlanAttributes, PaymentPlanCreationAttrib
         allowNull: false,
         primaryKey: true,
         unique: true,
-        defaultValue: DataType.UUIDV4
+        defaultValue: DataType.UUIDV4,
     })
     declare pp_id: string;
 
     @ForeignKey(() => Student)
     @Column({
         type: DataType.UUID,
-        allowNull: false
+        allowNull: false,
     })
     declare pp_student_id: string;
 
     @ForeignKey(() => User)
     @Column({
         type: DataType.UUID,
-        allowNull: false
+        allowNull: false,
     })
     declare pp_seller_id: string;
 
     @Column({
         type: DataType.DECIMAL(10, 2),
         allowNull: false,
-        defaultValue: 0.00
+        defaultValue: 0.0,
     })
     declare pp_enrollment_fee: number;
 
     @Column({
         type: DataType.DECIMAL(10, 2),
-        allowNull: false
+        allowNull: false,
     })
     declare pp_total_amount: number;
 
     @Column({
         type: DataType.BOOLEAN,
         allowNull: false,
-        defaultValue: false
+        defaultValue: false,
     })
     declare pp_is_single_payment: boolean;
 
     @Column({
         type: DataType.ENUM(...Object.values(paymentPlanStatus)),
         allowNull: false,
-        defaultValue: paymentPlanStatus.PENDING
+        defaultValue: paymentPlanStatus.Pending,
     })
     declare pp_status: PaymentPlanStatus;
 
     //* Relaciones
 
-    @BelongsTo(() => Student, 'pp_student_id')
+    @BelongsTo(() => Student, "pp_student_id")
     declare student: Student;
 
-    @BelongsTo(() => User, 'pp_seller_id')
+    @BelongsTo(() => User, "pp_seller_id")
     declare seller: User;
 
-    @HasMany(() => PaymentQuota, 'pq_payment_plan_id')
+    @HasMany(() => PaymentQuota, "pq_payment_plan_id")
     declare payment_quotas: PaymentQuota[];
 }
 

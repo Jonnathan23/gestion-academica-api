@@ -6,18 +6,15 @@ import { Student, Module, StudentModule } from "@/data/models/AdminDesk";
 import { AttendanceSession, LessonLog, RetentionAlert } from "@/data/models/ClassTrack";
 import PaymentQuota from "@/data/models/AdminDesk/PaymentQuota.model";
 import PaymentPlan from "@/data/models/AdminDesk/PaymentPlan.model";
-import { CustomPostgresDatabaseConnectionError } from "../errors/CustomPostgresDatabaseError";
-
-
+import { CustomPostgresDatabaseConnectionError } from "../errors/CustomPostgresDatabaseError.error";
 
 interface DatabaseConnectionOptions {
-    databaseUrl: string; 
+    databaseUrl: string;
     enableLogging?: boolean;
     forceSynchronization?: boolean;
 }
 
 export class DatabaseConnection {
-    
     private readonly sequelizeInstance: Sequelize;
     private readonly forceSynchronization: boolean;
 
@@ -25,30 +22,25 @@ export class DatabaseConnection {
         const { databaseUrl, enableLogging = false, forceSynchronization = false } = options;
 
         this.sequelizeInstance = new Sequelize(databaseUrl, {
-            models: [
-                User,
-                Student, Module, StudentModule,PaymentPlan, PaymentQuota,
-                AttendanceSession, RetentionAlert, LessonLog,                
-            ],
-            logging: enableLogging
+            models: [User, Student, Module, StudentModule, PaymentPlan, PaymentQuota, AttendanceSession, RetentionAlert, LessonLog],
+            logging: enableLogging,
         });
 
         this.forceSynchronization = forceSynchronization;
     }
 
     async connect(): Promise<void> {
-        console.log(ColorsAdapter.setYellow('Connecting to the database...\n'));
+        console.info(ColorsAdapter.setYellow("Connecting to the database...\n"));
         try {
             await this.sequelizeInstance.authenticate();
-            
+
             await this.sequelizeInstance.sync({ force: this.forceSynchronization });
-            
-            console.log(ColorsAdapter.setBlueBold('Successful connection to the database'));
+
+            console.info(ColorsAdapter.setBlueBold("Successful connection to the database"));
         } catch (error) {
-            console.log(ColorsAdapter.setRedBold('\n[FATAL] Error connecting to the database during startup:'));
+            console.error(ColorsAdapter.setRedBold("\n[FATAL] Error connecting to the database during startup:"));
             CustomPostgresDatabaseConnectionError.getErrorDetails(error);
         }
-
     }
 
     async disconnect(): Promise<void> {

@@ -1,4 +1,4 @@
-import { certificateType, type CertificateType } from "@/app/AdminDesk/students/domain/interfaces/Students.interface";
+import { certificateType, type CertificateType } from "@/app/admin-desk/students/domain/interfaces/Students.interface";
 import { userRoles, type UserRoles } from "@/core/interfaces";
 
 

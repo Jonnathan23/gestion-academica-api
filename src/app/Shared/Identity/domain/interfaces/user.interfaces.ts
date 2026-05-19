@@ -1,6 +1,6 @@
 export const userState = {
-    ACTIVE: "activo",
-    INACTIVE: "inactivo"
+    Active: "activo",
+    Inactive: "inactivo",
 } as const;
 
-export type UserState = typeof userState[keyof typeof userState];
+export type UserState = (typeof userState)[keyof typeof userState];

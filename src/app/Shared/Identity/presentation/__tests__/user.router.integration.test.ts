@@ -2,7 +2,7 @@ import { describe, test, expect, beforeAll, afterAll } from "bun:test";
 import request from "supertest";
 import express from "express";
 
-import { UserRouter } from "@/app/Shared/Identity/presentation/router";
+import { UserRouter } from "@/app/shared/Identity/presentation/router";
 import { environmentVariables } from "@/core/config/envs";
 import { DatabaseConnection } from "@/data/config/db-postgresql";
 import { testGlobalErrorHandler } from "@/__test__/configTest";
@@ -522,7 +522,7 @@ describe("Integration Tests: User Router (Authenticated)", () => {
             expect(res.body.errors[0].message).toBe("Invalid email");
         });
 
-        test("[404] Non-existent email should return 'User not found'", async () => {
+        test("[404] Non-existent email should return 'Invalid credentials'", async () => {
             const res = await request(testingApp)
                 .post("/api/users/login")
                 .send({
@@ -531,7 +531,7 @@ describe("Integration Tests: User Router (Authenticated)", () => {
                 });
 
             expect(res.status).toBe(404);
-            expect(res.body.errors[0].message).toBe("User not found");
+            expect(res.body.errors[0].message).toBe("Invalid credentials");
         });
 
         test("[401] Wrong password should return 'Invalid credentials'", async () => {
