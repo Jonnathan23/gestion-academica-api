@@ -1,5 +1,5 @@
-import type { RegisterUserDto } from "@/app/Shared/Identity/domain/dtos";
-import type { UserRepository } from "@/app/Shared/Identity/domain/repositories/user.repository";
+import type { RegisterUserDto } from "@/app/shared/Identity/domain/dtos";
+import type { UserRepository } from "@/app/shared/Identity/domain/repositories/user.repository";
 
 
 interface RegisterUserUseCase {

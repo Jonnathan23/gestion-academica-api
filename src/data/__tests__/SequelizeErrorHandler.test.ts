@@ -1,38 +1,44 @@
-import { ConnectionError, ConnectionRefusedError, AccessDeniedError, DatabaseError, UniqueConstraintError, ForeignKeyConstraintError } from "sequelize";
+import {
+    ConnectionError,
+    ConnectionRefusedError,
+    AccessDeniedError,
+    DatabaseError,
+    ValidationError,
+    UniqueConstraintError,
+    ForeignKeyConstraintError,
+} from "sequelize";
+
 import { describe, test, expect } from "bun:test";
+
 import { SequelizeErrorHandler } from "@/data/errors/SequelizeErrorHandler";
 
 describe("SequelizeErrorHandler", () => {
-
-    test("should translate ENOTFOUND to a 503 CustomError", () => {
+    test("should return a generic safe message for ENOTFOUND errors", () => {
         // 1. Arrange
         const errorHandler = new SequelizeErrorHandler();
+
         const fakeParentError = new Error("getaddrinfo ENOTFOUND");
         (fakeParentError as any).code = "ENOTFOUND";
 
-        // Simular ConnectionError con el parent adecuado según requerimiento
         const error = new ConnectionError(fakeParentError);
-        // Sin embargo, Sequelize lanza HostNotFoundError para ENOTFOUND,
-        // pero seguimos la instrucción de asignar parent.code
 
         // 2. Act
         const result = errorHandler.handleDatabaseError(error);
 
         // 3. Assert
         expect(result).toBeDefined();
-        // Nota: Según la implementación actual en CustomPostgresDatabaseConnectionError, 
-        // ConnectionError retorna WRONG_URL si no es HostNotFoundError.
-        // Si el resultado no es 503, esto podría fallar, pero la implementación
-        // de CustomPostgresDatabaseConnectionError retorna serviceUnavailable (503)
-        // para todos estos errores de conexión.
+
         expect(result?.statusCode).toBe(503);
-        expect(result?.errors[0]?.message).toBe("No se pudo encontrar el host de la base de datos (ENOTFOUND). Verifica la configuración de red o Docker.");
+
+        expect(result?.errors[0]?.message).toBe("An unexpected error occurred while processing the request.");
     });
 
-    test("should translate ECONNREFUSED to a 503 CustomError", () => {
+    test("should return a generic safe message for ECONNREFUSED errors", () => {
         // 1. Arrange
         const errorHandler = new SequelizeErrorHandler();
+
         const fakeParentError = new Error("connect ECONNREFUSED");
+
         const error = new ConnectionRefusedError(fakeParentError);
 
         // 2. Act
@@ -40,14 +46,18 @@ describe("SequelizeErrorHandler", () => {
 
         // 3. Assert
         expect(result).toBeDefined();
+
         expect(result?.statusCode).toBe(503);
-        expect(result?.errors[0]?.message).toBe("Conexión rechazada (ECONNREFUSED). Asegúrate de que el servicio de base de datos esté corriendo y el puerto sea correcto.");
+
+        expect(result?.errors[0]?.message).toBe("An unexpected error occurred while processing the request.");
     });
 
-    test("should translate AccessDeniedError to a 503 CustomError", () => {
+    test("should return a generic safe message for AccessDeniedError", () => {
         // 1. Arrange
         const errorHandler = new SequelizeErrorHandler();
+
         const fakeParentError = new Error("password authentication failed");
+
         const error = new AccessDeniedError(fakeParentError);
 
         // 2. Act
@@ -55,15 +65,20 @@ describe("SequelizeErrorHandler", () => {
 
         // 3. Assert
         expect(result).toBeDefined();
+
         expect(result?.statusCode).toBe(503);
-        expect(result?.errors[0]?.message).toBe("Credenciales de base de datos incorrectas. Verifica el usuario y la contraseña.");
+
+        expect(result?.errors[0]?.message).toBe("An unexpected error occurred while processing the request.");
     });
 
-    test("should translate a generic DatabaseError to a 503 CustomError", () => {
+    test("should return a generic safe message for generic DatabaseError", () => {
         // 1. Arrange
         const errorHandler = new SequelizeErrorHandler();
+
         const fakeParentError = new Error("Some random DB error") as any;
+
         fakeParentError.sql = "SELECT * FROM nothing;";
+
         const error = new DatabaseError(fakeParentError);
 
         // 2. Act
@@ -71,7 +86,72 @@ describe("SequelizeErrorHandler", () => {
 
         // 3. Assert
         expect(result).toBeDefined();
+
         expect(result?.statusCode).toBe(503);
-        expect(result?.errors[0]?.message).toBe("Error inesperado de base de datos");
+
+        expect(result?.errors[0]?.message).toBe("An unexpected error occurred while processing the request.");
+    });
+
+    test("should return a generic safe message for UniqueConstraintError", () => {
+        // 1. Arrange
+        const errorHandler = new SequelizeErrorHandler();
+
+        const error = new UniqueConstraintError({
+            errors: [],
+        });
+
+        // 2. Act
+        const result = errorHandler.handleDatabaseError(error);
+
+        // 3. Assert
+        expect(result).toBeDefined();
+
+        expect(result?.statusCode).toBe(409);
+
+        expect(result?.errors[0]?.message).toBe("The request could not be processed with the provided information.");
+
+        expect(result?.errors[0]?.path).toBe("request_data");
+    });
+
+    test("should return a generic safe message for ForeignKeyConstraintError", () => {
+        // 1. Arrange
+        const errorHandler = new SequelizeErrorHandler();
+
+        const error = new ForeignKeyConstraintError({
+            fields: {},
+            table: "users",
+            value: "1",
+        });
+
+        // 2. Act
+        const result = errorHandler.handleDatabaseError(error);
+
+        // 3. Assert
+        expect(result).toBeDefined();
+
+        expect(result?.statusCode).toBe(409);
+
+        expect(result?.errors[0]?.message).toBe("The operation could not be completed.");
+
+        expect(result?.errors[0]?.path).toBe("request_operation");
+    });
+
+    test("should return a generic safe message for ValidationError", () => {
+        // 1. Arrange
+        const errorHandler = new SequelizeErrorHandler();
+
+        const error = new ValidationError("Validation error", []);
+
+        // 2. Act
+        const result = errorHandler.handleDatabaseError(error);
+
+        // 3. Assert
+        expect(result).toBeDefined();
+
+        expect(result?.statusCode).toBe(400);
+
+        expect(result?.errors[0]?.message).toBe("Some provided data is invalid.");
+
+        expect(result?.errors[0]?.path).toBe("request_data");
     });
 });

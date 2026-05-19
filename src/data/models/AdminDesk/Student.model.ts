@@ -4,32 +4,30 @@ import RetentionAlert from "@/data/models/ClassTrack/RetentionAlert.model";
 import StudentModule from "@/data/models/AdminDesk/StudentModule.model";
 // import PaymentPlan from './PaymentPlan.model'; // Descomentaremos esto cuando creemos la tabla
 
-
-
 export const studentContractStatus = {
-    ACTIVE: "ACTIVE",
-    FROZEN: "FROZEN",
-    INACTIVE: "INACTIVE"
+    Active: "ACTIVE",
+    Frozen: "FROZEN",
+    Inactive: "INACTIVE",
 } as const;
 
-export type StudentContractStatus = typeof studentContractStatus[keyof typeof studentContractStatus];
+export type StudentContractStatus = (typeof studentContractStatus)[keyof typeof studentContractStatus];
 
 export const studentProgressCategory = {
-    FAST: "FAST",
-    MODERATE: "MODERATE",
-    SLOW: "SLOW",
-    NOT_ENOUGH_DATA: "NOT_ENOUGH_DATA"
+    Fast: "FAST",
+    Moderate: "MODERATE",
+    Slow: "SLOW",
+    NotEnoughData: "NOT_ENOUGH_DATA",
 } as const;
 
-export type StudentProgressCategory = typeof studentProgressCategory[keyof typeof studentProgressCategory];
+export type StudentProgressCategory = (typeof studentProgressCategory)[keyof typeof studentProgressCategory];
 
 export const certificateType = {
-    ONE_TONNE: "ONE_TONNE",
-    TOEFL: "TOEFL",
-    OTHER: "OTHER"
+    OneTonne: "OneTonne",
+    Toefl: "TOEFL",
+    Other: "OTHER",
 } as const;
 
-export type CertificateType = typeof certificateType[keyof typeof certificateType];
+export type CertificateType = (typeof certificateType)[keyof typeof certificateType];
 
 interface StudentAttributes {
     st_id: string;
@@ -48,13 +46,13 @@ interface StudentAttributes {
     st_updated_at: Date;
 }
 
-interface StudentCreationAttributes extends Omit<StudentAttributes, "st_id" | "st_created_at" | "st_updated_at"> { }
+interface StudentCreationAttributes extends Omit<StudentAttributes, "st_id" | "st_created_at" | "st_updated_at"> {}
 
 @Table({
     tableName: "Students",
     timestamps: true,
-    createdAt: 'st_created_at',
-    updatedAt: 'st_updated_at'
+    createdAt: "st_created_at",
+    updatedAt: "st_updated_at",
 })
 class Student extends Model<StudentAttributes, StudentCreationAttributes> {
     @Column({
@@ -62,76 +60,76 @@ class Student extends Model<StudentAttributes, StudentCreationAttributes> {
         allowNull: false,
         primaryKey: true,
         unique: true,
-        defaultValue: DataType.UUIDV4
+        defaultValue: DataType.UUIDV4,
     })
     declare st_id: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
-        unique: true
+        unique: true,
     })
     declare st_identification_card: string;
 
     @Column({
         type: DataType.STRING,
-        allowNull: false
+        allowNull: false,
     })
     declare st_full_name: string;
 
     @Column({
         type: DataType.STRING,
-        allowNull: false
+        allowNull: false,
     })
     declare st_phone_number: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
-        unique: true
+        unique: true,
     })
     declare st_email: string;
 
     @Column({
         type: DataType.DATEONLY,
-        allowNull: false
+        allowNull: false,
     })
     declare st_date_of_birth: Date;
 
     @Column({
         type: DataType.STRING,
-        allowNull: false
+        allowNull: false,
     })
     declare st_nationality: string;
 
     @Column({
         type: DataType.ENUM(...Object.values(certificateType)),
-        allowNull: false
+        allowNull: false,
     })
     declare st_certificate_type: CertificateType;
 
     @Column({
         type: DataType.DATEONLY,
-        allowNull: false
+        allowNull: false,
     })
     declare st_start_date: Date;
 
     @Column({
         type: DataType.BOOLEAN,
         allowNull: false,
-        defaultValue: false
+        defaultValue: false,
     })
     declare st_is_graduated: boolean;
 
     @Column({
         type: DataType.ENUM(...Object.values(studentContractStatus)),
-        allowNull: false
+        allowNull: false,
     })
     declare st_contract_status: StudentContractStatus;
 
     @Column({
         type: DataType.ENUM(...Object.values(studentProgressCategory)),
-        allowNull: false
+        allowNull: false,
     })
     declare st_progress_category: StudentProgressCategory;
 
@@ -154,7 +152,6 @@ class Student extends Model<StudentAttributes, StudentCreationAttributes> {
 }
 
 export default Student;
-
 
 /**
  * @swagger

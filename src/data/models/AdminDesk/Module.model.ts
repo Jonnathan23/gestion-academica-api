@@ -2,7 +2,6 @@ import { Column, Table, DataType, Model, HasMany } from "sequelize-typescript";
 import StudentModule from "@/data/models/AdminDesk/StudentModule.model";
 import type { Optional } from "sequelize";
 
-
 interface ModuleAttributes {
     mo_id: string;
     mo_name: string;
@@ -12,13 +11,13 @@ interface ModuleAttributes {
     mo_updated_at: Date;
 }
 
-interface ModuleCreationAttributes extends Optional<ModuleAttributes, 'mo_id' | 'mo_created_at' | 'mo_updated_at'> {}
+interface ModuleCreationAttributes extends Optional<ModuleAttributes, "mo_id" | "mo_created_at" | "mo_updated_at"> {}
 
 @Table({
     tableName: "Modules",
     timestamps: true,
-    createdAt: 'mo_created_at',
-    updatedAt: 'mo_updated_at'
+    createdAt: "mo_created_at",
+    updatedAt: "mo_updated_at",
 })
 class Module extends Model<ModuleAttributes, ModuleCreationAttributes> {
     @Column({
@@ -26,27 +25,27 @@ class Module extends Model<ModuleAttributes, ModuleCreationAttributes> {
         allowNull: false,
         primaryKey: true,
         unique: true,
-        defaultValue: DataType.UUIDV4
+        defaultValue: DataType.UUIDV4,
     })
     declare mo_id: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
-        unique: true
+        unique: true,
     })
     declare mo_name: string;
 
     @Column({
         type: DataType.STRING,
-        allowNull: false
+        allowNull: false,
     })
     declare mo_description: string;
 
     @Column({
         type: DataType.INTEGER,
         allowNull: false,
-        unique: true
+        unique: true,
     })
     declare mo_level: number;
 
@@ -54,9 +53,7 @@ class Module extends Model<ModuleAttributes, ModuleCreationAttributes> {
     declare student_modules: StudentModule[];
 }
 
-
 export default Module;
-
 
 /**
  * @swagger
