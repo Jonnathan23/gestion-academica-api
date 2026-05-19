@@ -5,7 +5,7 @@
   "engines": {
     "node": "22.x.x"
   },
-  "scripts": {    
+  "scripts": {
     "dev": "bun run --watch src/app.ts",
     "dev:api": "bun run --watch src/app.ts --api",
     "test": "bun test",
@@ -13,7 +13,12 @@
     "dev:local": "bun run --env-file=.env.local --watch src/app.ts --api",
     "test:local": "bun test --env-file=.env.test.local",
     "test:coverage:local": "bun test --coverage --env-file=.env.test.local",
-    "start": "bun run src/app.ts"
+    "start": "bun run src/app.ts",
+    "lint": "eslint \"src/**/*.ts\"",
+    "lint:fix": "eslint \"src/**/*.ts\" --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
+    "typecheck:generate-log-file": "cmd /c \"tsc --noEmit > tsc.logs 2>&1\""
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -24,6 +29,14 @@
     "@types/morgan": "1.9.10",
     "@types/supertest": "6.0.3",
     "@types/swagger-ui-express": "4.1.8",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.5",
+    "prettier": "^3.8.3",
     "supertest": "7.2.2"
   },
   "peerDependencies": {

@@ -1,5 +1,6 @@
+import type { StudentModuleStatus } from "@/app/admin-desk/student-level/domain/interfaces/Contracts.interface";
 import type { Module, StudentModule } from "@/data/models/AdminDesk";
-import type { StudentModuleStatus } from "@/app/admin-desk/student-level/domain";
+
 import type { Transaction } from "sequelize";
 
 export interface BulkCreateContractsProps {
@@ -12,7 +13,6 @@ export interface BulkCreateContractsProps {
 export interface SelfHealingAlgorithmProps {
     allStudentContracts: StudentModule[];
     transaction: Transaction;
-
 }
 
 export interface CalculateNewStudentModuleStatusProps {
@@ -20,8 +20,8 @@ export interface CalculateNewStudentModuleStatusProps {
     currentIndex: number;
     targetModuleIndex: number;
     currentStatus: StudentModuleStatus;
-
 }
+
 export interface BuildStatusUpdatePromisesProps {
     studentModules: StudentModule[];
     targetModuleIndex: number;

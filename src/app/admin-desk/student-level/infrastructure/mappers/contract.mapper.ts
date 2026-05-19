@@ -1,5 +1,8 @@
 import {
-    moduleRelationFields, sellerRelationFields, StudentLevelDetailsProjection, studentRelationFields
+    moduleRelationFields,
+    sellerRelationFields,
+    StudentLevelDetailsProjection,
+    studentRelationFields,
 } from "@/app/admin-desk/student-level/domain/projections/ContractDetails.projection";
 import { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/StudentLevel.entity";
 import { pickFields } from "@/core/utils/object-tools";
@@ -19,9 +22,8 @@ export class StudentLevelMapper {
             st_mod_status,
             st_mod_purchase_date,
             st_mod_created_at,
-            st_mod_updated_at
+            st_mod_updated_at,
         } = object;
-
         if (!st_mod_id) throw CustomError.internalServer("Missing st_mod_id");
         if (!st_mod_student_id) throw CustomError.internalServer("Missing st_mod_student_id");
         if (!st_mod_module_id) throw CustomError.internalServer("Missing st_mod_module_id");
@@ -42,16 +44,7 @@ export class StudentLevelMapper {
 
     public static studentLevelDetailsEntityFromObject(object: { [key: string]: any }): StudentLevelDetailsProjection {
         // Añadimos st_mod_created_at y st_mod_updated_at para extraerlas del objeto
-        const {
-            st_mod_id,
-            st_mod_status,
-            st_mod_purchase_date,
-            st_mod_created_at,
-            st_mod_updated_at,
-            module,
-            seller,
-            student
-        } = object;
+        const { st_mod_id, st_mod_status, st_mod_purchase_date, st_mod_created_at, st_mod_updated_at, module, seller, student } = object;
 
         if (!st_mod_id || !st_mod_status) {
             throw CustomError.internalServer("Missing required contract fields");
@@ -74,7 +67,7 @@ export class StudentLevelMapper {
             st_mod_status,
             st_mod_purchase_date ? new Date(st_mod_purchase_date) : new Date(),
             st_mod_created_at ? new Date(st_mod_created_at) : new Date(),
-            st_mod_updated_at ? new Date(st_mod_updated_at) : new Date()
+            st_mod_updated_at ? new Date(st_mod_updated_at) : new Date(),
         );
 
         return newStudentLevelDetailsProjection;

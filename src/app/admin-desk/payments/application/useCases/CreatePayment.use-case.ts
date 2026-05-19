@@ -8,8 +8,7 @@ interface CreatePaymentPlanUseCaseProps {
 }
 
 export class CreatePaymentPlanUseCase implements CreatePaymentPlanUseCaseProps {
-    
-    constructor(private readonly paymentRepository: PaymentRepository) { }
+    constructor(private readonly paymentRepository: PaymentRepository) {}
 
     async execute(dto: CreatePaymentPlanDto): Promise<PaymentPlanEntity> {
         const paymentPlan = new PaymentPlanEntity(
@@ -19,13 +18,10 @@ export class CreatePaymentPlanUseCase implements CreatePaymentPlanUseCaseProps {
             dto.enrollmentFee,
             dto.totalAmount,
             dto.isSinglePayment,
-            paymentPlanStatus.PENDING
+            paymentPlanStatus.PENDING,
         );
 
-        const generatedQuotas = paymentPlan.generateQuotas(
-            dto.firstQuotaDueDate,
-            dto.numberOfQuotas
-        );
+        const generatedQuotas = paymentPlan.generateQuotas(dto.firstQuotaDueDate, dto.numberOfQuotas);
 
         return await this.paymentRepository.createPaymentPlan(dto, generatedQuotas);
     }

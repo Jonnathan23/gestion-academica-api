@@ -6,9 +6,7 @@ export interface GetStudentContractsUseCase {
 }
 
 export class GetStudentContracts implements GetStudentContractsUseCase {
-    constructor(
-        private readonly repository: StudentLevelRepository
-    ) { }
+    constructor(private readonly repository: StudentLevelRepository) {}
 
     execute(studentId: string): Promise<StudentLevelDetailsProjection[]> {
         return this.repository.getStudentContracts(studentId);

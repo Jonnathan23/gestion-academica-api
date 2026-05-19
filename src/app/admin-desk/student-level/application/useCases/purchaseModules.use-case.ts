@@ -7,9 +7,7 @@ export interface PurchaseModulesUseCase {
 }
 
 export class PurchaseModules implements PurchaseModulesUseCase {
-    constructor(
-        private readonly repository: StudentLevelRepository
-    ) { }
+    constructor(private readonly repository: StudentLevelRepository) {}
 
     execute(dto: PurchaseModulesDto): Promise<StudentLevelEntity[]> {
         return this.repository.purchaseModules(dto);

@@ -7,9 +7,7 @@ export interface UpdateContractStatusUseCase {
 }
 
 export class UpdateStudentLevel implements UpdateContractStatusUseCase {
-    constructor(
-        private readonly repository: StudentLevelRepository
-    ) { }
+    constructor(private readonly repository: StudentLevelRepository) {}
 
     execute(dto: UpdateStudentLevelDto): Promise<StudentLevelEntity[]> {
         return this.repository.updateStudentLevel(dto);

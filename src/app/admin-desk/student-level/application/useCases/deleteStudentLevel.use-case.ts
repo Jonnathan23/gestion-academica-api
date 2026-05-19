@@ -5,9 +5,7 @@ export interface DeleteStudentLevelUseCase {
 }
 
 export class DeleteStudentLevel implements DeleteStudentLevelUseCase {
-    constructor(
-        private readonly repository: StudentLevelRepository
-    ) { }
+    constructor(private readonly repository: StudentLevelRepository) {}
 
     execute(studentLevelId: string): Promise<boolean> {
         return this.repository.deleteStudentLevel(studentLevelId);
