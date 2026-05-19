@@ -8,9 +8,7 @@ import { PaymentRouter } from "@/app/admin-desk/payments/presentation/router";
 import { AuthMiddleware } from "@/core/middleware";
 import { UserSegurityDataSourceImpl } from "@/app/shared/Identity/infrastructure/datasources/userSegurity.datasource.impl";
 
-
 export class AppRouter {
-
     public static get routes(): Router {
         const router = Router();
 
@@ -20,15 +18,15 @@ export class AppRouter {
 
         AuthMiddleware.configure(verify);
 
-        router.use('/user', UserRouter.routes);
+        router.use("/user", UserRouter.routes);
 
-        router.use('/modules', ModulesRouter.routes);
+        router.use("/modules", ModulesRouter.routes);
 
-        router.use('/students', StudentsRouter.routes);
+        router.use("/students", StudentsRouter.routes);
 
-        router.use('/student-levels', ContractsRouter.routes);
+        router.use("/student-levels", ContractsRouter.routes);
 
-        router.use('/payments', PaymentRouter.routes);
+        router.use("/payments", PaymentRouter.routes);
 
         return router;
     }

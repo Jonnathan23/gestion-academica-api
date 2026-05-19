@@ -26,7 +26,7 @@ export class UpdateStudentLevelDto {
         if (!Validators.IsUUID(contractId)) return ["Invalid contract format"];
         if (!Validators.IsUUID(studentId)) return ["Invalid student format"];
 
-        if (![studentModuleStatus.Active, studentModuleStatus.APPROVED, studentModuleStatus.LOCKED].includes(status)) {
+        if (![studentModuleStatus.Active, studentModuleStatus.Approved, studentModuleStatus.Locked].includes(status)) {
             return ["status must be ACTIVE, APPROVED or LOCKED"];
         }
 
