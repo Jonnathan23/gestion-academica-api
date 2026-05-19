@@ -14,13 +14,12 @@ export interface AuthRequest extends Request {
 }
 
 export class AuthMiddleware {
-
     private static validateUserActiveStatus: ((userId: string) => Promise<boolean>) | null = null;
 
     public static configure(validator: (userId: string) => Promise<boolean>) {
         this.validateUserActiveStatus = validator;
     }
-    
+
     public static async validateJWT(req: AuthRequest, res: Response, next: NextFunction) {
         let token = req.cookies?.auth_token;
 
@@ -51,13 +50,12 @@ export class AuthMiddleware {
             const isActive = await AuthMiddleware.validateUserActiveStatus(payload.id);
 
             if (!isActive) {
-                if (req.cookies?.auth_token) res.clearCookie('auth_token');
+                if (req.cookies?.auth_token) res.clearCookie("auth_token");
                 return next(CustomError.unauthorized("Your account has been deactivated by an administrator"));
             }
 
             req.userSession = payload;
             next();
-
         } catch (error) {
             console.error(error);
             next(CustomError.serviceUnavailable("Internal server error validating token"));

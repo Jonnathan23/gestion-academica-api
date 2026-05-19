@@ -12,10 +12,10 @@ export class CustomError extends Error {
     }
 
     /**
-         * @description Crea un error de tipo 400 Bad Request (Petición incorrecta o datos inválidos)
-         * @param message Mensaje de error
-         * @returns CustomError
-         */
+     * @description Crea un error de tipo 400 Bad Request (Petición incorrecta o datos inválidos)
+     * @param message Mensaje de error
+     * @returns CustomError
+     */
     public static badRequest(message: string): CustomError {
         return new CustomError(400, message);
     }
@@ -61,7 +61,7 @@ export class CustomError extends Error {
      * @param message Mensaje de error
      * @returns CustomError
      */
-    public static internalServer(message: string = 'Internal server error'): CustomError {
+    public static internalServer(message: string = "Internal server error"): CustomError {
         return new CustomError(500, message);
     }
 
@@ -70,7 +70,7 @@ export class CustomError extends Error {
      * @param message Mensaje de error
      * @returns CustomError
      */
-    public static serviceUnavailable(message: string = 'Service is currently unavailable'): CustomError {
+    public static serviceUnavailable(message: string = "Service is currently unavailable"): CustomError {
         return new CustomError(503, message);
     }
 }

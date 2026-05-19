@@ -45,6 +45,7 @@ export class CustomPostgresDatabaseConnectionError extends Error {
         const message = this.getErrorMessage(error);
 
         console.error(ColorsAdapter.setYellow(`[DATABASE ERROR]: ${message}`));
+        console.error(ColorsAdapter.setRedBold(`[DATABASE ERROR RAW]: ${error}`));
 
         return CustomError.serviceUnavailable("An unexpected error occurred while processing the request.");
     }

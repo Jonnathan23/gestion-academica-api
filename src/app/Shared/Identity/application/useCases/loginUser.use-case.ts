@@ -25,12 +25,12 @@ interface LoginUserUseCase {
     execute(user: LoginUserDto): Promise<LoginResponse>;
 }
 
-type funtionGenerateToken = typeof JwtAdapter.generateToken;
+type FuntionGenerateToken = typeof JwtAdapter.generateToken;
 
 export class LoginUser implements LoginUserUseCase {
     constructor(
         private readonly userRepository: UserRepository,
-        private readonly generateJWT: funtionGenerateToken = JwtAdapter.generateToken,
+        private readonly generateJWT: FuntionGenerateToken = JwtAdapter.generateToken,
     ) {}
 
     async execute(user: LoginUserDto): Promise<LoginResponse> {

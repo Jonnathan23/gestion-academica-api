@@ -1,4 +1,4 @@
-import type { CorsOptions } from 'cors';
+import type { CorsOptions } from "cors";
 
 interface CorsConfigurationOptions {
     frontendUrls: string[];
@@ -16,7 +16,7 @@ export class CorsConfig {
             origin: function (requestOrigin, callbackFunction) {
                 const allowedOrigins: Array<string | undefined> = [...frontendUrls];
 
-                if (commandLineArgument === '--api') {
+                if (commandLineArgument === "--api") {
                     allowedOrigins.push(undefined);
                 }
 
@@ -27,18 +27,18 @@ export class CorsConfig {
                 if (allowedOrigins.includes(requestOrigin)) {
                     callbackFunction(null, true);
                 } else {
-                    callbackFunction(new Error('Origin not allowed by CORS policy'));
+                    callbackFunction(new Error("Origin not allowed by CORS policy"));
                 }
             },
 
-            methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+            methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
 
-            allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+            allowedHeaders: ["Content-Type", "Authorization", "Accept"],
 
             credentials: true,
 
             //Soporte para navegadores antiguos (Smart TVs, IE11)
-            optionsSuccessStatus: 200
+            optionsSuccessStatus: 200,
         };
     }
 }

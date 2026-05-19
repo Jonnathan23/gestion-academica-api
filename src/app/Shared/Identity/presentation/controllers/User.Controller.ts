@@ -4,16 +4,22 @@ import type { UserRepository } from "@/app/shared/Identity/domain/repositories/u
 import { LoginUserDto, RegisterUserDto, UpdateUserDto } from "@/app/shared/Identity/domain/dtos";
 import { SuccessResponse } from "@/core/utils";
 import { CustomError } from "@/core/error";
-import { UserDataEntity, UserEntity } from "@/app/shared/Identity/domain/entities";
-import { ChangePassword, ChangeStateActive, FindAllUsers, FindUserById, LoginUser, RegisterUser, UpdateUser } from "@/app/shared/Identity/application";
-
+import { UserDataEntity } from "@/app/shared/Identity/domain/entities";
+import {
+    ChangePassword,
+    ChangeStateActive,
+    FindAllUsers,
+    FindUserById,
+    LoginUser,
+    RegisterUser,
+    UpdateUser,
+} from "@/app/shared/Identity/application";
 
 export class UserController {
-
     constructor(
-        private readonly userRepository: UserRepository
-    ) { }
-
+        private readonly userRepository: UserRepository,
+        private readonly useSecureCookies: boolean,
+    ) {}
 
     registerUser = (req: Request, res: Response, next: NextFunction) => {
         const [error, registerUserDto] = RegisterUserDto.create(req.body);
@@ -22,13 +28,16 @@ export class UserController {
 
         const registerUser = new RegisterUser(this.userRepository);
 
-        registerUser.execute(registerUserDto!)
+        registerUser
+            .execute(registerUserDto!)
             .then(() => {
                 const succesMessage = "User created successfully";
                 SuccessResponse.created(res, succesMessage);
             })
-            .catch(error => { next(error); });
-    }
+            .catch((error) => {
+                next(error);
+            });
+    };
 
     update = (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
@@ -39,13 +48,16 @@ export class UserController {
 
         const updateUser = new UpdateUser(this.userRepository);
 
-        updateUser.execute(id.toString(), updateUserDto!)
+        updateUser
+            .execute(id.toString(), updateUserDto!)
             .then(() => {
                 const succesMessage = "User updated successfully";
                 SuccessResponse.ok(res, succesMessage);
             })
-            .catch(error => { next(error); });
-    }
+            .catch((error) => {
+                next(error);
+            });
+    };
 
     login = (req: Request, res: Response, next: NextFunction) => {
         const [error, loginUserDto] = LoginUserDto.create(req.body);
@@ -54,24 +66,26 @@ export class UserController {
 
         const loginUser = new LoginUser(this.userRepository);
 
-        loginUser.execute(loginUserDto!)
+        loginUser
+            .execute(loginUserDto!)
             .then((loginResponse) => {
-                res.cookie('auth_token', loginResponse.token, {
+                res.cookie("auth_token", loginResponse.token, {
                     httpOnly: true,
-                    secure: process.env.NODE_ENV === 'production',
-                    sameSite: 'strict',
-                    maxAge: 18 * 60 * 60 * 1000
+                    secure: this.useSecureCookies,
+                    sameSite: "lax",
+                    maxAge: 18 * 60 * 60 * 1000,
                 });
 
                 const successMessage = "User logged in successfully";
 
                 SuccessResponse.ok(res, successMessage, loginResponse.user);
             })
-            .catch(error => { next(error); });
-    }
+            .catch((error) => {
+                next(error);
+            });
+    };
 
     changePassword = (req: Request, res: Response, next: NextFunction) => {
-
         //TODO: refactorizar a un Dto con sus debidas validaciones
         const { id } = req.params;
         const { password } = req.body;
@@ -82,13 +96,16 @@ export class UserController {
 
         const changePassword = new ChangePassword(this.userRepository);
 
-        changePassword.execute(id.toString(), password)
+        changePassword
+            .execute(id.toString(), password)
             .then(() => {
                 const succesMessage = "Password changed successfully";
                 SuccessResponse.ok(res, succesMessage);
             })
-            .catch(error => { next(error); });
-    }
+            .catch((error) => {
+                next(error);
+            });
+    };
 
     changeStateActive = (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
@@ -97,14 +114,16 @@ export class UserController {
 
         const changeStateActive = new ChangeStateActive(this.userRepository);
 
-        changeStateActive.execute(id.toString())
+        changeStateActive
+            .execute(id.toString())
             .then(() => {
                 const succesMessage = "State changed successfully";
                 SuccessResponse.ok(res, succesMessage);
             })
-            .catch(error => { next(error); });
-    }
-
+            .catch((error) => {
+                next(error);
+            });
+    };
 
     findById = (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
@@ -113,23 +132,28 @@ export class UserController {
 
         const findById = new FindUserById(this.userRepository);
 
-        findById.execute(id.toString())
+        findById
+            .execute(id.toString())
             .then((user) => {
                 const succesMessage = "User found successfully";
                 SuccessResponse.ok<UserDataEntity>(res, succesMessage, user);
             })
-            .catch(error => { next(error); });
-    }
+            .catch((error) => {
+                next(error);
+            });
+    };
 
     findAll = (req: Request, res: Response, next: NextFunction) => {
         const findAll = new FindAllUsers(this.userRepository);
 
-        findAll.execute()
+        findAll
+            .execute()
             .then((users) => {
                 const succesMessage = "Users found successfully";
                 SuccessResponse.ok<UserDataEntity[]>(res, succesMessage, users);
             })
-            .catch(error => { next(error); });
-    }
-
+            .catch((error) => {
+                next(error);
+            });
+    };
 }
