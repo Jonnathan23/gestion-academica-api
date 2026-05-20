@@ -18,7 +18,7 @@ export class CreatePaymentPlanUseCase implements CreatePaymentPlanUseCaseProps {
             dto.enrollmentFee,
             dto.totalAmount,
             dto.isSinglePayment,
-            paymentPlanStatus.PENDING,
+            paymentPlanStatus.Pending,
         );
 
         const generatedQuotas = paymentPlan.generateQuotas(dto.firstQuotaDueDate, dto.numberOfQuotas);

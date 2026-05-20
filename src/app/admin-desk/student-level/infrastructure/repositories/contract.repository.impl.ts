@@ -5,9 +5,7 @@ import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-lev
 import type { StudentLevelRepository } from "@/app/admin-desk/student-level/domain/repositories/studentLevel.repository";
 
 export class StudentLevelRepositoryImpl implements StudentLevelRepository {
-    constructor(
-        private readonly datasource: StudentLevelDataSource
-    ) { }
+    constructor(private readonly datasource: StudentLevelDataSource) {}
 
     purchaseModules(dto: PurchaseModulesDto): Promise<StudentLevelEntity[]> {
         return this.datasource.purchaseModules(dto);
@@ -17,8 +15,16 @@ export class StudentLevelRepositoryImpl implements StudentLevelRepository {
         return this.datasource.getStudentContracts(studentId);
     }
 
-    updateStudentLevel(dto: UpdateStudentLevelDto): Promise<StudentLevelEntity[]> {
-        return this.datasource.updateStudentLevel(dto);
+    unlockLevel(dto: UpdateStudentLevelDto): Promise<StudentLevelEntity> {
+        return this.datasource.unlockLevel(dto);
+    }
+
+    blockLevel(dto: UpdateStudentLevelDto): Promise<StudentLevelEntity> {
+        return this.datasource.blockLevel(dto);
+    }
+
+    finishCurrentLevel(dto: UpdateStudentLevelDto): Promise<StudentLevelEntity> {
+        return this.datasource.finishCurrentLevel(dto);
     }
 
     deleteStudentLevel(studentLevelId: string): Promise<boolean> {

@@ -4,8 +4,8 @@ import User from "@/data/models/Shared/User.model";
 
 const retentionAlertStatus = {
     Pending: "PENDING",
-    RESOLVED: "RESOLVED",
-    CLOSED_FROZEN: "CLOSED_FROZEN",
+    Resolved: "RESOLVED",
+    ClosedFrozen: "CLOSED_FROZEN",
 } as const;
 
 export type RetentionAlertStatus = (typeof retentionAlertStatus)[keyof typeof retentionAlertStatus];
@@ -111,7 +111,7 @@ class RetentionAlert extends Model<RetentionAlertAttributes> {
     @Column({
         type: DataType.ENUM(...Object.values(retentionAlertStatus)),
         allowNull: false,
-        defaultValue: retentionAlertStatus.PENDING,
+        defaultValue: retentionAlertStatus.Pending,
     })
     declare re_al_status: RetentionAlertStatus;
 

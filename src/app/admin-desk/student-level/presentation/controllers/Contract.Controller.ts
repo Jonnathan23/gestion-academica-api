@@ -1,8 +1,10 @@
 import {
+    BlockLevel,
     DeleteStudentLevel,
+    FinishCurrentLevel,
     GetStudentContracts,
     PurchaseModules,
-    UpdateStudentLevel,
+    UnlockLevel,
 } from "@/app/admin-desk/student-level/application/useCases";
 import { DeleteStudentLevelDto, PurchaseModulesDto, UpdateStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos";
 import type { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/StudentLevel.entity";
@@ -77,22 +79,66 @@ export class ContractController {
             });
     };
 
-    updateStudentLevel = (req: Request, res: Response, next: NextFunction) => {
-        const { contractId } = req.params;
+    blockLevel = (req: Request, res: Response, next: NextFunction) => {
+        const { studentLevelId, studentId } = req.params;
 
-        const [error, updateStudentLevelDto] = UpdateStudentLevelDto.create({
-            ...req.body,
-            contractId: contractId?.toString(),
+        const [error, blockLevelDto] = UpdateStudentLevelDto.create({
+            studentLevelId,
+            studentId,
         });
 
         if (error) throw CustomError.badRequest(error);
 
-        const updateStudentLevel = new UpdateStudentLevel(this.studentLevelRepository);
+        const blockLevel = new BlockLevel(this.studentLevelRepository);
 
-        updateStudentLevel
-            .execute(updateStudentLevelDto!)
-            .then((contracts) => {
-                SuccessResponse.ok<StudentLevelEntity[]>(res, "Student level updated successfully", contracts);
+        blockLevel
+            .execute(blockLevelDto!)
+            .then(() => {
+                SuccessResponse.ok(res, "Student level blocked successfully");
+            })
+            .catch((error) => {
+                next(error);
+            });
+    };
+
+    unlockLevel = (req: Request, res: Response, next: NextFunction) => {
+        const { studentLevelId, studentId } = req.params;
+
+        const [error, unlockLevelDto] = UpdateStudentLevelDto.create({
+            studentLevelId,
+            studentId,
+        });
+
+        if (error) throw CustomError.badRequest(error);
+
+        const unlockLevel = new UnlockLevel(this.studentLevelRepository);
+
+        unlockLevel
+            .execute(unlockLevelDto!)
+            .then(() => {
+                SuccessResponse.ok(res, "Student level unlocked successfully");
+            })
+            .catch((error) => {
+                next(error);
+            });
+    };
+
+    finishCurrentLevel = (req: Request, res: Response, next: NextFunction) => {
+        const { studentLevelId, studentId } = req.params;
+
+        const [error, finishCurrentLevelDto] = UpdateStudentLevelDto.create({
+            studentLevelId,
+            studentId,
+        });
+
+        if (error) throw CustomError.badRequest(error);
+
+        const finishCurrentLevel = new FinishCurrentLevel(this.studentLevelRepository);
+
+        finishCurrentLevel
+            .execute(finishCurrentLevelDto!)
+            .then(() => {
+                SuccessResponse.ok(res, "Student level finished successfully");
             })
             .catch((error) => {
                 next(error);

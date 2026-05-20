@@ -10,5 +10,5 @@ export class StudentLevelEntity {
         public readonly purchaseDate: Date,
         public readonly createdAt: Date,
         public readonly updatedAt: Date,
-    ) { }
+    ) {}
 }

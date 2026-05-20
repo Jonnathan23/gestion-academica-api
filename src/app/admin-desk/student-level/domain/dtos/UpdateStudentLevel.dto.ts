@@ -1,18 +1,16 @@
-import { studentModuleStatus, type StudentModuleStatus } from "@/app/admin-desk/student-level/domain/interfaces/Contracts.interface";
+import { studentModuleStatus } from "@/app/admin-desk/student-level/domain/interfaces/Contracts.interface";
 import { Validators } from "@/core/utils";
 
 export class UpdateStudentLevelDto {
     private constructor(
-        public readonly contractId: string,
+        public readonly studentLevelId: string,
         public readonly studentId: string,
-        public readonly status: StudentModuleStatus,
     ) {}
 
     get values() {
         const returnObject: { [key: string]: any } = {};
-        if (this.contractId) returnObject.contractId = this.contractId;
+        if (this.studentLevelId) returnObject.studentLevelId = this.studentLevelId;
         if (this.studentId) returnObject.studentId = this.studentId;
-        if (this.status) returnObject.status = this.status;
         return returnObject;
     }
 
@@ -30,6 +28,6 @@ export class UpdateStudentLevelDto {
             return ["status must be ACTIVE, APPROVED or LOCKED"];
         }
 
-        return [undefined, new UpdateStudentLevelDto(contractId, studentId, status)];
+        return [undefined, new UpdateStudentLevelDto(contractId, studentId)];
     }
 }

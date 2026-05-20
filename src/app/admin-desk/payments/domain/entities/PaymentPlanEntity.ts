@@ -1,8 +1,7 @@
-import { paymentQuotaStatus } from '@/app/admin-desk/payments/domain/interfaces';
-import { PaymentQuotaEntity } from './PaymentQuotaEntity';
+import { paymentQuotaStatus } from "@/app/admin-desk/payments/domain/interfaces";
+import { PaymentQuotaEntity } from "./PaymentQuotaEntity";
 
 export class PaymentPlanEntity {
-
     constructor(
         public id: string,
         public studentId: string,
@@ -13,15 +12,14 @@ export class PaymentPlanEntity {
         public status: string,
         public quotas?: PaymentQuotaEntity[],
         public createdAt?: Date,
-        public updatedAt?: Date
-    ) { }
+        public updatedAt?: Date,
+    ) {}
 
     public generateQuotas(firstDueDate: Date, numberOfQuotas: number): PaymentQuotaEntity[] {
         const generatedQuotas: PaymentQuotaEntity[] = [];
         const baseAmountPerQuota = parseFloat((this.totalAmount / numberOfQuotas).toFixed(2));
 
         for (let index = 0; index < numberOfQuotas; index++) {
-
             const currentDueDate = new Date(firstDueDate);
             currentDueDate.setMonth(currentDueDate.getMonth() + index);
 
@@ -31,11 +29,11 @@ export class PaymentPlanEntity {
                 index + 1,
                 null,
                 baseAmountPerQuota,
-                0.00,
+                0.0,
                 baseAmountPerQuota,
-                0.00,
+                0.0,
                 currentDueDate,
-                paymentQuotaStatus.PENDING
+                paymentQuotaStatus.Pending,
             );
 
             generatedQuotas.push(quota);

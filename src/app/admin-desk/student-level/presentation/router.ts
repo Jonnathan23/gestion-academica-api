@@ -19,7 +19,6 @@ export class ContractsRouter {
 
         // Router-level params validation
         router.param("studentId", VerifyUUID.validate);
-        router.param("contractId", VerifyUUID.validate);
         router.param("studentLevelId", VerifyUUID.validate);
 
         // POST /api/contracts/student/:studentId
@@ -36,11 +35,25 @@ export class ContractsRouter {
             contractController.getStudentContracts,
         );
 
-        // PATCH /api/contracts/:contractId/status
+        // PATCH /api/contracts/:contractId/status/block
         router.patch(
-            "/:contractId/status",
+            "/:studentLevelId/status/block/:studentId",
             RoleMiddleware.requirePermissions([systemPermissions.ADMINDESK_CONTRACTS_READ, systemPermissions.ADMINDESK_CONTRACTS_WRITE]),
-            contractController.updateStudentLevel,
+            contractController.blockLevel,
+        );
+
+        // PATCH /api/contracts/:contractId/status/unlock
+        router.patch(
+            "/:studentLevelId/status/unlock/:studentId",
+            RoleMiddleware.requirePermissions([systemPermissions.ADMINDESK_CONTRACTS_READ, systemPermissions.ADMINDESK_CONTRACTS_WRITE]),
+            contractController.unlockLevel,
+        );
+
+        // PATCH /api/contracts/:contractId/status/finish-current
+        router.patch(
+            "/:studentLevelId/status/finish-current/:studentId",
+            RoleMiddleware.requirePermissions([systemPermissions.ADMINDESK_CONTRACTS_READ, systemPermissions.ADMINDESK_CONTRACTS_WRITE]),
+            contractController.finishCurrentLevel,
         );
 
         // DELETE /api/contracts/:studentLevelId
