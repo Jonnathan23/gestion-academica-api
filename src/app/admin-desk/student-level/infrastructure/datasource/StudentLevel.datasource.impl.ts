@@ -29,7 +29,7 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
         const { studentId, sellerId, moduleIds } = dto;
         //TODO: validar que no puede comprar un modulo si ya lo tiene
         //TODO: validar que no puede comprar un modulo posterior a uno que no ha adquirido, por ejemplo no puede adquirir el 3 si ha adquirido el 1 pero no el 2
-
+        //TODO: validar que no puede adquirir modulos con salto de nivels, no puede 1 y 4, debe ser 1,2,3,4
         const sequelize = StudentModule.sequelize;
 
         if (!sequelize) throw CustomError.serviceUnavailable("Sequelize instance not found");
