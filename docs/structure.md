@@ -9,7 +9,7 @@ src
 │   │   ├── payments                # Gestión de pagos y finanzas
 │   │   └── students                # Gestión de expedientes de estudiantes
 │   │
-│   ├───ClassTrack                  # Módulo de control de asistencia
+│   ├───ClassTrack                  # Módulo de control de academica
 │   │   ├── Attendance              # Feature: Control de Ingreso/Salida
 │   │   ├── Lessons                 # Feature: Registro de Lecciones
 │   │   ├── RetentionAlerts         # Feature: Alertas de Inasistencia
@@ -18,6 +18,7 @@ src
 │   │
 │   │   └───Shared                  # Features transversales para todo el negocio
 │   │       └───Identity            # Feature: Login, Autenticación y Tokens
+│   │
 ├── core                            # Kernel del sistema y configuraciones globales
 │   ├── config                      # Variables de entorno y ajustes de apps
 │   ├── constants                   # Valores constantes y enumeraciones
