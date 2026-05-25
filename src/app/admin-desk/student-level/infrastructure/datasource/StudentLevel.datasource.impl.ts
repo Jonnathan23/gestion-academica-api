@@ -35,8 +35,7 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
 
         const modulesFromDb = await this.searchModules(moduleIds);
 
-        const transaction = await sequelize.transaction();
-        try {
+        return await sequelize.transaction(async (transaction) => {
             const createdContracts = await this.bulkCreateContracts({ studentId, sellerId, modulesFromDb, transaction });
 
             const allStudentContracts = await this.getAllStudentContracts(studentId, transaction);
@@ -45,15 +44,10 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
 
             await Promise.all(updatePromises);
 
-            await transaction.commit();
-
             const finalPurchasedLevels = await this.getFinalPurchasedLevels(createdContracts);
 
             return this.convertArrayToEntity(finalPurchasedLevels);
-        } catch (error) {
-            await transaction.rollback();
-            throw error;
-        }
+        });
     }
 
     async unlockLevel(dto: UpdateStudentLevelDto): Promise<StudentLevelEntity> {
@@ -130,22 +124,15 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
             throw CustomError.serviceUnavailable("Sequelize instance not found");
         }
 
-        const transaction = await sequelize.transaction();
-
-        try {
+        return await sequelize.transaction(async (transaction) => {
             await targetContract.destroy({ transaction });
 
             const updatePromises = await this.selfHealingAlgorithm({ allStudentContracts: remainingContracts, transaction });
 
             await Promise.all(updatePromises);
 
-            await transaction.commit();
-
             return true;
-        } catch (error) {
-            await transaction.rollback();
-            throw error;
-        }
+        });
     }
 
     //* Private methods

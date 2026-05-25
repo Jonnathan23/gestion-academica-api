@@ -10,7 +10,7 @@ export class CalculateRetentionAlertsWorker {
     public static start(): void {
         console.info(ColorsAdapter.setBlueBold("Initializing CalculateRetentionAlertsWorker... (Schedule: 30 7 * * *)"));
 
-        cron.schedule("30 7 * * *", async () => {
+        cron.schedule("30 7 * * *", () => {
             console.info(ColorsAdapter.setBlueBold(`[${new Date().toISOString()}] Executing CalculateRetentionAlertsWorker...`));
 
             const attendanceDatasource = new AttendanceSessionDatasourceImpl();
@@ -21,13 +21,15 @@ export class CalculateRetentionAlertsWorker {
 
             const useCase = new CalculateRetentionAlertsUseCase(attendanceRepository, retentionRepository);
 
-            try {
-                const result = await useCase.execute();
-                console.info(ColorsAdapter.setGreen(`[CalculateRetentionAlertsWorker] Success: ${result} retention alerts processed.`));
-            } catch (error) {
-                console.error(ColorsAdapter.setRedBold("[CalculateRetentionAlertsWorker] Error executing worker:"));
-                console.error(error);
-            }
+            useCase
+                .execute()
+                .then((result) => {
+                    console.info(ColorsAdapter.setGreen(`[CalculateRetentionAlertsWorker] Success: ${result} retention alerts processed.`));
+                })
+                .catch((error) => {
+                    console.error(ColorsAdapter.setRedBold("[CalculateRetentionAlertsWorker] Error executing worker:"));
+                    console.error(error);
+                });
         });
     }
 }

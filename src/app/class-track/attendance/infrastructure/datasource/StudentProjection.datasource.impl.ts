@@ -9,32 +9,25 @@ import { StudentProjectionMapper } from "@/app/class-track/attendance/infrastruc
 
 export class StudentProjectionDatasourceImpl implements StudentProjectionDatasource {
     public async getActiveStudentProfile(studentId: string): Promise<ActiveStudentProjection> {
-        try {
-            const student = await Student.findOne({
-                where: { st_id: studentId },
-                include: [
-                    {
-                        model: StudentModule,
-                        where: {
-                            st_mod_status: {
-                                [Op.in]: ["ACTIVE", "FROZEN"],
-                            },
+        const student = await Student.findOne({
+            where: { st_id: studentId },
+            include: [
+                {
+                    model: StudentModule,
+                    where: {
+                        st_mod_status: {
+                            [Op.in]: ["ACTIVE", "FROZEN"],
                         },
-                        required: true,
                     },
-                ],
-            });
+                    required: true,
+                },
+            ],
+        });
 
-            if (!student) {
-                throw CustomError.notFound("Active student profile not found");
-            }
-
-            return StudentProjectionMapper.entityFromObject(student);
-        } catch (error) {
-            if (error instanceof CustomError) {
-                throw error;
-            }
-            throw CustomError.internalServer("Error retrieving active student profile");
+        if (!student) {
+            throw CustomError.notFound("Active student profile not found");
         }
+
+        return StudentProjectionMapper.entityFromObject(student);
     }
 }

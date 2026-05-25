@@ -4,7 +4,7 @@ import { ModuleRepository } from "@/app/admin-desk/modules/domain/repositories/m
 import { CreateModuleDto, UpdateModuleDto } from "@/app/admin-desk/modules/domain/dtos";
 import { CustomError } from "@/core/error";
 import { CreateModule, DeleteModule, GetAllModules, GetModuleById, UpdateModule } from "@/app/admin-desk/modules/application";
-import { SuccessResponse, Validators } from "@/core/utils";
+import { SuccessResponse } from "@/core/utils";
 import { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
 
 export class ModuleController {

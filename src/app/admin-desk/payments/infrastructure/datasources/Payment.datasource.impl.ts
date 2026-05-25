@@ -16,22 +16,15 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
     //* PUBLIC METHODS (ORCHESTRATORS)
 
     async createPaymentPlan(dto: CreatePaymentPlanDto, generatedQuotas: PaymentQuotaEntity[]): Promise<PaymentPlanEntity> {
-        const transaction = await PaymentPlanModel.sequelize!.transaction();
-
-        try {
+        return await PaymentPlanModel.sequelize!.transaction(async (transaction) => {
             const createdPlan = await this._insertPaymentPlan(dto, transaction);
             const createdQuotas = await this._insertGeneratedQuotas(createdPlan.pp_id, generatedQuotas, transaction);
-
-            await transaction.commit();
 
             return PaymentMapper.planEntityFromObject({
                 ...createdPlan.toJSON(),
                 payment_quotas: createdQuotas.map((quota) => quota.toJSON()),
             });
-        } catch (error) {
-            await transaction.rollback();
-            throw error;
-        }
+        });
     }
 
     async getStudentPaymentPlans(studentId: string): Promise<PaymentPlanEntity[]> {
@@ -53,9 +46,7 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
     }
 
     async processQuotaPayment(dto: PayQuotaDto): Promise<PaymentQuotaEntity> {
-        const transaction = await PaymentQuotaModel.sequelize!.transaction();
-
-        try {
+        return await PaymentQuotaModel.sequelize!.transaction(async (transaction) => {
             const currentQuota = await this._findAndValidateQuotaForPayment(dto.quotaId, dto.amountPaid, transaction);
 
             const expectedAmount = Number(currentQuota.pq_total_expected);
@@ -67,18 +58,12 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
                 await this._addRolloverDebtToNextQuota(currentQuota, remainingDebt, transaction);
             }
 
-            await transaction.commit();
             return PaymentMapper.quotaEntityFromObject(currentQuota.toJSON());
-        } catch (error) {
-            await transaction.rollback();
-            throw error;
-        }
+        });
     }
 
     async revertQuotaPayment(quotaId: string): Promise<boolean> {
-        const transaction = await PaymentQuotaModel.sequelize!.transaction();
-
-        try {
+        return await PaymentQuotaModel.sequelize!.transaction(async (transaction) => {
             const currentQuota = await this._findQuotaOrThrow(quotaId, transaction);
 
             const previousAmountPaid = Number(currentQuota.pq_amount_paid);
@@ -91,12 +76,8 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
                 await this._subtractRolloverDebtFromNextQuota(currentQuota, rolledOverDebt, transaction);
             }
 
-            await transaction.commit();
             return true;
-        } catch (error) {
-            await transaction.rollback();
-            throw error;
-        }
+        });
     }
 
     //* PRIVATE METHODS (WORKERS)
