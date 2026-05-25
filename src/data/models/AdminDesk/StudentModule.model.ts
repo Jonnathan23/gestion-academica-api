@@ -7,6 +7,7 @@ const studentModuleStatus = {
     Active: "ACTIVE",
     Approved: "APPROVED",
     Locked: "LOCKED",
+    Frozen: "FROZEN",
 } as const;
 
 export type StudentModuleStatus = (typeof studentModuleStatus)[keyof typeof studentModuleStatus];
@@ -18,6 +19,8 @@ interface StudentModuleAttributes {
     st_mod_seller_id: string;
     st_mod_status: StudentModuleStatus;
     st_mod_purchase_date: Date;
+    st_mod_freeze_count: number;
+    st_mod_reactivation_count: number;
     st_mod_created_at: Date;
     st_mod_updated_at: Date;
 }
@@ -51,6 +54,20 @@ class StudentModule extends Model<StudentModuleAttributes, StudentModuleCreation
         allowNull: false,
     })
     declare st_mod_purchase_date: Date;
+
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+    })
+    declare st_mod_freeze_count: number;
+
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+    })
+    declare st_mod_reactivation_count: number;
 
     //* Foreign Keys
     @ForeignKey(() => Student)
