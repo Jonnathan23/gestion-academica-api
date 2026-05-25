@@ -1,3 +1,4 @@
+import type { Optional } from "sequelize";
 import { Column, Table, DataType, Model, ForeignKey, BelongsTo } from "sequelize-typescript";
 import AttendanceSession from "@/data/models/ClassTrack/AttendanceSession.model";
 
@@ -9,14 +10,14 @@ interface LessonLogAttributes {
     le_lo_created_at: Date;
     le_lo_updated_at: Date;
 }
-
+interface LessonLogCreationAttributes extends Optional<LessonLogAttributes, "le_lo_id" | "le_lo_created_at" | "le_lo_updated_at"> {}
 @Table({
     tableName: "LessonLogs",
     timestamps: true,
     createdAt: "le_lo_created_at",
     updatedAt: "le_lo_updated_at",
 })
-class LessonLog extends Model<LessonLogAttributes> {
+class LessonLog extends Model<LessonLogAttributes, LessonLogCreationAttributes> {
     @Column({
         type: DataType.UUID,
         allowNull: false,

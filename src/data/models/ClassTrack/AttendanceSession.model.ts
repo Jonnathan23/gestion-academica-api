@@ -1,3 +1,4 @@
+import type { Optional } from "sequelize";
 import { Column, Table, DataType, Model, ForeignKey, BelongsTo, HasOne } from "sequelize-typescript";
 import Student from "@/data/models/AdminDesk/Student.model";
 import User from "@/data/models/Shared/User.model";
@@ -24,13 +25,18 @@ interface AttendanceSessionAttributes {
     at_se_updated_at: Date;
 }
 
+interface AttendanceSessionCreationAttributes extends Optional<
+    AttendanceSessionAttributes,
+    "at_se_id" | "at_se_teacher_id" | "at_se_exit_time" | "at_se_total_minutes" | "at_se_status" | "at_se_created_at" | "at_se_updated_at"
+> {}
+
 @Table({
     tableName: "AttendanceSessions",
     timestamps: true,
     createdAt: "at_se_created_at",
     updatedAt: "at_se_updated_at",
 })
-class AttendanceSession extends Model<AttendanceSessionAttributes> {
+class AttendanceSession extends Model<AttendanceSessionAttributes, AttendanceSessionCreationAttributes> {
     @Column({
         type: DataType.UUID,
         allowNull: false,

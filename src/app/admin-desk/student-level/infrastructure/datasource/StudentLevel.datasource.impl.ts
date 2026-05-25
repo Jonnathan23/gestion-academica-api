@@ -1,7 +1,6 @@
 import type { Transaction } from "sequelize";
 
 import type {
-    BuildStatusUpdatePromisesProps,
     BulkCreateContractsProps,
     CalculateNewStudentModuleStatusProps,
     SelfHealingAlgorithmProps,
@@ -269,6 +268,8 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
             st_mod_module_id: currentModule.mo_id,
             st_mod_seller_id: sellerId,
             st_mod_status: studentModuleStatus.Locked,
+            st_mod_freeze_count: 0,
+            st_mod_reactivation_count: 0,
             st_mod_purchase_date: new Date(),
         }));
 

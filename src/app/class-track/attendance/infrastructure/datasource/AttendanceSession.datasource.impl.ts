@@ -2,8 +2,66 @@ import { Op } from "sequelize";
 import AttendanceSession from "@/data/models/ClassTrack/AttendanceSession.model";
 import { CustomError } from "@/core/error/customError.error";
 import { AttendanceSessionDatasource } from "@/app/class-track/attendance/domain/datasource/AttendanceSession.datasource";
+import type { StartAttendanceSessionDto } from "@/app/class-track/attendance/domain/dtos/StartAttendanceSession.dto";
+import type { EndAttendanceSessionDto } from "@/app/class-track/attendance/domain/dtos/EndAttendanceSession.dto";
+import type { AttendanceSessionEntity } from "@/app/class-track/attendance/domain/entities/AttendanceSession.entity";
+import { AttendanceSessionMapper } from "@/app/class-track/attendance/infrastructure/mappers/attendanceSession.mapper";
 
 export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasource {
+    public async startSession(dto: StartAttendanceSessionDto): Promise<AttendanceSessionEntity> {
+        const { studentId, entryTime } = dto;
+
+        try {
+            const newSession = await AttendanceSession.create({
+                at_se_student_id: studentId,
+                at_se_session_date: entryTime,
+                at_se_entry_time: entryTime,
+                at_se_status: "IN_PROGRESS",
+            });
+
+            return AttendanceSessionMapper.entityFromObject(newSession);
+        } catch (error) {
+            if (error instanceof CustomError) {
+                throw error;
+            }
+            throw CustomError.internalServer("Error starting attendance session");
+        }
+    }
+
+    public async endSession(dto: EndAttendanceSessionDto): Promise<AttendanceSessionEntity> {
+        try {
+            const session = await AttendanceSession.findByPk(dto.sessionId);
+
+            if (!session) {
+                throw CustomError.notFound("Attendance session not found");
+            }
+
+            if (session.at_se_status !== "IN_PROGRESS") {
+                throw CustomError.conflict("Session is not IN_PROGRESS");
+            }
+
+            const exitTime = dto.exitTime;
+            const entryTime = new Date(session.at_se_entry_time);
+
+            // calculate total minutes
+            const diffMs = exitTime.getTime() - entryTime.getTime();
+            const totalMinutes = Math.floor(diffMs / 60000);
+
+            await session.update({
+                at_se_teacher_id: dto.teacherId,
+                at_se_exit_time: exitTime,
+                at_se_total_minutes: totalMinutes,
+                at_se_status: "PENDING_APPROVAL",
+            });
+
+            return AttendanceSessionMapper.entityFromObject(session);
+        } catch (error) {
+            if (error instanceof CustomError) {
+                throw error;
+            }
+            throw CustomError.internalServer("Error ending attendance session");
+        }
+    }
     public async closeOrphanSessions(): Promise<number> {
         const transaction = await AttendanceSession.sequelize?.transaction();
 
