@@ -1,10 +1,11 @@
-import { StudentProjectionDatasource } from "../../domain/datasource/StudentProjectionDatasource";
-import { ActiveStudentProjection } from "../../domain/projections/ActiveStudentProjection";
 import Student from "@/data/models/AdminDesk/Student.model";
 import StudentModule from "@/data/models/AdminDesk/StudentModule.model";
 import { CustomError } from "@/core/error/customError.error";
-import { StudentProjectionMapper } from "../mappers/StudentProjectionMapper";
+
 import { Op } from "sequelize";
+import type { StudentProjectionDatasource } from "@/app/class-track/attendance/domain/datasource/StudentProjection.datasource";
+import type { ActiveStudentProjection } from "@/app/class-track/core/interfaces/StudentProjection.interface";
+import { StudentProjectionMapper } from "@/app/class-track/attendance/infrastructure/mappers/StudentProjectionMapper";
 
 export class StudentProjectionDatasourceImpl implements StudentProjectionDatasource {
     public async getActiveStudentProfile(studentId: string): Promise<ActiveStudentProjection> {
