@@ -62,6 +62,38 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
             throw CustomError.internalServer("Error ending attendance session");
         }
     }
+
+    public async getStudentsAbsentForMoreThan(days: number): Promise<{ studentId: string; daysAbsent: number }[]> {
+        try {
+            const results = await AttendanceSession.findAll({
+                attributes: [
+                    "at_se_student_id",
+                    [AttendanceSession.sequelize!.fn("MAX", AttendanceSession.sequelize!.col("at_se_entry_time")), "lastAttendance"],
+                ],
+                group: ["at_se_student_id"],
+                raw: true,
+            });
+
+            const today = new Date();
+            const absentStudents: { studentId: string; daysAbsent: number }[] = [];
+
+            for (const row of results as unknown as Array<{ at_se_student_id: string; lastAttendance: string }>) {
+                if (!row.lastAttendance) continue;
+                const lastDate = new Date(row.lastAttendance);
+                const diffTime = today.getTime() - lastDate.getTime();
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+                if (diffDays > days) {
+                    absentStudents.push({ studentId: row.at_se_student_id, daysAbsent: diffDays });
+                }
+            }
+
+            return absentStudents;
+        } catch (error) {
+            throw CustomError.internalServer("Error retrieving absent students");
+        }
+    }
+
     public async closeOrphanSessions(): Promise<number> {
         const transaction = await AttendanceSession.sequelize?.transaction();
 

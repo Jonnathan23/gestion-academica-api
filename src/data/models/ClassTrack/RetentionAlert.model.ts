@@ -1,3 +1,4 @@
+import type { Optional } from "sequelize";
 import { Column, Table, DataType, Model, ForeignKey, BelongsTo } from "sequelize-typescript";
 import Student from "@/data/models/AdminDesk/Student.model";
 import User from "@/data/models/Shared/User.model";
@@ -14,7 +15,7 @@ export type RetentionAlertStatus = (typeof retentionAlertStatus)[keyof typeof re
 interface RetentionAlertAttributes {
     re_al_id: string;
     re_al_student_id: string;
-    re_al_user_id: string;
+    re_al_user_id: string | null;
     re_al_contact_date: Date;
     re_al_has_responded: boolean;
     re_al_days_absent: number;
@@ -28,13 +29,28 @@ interface RetentionAlertAttributes {
     re_al_updated_at: Date;
 }
 
+// Declaramos explícitamente los campos opcionales al hacer el INSERT
+interface RetentionAlertCreationAttributes extends Optional<
+    RetentionAlertAttributes,
+    | "re_al_id"
+    | "re_al_user_id"
+    | "re_al_has_responded"
+    | "re_al_is_justified"
+    | "re_al_justification_reason"
+    | "re_al_return_deadline"
+    | "re_al_status"
+    | "re_al_resolution_date"
+    | "re_al_created_at"
+    | "re_al_updated_at"
+> {}
+
 @Table({
     tableName: "RetentionAlerts",
     timestamps: true,
     createdAt: "re_al_created_at",
     updatedAt: "re_al_updated_at",
 })
-class RetentionAlert extends Model<RetentionAlertAttributes> {
+class RetentionAlert extends Model<RetentionAlertAttributes, RetentionAlertCreationAttributes> {
     @Column({
         type: DataType.UUID,
         allowNull: false,
@@ -57,7 +73,7 @@ class RetentionAlert extends Model<RetentionAlertAttributes> {
     @ForeignKey(() => User)
     @Column({
         type: DataType.UUID,
-        allowNull: false,
+        allowNull: true,
     })
     declare re_al_user_id: string;
 

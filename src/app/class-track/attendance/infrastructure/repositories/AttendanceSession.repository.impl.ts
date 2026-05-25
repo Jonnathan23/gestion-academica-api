@@ -15,6 +15,10 @@ export class AttendanceSessionRepositoryImpl implements AttendanceSessionReposit
         return this.datasource.endSession(dto);
     }
 
+    public async getStudentsAbsentForMoreThan(days: number): Promise<{ studentId: string; daysAbsent: number }[]> {
+        return this.datasource.getStudentsAbsentForMoreThan(days);
+    }
+
     public async closeOrphanSessions(): Promise<number> {
         return this.datasource.closeOrphanSessions();
     }
