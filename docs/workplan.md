@@ -1,4 +1,4 @@
-# 🤖 System Prompt & Orchestration Plan for Antigravity AI
+# System Prompt & Orchestration Plan for Antigravity AI
 
 ## 1. Context & System Architecture
 
@@ -7,6 +7,32 @@ You are operating within the `SALC` backend, a Node.js + TypeScript (Bun) system
 - The system is divided into Bounded Contexts (e.g., `AdminDesk` and `ClassTrack`).
 - **Rule of Thumb:** Domains must NEVER couple. `ClassTrack` cannot import `AdminDesk` repositories.
 - We are currently developing the `ClassTrack` subsystem.
+
+### 1.1 Strict Directory Structure
+You are FORBIDDEN from inventing new folders. You must strictly place all generated code within this exact tree:
+├───application
+│   └───useCases
+├───domain
+│   ├───datasource
+│   ├───dtos
+│   ├───entities
+│   ├───interfaces
+│   ├───projections
+│   └───repositories
+├───infrastructure
+│   ├───datasource
+│   ├───interfaces
+│   ├───mappers
+│   └───repositories
+└───presentation
+    ├───controllers
+    ├───documentation
+    └───__tests__
+
+*Note: Routers or entry-point Workers must be placed directly inside the `presentation/` directory. Do not create a `routes` folder.*
+
+---
+
 
 ## 2. Your Available Skills
 
