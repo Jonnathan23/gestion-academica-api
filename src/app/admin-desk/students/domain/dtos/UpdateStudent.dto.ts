@@ -13,8 +13,8 @@ export class UpdateStudentDto {
         public readonly certificateType?: CertificateType,
 
         public readonly contractStatus?: StudentContractStatus,
-        public readonly isGraduated?: boolean
-    ) { }
+        public readonly isGraduated?: boolean,
+    ) {}
 
     get value() {
         const returnObject: { [key: string]: any } = {};
@@ -34,21 +34,45 @@ export class UpdateStudentDto {
     }
 
     static create(object: { [key: string]: any }): [string?, UpdateStudentDto?] {
-        const { identificationCard, fullName, phoneNumber, email, startDate, dateOfBirth, nationality, certificateType, contractStatus, isGraduated } = object;
+        const {
+            identificationCard,
+            fullName,
+            phoneNumber,
+            email,
+            startDate,
+            dateOfBirth,
+            nationality,
+            certificateType,
+            contractStatus,
+            isGraduated,
+        } = object;
 
-        if (!identificationCard && !fullName && !phoneNumber && !email && !startDate && !dateOfBirth
-            && !nationality && !certificateType && !contractStatus && isGraduated === undefined) return ['No data provided to update'];
+        if (
+            !identificationCard &&
+            !fullName &&
+            !phoneNumber &&
+            !email &&
+            !startDate &&
+            !dateOfBirth &&
+            !nationality &&
+            !certificateType &&
+            !contractStatus &&
+            isGraduated === undefined
+        )
+            return ["No data provided to update"];
 
-        if (identificationCard && identificationCard.length !== 10) return ['Invalid identificationCard'];
-        if (phoneNumber && phoneNumber.length !== 10) return ['Invalid phoneNumber'];
+        if (identificationCard && identificationCard.length !== 10) return ["Invalid identificationCard"];
+        if (phoneNumber && phoneNumber.length !== 10) return ["Invalid phoneNumber"];
 
-        if (identificationCard && !Validators.isIdentificationCard(identificationCard)) return ['Invalid identificationCard'];
-        if (phoneNumber && !Validators.isPhoneNumber(phoneNumber)) return ['Invalid phoneNumber'];
+        if (identificationCard && !Validators.isIdentificationCard(identificationCard)) return ["Invalid identificationCard"];
+        if (phoneNumber && !Validators.isPhoneNumber(phoneNumber)) return ["Invalid phoneNumber"];
 
-        if (startDate && !Validators.isDate(startDate)) return ['Invalid startDate'];
-        if (dateOfBirth && !Validators.isDate(dateOfBirth)) return ['Invalid dateOfBirth'];
+        if (startDate && !Validators.isDate(startDate)) return ["Invalid startDate"];
+        if (dateOfBirth && !Validators.isDate(dateOfBirth)) return ["Invalid dateOfBirth"];
 
-        return [undefined, new UpdateStudentDto(
+        return [
+            undefined,
+            new UpdateStudentDto(
                 identificationCard,
                 fullName,
                 phoneNumber,
@@ -58,7 +82,8 @@ export class UpdateStudentDto {
                 nationality,
                 certificateType,
                 contractStatus,
-                isGraduated
-            )];
+                isGraduated,
+            ),
+        ];
     }
 }

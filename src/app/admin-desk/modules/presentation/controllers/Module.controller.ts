@@ -7,12 +7,8 @@ import { CreateModule, DeleteModule, GetAllModules, GetModuleById, UpdateModule 
 import { SuccessResponse, Validators } from "@/core/utils";
 import { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
 
-
 export class ModuleController {
-
-    constructor(
-        private readonly moduleRepository: ModuleRepository
-    ) { }
+    constructor(private readonly moduleRepository: ModuleRepository) {}
 
     createModule = (req: Request, res: Response, next: NextFunction) => {
         const [error, createModuleDto] = CreateModuleDto.create(req.body);
@@ -21,24 +17,30 @@ export class ModuleController {
 
         const createModule = new CreateModule(this.moduleRepository);
 
-        createModule.execute(createModuleDto!)
+        createModule
+            .execute(createModuleDto!)
             .then(() => {
-                const successMessage = "Module created successfully"
+                const successMessage = "Module created successfully";
                 SuccessResponse.created(res, successMessage);
             })
-            .catch(error => { next(error); });
-    }
+            .catch((error) => {
+                next(error);
+            });
+    };
 
     getAllModules = (req: Request, res: Response, next: NextFunction) => {
         const getAllModules = new GetAllModules(this.moduleRepository);
 
-        getAllModules.execute()
-            .then(modules => {
+        getAllModules
+            .execute()
+            .then((modules) => {
                 const successMessage = "Modules found successfully";
                 SuccessResponse.ok<ModuleEntity[]>(res, successMessage, modules);
             })
-            .catch(error => { next(error); });
-    }
+            .catch((error) => {
+                next(error);
+            });
+    };
 
     getModuleById = (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
@@ -47,13 +49,16 @@ export class ModuleController {
 
         const getModule = new GetModuleById(this.moduleRepository);
 
-        getModule.execute(id.toString())
-            .then(module => {
+        getModule
+            .execute(id.toString())
+            .then((module) => {
                 const successMessage = "Modules found successfully";
                 SuccessResponse.ok<ModuleEntity>(res, successMessage, module);
             })
-            .catch(error => { next(error); });
-    }
+            .catch((error) => {
+                next(error);
+            });
+    };
 
     updateModule = (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
@@ -65,14 +70,16 @@ export class ModuleController {
 
         const updateModule = new UpdateModule(this.moduleRepository);
 
-        updateModule.execute(id.toString(), updateModuleDto!)
+        updateModule
+            .execute(id.toString(), updateModuleDto!)
             .then(() => {
-                const successMessage = "Module updated successfully"
+                const successMessage = "Module updated successfully";
                 SuccessResponse.ok(res, successMessage);
             })
-            .catch(error => { next(error); });
-
-    }
+            .catch((error) => {
+                next(error);
+            });
+    };
 
     deleteModule = (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
@@ -81,12 +88,14 @@ export class ModuleController {
 
         const deleteModule = new DeleteModule(this.moduleRepository);
 
-        deleteModule.execute(id.toString())
+        deleteModule
+            .execute(id.toString())
             .then(() => {
-                const successMessage = "Module deleted successfully"
+                const successMessage = "Module deleted successfully";
                 SuccessResponse.ok(res, successMessage);
             })
-            .catch(error => { next(error); });
-    }
-
+            .catch((error) => {
+                next(error);
+            });
+    };
 }

@@ -3,31 +3,22 @@ import type { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/modu
 import type { StudentEntity } from "@/app/admin-desk/students/domain";
 import type { UserEntity } from "@/app/shared/Identity/domain/entities";
 
-export const moduleRelationFields: readonly (keyof ModuleEntity)[] = [
-    'mo_id',
-    'mo_name',
-    'mo_level'
-] as const;
+export const moduleRelationFields: readonly (keyof ModuleEntity)[] = ["mo_id", "mo_name", "mo_level"] as const;
 
-export const sellerRelationFields: readonly (keyof UserEntity)[] = [
-    'us_id',
-    'us_full_name',
-    'us_email',
-] as const;
+export const sellerRelationFields: readonly (keyof UserEntity)[] = ["us_id", "us_full_name", "us_email"] as const;
 
 export const studentRelationFields: readonly (keyof StudentEntity)[] = [
-    'id',
-    'identificationCard',
-    'fullName',
-    'email',
+    "id",
+    "identificationCard",
+    "fullName",
+    "email",
     "isGraduated",
-    "contractStatus"
+    "contractStatus",
 ] as const;
 
-
-export type ModuleRelation = Pick<ModuleEntity, typeof moduleRelationFields[number]>;
-export type SellerRelation = Pick<UserEntity, typeof sellerRelationFields[number]>;
-export type StudentRelation = Pick<StudentEntity, typeof studentRelationFields[number]>;
+export type ModuleRelation = Pick<ModuleEntity, (typeof moduleRelationFields)[number]>;
+export type SellerRelation = Pick<UserEntity, (typeof sellerRelationFields)[number]>;
+export type StudentRelation = Pick<StudentEntity, (typeof studentRelationFields)[number]>;
 
 export class StudentLevelDetailsProjection {
     constructor(
@@ -38,6 +29,6 @@ export class StudentLevelDetailsProjection {
         public readonly status: StudentModuleStatus,
         public readonly purchaseDate: Date,
         public readonly createdAt: Date,
-        public readonly updatedAt: Date
-    ) { }
+        public readonly updatedAt: Date,
+    ) {}
 }

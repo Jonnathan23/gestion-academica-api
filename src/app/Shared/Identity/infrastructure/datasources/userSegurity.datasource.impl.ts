@@ -5,7 +5,7 @@ export class UserSegurityDataSourceImpl implements UserSegurityDataSource {
     async checkUserActiveStatus(id: string): Promise<boolean> {
         try {
             const user = await User.findByPk(id, {
-                attributes: ['us_is_active']
+                attributes: ["us_is_active"],
             });
 
             if (!user) return false;

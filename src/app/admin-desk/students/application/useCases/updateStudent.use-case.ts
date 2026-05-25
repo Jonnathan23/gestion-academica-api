@@ -5,10 +5,7 @@ export interface UpdateStudentUseCase {
 }
 
 export class UpdateStudent implements UpdateStudentUseCase {
-
-    constructor(
-        private readonly repository: StudentRepository
-    ) { }
+    constructor(private readonly repository: StudentRepository) {}
 
     execute(id: string, dto: UpdateStudentDto): Promise<StudentEntity> {
         return this.repository.update(id, dto);

@@ -16,5 +16,5 @@ export class StudentEntity {
         public readonly progressCategory: StudentProgressCategory,
         public readonly createdAt: Date,
         public readonly updatedAt: Date,
-    ) { }
+    ) {}
 }

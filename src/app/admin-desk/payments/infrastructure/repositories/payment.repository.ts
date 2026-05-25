@@ -4,10 +4,7 @@ import type { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entitie
 import type { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/PaymentQuotaEntity";
 import type { PaymentRepository } from "@/app/admin-desk/payments/domain/repositories/Payment.repository";
 
-
-
 export class PaymentRepositoryImpl implements PaymentRepository {
-    
     constructor(private readonly datasource: PaymentDataSource) {}
 
     async createPaymentPlan(dto: CreatePaymentPlanDto, generatedQuotas: PaymentQuotaEntity[]): Promise<PaymentPlanEntity> {

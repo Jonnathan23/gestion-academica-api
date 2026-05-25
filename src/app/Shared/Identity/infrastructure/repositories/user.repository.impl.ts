@@ -3,17 +3,12 @@ import type { RegisterUserDto, LoginUserDto, UpdateUserDto } from "@/app/shared/
 import type { UserDataEntity, UserEntity } from "@/app/shared/Identity/domain/entities";
 import type { UserRepository } from "@/app/shared/Identity/domain/repositories/user.repository";
 
-
 export class UserRepositoryImpl implements UserRepository {
-
-    constructor(
-        private readonly userDataSource: UserDataSource
-    ) { }
+    constructor(private readonly userDataSource: UserDataSource) {}
 
     create(user: RegisterUserDto): Promise<UserEntity> {
         return this.userDataSource.create(user);
     }
-
 
     login(user: LoginUserDto): Promise<UserEntity> {
         return this.userDataSource.login(user);
@@ -38,6 +33,4 @@ export class UserRepositoryImpl implements UserRepository {
     findAll(): Promise<UserDataEntity[]> {
         return this.userDataSource.findAll();
     }
-
-
 }

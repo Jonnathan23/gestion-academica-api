@@ -1,7 +1,6 @@
 import type { UserRoles } from "@/core/interfaces";
 import type { UserState } from "@/app/shared/Identity/domain/interfaces/user.interfaces";
 
-
 export class UserDataEntity {
     constructor(
         public us_id: string,
@@ -10,5 +9,5 @@ export class UserDataEntity {
         public us_role: UserRoles,
         public us_is_active: UserState,
         public permissions: string[],
-    ) { }
+    ) {}
 }

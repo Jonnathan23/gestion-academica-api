@@ -1,8 +1,6 @@
 import { certificateType, type CertificateType } from "@/app/admin-desk/students/domain/interfaces/Students.interface";
 import { userRoles, type UserRoles } from "@/core/interfaces";
 
-
-
 export const Validators = {
     isEmail: (email: string): boolean => {
         const emailRegularExpression = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -53,6 +51,4 @@ export const Validators = {
         // getTime() devuelve NaN si la fecha es inválida, e isNaN() lo detecta
         return !isNaN(parsedDate.getTime());
     },
-
-
 };

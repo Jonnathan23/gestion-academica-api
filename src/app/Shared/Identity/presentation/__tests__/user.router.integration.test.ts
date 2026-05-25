@@ -47,7 +47,6 @@ const MALFORMED_ID = "not-a-valid-uuid";
 // Test suite
 // ------------------------------------------------------------------ //
 describe("Integration Tests: User Router (Authenticated)", () => {
-
     let adminToken: string;
     let superAdminId: string;
     let createdUserId: string;
@@ -90,7 +89,6 @@ describe("Integration Tests: User Router (Authenticated)", () => {
     // AUTH — [401] Unauthenticated access
     // ---------------------------------------------------------------- //
     describe("Authentication guard", () => {
-
         test("[401] GET /api/users without token should return 'You must be logged in'", async () => {
             const res = await request(testingApp).get("/api/users");
 
@@ -99,36 +97,28 @@ describe("Integration Tests: User Router (Authenticated)", () => {
         });
 
         test("[401] GET /api/users with invalid token should return unauthorized", async () => {
-            const res = await request(testingApp)
-                .get("/api/users")
-                .set("Authorization", "Bearer invalid.jwt.token");
+            const res = await request(testingApp).get("/api/users").set("Authorization", "Bearer invalid.jwt.token");
 
             expect(res.status).toBe(401);
             expect(res.body).toHaveProperty("errors");
         });
 
         test("[401] POST /api/users without token should be rejected", async () => {
-            const res = await request(testingApp)
-                .post("/api/users")
-                .send(NEW_USER_PAYLOAD);
+            const res = await request(testingApp).post("/api/users").send(NEW_USER_PAYLOAD);
 
             expect(res.status).toBe(401);
             expect(res.body.errors[0].message).toBe("You must be logged in");
         });
 
         test("[401] PATCH /api/users/:id without token should be rejected", async () => {
-            const res = await request(testingApp)
-                .patch(`/api/users/${superAdminId}`)
-                .send({ us_full_name: "Hacked Name" });
+            const res = await request(testingApp).patch(`/api/users/${superAdminId}`).send({ us_full_name: "Hacked Name" });
 
             expect(res.status).toBe(401);
             expect(res.body.errors[0].message).toBe("You must be logged in");
         });
 
         test("[401] Authorization header without 'Bearer ' prefix should be rejected", async () => {
-            const res = await request(testingApp)
-                .get("/api/users")
-                .set("Authorization", adminToken);
+            const res = await request(testingApp).get("/api/users").set("Authorization", adminToken);
 
             expect(res.status).toBe(401);
             expect(res.body.errors[0].message).toBe("You must be logged in");
@@ -140,7 +130,7 @@ describe("Integration Tests: User Router (Authenticated)", () => {
                 us_email: "deactivated@test.com",
                 us_password_hash: "MockHash123!",
                 us_role: "TEACHER",
-                us_is_active: false
+                us_is_active: false,
             });
             const deactivatedToken = await JwtAdapter.generateToken({
                 id: deactivatedUser.us_id,
@@ -148,9 +138,7 @@ describe("Integration Tests: User Router (Authenticated)", () => {
                 role: deactivatedUser.us_role,
             });
 
-            const res = await request(testingApp)
-                .get("/api/users")
-                .set("Authorization", `Bearer ${deactivatedToken}`);
+            const res = await request(testingApp).get("/api/users").set("Authorization", `Bearer ${deactivatedToken}`);
 
             expect(res.status).toBe(401);
             expect(res.body.errors[0].message).toBe("Your account has been deactivated by an administrator");
@@ -161,11 +149,8 @@ describe("Integration Tests: User Router (Authenticated)", () => {
     // EDGE CASES — Invalid UUID in route params
     // ---------------------------------------------------------------- //
     describe("Edge Cases: Malformed UUID in :id param", () => {
-
         test("[400] GET /api/users/:id with malformed ID should return 400", async () => {
-            const res = await request(testingApp)
-                .get(`/api/users/${MALFORMED_ID}`)
-                .set("Authorization", `Bearer ${adminToken}`);
+            const res = await request(testingApp).get(`/api/users/${MALFORMED_ID}`).set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(400);
             expect(res.body.errors[0].message.toLowerCase()).toContain("invalid item");
@@ -182,9 +167,7 @@ describe("Integration Tests: User Router (Authenticated)", () => {
         });
 
         test("[400] POST /api/users/:id/state with numeric string ID should return 400", async () => {
-            const res = await request(testingApp)
-                .post("/api/users/12345/state")
-                .set("Authorization", `Bearer ${adminToken}`);
+            const res = await request(testingApp).post("/api/users/12345/state").set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(400);
             expect(res.body.errors[0].message.toLowerCase()).toContain("invalid item");
@@ -205,12 +188,8 @@ describe("Integration Tests: User Router (Authenticated)", () => {
     // POST /api/users — Register user
     // ---------------------------------------------------------------- //
     describe("POST /api/users", () => {
-
         test("[400] Missing required fields should return first validation error", async () => {
-            const res = await request(testingApp)
-                .post("/api/users")
-                .set("Authorization", `Bearer ${adminToken}`)
-                .send({});
+            const res = await request(testingApp).post("/api/users").set("Authorization", `Bearer ${adminToken}`).send({});
 
             expect(res.status).toBe(400);
             expect(res.body).toHaveProperty("errors");
@@ -218,55 +197,43 @@ describe("Integration Tests: User Router (Authenticated)", () => {
         });
 
         test("[400] Invalid email format should return validation error", async () => {
-            const res = await request(testingApp)
-                .post("/api/users")
-                .set("Authorization", `Bearer ${adminToken}`)
-                .send({
-                    us_full_name: "John Doe",
-                    us_email: "not-an-email",
-                    us_password_hash: "Str0ngP@ssw0rd!",
-                    us_role: "ADMIN",
-                });
+            const res = await request(testingApp).post("/api/users").set("Authorization", `Bearer ${adminToken}`).send({
+                us_full_name: "John Doe",
+                us_email: "not-an-email",
+                us_password_hash: "Str0ngP@ssw0rd!",
+                us_role: "ADMIN",
+            });
 
             expect(res.status).toBe(400);
             expect(res.body.errors[0].message).toBe("Invalid email");
         });
 
         test("[400] Weak password should return validation error", async () => {
-            const res = await request(testingApp)
-                .post("/api/users")
-                .set("Authorization", `Bearer ${adminToken}`)
-                .send({
-                    us_full_name: "John Doe",
-                    us_email: "john@example.com",
-                    us_password_hash: "weak",
-                    us_role: "ADMIN",
-                });
+            const res = await request(testingApp).post("/api/users").set("Authorization", `Bearer ${adminToken}`).send({
+                us_full_name: "John Doe",
+                us_email: "john@example.com",
+                us_password_hash: "weak",
+                us_role: "ADMIN",
+            });
 
             expect(res.status).toBe(400);
             expect(res.body.errors[0].message).toBe("Invalid password");
         });
 
         test("[400] Invalid role should return validation error", async () => {
-            const res = await request(testingApp)
-                .post("/api/users")
-                .set("Authorization", `Bearer ${adminToken}`)
-                .send({
-                    us_full_name: "John Doe",
-                    us_email: "john@example.com",
-                    us_password_hash: "Str0ngP@ssw0rd!",
-                    us_role: "SUPER_HACKER",
-                });
+            const res = await request(testingApp).post("/api/users").set("Authorization", `Bearer ${adminToken}`).send({
+                us_full_name: "John Doe",
+                us_email: "john@example.com",
+                us_password_hash: "Str0ngP@ssw0rd!",
+                us_role: "SUPER_HACKER",
+            });
 
             expect(res.status).toBe(400);
             expect(res.body.errors[0].message).toBe("Invalid role");
         });
 
         test("[201] Valid payload should register a new user", async () => {
-            const res = await request(testingApp)
-                .post("/api/users")
-                .set("Authorization", `Bearer ${adminToken}`)
-                .send(NEW_USER_PAYLOAD);
+            const res = await request(testingApp).post("/api/users").set("Authorization", `Bearer ${adminToken}`).send(NEW_USER_PAYLOAD);
 
             expect(res.status).toBe(201);
             expect(res.body.success).toBe(true);
@@ -274,10 +241,7 @@ describe("Integration Tests: User Router (Authenticated)", () => {
         });
 
         test("[400] Duplicate email should return 'User already exists'", async () => {
-            const res = await request(testingApp)
-                .post("/api/users")
-                .set("Authorization", `Bearer ${adminToken}`)
-                .send(NEW_USER_PAYLOAD);
+            const res = await request(testingApp).post("/api/users").set("Authorization", `Bearer ${adminToken}`).send(NEW_USER_PAYLOAD);
 
             expect(res.status).toBe(400);
             expect(res.body.errors[0].message).toBe("User already exists");
@@ -301,11 +265,8 @@ describe("Integration Tests: User Router (Authenticated)", () => {
     // GET /api/users — Find all (Admin only)
     // ---------------------------------------------------------------- //
     describe("GET /api/users", () => {
-
         test("[200] Should return a non-empty list of users", async () => {
-            const res = await request(testingApp)
-                .get("/api/users")
-                .set("Authorization", `Bearer ${adminToken}`);
+            const res = await request(testingApp).get("/api/users").set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(200);
             expect(res.body.success).toBe(true);
@@ -314,9 +275,7 @@ describe("Integration Tests: User Router (Authenticated)", () => {
             expect(res.body.data.length).toBeGreaterThanOrEqual(2);
 
             // Capture the non-admin user ID for subsequent tests
-            const newUser = res.body.data.find(
-                (u: { us_email: string }) => u.us_email === NEW_USER_PAYLOAD.us_email
-            );
+            const newUser = res.body.data.find((u: { us_email: string }) => u.us_email === NEW_USER_PAYLOAD.us_email);
             createdUserId = newUser.us_id;
             expect(typeof createdUserId).toBe("string");
         });
@@ -326,11 +285,8 @@ describe("Integration Tests: User Router (Authenticated)", () => {
     // GET /api/users/:id — Find by ID (Authenticated)
     // ---------------------------------------------------------------- //
     describe("GET /api/users/:id", () => {
-
         test("[200] Should return the user matching the given ID", async () => {
-            const res = await request(testingApp)
-                .get(`/api/users/${createdUserId}`)
-                .set("Authorization", `Bearer ${adminToken}`);
+            const res = await request(testingApp).get(`/api/users/${createdUserId}`).set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(200);
             expect(res.body.success).toBe(true);
@@ -339,9 +295,7 @@ describe("Integration Tests: User Router (Authenticated)", () => {
         });
 
         test("[404] Non-existent UUID should return 'User not found'", async () => {
-            const res = await request(testingApp)
-                .get(`/api/users/${NON_EXISTENT_UUID}`)
-                .set("Authorization", `Bearer ${adminToken}`);
+            const res = await request(testingApp).get(`/api/users/${NON_EXISTENT_UUID}`).set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(404);
             expect(res.body.errors[0].message).toBe("User not found");
@@ -352,7 +306,6 @@ describe("Integration Tests: User Router (Authenticated)", () => {
     // PATCH /api/users/:id — Update (Admin only)
     // ---------------------------------------------------------------- //
     describe("PATCH /api/users/:id", () => {
-
         test("[400] No updatable fields should return 'No fields to update'", async () => {
             const res = await request(testingApp)
                 .patch(`/api/users/${createdUserId}`)
@@ -409,11 +362,8 @@ describe("Integration Tests: User Router (Authenticated)", () => {
     // POST /api/users/:id/state — Toggle active state (Admin only)
     // ---------------------------------------------------------------- //
     describe("POST /api/users/:id/state", () => {
-
         test("[200] Should toggle us_is_active and return success", async () => {
-            const res = await request(testingApp)
-                .post(`/api/users/${createdUserId}/state`)
-                .set("Authorization", `Bearer ${adminToken}`);
+            const res = await request(testingApp).post(`/api/users/${createdUserId}/state`).set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(200);
             expect(res.body.success).toBe(true);
@@ -434,7 +384,6 @@ describe("Integration Tests: User Router (Authenticated)", () => {
     // PATCH /api/users/:id/password — Change password (Authenticated)
     // ---------------------------------------------------------------- //
     describe("PATCH /api/users/:id/password", () => {
-
         test("[400] Missing 'password' field should return validation error", async () => {
             const res = await request(testingApp)
                 .patch(`/api/users/${createdUserId}/password`)
@@ -481,29 +430,22 @@ describe("Integration Tests: User Router (Authenticated)", () => {
     // POST /api/users/login — Login (Public endpoint, no token needed)
     // ---------------------------------------------------------------- //
     describe("POST /api/users/login", () => {
-
         test("[400] Missing email should return validation error", async () => {
-            const res = await request(testingApp)
-                .post("/api/users/login")
-                .send({ us_password_hash: SUPER_ADMIN_PASSWORD });
+            const res = await request(testingApp).post("/api/users/login").send({ us_password_hash: SUPER_ADMIN_PASSWORD });
 
             expect(res.status).toBe(400);
             expect(res.body.errors[0].message).toBe("Missing email");
         });
 
         test("[400] Missing password should return validation error", async () => {
-            const res = await request(testingApp)
-                .post("/api/users/login")
-                .send({ us_email: SUPER_ADMIN_EMAIL });
+            const res = await request(testingApp).post("/api/users/login").send({ us_email: SUPER_ADMIN_EMAIL });
 
             expect(res.status).toBe(400);
             expect(res.body.errors[0].message).toBe("Missing password");
         });
 
         test("[400] Empty body should return first validation error", async () => {
-            const res = await request(testingApp)
-                .post("/api/users/login")
-                .send({});
+            const res = await request(testingApp).post("/api/users/login").send({});
 
             expect(res.status).toBe(400);
             expect(res.body).toHaveProperty("errors");
@@ -511,48 +453,40 @@ describe("Integration Tests: User Router (Authenticated)", () => {
         });
 
         test("[400] Invalid email format should return validation error", async () => {
-            const res = await request(testingApp)
-                .post("/api/users/login")
-                .send({
-                    us_email: "not-a-valid-email",
-                    us_password_hash: SUPER_ADMIN_PASSWORD,
-                });
+            const res = await request(testingApp).post("/api/users/login").send({
+                us_email: "not-a-valid-email",
+                us_password_hash: SUPER_ADMIN_PASSWORD,
+            });
 
             expect(res.status).toBe(400);
             expect(res.body.errors[0].message).toBe("Invalid email");
         });
 
         test("[404] Non-existent email should return 'Invalid credentials'", async () => {
-            const res = await request(testingApp)
-                .post("/api/users/login")
-                .send({
-                    us_email: "nobody@ghost.com",
-                    us_password_hash: "SomeP@ssw0rd1!",
-                });
+            const res = await request(testingApp).post("/api/users/login").send({
+                us_email: "nobody@ghost.com",
+                us_password_hash: "SomeP@ssw0rd1!",
+            });
 
             expect(res.status).toBe(404);
             expect(res.body.errors[0].message).toBe("Invalid credentials");
         });
 
         test("[401] Wrong password should return 'Invalid credentials'", async () => {
-            const res = await request(testingApp)
-                .post("/api/users/login")
-                .send({
-                    us_email: SUPER_ADMIN_EMAIL,
-                    us_password_hash: "WrongP@ssw0rd1!",
-                });
+            const res = await request(testingApp).post("/api/users/login").send({
+                us_email: SUPER_ADMIN_EMAIL,
+                us_password_hash: "WrongP@ssw0rd1!",
+            });
 
             expect(res.status).toBe(401);
             expect(res.body.errors[0].message).toBe("Invalid credentials");
         });
 
         test("[200] Valid credentials should return token and user data", async () => {
-            const res = await request(testingApp)
-                .post("/api/users/login")
-                .send({
-                    us_email: SUPER_ADMIN_EMAIL,
-                    us_password_hash: SUPER_ADMIN_PASSWORD,
-                });
+            const res = await request(testingApp).post("/api/users/login").send({
+                us_email: SUPER_ADMIN_EMAIL,
+                us_password_hash: SUPER_ADMIN_PASSWORD,
+            });
 
             expect(res.status).toBe(200);
             expect(res.body.success).toBe(true);
@@ -603,9 +537,7 @@ describe("Integration Tests: User Router (Authenticated)", () => {
         });
 
         test("[403] Should deny access to GET /api/users if user lacks SHARED_IDENTITY_READ permission", async () => {
-            const res = await request(testingApp)
-                .get("/api/users")
-                .set("Authorization", `Bearer ${teacherToken}`);
+            const res = await request(testingApp).get("/api/users").set("Authorization", `Bearer ${teacherToken}`);
 
             expect(res.status).toBe(403);
             expect(res.body.errors[0].message).toContain("Access denied");
@@ -620,11 +552,9 @@ describe("Integration Tests: User Router (Authenticated)", () => {
             expect(res.status).toBe(403);
             expect(res.body.errors[0].message).toContain("Access denied");
         });
-        
+
         test("[403] Should deny access to POST /api/users/:id/state if user lacks SHARED_IDENTITY_WRITE permission", async () => {
-            const res = await request(testingApp)
-                .post(`/api/users/${createdUserId}/state`)
-                .set("Authorization", `Bearer ${teacherToken}`);
+            const res = await request(testingApp).post(`/api/users/${createdUserId}/state`).set("Authorization", `Bearer ${teacherToken}`);
 
             expect(res.status).toBe(403);
             expect(res.body.errors[0].message).toContain("Access denied");

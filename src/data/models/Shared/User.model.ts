@@ -8,10 +8,10 @@ export const userRoles = {
     ADMIN: "ADMIN",
     TEACHER: "TEACHER",
     ADVISOR: "ADVISOR",
-    ACADEMIC_DIRECTOR: "ACADEMIC_DIRECTOR"
+    ACADEMIC_DIRECTOR: "ACADEMIC_DIRECTOR",
 } as const;
 
-export type UserRoles = typeof userRoles[keyof typeof userRoles];
+export type UserRoles = (typeof userRoles)[keyof typeof userRoles];
 
 interface UserAttributes {
     us_id: string;
@@ -29,8 +29,8 @@ interface UserCreationAttributes extends Optional<UserAttributes, "us_id" | "us_
 @Table({
     tableName: "Users",
     timestamps: true,
-    createdAt: 'us_created_at',
-    updatedAt: 'us_updated_at'
+    createdAt: "us_created_at",
+    updatedAt: "us_updated_at",
 })
 class User extends Model<UserAttributes, UserCreationAttributes> {
     @Column({
@@ -38,52 +38,52 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
         allowNull: false,
         primaryKey: true,
         unique: true,
-        defaultValue: DataType.UUIDV4
+        defaultValue: DataType.UUIDV4,
     })
     declare us_id: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
-        unique: true
+        unique: true,
     })
     declare us_full_name: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
-        unique: true
+        unique: true,
     })
     declare us_email: string;
 
     @Column({
         type: DataType.STRING,
-        allowNull: false
+        allowNull: false,
     })
     declare us_password_hash: string;
 
     @Column({
         type: DataType.ENUM(...Object.values(userRoles)),
-        allowNull: false
+        allowNull: false,
     })
     declare us_role: UserRoles;
 
     @Column({
         type: DataType.BOOLEAN,
         allowNull: false,
-        defaultValue: true
+        defaultValue: true,
     })
     declare us_is_active: boolean;
 
     //* Relaciones (Has Many)
 
-    @HasMany(() => StudentModule, 'st_mod_seller_id')
+    @HasMany(() => StudentModule, "st_mod_seller_id")
     declare sold_modules: StudentModule[];
 
-    @HasMany(() => AttendanceSession, 'at_se_teacher_id')
+    @HasMany(() => AttendanceSession, "at_se_teacher_id")
     declare overseen_sessions: AttendanceSession[];
 
-    @HasMany(() => RetentionAlert, 're_al_user_id')
+    @HasMany(() => RetentionAlert, "re_al_user_id")
     declare retention_alerts: RetentionAlert[];
 
     /* * Preparación para el nuevo módulo de facturación.
@@ -92,7 +92,6 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
     // @HasMany(() => PaymentPlan, 'pp_seller_id')
     // declare created_payment_plans: PaymentPlan[];
 }
-
 
 export default User;
 

@@ -1,16 +1,12 @@
-
 import type { UserRoles } from "@/core/interfaces";
 import { Validators } from "@/core/utils";
 
-
 export class UpdateUserDto {
-
     private constructor(
         public readonly us_full_name?: string,
         public readonly us_email?: string,
         public readonly us_role?: UserRoles,
-    ) { }
-
+    ) {}
 
     get values() {
         const returnObject: { [key: string]: any } = {};
@@ -32,7 +28,6 @@ export class UpdateUserDto {
 
         if (us_role !== undefined && !Validators.isRole(us_role)) {
             return ["Invalid role"];
-
         }
 
         return [undefined, new UpdateUserDto(us_full_name, us_email, us_role)];

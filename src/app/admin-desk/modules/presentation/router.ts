@@ -6,9 +6,7 @@ import { ModuleController } from "@/app/admin-desk/modules/presentation/controll
 import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
 import { systemPermissions } from "@/core/constants";
 
-
 export class ModulesRouter {
-
     static get routes(): Router {
         const router = Router();
 
@@ -16,53 +14,35 @@ export class ModulesRouter {
         const moduleRespository = new ModuleRepositoryImpl(moduleDatasource);
         const moduleController = new ModuleController(moduleRespository);
 
-        router.use(AuthMiddleware.validateJWT)
-        router.param('id', VerifyUUID.validate);
+        router.use(AuthMiddleware.validateJWT);
+        router.param("id", VerifyUUID.validate);
 
         //Posts
-        router.post("/",
-            RoleMiddleware.requirePermissions([
-                systemPermissions.ADMINDESK_MODULES_READ,
-                systemPermissions.ADMINDESK_MODULES_WRITE
-            ]),
-            moduleController.createModule
+        router.post(
+            "/",
+            RoleMiddleware.requirePermissions([systemPermissions.ADMINDESK_MODULES_READ, systemPermissions.ADMINDESK_MODULES_WRITE]),
+            moduleController.createModule,
         );
 
         //Gets
-        router.get("/",
-            RoleMiddleware.requirePermissions([
-                systemPermissions.ADMINDESK_MODULES_READ,
-            ]),
-            moduleController.getAllModules
-        );
+        router.get("/", RoleMiddleware.requirePermissions([systemPermissions.ADMINDESK_MODULES_READ]), moduleController.getAllModules);
 
-        router.get("/:id",
-            RoleMiddleware.requirePermissions([
-                systemPermissions.ADMINDESK_MODULES_READ,
-
-            ]),
-            moduleController.getModuleById
-        );
+        router.get("/:id", RoleMiddleware.requirePermissions([systemPermissions.ADMINDESK_MODULES_READ]), moduleController.getModuleById);
 
         //PATCH
-        router.patch("/:id",
-            RoleMiddleware.requirePermissions([
-                systemPermissions.ADMINDESK_MODULES_READ,
-                systemPermissions.ADMINDESK_MODULES_WRITE
-            ]),
-            moduleController.updateModule
+        router.patch(
+            "/:id",
+            RoleMiddleware.requirePermissions([systemPermissions.ADMINDESK_MODULES_READ, systemPermissions.ADMINDESK_MODULES_WRITE]),
+            moduleController.updateModule,
         );
 
         //DELETE
-        router.delete("/:id",
-            RoleMiddleware.requirePermissions([
-                systemPermissions.ADMINDESK_MODULES_READ,
-                systemPermissions.ADMINDESK_MODULES_WRITE
-            ]),
-            moduleController.deleteModule
+        router.delete(
+            "/:id",
+            RoleMiddleware.requirePermissions([systemPermissions.ADMINDESK_MODULES_READ, systemPermissions.ADMINDESK_MODULES_WRITE]),
+            moduleController.deleteModule,
         );
 
-
-        return router
+        return router;
     }
 }

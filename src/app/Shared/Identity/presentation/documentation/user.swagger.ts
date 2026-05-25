@@ -5,7 +5,6 @@
  *   description: Authentication and user management (CRUD)
  */
 
-
 /**
  * @swagger
  * /api/user/login:
@@ -55,7 +54,6 @@
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-
 
 /**
  * @swagger
@@ -128,7 +126,6 @@
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 
-
 /**
  * @swagger
  * /api/user:
@@ -163,7 +160,6 @@
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-
 
 /**
  * @swagger
@@ -217,7 +213,6 @@
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-
 
 /**
  * @swagger
@@ -295,7 +290,6 @@
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 
-
 /**
  * @swagger
  * /api/user/{id}/state:
@@ -350,7 +344,6 @@
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-
 
 /**
  * @swagger
@@ -421,7 +414,6 @@
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 
-
 /**
  * @swagger
  * components:
@@ -466,5 +458,4 @@
  *           example: "Bad Request"
  */
 
-
-export { };
+export {};

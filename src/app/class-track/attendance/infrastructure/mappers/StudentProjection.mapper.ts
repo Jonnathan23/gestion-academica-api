@@ -1,6 +1,6 @@
-import { ActiveStudentProjection } from "../../domain/projections/ActiveStudentProjection";
 import Student from "@/data/models/AdminDesk/Student.model";
 import { CustomError } from "@/core/error/customError.error";
+import type { ActiveStudentProjection } from "@/app/class-track/core/interfaces/StudentProjection.interface";
 
 export class StudentProjectionMapper {
     public static entityFromObject(object: Student): ActiveStudentProjection {
@@ -10,9 +10,7 @@ export class StudentProjectionMapper {
             throw CustomError.internalServer("Mapper Error: Student modules not included in query");
         }
 
-        const activeOrFrozenModule = student_modules.find(
-            (m) => m.st_mod_status === "ACTIVE" || m.st_mod_status === "FROZEN"
-        );
+        const activeOrFrozenModule = student_modules.find((m) => m.st_mod_status === "ACTIVE" || m.st_mod_status === "FROZEN");
 
         if (!activeOrFrozenModule) {
             throw CustomError.notFound("Active student profile not found");

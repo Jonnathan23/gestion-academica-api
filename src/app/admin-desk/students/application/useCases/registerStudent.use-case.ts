@@ -7,10 +7,7 @@ export interface RegisterStudentUseCase {
 }
 
 export class RegisterStudent implements RegisterStudentUseCase {
-
-    constructor(
-        private readonly repository: StudentRepository
-    ) { }
+    constructor(private readonly repository: StudentRepository) {}
 
     execute(dto: RegisterStudentDto): Promise<StudentEntity> {
         return this.repository.register(dto);

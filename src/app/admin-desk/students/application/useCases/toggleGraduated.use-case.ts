@@ -5,10 +5,7 @@ export interface ToggleGraduatedUseCase {
 }
 
 export class ToggleGraduated implements ToggleGraduatedUseCase {
-
-    constructor(
-        private readonly repository: StudentRepository
-    ) { }
+    constructor(private readonly repository: StudentRepository) {}
 
     execute(id: string): Promise<StudentEntity> {
         return this.repository.toggleGraduated(id);

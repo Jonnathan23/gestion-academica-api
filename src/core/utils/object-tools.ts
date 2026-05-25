@@ -1,4 +1,3 @@
-
 interface PickFieldsProps<T extends object, K extends keyof T> {
     objectToFilter: T;
     fieldsToKeep: readonly K[];

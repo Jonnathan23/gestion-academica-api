@@ -261,33 +261,6 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
         }
     }
 
-    private buildStatusUpdatePromises(buildProps: BuildStatusUpdatePromisesProps): Promise<unknown>[] {
-        const { studentModules, targetModuleIndex, statusRequested, transaction } = buildProps;
-        const updatePromises: Promise<unknown>[] = [];
-
-        for (let currentIndex = 0; currentIndex < studentModules.length; currentIndex++) {
-            const currentStudentModule = studentModules[currentIndex];
-
-            if (!currentStudentModule) {
-                continue;
-            }
-
-            const currentStatus = currentStudentModule.st_mod_status as StudentModuleStatus;
-            const newContractStatus = this.calculateNewStudentModuleStatus({
-                statusRequested,
-                currentIndex,
-                targetModuleIndex,
-                currentStatus,
-            });
-
-            if (currentStatus !== newContractStatus) {
-                updatePromises.push(currentStudentModule.update({ st_mod_status: newContractStatus }, { transaction }));
-            }
-        }
-
-        return updatePromises;
-    }
-
     private async bulkCreateContracts(props: BulkCreateContractsProps): Promise<StudentModule[]> {
         const { studentId, sellerId, modulesFromDb, transaction } = props;
 

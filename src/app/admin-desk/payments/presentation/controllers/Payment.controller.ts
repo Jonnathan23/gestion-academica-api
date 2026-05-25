@@ -12,14 +12,8 @@ import { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/Pa
 import { CustomError } from "@/core/error";
 import { SuccessResponse } from "@/core/utils";
 
-
-
-
 export class PaymentController {
-
-    constructor(
-        private readonly paymentRepository: PaymentRepository
-    ) { }
+    constructor(private readonly paymentRepository: PaymentRepository) {}
 
     createPaymentPlan = (req: Request, res: Response, next: NextFunction) => {
         const { studentId } = req.params;
@@ -28,60 +22,72 @@ export class PaymentController {
         const [error, createPaymentPlanDto] = CreatePaymentPlanDto.create({
             ...req.body,
             studentId,
-            sellerId
+            sellerId,
         });
 
         if (error) throw CustomError.badRequest(error);
 
         const createPaymentPlan = new CreatePaymentPlanUseCase(this.paymentRepository);
 
-        createPaymentPlan.execute(createPaymentPlanDto!)
-            .then(paymentPlan => {
+        createPaymentPlan
+            .execute(createPaymentPlanDto!)
+            .then((paymentPlan) => {
                 SuccessResponse.created<PaymentPlanEntity>(res, "Payment plan created successfully", paymentPlan);
             })
-            .catch(error => { next(error); });
-    }
+            .catch((error) => {
+                next(error);
+            });
+    };
 
     getStudentPaymentPlans = (req: Request, res: Response, next: NextFunction) => {
         const { studentId } = req.params;
 
         const getStudentPaymentPlans = new GetStudentPaymentPlansUseCase(this.paymentRepository);
 
-        getStudentPaymentPlans.execute(studentId as string)
-            .then(paymentPlans => {
+        getStudentPaymentPlans
+            .execute(studentId as string)
+            .then((paymentPlans) => {
                 SuccessResponse.ok<PaymentPlanEntity[]>(res, "Payment plans retrieved successfully", paymentPlans);
             })
-            .catch(error => { next(error); });
-    }
+            .catch((error) => {
+                next(error);
+            });
+    };
 
     processQuotaPayment = (req: Request, res: Response, next: NextFunction) => {
         const { quotaId } = req.params;
 
         const [error, payQuotaDto] = PayQuotaDto.create({
             ...req.body,
-            quotaId
+            quotaId,
         });
 
         if (error) throw CustomError.badRequest(error);
 
         const processQuotaPayment = new ProcessQuotaPaymentUseCase(this.paymentRepository);
 
-        processQuotaPayment.execute(payQuotaDto!)
-            .then(updatedQuota => {
+        processQuotaPayment
+            .execute(payQuotaDto!)
+            .then((updatedQuota) => {
                 SuccessResponse.ok<PaymentQuotaEntity>(res, "Payment processed successfully", updatedQuota);
             })
-            .catch(error => { next(error); });
-    }
+            .catch((error) => {
+                next(error);
+            });
+    };
 
     revertQuotaPayment = (req: Request, res: Response, next: NextFunction) => {
         const { quotaId } = req.params;
 
         const revertQuotaPayment = new RevertQuotaPaymentUseCase(this.paymentRepository);
 
-        revertQuotaPayment.execute(quotaId as string)
+        revertQuotaPayment
+            .execute(quotaId as string)
             .then(() => {
                 SuccessResponse.ok<null>(res, "Payment reverted successfully", null);
             })
-            .catch(error => { next(error); });
-    }
+            .catch((error) => {
+                next(error);
+            });
+    };
 }

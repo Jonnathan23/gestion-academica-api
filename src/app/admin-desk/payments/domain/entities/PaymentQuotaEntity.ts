@@ -11,6 +11,6 @@ export class PaymentQuotaEntity {
         public dueDate: Date,
         public status: string,
         public createdAt?: Date,
-        public updatedAt?: Date
-    ) { }
+        public updatedAt?: Date,
+    ) {}
 }

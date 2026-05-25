@@ -5,7 +5,7 @@ import { CustomError } from "@/core/error/customError.error";
 import { Op } from "sequelize";
 import type { StudentProjectionDatasource } from "@/app/class-track/attendance/domain/datasource/StudentProjection.datasource";
 import type { ActiveStudentProjection } from "@/app/class-track/core/interfaces/StudentProjection.interface";
-import { StudentProjectionMapper } from "@/app/class-track/attendance/infrastructure/mappers/StudentProjectionMapper";
+import { StudentProjectionMapper } from "@/app/class-track/attendance/infrastructure/mappers/StudentProjection.mapper";
 
 export class StudentProjectionDatasourceImpl implements StudentProjectionDatasource {
     public async getActiveStudentProfile(studentId: string): Promise<ActiveStudentProjection> {
