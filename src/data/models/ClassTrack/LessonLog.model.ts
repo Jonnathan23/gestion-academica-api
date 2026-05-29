@@ -1,7 +1,6 @@
 import { Column, Table, DataType, Model, ForeignKey, BelongsTo } from "sequelize-typescript";
 import AttendanceSession from "@/data/models/ClassTrack/AttendanceSession.model";
 
-
 interface LessonLogAttributes {
     le_lo_id: string;
     le_lo_attendance_session_id: string;
@@ -11,12 +10,11 @@ interface LessonLogAttributes {
     le_lo_updated_at: Date;
 }
 
-
 @Table({
     tableName: "LessonLogs",
     timestamps: true,
-    createdAt: 'le_lo_created_at',
-    updatedAt: 'le_lo_updated_at'
+    createdAt: "le_lo_created_at",
+    updatedAt: "le_lo_updated_at",
 })
 class LessonLog extends Model<LessonLogAttributes> {
     @Column({
@@ -24,14 +22,14 @@ class LessonLog extends Model<LessonLogAttributes> {
         allowNull: false,
         primaryKey: true,
         unique: true,
-        defaultValue: DataType.UUIDV4
+        defaultValue: DataType.UUIDV4,
     })
     declare le_lo_id: string;
 
     @ForeignKey(() => AttendanceSession)
     @Column({
         type: DataType.UUID,
-        allowNull: false
+        allowNull: false,
     })
     declare le_lo_attendance_session_id: string;
 
@@ -40,17 +38,16 @@ class LessonLog extends Model<LessonLogAttributes> {
 
     @Column({
         type: DataType.STRING,
-        allowNull: false
+        allowNull: false,
     })
     declare le_lo_lesson_number: string;
 
     @Column({
         type: DataType.TEXT,
-        allowNull: false
+        allowNull: false,
     })
     declare le_lo_notes: string;
 }
-
 
 export default LessonLog;
 

@@ -3,14 +3,13 @@ import Student from "@/data/models/AdminDesk/Student.model";
 import User from "@/data/models/Shared/User.model";
 import LessonLog from "@/data/models/ClassTrack/LessonLog.model";
 
-
 const attendanceSessionStatus = {
-    IN_PROGRESS: "IN_PROGRESS",
-    PENDING_APPROVAL: "PENDING_APPROVAL",
-    APPROVED: "APPROVED"
-} as const
+    InProgress: "IN_PROGRESS",
+    PendingApproval: "PENDING_APPROVAL",
+    Approved: "APPROVED",
+} as const;
 
-export type AttendanceSessionStatus = typeof attendanceSessionStatus[keyof typeof attendanceSessionStatus]
+export type AttendanceSessionStatus = (typeof attendanceSessionStatus)[keyof typeof attendanceSessionStatus];
 
 interface AttendanceSessionAttributes {
     at_se_id: string;
@@ -25,12 +24,11 @@ interface AttendanceSessionAttributes {
     at_se_updated_at: Date;
 }
 
-
 @Table({
     tableName: "AttendanceSessions",
     timestamps: true,
-    createdAt: 'at_se_created_at',
-    updatedAt: 'at_se_updated_at'
+    createdAt: "at_se_created_at",
+    updatedAt: "at_se_updated_at",
 })
 class AttendanceSession extends Model<AttendanceSessionAttributes> {
     @Column({
@@ -38,14 +36,14 @@ class AttendanceSession extends Model<AttendanceSessionAttributes> {
         allowNull: false,
         primaryKey: true,
         unique: true,
-        defaultValue: DataType.UUIDV4
+        defaultValue: DataType.UUIDV4,
     })
     declare at_se_id: string;
 
     @ForeignKey(() => Student)
     @Column({
         type: DataType.UUID,
-        allowNull: false
+        allowNull: false,
     })
     declare at_se_student_id: string;
 
@@ -55,7 +53,7 @@ class AttendanceSession extends Model<AttendanceSessionAttributes> {
     @ForeignKey(() => User)
     @Column({
         type: DataType.UUID,
-        allowNull: true
+        allowNull: true,
     })
     declare at_se_teacher_id: string;
 
@@ -64,32 +62,32 @@ class AttendanceSession extends Model<AttendanceSessionAttributes> {
 
     @Column({
         type: DataType.DATEONLY,
-        allowNull: false
+        allowNull: false,
     })
     declare at_se_session_date: Date;
 
     @Column({
         type: DataType.DATE,
-        allowNull: false
+        allowNull: false,
     })
     declare at_se_entry_time: Date;
 
     @Column({
         type: DataType.DATE,
-        allowNull: true
+        allowNull: true,
     })
     declare at_se_exit_time: Date;
 
     @Column({
         type: DataType.INTEGER,
-        allowNull: true
+        allowNull: true,
     })
     declare at_se_total_minutes: number;
 
     @Column({
         type: DataType.ENUM(...Object.values(attendanceSessionStatus)),
         allowNull: false,
-        defaultValue: attendanceSessionStatus.IN_PROGRESS
+        defaultValue: attendanceSessionStatus.InProgress,
     })
     declare at_se_status: AttendanceSessionStatus;
 
@@ -97,9 +95,7 @@ class AttendanceSession extends Model<AttendanceSessionAttributes> {
     declare lesson_log: LessonLog;
 }
 
-
 export default AttendanceSession;
-
 
 /**
  * @swagger

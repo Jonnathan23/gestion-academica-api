@@ -4,6 +4,7 @@ import User from "@/data/models/Shared/User.model";
 
 const retentionAlertStatus = {
     Pending: "PENDING",
+    InProgress: "IN_PROGRESS",
     Resolved: "RESOLVED",
     ClosedFrozen: "CLOSED_FROZEN",
 } as const;
