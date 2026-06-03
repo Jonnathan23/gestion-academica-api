@@ -6,6 +6,7 @@ import type { StartAttendanceSessionDto } from "@/app/class-track/attendance/dom
 import type { EndAttendanceSessionDto } from "@/app/class-track/attendance/domain/dtos/EndAttendanceSession.dto";
 import type { AttendanceSessionEntity } from "@/app/class-track/attendance/domain/entities/AttendanceSession.entity";
 import { AttendanceSessionMapper } from "@/app/class-track/attendance/infrastructure/mappers/attendanceSession.mapper";
+import { attendanceSessionStatus } from "@/app/class-track/attendance/domain/interfaces/attendance.interface";
 
 export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasource {
     public async startSession(dto: StartAttendanceSessionDto): Promise<AttendanceSessionEntity> {
@@ -15,10 +16,10 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
             at_se_student_id: studentId,
             at_se_session_date: entryTime,
             at_se_entry_time: entryTime,
-            at_se_status: "IN_PROGRESS",
+            at_se_status: attendanceSessionStatus.InProgress,
         });
 
-        return AttendanceSessionMapper.entityFromObject(newSession);
+        return this.convertToEntity(newSession);
     }
 
     public async endSession(dto: EndAttendanceSessionDto): Promise<AttendanceSessionEntity> {
@@ -28,7 +29,7 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
             throw CustomError.notFound("Attendance session not found");
         }
 
-        if (session.at_se_status !== "IN_PROGRESS") {
+        if (session.at_se_status !== attendanceSessionStatus.InProgress) {
             throw CustomError.conflict("Session is not IN_PROGRESS");
         }
 
@@ -43,37 +44,39 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
             at_se_teacher_id: dto.teacherId,
             at_se_exit_time: exitTime,
             at_se_total_minutes: totalMinutes,
-            at_se_status: "PENDING_APPROVAL",
+            at_se_status: attendanceSessionStatus.PendingApproval,
         });
 
-        return AttendanceSessionMapper.entityFromObject(session);
+        return this.convertToEntity(session);
     }
 
     public async getStudentsAbsentForMoreThan(days: number): Promise<{ studentId: string; daysAbsent: number }[]> {
+        const targetDate = new Date();
+        targetDate.setDate(targetDate.getDate() - days);
+
         const results = await AttendanceSession.findAll({
             attributes: [
                 "at_se_student_id",
                 [AttendanceSession.sequelize!.fn("MAX", AttendanceSession.sequelize!.col("at_se_entry_time")), "lastAttendance"],
             ],
             group: ["at_se_student_id"],
+            having: AttendanceSession.sequelize!.where(
+                AttendanceSession.sequelize!.fn("MAX", AttendanceSession.sequelize!.col("at_se_entry_time")),
+                { [Op.lt]: targetDate },
+            ),
             raw: true,
         });
 
         const today = new Date();
-        const absentStudents: { studentId: string; daysAbsent: number }[] = [];
-
-        for (const row of results as unknown as Array<{ at_se_student_id: string; lastAttendance: string }>) {
-            if (!row.lastAttendance) continue;
+        return (results as any[]).map((row) => {
             const lastDate = new Date(row.lastAttendance);
-            const diffTime = today.getTime() - lastDate.getTime();
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const diffDays = Math.floor((today.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
 
-            if (diffDays > days) {
-                absentStudents.push({ studentId: row.at_se_student_id, daysAbsent: diffDays });
-            }
-        }
-
-        return absentStudents;
+            return {
+                studentId: row.at_se_student_id,
+                daysAbsent: diffDays,
+            };
+        });
     }
 
     public async closeOrphanSessions(): Promise<number> {
@@ -87,7 +90,7 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
 
             const orphanSessions = await AttendanceSession.findAll({
                 where: {
-                    at_se_status: "IN_PROGRESS",
+                    at_se_status: attendanceSessionStatus.InProgress,
                     at_se_entry_time: {
                         [Op.lt]: twelveHoursAgo,
                     },
@@ -104,7 +107,7 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
                     {
                         at_se_exit_time: exitTime,
                         at_se_total_minutes: 720,
-                        at_se_status: "APPROVED",
+                        at_se_status: attendanceSessionStatus.Approved,
                     },
                     { transaction },
                 );
@@ -114,5 +117,9 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
 
             return updatedCount;
         });
+    }
+
+    private convertToEntity(object: AttendanceSession): AttendanceSessionEntity {
+        return AttendanceSessionMapper.entityFromObject(object);
     }
 }

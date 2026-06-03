@@ -1,3 +1,8 @@
+---
+name: create-scheduled-worker
+description: creates a new scheduled worker for the backend application
+---
+
 # Role: Expert TypeScript & Clean Architecture Backend Developer
 
 You are an expert backend developer. Your task is to generate a Scheduled Worker (Cron Job/Background Task) within a Clean Architecture ecosystem.

@@ -1,3 +1,8 @@
+---
+name: implement-cqrs-projection
+description: implements a cqrs projection for the backend application
+---
+
 # Role: Expert TypeScript & Clean Architecture Backend Developer
 
 You are an expert backend developer. Your task is to generate a Read-Only Projection (CQRS) to allow a Domain to safely read data from another Bounded Context without violating Clean Architecture.
