@@ -3,6 +3,7 @@ import { AttendanceSessionDatasource } from "@/app/class-track/attendance/domain
 import type { StartAttendanceSessionDto } from "@/app/class-track/attendance/domain/dtos/StartAttendanceSession.dto";
 import type { EndAttendanceSessionDto } from "@/app/class-track/attendance/domain/dtos/EndAttendanceSession.dto";
 import type { AttendanceSessionEntity } from "@/app/class-track/attendance/domain/entities/AttendanceSession.entity";
+import type { AbsentStudentProjection } from "@/app/class-track/attendance/domain/projections/AbsentStudent.projection";
 
 export class AttendanceSessionRepositoryImpl implements AttendanceSessionRepository {
     constructor(private readonly datasource: AttendanceSessionDatasource) {}
@@ -15,7 +16,7 @@ export class AttendanceSessionRepositoryImpl implements AttendanceSessionReposit
         return this.datasource.endSession(dto);
     }
 
-    public async getStudentsAbsentForMoreThan(days: number): Promise<{ studentId: string; daysAbsent: number }[]> {
+    public async getStudentsAbsentForMoreThan(days: number): Promise<AbsentStudentProjection[]> {
         return this.datasource.getStudentsAbsentForMoreThan(days);
     }
 

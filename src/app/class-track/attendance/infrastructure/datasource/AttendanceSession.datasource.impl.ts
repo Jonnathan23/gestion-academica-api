@@ -6,6 +6,9 @@ import type { StartAttendanceSessionDto } from "@/app/class-track/attendance/dom
 import type { EndAttendanceSessionDto } from "@/app/class-track/attendance/domain/dtos/EndAttendanceSession.dto";
 import type { AttendanceSessionEntity } from "@/app/class-track/attendance/domain/entities/AttendanceSession.entity";
 import { AttendanceSessionMapper } from "@/app/class-track/attendance/infrastructure/mappers/attendanceSession.mapper";
+import type { AbsentStudentProjection } from "@/app/class-track/attendance/domain/projections/AbsentStudent.projection";
+import { AbsentStudentMapper } from "@/app/class-track/attendance/infrastructure/mappers/absentStudent.mapper";
+import { Student } from "@/data/models/AdminDesk";
 import { attendanceSessionStatus } from "@/app/class-track/attendance/domain/interfaces/attendance.interface";
 
 export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasource {
@@ -50,7 +53,7 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
         return this.convertToEntity(session);
     }
 
-    public async getStudentsAbsentForMoreThan(days: number): Promise<{ studentId: string; daysAbsent: number }[]> {
+    public async getStudentsAbsentForMoreThan(days: number): Promise<AbsentStudentProjection[]> {
         const targetDate = new Date();
         targetDate.setDate(targetDate.getDate() - days);
 
@@ -59,23 +62,35 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
                 "at_se_student_id",
                 [AttendanceSession.sequelize!.fn("MAX", AttendanceSession.sequelize!.col("at_se_entry_time")), "lastAttendance"],
             ],
-            group: ["at_se_student_id"],
+            include: [
+                {
+                    model: Student,
+                    as: "student",
+                    attributes: ["st_id", "st_identification_card", "st_full_name", "st_phone_number", "st_email"],
+                },
+            ],
+            group: [
+                "at_se_student_id",
+                "student.st_id",
+                "student.st_identification_card",
+                "student.st_full_name",
+                "student.st_phone_number",
+                "student.st_email",
+            ],
             having: AttendanceSession.sequelize!.where(
                 AttendanceSession.sequelize!.fn("MAX", AttendanceSession.sequelize!.col("at_se_entry_time")),
                 { [Op.lt]: targetDate },
             ),
-            raw: true,
         });
 
         const today = new Date();
-        return (results as any[]).map((row) => {
-            const lastDate = new Date(row.lastAttendance);
+
+        return results.map((row) => {
+            const rowJSON = row.toJSON() as any;
+            const lastDate = new Date(rowJSON.lastAttendance);
             const diffDays = Math.floor((today.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
 
-            return {
-                studentId: row.at_se_student_id,
-                daysAbsent: diffDays,
-            };
+            return AbsentStudentMapper.projectionFromObject(rowJSON, diffDays, lastDate);
         });
     }
 

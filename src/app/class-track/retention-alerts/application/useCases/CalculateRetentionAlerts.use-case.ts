@@ -13,7 +13,7 @@ export class CalculateRetentionAlertsUseCase {
             const absentStudents = await this.attendanceSessionRepository.getStudentsAbsentForMoreThan(3);
 
             for (const student of absentStudents) {
-                await this.retentionAlertRepository.upsertAlert(student.studentId, student.daysAbsent);
+                await this.retentionAlertRepository.upsertAlert(student.student.id, student.daysAbsent);
             }
 
             return absentStudents.length;
