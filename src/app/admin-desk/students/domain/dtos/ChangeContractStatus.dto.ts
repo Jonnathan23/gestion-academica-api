@@ -1,4 +1,4 @@
-import { studentContractStatus, type StudentContractStatus } from "@/app/admin-desk/students/domain/interfaces/Students.interface";
+import { studentContractStatus, type StudentContractStatus } from "@/core/interfaces/Students.interface";
 
 export class ChangeContractStatusDto {
     private constructor(public readonly contractStatus: StudentContractStatus) {}

@@ -1,4 +1,4 @@
-import type { StudentContractStatus, StudentProgressCategory } from "@/app/admin-desk/students/domain/interfaces/Students.interface";
+import type { StudentContractStatus, StudentProgressCategory } from "@/core/interfaces/Students.interface";
 
 export class StudentEntity {
     constructor(

@@ -1,4 +1,4 @@
-import { studentModuleStatus } from "@/app/admin-desk/student-level/domain/interfaces/Contracts.interface";
+import { studentModuleStatus } from "@/core/interfaces/Contracts.interface";
 import { Validators } from "@/core/utils";
 
 export class UpdateStudentLevelDto {

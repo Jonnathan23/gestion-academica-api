@@ -1,4 +1,4 @@
-import type { CertificateType, StudentContractStatus } from "@/app/admin-desk/students/domain/interfaces/Students.interface";
+import type { CertificateType, StudentContractStatus } from "@/core/interfaces/Students.interface";
 import { Validators } from "@/core/utils";
 
 export class UpdateStudentDto {

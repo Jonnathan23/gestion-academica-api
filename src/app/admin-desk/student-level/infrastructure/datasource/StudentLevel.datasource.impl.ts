@@ -14,7 +14,7 @@ import { StudentModule, Module, Student } from "@/data/models/AdminDesk";
 import { User } from "@/data/models/Shared";
 import { CustomError } from "@/core/error";
 import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-level/domain/projections/ContractDetails.projection";
-import { studentModuleStatus } from "@/app/admin-desk/student-level/domain/interfaces/Contracts.interface";
+import { studentModuleStatus } from "@/core/interfaces/Contracts.interface";
 import type { StudentModuleStatus } from "@/data/models/AdminDesk/StudentModule.model";
 
 export class StudentLevelDataSourceImpl implements StudentLevelDataSource {

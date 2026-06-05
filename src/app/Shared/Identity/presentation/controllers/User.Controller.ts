@@ -85,6 +85,13 @@ export class UserController {
             });
     };
 
+    logout = (req: Request, res: Response, next: NextFunction) => {
+        //todo: realizar la lógica de desautenticación del usuario
+        res.clearCookie("auth_token");
+        const succesMessage = "User logged out successfully";
+        SuccessResponse.ok(res, succesMessage);
+    };
+
     changePassword = (req: Request, res: Response, next: NextFunction) => {
         //TODO: refactorizar a un Dto con sus debidas validaciones
         const { id } = req.params;

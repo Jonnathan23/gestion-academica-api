@@ -22,7 +22,7 @@ export const studentProgressCategory = {
 export type StudentProgressCategory = (typeof studentProgressCategory)[keyof typeof studentProgressCategory];
 
 export const certificateType = {
-    OneTonne: "OneTonne",
+    OneTonne: "ONE_TONNE",
     Toefl: "TOEFL",
     Other: "OTHER",
 } as const;

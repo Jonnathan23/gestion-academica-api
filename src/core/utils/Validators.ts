@@ -1,4 +1,4 @@
-import { certificateType, type CertificateType } from "@/app/admin-desk/students/domain/interfaces/Students.interface";
+import { certificateType, type CertificateType } from "@/core/interfaces/Students.interface";
 import { userRoles, type UserRoles } from "@/core/interfaces";
 
 export const Validators = {

@@ -2,6 +2,8 @@ import { userRoles } from "@/core/interfaces";
 
 export const systemPermissions = {
     // Feature: AdminDesk/students
+    ADMINDESK_MAIN_ACCESS: "admindesk:main:access",
+
     ADMINDESK_STUDENTS_READ: "admindesk:students:read",
     ADMINDESK_STUDENTS_WRITE: "admindesk:students:write",
 
@@ -22,19 +24,30 @@ export const systemPermissions = {
     SHARED_IDENTITY_WRITE: "shared:identity:write",
 
     // Feature: ClassTrack (Asistencia, Sesiones)
-    CLASSTRACK_READ: "classtrack:read",
-    CLASSTRACK_WRITE: "classtrack:write",
+    CLASSTRACK_MAIN_ACCESS: "classtrack:main:access",
+
+    CLASSTRACK_ATTENDANCE_READ: "classtrack:attendance:read",
+
+    CLASSTRACK_ATTENDANCE_WRITE: "classtrack:attendance:write",
+
+    CLASSTRACK_SESSIONS_READ: "classtrack:sessions:read",
+    CLASSTRACK_SESSIONS_WRITE: "classtrack:sessions:write",
+
+    CLASSTRACK_OBSERVATIONS_READ: "classtrack:observations:read",
+    CLASSTRACK_OBSERVATIONS_WRITE: "classtrack:observations:write",
+
+    CLASSTRACK_RETENTION_ALERTS_READ: "classtrack:retention_alerts:read",
+    CLASSTRACK_RETENTION_ALERTS_WRITE: "classtrack:retention_alerts:write",
 } as const;
 
 export type SystemPermission = (typeof systemPermissions)[keyof typeof systemPermissions];
 
-// 2. Mapa de asignación: Repartiendo las "pulseras" a cada Rol
 export const rolePermissionsMapping: Record<string, SystemPermission[]> = {
-    // ADMIN: Dios del sistema. Lo puede hacer todo.
     [userRoles.ADMIN]: Object.values(systemPermissions),
 
-    // ADVISOR (Asesor): El motor de ventas y matrículas.
     [userRoles.ADVISOR]: [
+        systemPermissions.ADMINDESK_MAIN_ACCESS,
+
         systemPermissions.ADMINDESK_STUDENTS_READ,
         systemPermissions.ADMINDESK_STUDENTS_WRITE,
 
@@ -44,27 +57,45 @@ export const rolePermissionsMapping: Record<string, SystemPermission[]> = {
         systemPermissions.ADMINDESK_PAYMENTS_READ,
         systemPermissions.ADMINDESK_PAYMENTS_WRITE,
 
-        // El asesor necesita LEER los módulos para armar el paquete de venta, pero NO puede CREAR nuevos módulos en el sistema.
         systemPermissions.ADMINDESK_MODULES_READ,
     ],
 
-    // ACADEMIC_DIRECTOR: El jefe académico.
     [userRoles.ACADEMIC_DIRECTOR]: [
-        // En AdminDesk solo audita (Solo Lectura)
+        systemPermissions.CLASSTRACK_MAIN_ACCESS,
+
         systemPermissions.ADMINDESK_STUDENTS_READ,
+
         systemPermissions.ADMINDESK_CONTRACTS_READ,
+
         systemPermissions.ADMINDESK_MODULES_READ,
+
         systemPermissions.ADMINDESK_PAYMENTS_READ,
-        // En ClassTrack es el jefe absoluto
-        systemPermissions.CLASSTRACK_READ,
-        systemPermissions.CLASSTRACK_WRITE,
+
+        systemPermissions.CLASSTRACK_ATTENDANCE_READ,
+        systemPermissions.CLASSTRACK_ATTENDANCE_WRITE,
+
+        systemPermissions.CLASSTRACK_SESSIONS_READ,
+        systemPermissions.CLASSTRACK_SESSIONS_WRITE,
+
+        systemPermissions.CLASSTRACK_OBSERVATIONS_READ,
+        systemPermissions.CLASSTRACK_OBSERVATIONS_WRITE,
+
+        systemPermissions.CLASSTRACK_RETENTION_ALERTS_READ,
+        systemPermissions.CLASSTRACK_RETENTION_ALERTS_WRITE,
     ],
 
-    // TEACHER: Enfoque 100% en el aula.
     [userRoles.TEACHER]: [
-        systemPermissions.CLASSTRACK_READ,
-        systemPermissions.CLASSTRACK_WRITE,
-        // Le damos lectura a estudiantes por si necesita ver el perfil o nivel de su alumno
+        systemPermissions.CLASSTRACK_MAIN_ACCESS,
         systemPermissions.ADMINDESK_STUDENTS_READ,
+
+        systemPermissions.CLASSTRACK_ATTENDANCE_READ,
+        systemPermissions.CLASSTRACK_ATTENDANCE_WRITE,
+
+        systemPermissions.CLASSTRACK_SESSIONS_READ,
+        systemPermissions.CLASSTRACK_SESSIONS_WRITE,
+
+        systemPermissions.CLASSTRACK_OBSERVATIONS_READ,
+
+        systemPermissions.CLASSTRACK_RETENTION_ALERTS_READ,
     ],
 };

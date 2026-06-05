@@ -61,7 +61,8 @@
                 "*.entity.ts",
                 "*.entities.ts",
                 "*.error.ts",
-                "*.integration.test.ts"
+                "*.integration.test.ts",
+                "Permissions.ts"
             ],
             "rules": {
                 "@typescript-eslint/naming-convention": [

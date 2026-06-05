@@ -1,4 +1,4 @@
-import type { StudentModuleStatus } from "@/app/admin-desk/student-level/domain/interfaces/Contracts.interface";
+import type { StudentModuleStatus } from "@/core/interfaces/Contracts.interface";
 
 export class StudentLevelEntity {
     constructor(
