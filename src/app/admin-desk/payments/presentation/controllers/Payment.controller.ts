@@ -1,10 +1,10 @@
 import type { NextFunction, Request, Response } from "express";
 
 import type { PaymentRepository } from "@/app/admin-desk/payments/domain/repositories/Payment.repository";
-import { CreatePaymentPlanUseCase } from "@/app/admin-desk/payments/application/use-cases/CreatePayment.use-case";
-import { GetStudentPaymentPlansUseCase } from "@/app/admin-desk/payments/application/use-cases/GetStudentPaymentPlans.use-case";
-import { ProcessQuotaPaymentUseCase } from "@/app/admin-desk/payments/application/use-cases/ProcessQuotaPayment.use-case";
-import { RevertQuotaPaymentUseCase } from "@/app/admin-desk/payments/application/use-cases/RevertQuotaPayment.use-case";
+import { CreatePaymentPlanUseCase } from "@/app/admin-desk/payments/application/use-cases/createPayment.use-case";
+import { GetStudentPaymentPlansUseCase } from "@/app/admin-desk/payments/application/use-cases/getStudentPaymentPlans.use-case";
+import { ProcessQuotaPaymentUseCase } from "@/app/admin-desk/payments/application/use-cases/processQuotaPayment.use-case";
+import { RevertQuotaPaymentUseCase } from "@/app/admin-desk/payments/application/use-cases/revertQuotaPayment.use-case";
 import { CreatePaymentPlanDto } from "@/app/admin-desk/payments/domain/dtos";
 import { PayQuotaDto } from "@/app/admin-desk/payments/domain/dtos";
 import { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/PaymentPlanEntity";

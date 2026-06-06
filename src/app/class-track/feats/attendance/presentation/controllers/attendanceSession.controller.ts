@@ -1,8 +1,8 @@
 import type { Request, Response, NextFunction } from "express";
 import type { AttendanceSessionRepository } from "@/app/class-track/feats/attendance/domain/repositories/AttendanceSession.repository";
 import type { StudentProjectionRepository } from "@/app/class-track/feats/attendance/domain/repositories/StudentProjection.repository";
-import { StartAttendanceSessionUseCase } from "@/app/class-track/feats/attendance/application/use-cases/StartAttendanceSession.use-case";
-import { EndAttendanceSessionUseCase } from "@/app/class-track/feats/attendance/application/use-cases/EndAttendanceSession.use-case";
+import { StartAttendanceSessionUseCase } from "@/app/class-track/feats/attendance/application/use-cases/startAttendanceSession.use-case";
+import { EndAttendanceSessionUseCase } from "@/app/class-track/feats/attendance/application/use-cases/endAttendanceSession.use-case";
 import { StartAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/StartAttendanceSession.dto";
 import { EndAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/EndAttendanceSession.dto";
 import { CustomError } from "@/core/error/customError.error";

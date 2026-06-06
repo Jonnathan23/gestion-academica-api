@@ -3,7 +3,7 @@ import { AttendanceSessionDatasourceImpl } from "@/app/class-track/feats/attenda
 import { AttendanceSessionRepositoryImpl } from "@/app/class-track/feats/attendance/infrastructure/repositories/AttendanceSession.repository.impl";
 import { StudentProjectionDatasourceImpl } from "@/app/class-track/feats/attendance/infrastructure/datasource/StudentProjection.datasource.impl";
 import { StudentProjectionRepositoryImpl } from "@/app/class-track/feats/attendance/infrastructure/repositories/StudentProjection.repository.impl";
-import { AttendanceSessionController } from "@/app/class-track/feats/attendance/presentation/controllers/attendanceSession.controller";
+import { AttendanceSessionController } from "@/app/class-track/feats/attendance/presentation/controllers/AttendanceSession.controller";
 import { RoleMiddleware } from "@/core/middleware";
 import { systemPermissions } from "@/core/constants";
 

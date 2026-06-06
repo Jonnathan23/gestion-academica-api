@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import type { LessonLogRepository } from "@/app/class-track/feats/attendance/domain/repositories/LessonLog.repository";
-import { RegisterLessonLogUseCase } from "@/app/class-track/feats/attendance/application/use-cases/RegisterLessonLog.use-case";
+import { RegisterLessonLogUseCase } from "@/app/class-track/feats/attendance/application/use-cases/registerLessonLog.use-case";
 import { RegisterLessonLogDto } from "@/app/class-track/feats/attendance/domain/dtos/RegisterLessonLog.dto";
 import { CustomError } from "@/core/error/customError.error";
 import { SuccessResponse } from "@/core/utils/SuccesResponse";

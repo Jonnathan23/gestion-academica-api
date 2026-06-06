@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import type { AcademicObservationRepository } from "@/app/class-track/feats/observation/domain/repositories/AcademicObservation.repository";
-import { CreateAcademicObservationUseCase } from "@/app/class-track/feats/observation/application/use-cases/CreateAcademicObservation.use-case";
+import { CreateAcademicObservationUseCase } from "@/app/class-track/feats/observation/application/use-cases/createAcademicObservation.use-case";
 import { CreateAcademicObservationDto } from "@/app/class-track/feats/observation/domain/dtos/CreateAcademicObservation.dto";
 import { CustomError } from "@/core/error/customError.error";
 import { SuccessResponse } from "@/core/utils/SuccesResponse";

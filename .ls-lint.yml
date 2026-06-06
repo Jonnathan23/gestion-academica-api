@@ -1,29 +1,40 @@
 ls:
+    # Reglas base para toda la carpeta src (Recomendado)
     src/**:
         .dir: kebab-case
         .ts: camelCase | PascalCase
-    src/**/domain:
+
+    # Aplica a: src/app/admin-desk/contracts/domain, src/app/shared/identity/domain, etc.
+    src/**/domain/**:
         .dto.ts: PascalCase
         .model.ts: PascalCase
         .projection.ts: PascalCase
         .interface.ts: PascalCase
         .datasource.ts: camelCase
         .repository.ts: camelCase
-    src/**/infrastructure:
+
+    # Aplica a: src/app/class-track/attendance/infrastructure, etc.
+    src/**/infrastructure/**:
         .interface.ts: PascalCase
         .datasource.impl.ts: camelCase
         .mapper.ts: camelCase
-    src/**/application:
+
+    # Aplica a: src/app/admin-desk/payments/application, etc.
+    src/**/application/**:
         .use-case.ts: camelCase
-    src/**/presentation:
+
+    # Aplica a: src/app/class-track/lessons/presentation, etc.
+    src/**/presentation/**:
         .controller.ts: PascalCase
         .worker.ts: PascalCase
         .routes.ts: camelCase
-    src/data/config:
-        .ts: camelCase | PascalCase
-    src/data/models:
-        .model.ts: PascalCase
 
+    # Reglas específicas para tu carpeta data/ en la raíz
+    src/data/config/**:
+        .ts: camelCase | PascalCase
+
+    src/data/models/**:
+        .model.ts: PascalCase
 ignore:
     - node_modules
     - .git
