@@ -1,14 +1,24 @@
 ls:
-  src/**:
-    .dir: kebab-case
-    .ts: camelCase|PascalCase
-  src/app/**/domain/dtos:
-    .ts: PascalCase
+    src/**:
+        .dir: kebab-case
+        .ts: camelCase|PascalCase
+    src/**/domain:
+        .dto.ts: PascalCase
+        .model.ts: PascalCase
+        .projection.ts: PascalCase
+        .interface.ts: PascalCase
+        .datasource.ts: camelCase
+        .repository.ts: camelCase
+    src/**/infrastructure:
+        .interface.ts: PascalCase
+        .datasource.impl.ts: camelCase
+        .mapper.ts: camelCase
+
 ignore:
-  - node_modules
-  - .git
-  - dist
-  - docs
-  - .vscode
-  - scripts
-  - .agents
+    - node_modules
+    - .git
+    - dist
+    - docs
+    - .vscode
+    - scripts
+    - .agents
