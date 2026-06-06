@@ -1,0 +1,14 @@
+ls:
+  src/**:
+    .dir: kebab-case
+    .ts: camelCase|PascalCase
+  src/app/**/domain/dtos:
+    .ts: PascalCase
+ignore:
+  - node_modules
+  - .git
+  - dist
+  - docs
+  - .vscode
+  - scripts
+  - .agents
