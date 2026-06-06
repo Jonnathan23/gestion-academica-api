@@ -13,7 +13,7 @@ import {
 import { CustomError } from "@/core/error";
 import { SuccessResponse } from "@/core/utils";
 import type { StudentEntity } from "@/app/admin-desk/students/domain/entities/Student.entity";
-import { GetAllStudents } from "@/app/admin-desk/students/application/useCases/getAllStudents.use-case";
+import { GetAllStudents } from "@/app/admin-desk/students/application/use-cases/getAllStudents.use-case";
 
 export class StudentController {
     constructor(private readonly studentRepository: StudentRepository) {}

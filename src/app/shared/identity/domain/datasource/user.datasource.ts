@@ -1,5 +1,5 @@
-import type { LoginUserDto, RegisterUserDto, UpdateUserDto } from "@/app/shared/Identity/domain/dtos";
-import type { UserDataEntity, UserEntity } from "@/app/shared/Identity/domain/entities";
+import type { LoginUserDto, RegisterUserDto, UpdateUserDto } from "@/app/shared/identity/domain/dtos";
+import type { UserDataEntity, UserEntity } from "@/app/shared/identity/domain/entities";
 
 export abstract class UserDataSource {
     abstract create(user: RegisterUserDto): Promise<UserEntity>;

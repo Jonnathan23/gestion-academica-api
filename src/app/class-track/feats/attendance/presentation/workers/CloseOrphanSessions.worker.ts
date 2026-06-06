@@ -2,7 +2,7 @@ import cron from "node-cron";
 import { ColorsAdapter } from "@/core/utils";
 import { AttendanceSessionDatasourceImpl } from "@/app/class-track/feats/attendance/infrastructure/datasource/AttendanceSession.datasource.impl";
 import { AttendanceSessionRepositoryImpl } from "@/app/class-track/feats/attendance/infrastructure/repositories/AttendanceSession.repository.impl";
-import { CloseOrphanSessionsUseCase } from "@/app/class-track/feats/attendance/application/useCases/CloseOrphanSessions.use-case";
+import { CloseOrphanSessionsUseCase } from "@/app/class-track/feats/attendance/application/use-cases/CloseOrphanSessions.use-case";
 
 export class CloseOrphanSessionsWorker {
     public static start(): void {

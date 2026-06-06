@@ -4,7 +4,7 @@ import type { StudentDataSource } from "@/app/admin-desk/students/domain/datasou
 import type { RegisterStudentDto, UpdateStudentDto, ChangeContractStatusDto, StudentEntity } from "@/app/admin-desk/students/domain";
 import { studentContractStatus, studentProgressCategory } from "@/core/interfaces/Students.interface";
 import { StudentMapper } from "@/app/admin-desk/students/infrastructure/mappers/student.mapper";
-import { Student } from "@/data/models/AdminDesk";
+import { Student } from "@/data/models/admin-desk";
 import { CustomError } from "@/core/error";
 import { Validators } from "@/core/utils";
 

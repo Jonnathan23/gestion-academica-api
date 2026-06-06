@@ -1,5 +1,5 @@
-import Student from "@/data/models/AdminDesk/Student.model";
-import StudentModule from "@/data/models/AdminDesk/StudentModule.model";
+import Student from "@/data/models/admin-desk/Student.model";
+import StudentModule from "@/data/models/admin-desk/StudentModule.model";
 import { CustomError } from "@/core/error/customError.error";
 
 import { Op } from "sequelize";

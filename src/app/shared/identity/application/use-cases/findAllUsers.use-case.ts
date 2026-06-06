@@ -1,5 +1,5 @@
-import type { UserDataEntity, UserEntity } from "@/app/shared/Identity/domain/entities";
-import type { UserRepository } from "@/app/shared/Identity/domain/repositories/user.repository";
+import type { UserDataEntity, UserEntity } from "@/app/shared/identity/domain/entities";
+import type { UserRepository } from "@/app/shared/identity/domain/repositories/user.repository";
 
 interface FindAllUsersUseCase {
     execute(): Promise<UserDataEntity[]>;

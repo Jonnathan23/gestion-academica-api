@@ -1,6 +1,6 @@
 import type { Optional } from "sequelize";
 import { Column, Table, DataType, Model, ForeignKey, BelongsTo } from "sequelize-typescript";
-import AttendanceSession from "@/data/models/ClassTrack/AttendanceSession.model";
+import AttendanceSession from "@/data/models/class-track/AttendanceSession.model";
 
 interface LessonLogAttributes {
     le_lo_id: string;

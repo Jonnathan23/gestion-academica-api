@@ -1,5 +1,5 @@
 import type { UserSegurityDataSource } from "@/app/shared/identity/domain/datasource/userSegurity.datasource";
-import { User } from "@/data/models/Shared";
+import { User } from "@/data/models/shared";
 
 export class UserSegurityDataSourceImpl implements UserSegurityDataSource {
     async checkUserActiveStatus(id: string): Promise<boolean> {

@@ -1,5 +1,5 @@
 import { Column, Table, DataType, Model, HasMany } from "sequelize-typescript";
-import StudentModule from "@/data/models/AdminDesk/StudentModule.model";
+import StudentModule from "@/data/models/admin-desk/StudentModule.model";
 import type { Optional } from "sequelize";
 
 interface ModuleAttributes {

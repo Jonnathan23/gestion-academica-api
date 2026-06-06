@@ -1,5 +1,5 @@
 import { StudentMapper } from "@/app/admin-desk/students/infrastructure/mappers/student.mapper";
-import { pickFields } from "@/core/utils/object-tools";
+import { pickFields } from "@/core/utils/objectTools";
 import { CustomError } from "@/core/error/customError.error";
 import {
     AbsentStudentProjection,

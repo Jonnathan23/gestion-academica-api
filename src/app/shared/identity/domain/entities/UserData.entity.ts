@@ -1,5 +1,5 @@
 import type { UserRoles } from "@/core/interfaces";
-import type { UserState } from "@/app/shared/Identity/domain/interfaces/user.interfaces";
+import type { UserState } from "@/app/shared/identity/domain/interfaces/user.interfaces";
 
 export class UserDataEntity {
     constructor(

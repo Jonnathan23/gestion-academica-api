@@ -1,4 +1,4 @@
-import type { RetentionAlertStatus } from "@/data/models/ClassTrack/RetentionAlert.model";
+import type { RetentionAlertStatus } from "@/data/models/class-track/RetentionAlert.model";
 
 export class RetentionAlertEntity {
     constructor(

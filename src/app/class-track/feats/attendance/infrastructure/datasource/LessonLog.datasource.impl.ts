@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import LessonLog from "@/data/models/ClassTrack/LessonLog.model";
+import LessonLog from "@/data/models/class-track/LessonLog.model";
 import type { LessonLogDatasource } from "@/app/class-track/feats/attendance/domain/datasource/LessonLog.datasource";
 import type { RegisterLessonLogDto } from "@/app/class-track/feats/attendance/domain/dtos/RegisterLessonLog.dto";
 import type { LessonLogEntity } from "@/app/class-track/feats/attendance/domain/entities/LessonLog.entity";

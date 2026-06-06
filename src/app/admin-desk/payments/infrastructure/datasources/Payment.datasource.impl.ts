@@ -7,8 +7,8 @@ import type { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entiti
 import { paymentPlanStatus, paymentQuotaStatus, type PaymentQuotaStatus } from "@/app/admin-desk/payments/domain/interfaces";
 import { PaymentMapper } from "@/app/admin-desk/payments/infrastructure/mappers/payment.mapper";
 import { CustomError } from "@/core/error";
-import PaymentPlanModel from "@/data/models/AdminDesk/PaymentPlan.model";
-import PaymentQuotaModel from "@/data/models/AdminDesk/PaymentQuota.model";
+import PaymentPlanModel from "@/data/models/admin-desk/PaymentPlan.model";
+import PaymentQuotaModel from "@/data/models/admin-desk/PaymentQuota.model";
 
 export class PaymentDataSourceImpl implements PaymentDataSource {
     constructor() {}

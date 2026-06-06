@@ -1,7 +1,7 @@
 import { Column, Table, DataType, Model, HasMany } from "sequelize-typescript";
-import StudentModule from "@/data/models/AdminDesk/StudentModule.model";
-import AttendanceSession from "@/data/models/ClassTrack/AttendanceSession.model";
-import RetentionAlert from "@/data/models/ClassTrack/RetentionAlert.model";
+import StudentModule from "@/data/models/admin-desk/StudentModule.model";
+import AttendanceSession from "@/data/models/class-track/AttendanceSession.model";
+import RetentionAlert from "@/data/models/class-track/RetentionAlert.model";
 import type { Optional } from "sequelize";
 
 export const userRoles = {

@@ -1,8 +1,8 @@
 import type { Optional } from "sequelize";
 import { Column, Table, DataType, Model, ForeignKey, BelongsTo, HasOne } from "sequelize-typescript";
-import Student from "@/data/models/AdminDesk/Student.model";
-import User from "@/data/models/Shared/User.model";
-import LessonLog from "@/data/models/ClassTrack/LessonLog.model";
+import Student from "@/data/models/admin-desk/Student.model";
+import User from "@/data/models/shared/User.model";
+import LessonLog from "@/data/models/class-track/LessonLog.model";
 
 const attendanceSessionStatus = {
     InProgress: "IN_PROGRESS",

@@ -3,7 +3,7 @@ import type { CreateModuleDto, UpdateModuleDto } from "@/app/admin-desk/modules/
 import type { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
 import { ModuleMapper } from "@/app/admin-desk/modules/infrastructure/mappers/module.mapper";
 import { CustomError } from "@/core/error";
-import { Module } from "@/data/models/AdminDesk";
+import { Module } from "@/data/models/admin-desk";
 
 type ModuleEntityFromObject = typeof ModuleMapper.moduleModelToEntity;
 

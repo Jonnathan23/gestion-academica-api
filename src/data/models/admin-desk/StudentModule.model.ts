@@ -1,7 +1,7 @@
 import { Column, Table, DataType, Model, ForeignKey, BelongsTo } from "sequelize-typescript";
-import Student from "@/data/models/AdminDesk/Student.model";
-import Module from "@/data/models/AdminDesk/Module.model";
-import User from "@/data/models/Shared/User.model";
+import Student from "@/data/models/admin-desk/Student.model";
+import Module from "@/data/models/admin-desk/Module.model";
+import User from "@/data/models/shared/User.model";
 
 const studentModuleStatus = {
     Active: "ACTIVE",

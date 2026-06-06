@@ -5,7 +5,7 @@ import { UserMapper } from "@/app/shared/identity/infrastructure/mappers/user.ma
 import { UserDataMapper } from "@/app/shared/identity/infrastructure/mappers/userData.mapper";
 import { CustomError } from "@/core/error";
 import { BcryptAdapter } from "@/core/utils";
-import { User } from "@/data/models/Shared";
+import { User } from "@/data/models/shared";
 
 type HashFunction = typeof BcryptAdapter.hash;
 type CompareFunction = typeof BcryptAdapter.compare;

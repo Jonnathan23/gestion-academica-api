@@ -1,16 +1,21 @@
 import type { Request, Response, NextFunction } from "express";
 
-//import { LoginUserDto, RegisterUserDto, UpdateUserDto } from "@/app/shared/Identity/domain/dtos";
+//import { LoginUserDto, RegisterUserDto, UpdateUserDto } from "@/app/shared/identity/domain/dtos";
 import { RegisterUserDto } from "@/app/shared/identity/domain/dtos/RegisterUser.dto";
 import { SuccessResponse } from "@/core/utils";
 import { CustomError } from "@/core/error";
 
 import type { UserRepository } from "@/app/shared/identity/domain/repositories/user.repository";
-import { RegisterUser } from "@/app/shared/identity/application/useCases/registerUser.use-case";
-import { UpdateUser } from "@/app/shared/identity/application/useCases/updateUser.use-case";
+import { RegisterUser } from "@/app/shared/identity/application/use-cases/registerUser.use-case";
+import { UpdateUser } from "@/app/shared/identity/application/use-cases/updateUser.use-case";
 import { UpdateUserDto } from "@/app/shared/identity/domain/dtos/UpdateUser.dto";
 import { LoginUserDto } from "@/app/shared/identity/domain/dtos";
-import { LoginUser } from "@/app/shared/identity/application/useCases/loginUser.use-case";
+import { LoginUser } from "@/app/shared/identity/application/use-cases/loginUser.use-case";
+import { ChangePassword } from "@/app/shared/identity/application/use-cases/changePassword.use-case";
+import { ChangeStateActive } from "@/app/shared/identity/application/use-cases/changeStateActive.use-case";
+import { FindAllUsers } from "@/app/shared/identity/application/use-cases/findAllUsers.use-case";
+import { FindUserById } from "@/app/shared/identity/application/use-cases/findUserById.use-case";
+import type { UserDataEntity } from "@/app/shared/identity/domain/entities";
 
 export class UserController {
     constructor(

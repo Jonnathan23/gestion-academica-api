@@ -1,9 +1,9 @@
 import { Table, Column, Model, DataType, ForeignKey, BelongsTo, HasMany } from "sequelize-typescript";
 import type { Optional } from "sequelize";
 
-import Student from "@/data/models/AdminDesk/Student.model";
-import { User } from "@/data/models/Shared";
-import PaymentQuota from "@/data/models/AdminDesk/PaymentQuota.model";
+import Student from "@/data/models/admin-desk/Student.model";
+import { User } from "@/data/models/shared";
+import PaymentQuota from "@/data/models/admin-desk/PaymentQuota.model";
 
 export const paymentPlanStatus = {
     Pending: "PENDING",

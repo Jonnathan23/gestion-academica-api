@@ -1,4 +1,4 @@
-import type { UserRepository } from "@/app/shared/Identity/domain/repositories/user.repository";
+import type { UserRepository } from "@/app/shared/identity/domain/repositories/user.repository";
 
 interface ChangeStateActiveUseCase {
     execute(id: string): Promise<void>;

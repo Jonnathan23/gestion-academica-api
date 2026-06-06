@@ -1,4 +1,4 @@
-import Student from "@/data/models/AdminDesk/Student.model";
+import Student from "@/data/models/admin-desk/Student.model";
 import { CustomError } from "@/core/error/customError.error";
 import type { ActiveStudentProjection } from "@/app/class-track/core/interfaces/StudentProjection.interface";
 

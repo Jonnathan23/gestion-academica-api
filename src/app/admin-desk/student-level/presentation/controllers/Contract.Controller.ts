@@ -5,7 +5,7 @@ import {
     GetStudentContracts,
     PurchaseModules,
     UnlockLevel,
-} from "@/app/admin-desk/student-level/application/useCases";
+} from "@/app/admin-desk/student-level/application/use-cases";
 import { DeleteStudentLevelDto, PurchaseModulesDto, UpdateStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos";
 import type { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/StudentLevel.entity";
 import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-level/domain/projections/ContractDetails.projection";

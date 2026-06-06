@@ -1,7 +1,7 @@
 ls:
     src/**:
         .dir: kebab-case
-        .ts: camelCase|PascalCase
+        .ts: camelCase | PascalCase
     src/**/domain:
         .dto.ts: PascalCase
         .model.ts: PascalCase
@@ -13,6 +13,16 @@ ls:
         .interface.ts: PascalCase
         .datasource.impl.ts: camelCase
         .mapper.ts: camelCase
+    src/**/application:
+        .use-case.ts: camelCase
+    src/**/presentation:
+        .controller.ts: PascalCase
+        .worker.ts: PascalCase
+        .routes.ts: camelCase
+    src/data/config:
+        .ts: camelCase | PascalCase
+    src/data/models:
+        .model.ts: PascalCase
 
 ignore:
     - node_modules
@@ -22,3 +32,5 @@ ignore:
     - .vscode
     - scripts
     - .agents
+    - src/**/__tests__
+    - src/**/__test__

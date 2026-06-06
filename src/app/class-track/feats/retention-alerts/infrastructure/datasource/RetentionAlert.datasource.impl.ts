@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import RetentionAlert from "@/data/models/ClassTrack/RetentionAlert.model";
+import RetentionAlert from "@/data/models/class-track/RetentionAlert.model";
 import type { RetentionAlertDatasource } from "@/app/class-track/feats/retention-alerts/domain/datasource/RetentionAlert.datasource";
 import { retentionAlertStatus } from "@/app/class-track/feats/retention-alerts/domain/interfaces/retention-alert.interface";
 

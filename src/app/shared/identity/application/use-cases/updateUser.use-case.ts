@@ -1,5 +1,5 @@
-import type { UpdateUserDto } from "@/app/shared/Identity/domain/dtos";
-import type { UserRepository } from "@/app/shared/Identity/domain/repositories/user.repository";
+import type { UpdateUserDto } from "@/app/shared/identity/domain/dtos";
+import type { UserRepository } from "@/app/shared/identity/domain/repositories/user.repository";
 
 interface UpdateUserUseCase {
     execute(id: string, userDto: UpdateUserDto): Promise<void>;

@@ -1,4 +1,4 @@
-import PaymentPlan from "@/data/models/AdminDesk/PaymentPlan.model";
+import PaymentPlan from "@/data/models/admin-desk/PaymentPlan.model";
 import type { Optional } from "sequelize";
 
 import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from "sequelize-typescript";

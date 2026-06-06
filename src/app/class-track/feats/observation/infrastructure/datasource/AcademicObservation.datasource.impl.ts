@@ -1,4 +1,4 @@
-import AcademicObservation from "@/data/models/ClassTrack/AcademicObservationAttributes.model";
+import AcademicObservation from "@/data/models/class-track/AcademicObservationAttributes.model";
 import type { AcademicObservationDatasource } from "@/app/class-track/feats/observation/domain/datasource/AcademicObservation.datasource";
 import type { CreateAcademicObservationDto } from "@/app/class-track/feats/observation/domain/dtos/CreateAcademicObservation.dto";
 import type { AcademicObservationEntity } from "@/app/class-track/feats/observation/domain/entities/AcademicObservation.entity";

@@ -1,5 +1,5 @@
 import type { StudentModuleStatus } from "@/core/interfaces/Contracts.interface";
-import type { Module, StudentModule } from "@/data/models/AdminDesk";
+import type { Module, StudentModule } from "@/data/models/admin-desk";
 
 import type { Transaction } from "sequelize";
 

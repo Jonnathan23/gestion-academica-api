@@ -5,10 +5,10 @@ import cookieParser from "cookie-parser";
 
 import { ContractsRouter } from "@/app/admin-desk/student-level/presentation/router";
 import { environmentVariables } from "@/core/config";
-import { DatabaseConnection } from "@/data/config/db-postgresql";
+import { DatabaseConnection } from "@/data/config/dbPostgresql";
 import { testGlobalErrorHandler } from "@/__test__/configTest";
-import { User } from "@/data/models/Shared";
-import { Student, Module, StudentModule } from "@/data/models/AdminDesk";
+import { User } from "@/data/models/shared";
+import { Student, Module, StudentModule } from "@/data/models/admin-desk";
 import { JwtAdapter, BcryptAdapter } from "@/core/utils";
 import { userRoles } from "@/core/interfaces/Roles.interfaces";
 import { AuthMiddleware } from "@/core/middleware/auth.mid";

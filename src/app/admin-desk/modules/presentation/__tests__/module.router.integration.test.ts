@@ -5,9 +5,9 @@ import cookieParser from "cookie-parser";
 
 import { ModulesRouter } from "@/app/admin-desk/modules/presentation/router";
 import { environmentVariables } from "@/core/config";
-import { DatabaseConnection } from "@/data/config/db-postgresql";
+import { DatabaseConnection } from "@/data/config/dbPostgresql";
 import { testGlobalErrorHandler } from "@/__test__/configTest";
-import { User } from "@/data/models/Shared";
+import { User } from "@/data/models/shared";
 import { JwtAdapter, BcryptAdapter } from "@/core/utils";
 import { AuthMiddleware } from "@/core/middleware/auth.mid";
 

@@ -1,11 +1,11 @@
 import { Sequelize } from "sequelize-typescript";
 
 import { ColorsAdapter } from "@/core/utils";
-import { User } from "@/data/models/Shared";
-import { Student, Module, StudentModule } from "@/data/models/AdminDesk";
-import { AttendanceSession, LessonLog, RetentionAlert } from "@/data/models/ClassTrack";
-import PaymentQuota from "@/data/models/AdminDesk/PaymentQuota.model";
-import PaymentPlan from "@/data/models/AdminDesk/PaymentPlan.model";
+import { User } from "@/data/models/shared";
+import { Student, Module, StudentModule } from "@/data/models/admin-desk";
+import { AttendanceSession, LessonLog, RetentionAlert } from "@/data/models/class-track";
+import PaymentQuota from "@/data/models/admin-desk/PaymentQuota.model";
+import PaymentPlan from "@/data/models/admin-desk/PaymentPlan.model";
 import { CustomPostgresDatabaseConnectionError } from "../errors/CustomPostgresDatabaseError.error";
 
 interface DatabaseConnectionOptions {

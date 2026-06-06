@@ -4,13 +4,13 @@ import express from "express";
 
 import { PaymentRouter } from "@/app/admin-desk/payments/presentation/router";
 import { environmentVariables } from "@/core/config/envs";
-import { DatabaseConnection } from "@/data/config/db-postgresql";
+import { DatabaseConnection } from "@/data/config/dbPostgresql";
 import { testGlobalErrorHandler } from "@/__test__/configTest";
-import { User } from "@/data/models/Shared";
-import { Student } from "@/data/models/AdminDesk";
+import { User } from "@/data/models/shared";
+import { Student } from "@/data/models/admin-desk";
 import { JwtAdapter, BcryptAdapter } from "@/core/utils";
 import { userRoles } from "@/core/interfaces";
-import PaymentQuota from "@/data/models/AdminDesk/PaymentQuota.model";
+import PaymentQuota from "@/data/models/admin-desk/PaymentQuota.model";
 
 // ------------------------------------------------------------------ //
 // Micro-application: only the Payments router

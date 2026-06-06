@@ -1,8 +1,8 @@
 import { Router } from "express";
 
-import { UserDataSourceImpl } from "@/app/shared/Identity/infrastructure/datasources/user.datasource.impl";
-import { UserRepositoryImpl } from "@/app/shared/Identity/infrastructure/repositories/user.repository.impl";
-import { UserController } from "@/app/shared/Identity/presentation/controllers/User.Controller";
+import { UserDataSourceImpl } from "@/app/shared/identity/infrastructure/datasources/user.datasource.impl";
+import { UserRepositoryImpl } from "@/app/shared/identity/infrastructure/repositories/user.repository.impl";
+import { UserController } from "@/app/shared/identity/presentation/controllers/User.Controller";
 import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
 import { systemPermissions } from "@/core/constants";
 import { environmentVariables } from "@/core/config";

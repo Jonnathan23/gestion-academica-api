@@ -10,12 +10,12 @@ import type { PurchaseModulesDto, UpdateStudentLevelDto } from "@/app/admin-desk
 import { StudentLevelMapper } from "@/app/admin-desk/student-level/infrastructure/mappers/contract.mapper";
 import type { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/StudentLevel.entity";
 
-import { StudentModule, Module, Student } from "@/data/models/AdminDesk";
-import { User } from "@/data/models/Shared";
+import { StudentModule, Module, Student } from "@/data/models/admin-desk";
+import { User } from "@/data/models/shared";
 import { CustomError } from "@/core/error";
 import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-level/domain/projections/ContractDetails.projection";
 import { studentModuleStatus } from "@/core/interfaces/Contracts.interface";
-import type { StudentModuleStatus } from "@/data/models/AdminDesk/StudentModule.model";
+import type { StudentModuleStatus } from "@/data/models/admin-desk/StudentModule.model";
 
 export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
     //* Public methods

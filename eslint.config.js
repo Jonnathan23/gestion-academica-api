@@ -8,6 +8,9 @@ import globals from "globals";
 const eslintConfiguration = [
     eslintJs.configs.recommended,
     eslintPluginPrettierRecommended,
+    {
+        ignores: ["eslint.config.js", "prettier.config.mjs", "lint-staged.config.js", "dist/**", "node_modules/**"],
+    },
 
     {
         languageOptions: {

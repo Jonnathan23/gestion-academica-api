@@ -1,7 +1,7 @@
-import type { UserDataSource } from "@/app/shared/Identity/domain/datasource/user.datasource";
-import type { RegisterUserDto, LoginUserDto, UpdateUserDto } from "@/app/shared/Identity/domain/dtos";
-import type { UserDataEntity, UserEntity } from "@/app/shared/Identity/domain/entities";
-import type { UserRepository } from "@/app/shared/Identity/domain/repositories/user.repository";
+import type { UserDataSource } from "@/app/shared/identity/domain/datasource/user.datasource";
+import type { RegisterUserDto, LoginUserDto, UpdateUserDto } from "@/app/shared/identity/domain/dtos";
+import type { UserDataEntity, UserEntity } from "@/app/shared/identity/domain/entities";
+import type { UserRepository } from "@/app/shared/identity/domain/repositories/user.repository";
 
 export class UserRepositoryImpl implements UserRepository {
     constructor(private readonly userDataSource: UserDataSource) {}

@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import AttendanceSession from "@/data/models/ClassTrack/AttendanceSession.model";
+import AttendanceSession, { type AttendanceSessionStatus } from "@/data/models/class-track/AttendanceSession.model";
 import { CustomError } from "@/core/error/customError.error";
 import { AttendanceSessionDatasource } from "@/app/class-track/feats/attendance/domain/datasource/AttendanceSession.datasource";
 import type { StartAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/StartAttendanceSession.dto";
@@ -11,11 +11,10 @@ import { StudentInClassProjection } from "@/app/class-track/feats/dashboard/doma
 import { StudentInClassMapper } from "@/app/class-track/feats/attendance/infrastructure/mappers/studentInClass.mapper";
 import {
     attendanceSessionStatus,
-    type AttendanceSessionStatus,
 } from "@/app/class-track/feats/attendance/domain/interfaces/attendance.interface";
-import Student, { studentContractStatus } from "@/data/models/AdminDesk/Student.model";
+import Student, { studentContractStatus } from "@/data/models/admin-desk/Student.model";
 import { AttendanceSessionMapper } from "@/app/class-track/feats/attendance/infrastructure/mappers/attendanceSession.mapper";
-import StudentModule from "@/data/models/AdminDesk/StudentModule.model";
+import StudentModule from "@/data/models/admin-desk/StudentModule.model";
 
 interface AbsentStudentQueryRow {
     at_se_student_id: string;
