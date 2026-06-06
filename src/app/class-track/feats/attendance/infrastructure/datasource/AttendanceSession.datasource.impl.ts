@@ -5,13 +5,17 @@ import { AttendanceSessionDatasource } from "@/app/class-track/feats/attendance/
 import type { StartAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/StartAttendanceSession.dto";
 import type { EndAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/EndAttendanceSession.dto";
 import type { AttendanceSessionEntity } from "@/app/class-track/feats/attendance/domain/entities/AttendanceSession.entity";
-import { AttendanceSessionMapper } from "@/app/class-track/feats/attendance/infrastructure/mappers/attendanceSession.mapper";
 import type { AbsentStudentProjection } from "@/app/class-track/feats/attendance/domain/projections/AbsentStudent.projection";
 import { AbsentStudentMapper } from "@/app/class-track/feats/attendance/infrastructure/mappers/absentStudent.mapper";
 import { StudentInClassProjection } from "@/app/class-track/feats/dashboard/domain/projections/StudentInClass.projection";
-import type { GetActiveSessionsDto } from "@/app/class-track/feats/attendance/domain/dtos/GetActiveSessions.dto";
-import { Student } from "@/data/models/AdminDesk";
-import { attendanceSessionStatus } from "@/app/class-track/feats/attendance/domain/interfaces/attendance.interface";
+import { StudentInClassMapper } from "@/app/class-track/feats/attendance/infrastructure/mappers/studentInClass.mapper";
+import {
+    attendanceSessionStatus,
+    type AttendanceSessionStatus,
+} from "@/app/class-track/feats/attendance/domain/interfaces/attendance.interface";
+import Student, { studentContractStatus } from "@/data/models/AdminDesk/Student.model";
+import { AttendanceSessionMapper } from "@/app/class-track/feats/attendance/infrastructure/mappers/attendanceSession.mapper";
+import StudentModule from "@/data/models/AdminDesk/StudentModule.model";
 
 interface AbsentStudentQueryRow {
     at_se_student_id: string;
@@ -36,7 +40,7 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
             at_se_status: attendanceSessionStatus.InProgress,
         });
 
-        return this.convertToEntity(newSession);
+        return this.convertToAttendanceSessionEntity(newSession);
     }
 
     public async endSession(dto: EndAttendanceSessionDto): Promise<AttendanceSessionEntity> {
@@ -64,7 +68,7 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
             at_se_status: attendanceSessionStatus.PendingApproval,
         });
 
-        return this.convertToEntity(session);
+        return this.convertToAttendanceSessionEntity(session);
     }
 
     public async getStudentsAbsentForMoreThan(days: number): Promise<AbsentStudentProjection[]> {
@@ -95,17 +99,18 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
                 AttendanceSession.sequelize!.fn("MAX", AttendanceSession.sequelize!.col("at_se_entry_time")),
                 { [Op.lt]: targetDate },
             ),
-            raw: true, // Returns plain JSON objects, bypassing the need for .toJSON()
-            nest: true, // Reconstructs the nested "student" object properly
+            raw: true,
+            nest: true,
         })) as unknown as AbsentStudentQueryRow[];
 
+        return this.convertArrayToAbsentStudentProjections(results);
+    }
+
+    private convertArrayToAbsentStudentProjections(attendanceSessions: AbsentStudentQueryRow[]): AbsentStudentProjection[] {
         const today = new Date();
 
-        return results.map((row) => {
-            // row is now strictly typed as AbsentStudentQueryRow
+        return attendanceSessions.map((row) => {
             const lastDate = new Date(row.lastAttendance);
-
-            // Calculate diff safely with timestamps
             const diffMs = today.getTime() - lastDate.getTime();
             const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
@@ -153,16 +158,14 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
         });
     }
 
-    private convertToEntity(object: AttendanceSession): AttendanceSessionEntity {
+    private convertToAttendanceSessionEntity(object: AttendanceSession): AttendanceSessionEntity {
         return AttendanceSessionMapper.entityFromObject(object);
     }
 
-    public async getActiveSessionsWithStudentDetails(dto: GetActiveSessionsDto): Promise<StudentInClassProjection[]> {
+    public async getActiveSessionsWithStudentDetails(status: AttendanceSessionStatus): Promise<StudentInClassProjection[]> {
         const sessions = await AttendanceSession.findAll({
             where: {
-                at_se_status: {
-                    [Op.in]: dto.statuses,
-                },
+                at_se_status: status,
             },
             include: [
                 {
@@ -170,25 +173,29 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
                     as: "student",
                     required: true,
                     attributes: ["st_id", "st_full_name"],
+                    include: [
+                        {
+                            model: StudentModule,
+                            required: true,
+                            attributes: ["st_mod_status"],
+                            where: {
+                                st_mod_status: {
+                                    [Op.in]: [studentContractStatus.Active, studentContractStatus.Frozen],
+                                },
+                            },
+                        },
+                    ],
                 },
             ],
         });
 
-        return sessions.map((session) => {
-            const student = session.student;
+        return this.convertArrayToStudentInClassProjections(sessions);
+    }
 
-            // Note: Contract status is derived differently based on requirements,
-            // assuming it's fetched or mapped elsewhere. The prompt asks to get the student's full name, contract status, and entry time.
-            // But Student model might not have contract status directly.
-            // Wait, I should check how contract status is accessed on Student model or just return "ACTIVE" if not present.
-            // Actually, let me just add it.
-            return new StudentInClassProjection(
-                session.at_se_id,
-                session.at_se_student_id,
-                student ? student.st_full_name : "Unknown",
-                "ACTIVE", // Assuming active for now, or maybe the model has it
-                session.at_se_entry_time,
-            );
+    private convertArrayToStudentInClassProjections(attendanceSessions: AttendanceSession[]): StudentInClassProjection[] {
+        const arraySessins = attendanceSessions.map((attendanceSession) => {
+            return StudentInClassMapper.projectionFromDbRecord(attendanceSession);
         });
+        return arraySessins;
     }
 }

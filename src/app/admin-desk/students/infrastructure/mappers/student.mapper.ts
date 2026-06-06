@@ -3,8 +3,8 @@ import { studentContractStatus, studentProgressCategory } from "@/core/interface
 import { type StudentContractStatus, type StudentProgressCategory } from "@/core/interfaces/Students.interface";
 import { CustomError } from "@/core/error";
 
-export const StudentMapper = {
-    studentModelToEntity(object: { [key: string]: any }): StudentEntity {
+export class StudentMapper {
+    static studentModelToEntity(object: { [key: string]: any }): StudentEntity {
         const {
             st_id,
             st_identification_card,
@@ -65,5 +65,5 @@ export const StudentMapper = {
             new Date(st_created_at),
             new Date(st_updated_at),
         );
-    },
-};
+    }
+}

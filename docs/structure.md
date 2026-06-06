@@ -1,37 +1,74 @@
 ### 🗂️ Estructura de Directorios (Backend)
 
 ```text
-src
-├── app
-│   ├── AdminDesk                   # Módulo de gestión administrativa
-│   │   ├── contracts               # Gestión de contratos y matrículas
-│   │   ├── modules                 # Gestión de catálogo de módulos
-│   │   ├── payments                # Gestión de pagos y finanzas
-│   │   └── students                # Gestión de expedientes de estudiantes
-│   │
-│   ├───ClassTrack                  # Módulo de control de academica
-│   │   ├── Attendance              # Feature: Control de Ingreso/Salida
-│   │   ├── Lessons                 # Feature: Registro de Lecciones
-│   │   ├── RetentionAlerts         # Feature: Alertas de Inasistencia
-│   │   ├── Performance             # Feature: Cálculo de Avance diario (Cron/Fantasma)
-│   │   └── Core                    # Middlewares, utilidades y routers EXCLUSIVOS de ClassTrack
-│   │
-│   │   └───Shared                  # Features transversales para todo el negocio
-│   │       └───Identity            # Feature: Login, Autenticación y Tokens
-│   │
-├── core                            # Kernel del sistema y configuraciones globales
-│   ├── config                      # Variables de entorno y ajustes de apps
-│   ├── constants                   # Valores constantes y enumeraciones
-│   ├── error                       # Manejo centralizado de excepciones
-│   ├── interfaces                  # Definiciones de tipos y contratos globales
-│   ├── middleware                  # Interceptores de peticiones HTTP
-│   ├── server                      # Configuración del servidor (Express/Bun)
-│   └── utils                       # Utilidades y funciones auxiliares
-├── data                            # Capa de persistencia (Infraestructura)
-│   ├── config                      # Configuración de base de datos (ORM)
-│   ├── errors                      # Errores específicos de la capa de datos
-│   └── models                      # Definiciones de esquemas y modelos
-└── app.ts                          # Punto de entrada de la aplicación
+src/
+├── core/                           <-- Kernel del sistema y configuraciones globales
+│   ├── config/                     <-- Variables de entorno y ajustes de apps
+│   ├── constants/                  <-- Valores constantes y enumeraciones
+│   ├── error/                      <-- Manejo centralizado de excepciones
+│   ├── interfaces/                 <-- Definiciones de tipos y contratos globales
+│   ├── middleware/                 <-- Interceptores de peticiones HTTP
+│   ├── server/                     <-- Configuración del servidor (Express/Bun)
+│   └── utils/                      <-- Utilidades y funciones auxiliares
+│
+├── data/                           <-- Capa de persistencia (Infraestructura de DB)
+│   ├── config/                     <-- Configuración de base de datos (ORM)
+│   ├── errors/                     <-- Errores específicos de la capa de datos
+│   └── models/                     <-- Definiciones de esquemas y modelos
+│
+└── app/                            <-- Reglas de negocio divididas por módulos (Features)
+    ├── admin-desk/                 <-- Lógica exclusiva de AdminDesk (Administración)
+    │   ├── contracts/              <-- Gestión de contratos y matrículas
+    │   │   ├── application/        <-- (Casos de uso)
+    │   │   ├── domain/             <-- (Entidades, DTOs, interfaces de datasources)
+    │   │   ├── infrastructure/     <-- (Repositorios, mappers, datasources impl)
+    │   │   └── presentation/       <-- (Controladores, rutas, DI)
+    │   ├── modules/                <-- Gestión de catálogo de módulos
+    │   │   ├── application/
+    │   │   ├── domain/
+    │   │   ├── infrastructure/
+    │   │   └── presentation/
+    │   ├── payments/               <-- Gestión de pagos y finanzas
+    │   │   ├── application/
+    │   │   ├── domain/
+    │   │   ├── infrastructure/
+    │   │   └── presentation/
+    │   └── students/               <-- Gestión de expedientes de estudiantes
+    │       ├── application/
+    │       ├── domain/
+    │       ├── infrastructure/
+    │       └── presentation/
+    │
+    ├── class-track/                <-- Módulo de control académico
+    │   ├── attendance/             <-- Feature: Control de Ingreso/Salida
+    │   │   ├── application/
+    │   │   ├── domain/
+    │   │   ├── infrastructure/
+    │   │   └── presentation/
+    │   ├── lessons/                <-- Feature: Registro de Lecciones
+    │   │   ├── application/
+    │   │   ├── domain/
+    │   │   ├── infrastructure/
+    │   │   └── presentation/
+    │   ├── retention-alerts/       <-- Feature: Alertas de Inasistencia
+    │   │   ├── application/
+    │   │   ├── domain/
+    │   │   ├── infrastructure/
+    │   │   └── presentation/
+    │   ├── performance/            <-- Feature: Cálculo de Avance diario (Cron/Fantasma)
+    │   │   ├── application/
+    │   │   ├── domain/
+    │   │   ├── infrastructure/
+    │   │   └── presentation/
+    │   └── core/                   <-- Middlewares, utilidades y routers EXCLUSIVOS
+    │
+    └── shared/                     <-- Lógica compartida entre aplicaciones
+        └── identity/               <-- Login, Autenticación y Tokens
+            ├── application/
+            ├── domain/
+            ├── infrastructure/
+            └── presentation/
+
 ```
 
 # Descripción de Capas (Clean Architecture)

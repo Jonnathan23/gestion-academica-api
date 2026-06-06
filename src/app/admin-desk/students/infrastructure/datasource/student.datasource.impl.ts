@@ -11,6 +11,7 @@ import { Validators } from "@/core/utils";
 type StudentEntityFromObject = typeof StudentMapper.studentModelToEntity;
 
 export class StudentDataSourceImpl implements StudentDataSource {
+    // FIXME: Esto no es lo mejor del mundo, pero funciona por ahora
     constructor(private readonly studentEntityFromObject: StudentEntityFromObject = StudentMapper.studentModelToEntity) {}
 
     async register(dto: RegisterStudentDto): Promise<StudentEntity> {

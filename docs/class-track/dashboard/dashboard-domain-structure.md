@@ -6,11 +6,7 @@
 
 ## DTOs
 
-### `GetActiveSessionsDto`
-
-Used internally to request attendance sessions matching specific statuses.
-
-- `statuses` (string[], required): An array of attendance session status strings (e.g., IN_PROGRESS, PENDING_APPROVAL).
+*(No specific DTOs for the Dashboard API endpoint)*
 
 ## Projections
 

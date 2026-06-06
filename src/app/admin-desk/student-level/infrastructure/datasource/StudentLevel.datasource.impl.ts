@@ -21,7 +21,7 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
     //* Public methods
     async getStudentContracts(studentId: string): Promise<StudentLevelDetailsProjection[]> {
         const studentContracts = await this.fetchAllStudentContractsWithSellers(studentId);
-        return await this.convertToDetailsEntity(studentContracts);
+        return await this.convertArrayToDetailsEntity(studentContracts);
     }
 
     async purchaseModules(dto: PurchaseModulesDto): Promise<StudentLevelEntity[]> {
@@ -302,7 +302,7 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
         return contracts.map((contract) => StudentLevelMapper.studentLevelEntityFromObject(contract.toJSON()));
     }
 
-    private async convertToDetailsEntity(contracts: StudentModule[]): Promise<StudentLevelDetailsProjection[]> {
+    private async convertArrayToDetailsEntity(contracts: StudentModule[]): Promise<StudentLevelDetailsProjection[]> {
         return contracts.map((contract) => StudentLevelMapper.studentLevelDetailsEntityFromObject(contract.toJSON()));
     }
 }
