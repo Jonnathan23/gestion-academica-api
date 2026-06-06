@@ -71,18 +71,19 @@ const eslintConfiguration = [
             "**/*.dto.ts",
             "**/*.mapper.ts",
             "**/*.mappers.ts",
-            "**/*.datasource.ts",
-            "**/*.datasource.impl.ts",
-            "**/*.datasources.ts",
+            //"**/*.datasource.ts",
+            //"**/*.datasource.impl.ts",
+            //"**/*.datasources.ts",
             "**/*.model.ts",
             "**/*.models.ts",
             "**/*.entity.ts",
             "**/*.entities.ts",
             "**/*.error.ts",
             "**/*.integration.test.ts",
-            "**/Permissions.ts",
         ],
         rules: {
+            // Apagamos la advertencia de interfaces vacías (Muy común en Sequelize)
+            "@typescript-eslint/no-empty-object-type": "off",
             "@typescript-eslint/naming-convention": [
                 "error",
                 {
@@ -92,7 +93,8 @@ const eslintConfiguration = [
                 },
                 {
                     selector: "variable",
-                    format: ["camelCase", "UPPER_CASE", "snake_case"],
+                    // AÑADIDO: PascalCase para permitir export const UserMapper
+                    format: ["camelCase", "UPPER_CASE", "snake_case", "PascalCase"],
                     leadingUnderscore: "allow",
                 },
                 {
@@ -106,7 +108,8 @@ const eslintConfiguration = [
                 },
                 {
                     selector: "property",
-                    format: ["camelCase", "PascalCase", "snake_case"],
+                    // AÑADIDO: UPPER_CASE para permitir ACADEMIC_DIRECTOR en Modelos
+                    format: ["camelCase", "PascalCase", "snake_case", "UPPER_CASE"],
                     leadingUnderscore: "allow",
                 },
                 {
@@ -120,9 +123,45 @@ const eslintConfiguration = [
 
     // 4. Segundo bloque de excepciones (Desactivar tipo 'any' explícito)
     {
-        files: ["**/*.dto.ts", "**/*.dtos.ts", "**/*.mapper.ts", "**/*.mappers.ts", "**/*.test.ts", "**/*.error.ts"],
+        files: [
+            "**/*.dto.ts",
+            "**/*.dtos.ts",
+            "**/*.mapper.ts",
+            "**/*.mappers.ts",
+            "**/*.test.ts",
+            "**/*.error.ts",
+            "**/*.datasource.impl.ts", // AÑADIDO: Para permitir 'any' en los datasources
+        ],
         rules: {
             "@typescript-eslint/no-explicit-any": "off",
+        },
+    },
+
+    // 5. Reglas estrictas exclusivas para diccionarios de constantes (Permisos)
+    {
+        files: ["**/Permissions.ts", "**/*.permissions.ts"],
+        rules: {
+            "@typescript-eslint/naming-convention": [
+                "error",
+                {
+                    selector: "variable",
+                    modifiers: ["exported", "const"],
+                    format: ["camelCase"],
+                },
+                {
+                    selector: "property",
+                    format: ["UPPER_CASE"],
+                },
+                {
+                    // AÑADIDO: Permitir PascalCase para los Types/Interfaces en este archivo
+                    selector: "typeLike",
+                    format: ["PascalCase"],
+                },
+                {
+                    selector: "default",
+                    format: ["camelCase", "UPPER_CASE"],
+                },
+            ],
         },
     },
 ];

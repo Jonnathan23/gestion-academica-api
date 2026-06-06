@@ -1,14 +1,16 @@
 import type { Request, Response, NextFunction } from "express";
 
 //import { LoginUserDto, RegisterUserDto, UpdateUserDto } from "@/app/shared/Identity/domain/dtos";
-import { RegisterUserDto } from "@/app/Shared/Identity/domain/dtos/RegisterUser.dto";
+import { RegisterUserDto } from "@/app/shared/identity/domain/dtos/RegisterUser.dto";
 import { SuccessResponse } from "@/core/utils";
 import { CustomError } from "@/core/error";
 
-import type { UserRepository } from "@/app/Shared/Identity/domain/repositories/user.repository";
-import { RegisterUser } from "@/app/Shared/Identity/application/useCases/registerUser.use-case";
-import { UpdateUser } from "@/app/Shared/Identity/application/useCases/updateUser.use-case";
-import { UpdateUserDto } from "@/app/Shared/Identity/domain/dtos/UpdateUser.dto";
+import type { UserRepository } from "@/app/shared/identity/domain/repositories/user.repository";
+import { RegisterUser } from "@/app/shared/identity/application/useCases/registerUser.use-case";
+import { UpdateUser } from "@/app/shared/identity/application/useCases/updateUser.use-case";
+import { UpdateUserDto } from "@/app/shared/identity/domain/dtos/UpdateUser.dto";
+import { LoginUserDto } from "@/app/shared/identity/domain/dtos";
+import { LoginUser } from "@/app/shared/identity/application/useCases/loginUser.use-case";
 
 export class UserController {
     constructor(

@@ -1,6 +1,7 @@
 {
     "name": "backend",
     "module": "index.ts",
+    "type": "module",
     "private": true,
     "engines": {
         "node": "22.x.x"
