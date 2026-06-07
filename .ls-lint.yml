@@ -1,0 +1,47 @@
+ls:
+    # Regla universal: No importa la carpeta, importa el tipo de archivo.
+    src/**:
+        .dir: kebab-case
+        .ts: camelCase | PascalCase
+        
+        # Tipos e Interfaces
+        .interface.ts: PascalCase
+        .type.ts: PascalCase
+        
+        # Capa Domain
+        .dto.ts: PascalCase
+        .model.ts: PascalCase
+        .projection.ts: PascalCase        
+        .datasource.ts: camelCase
+        .repository.ts: camelCase
+        
+        # Capa Infrastructure
+        .datasource.impl.ts: camelCase
+        .repository.impl.ts: camelCase
+        .mapper.ts: camelCase
+        
+        # Capa Application
+        .use-case.ts: camelCase
+        
+        # Capa Presentation
+        .controller.ts: camelCase
+        .worker.ts: camelCase
+        .routes.ts: camelCase
+
+    # Excepciones específicas que mantienen su flexibilidad
+    src/data/config/**:
+        .ts: camelCase | PascalCase
+
+    src/data/models/**:
+        .model.ts: PascalCase
+
+ignore:
+    - node_modules
+    - .git
+    - dist
+    - docs
+    - .vscode
+    - scripts
+    - .agents
+    - src/**/__tests__
+    - src/**/__test__
