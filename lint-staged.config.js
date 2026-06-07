@@ -1,9 +1,4 @@
-/** @type {import('lint-staged').Config} */
-const lintStagedConfiguration = {
-  "*.ts": [
-    () => "bunx prettier --write",
-    () => "bunx eslint --fix"
-  ]
+export default {
+    "*.{ts,tsx}": ["prettier --write", "eslint --fix"],
+    "*.{json,md,css,html}": ["prettier --write"],
 };
-
-export default lintStagedConfiguration;

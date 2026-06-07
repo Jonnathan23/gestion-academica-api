@@ -21,7 +21,8 @@
         "lint:fix": "eslint \"src/**/*.ts\" --fix",
         "format": "prettier --write \"src/**/*.ts\"",
         "typecheck": "tsc --noEmit",
-        "typecheck:generate-log-file": "cmd /c \"tsc --noEmit > tsc.logs 2>&1\""
+        "typecheck:generate-log-file": "cmd /c \"tsc --noEmit > tsc.logs 2>&1\"",
+        "prepare": "husky"
     },
     "devDependencies": {
         "@eslint/js": "10.0.1",
@@ -68,9 +69,5 @@
         "sequelize-typescript": "2.1.6",
         "swagger-jsdoc": "6.2.8",
         "swagger-ui-express": "5.0.1"
-    },
-    "simple-git-hooks": {
-        "pre-commit": "pnpm lint-staged",
-        "commit-msg": "pnpm commitlint --edit ${1}"
     }
 }

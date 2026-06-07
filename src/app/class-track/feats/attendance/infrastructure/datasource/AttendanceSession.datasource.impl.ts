@@ -9,9 +9,7 @@ import type { AbsentStudentProjection } from "@/app/class-track/feats/attendance
 import { AbsentStudentMapper } from "@/app/class-track/feats/attendance/infrastructure/mappers/absentStudent.mapper";
 import { StudentInClassProjection } from "@/app/class-track/feats/dashboard/domain/projections/StudentInClass.projection";
 import { StudentInClassMapper } from "@/app/class-track/feats/attendance/infrastructure/mappers/studentInClass.mapper";
-import {
-    attendanceSessionStatus,
-} from "@/app/class-track/feats/attendance/domain/interfaces/attendance.interface";
+import { attendanceSessionStatus } from "@/app/class-track/feats/attendance/domain/interfaces/attendance.interface";
 import Student, { studentContractStatus } from "@/data/models/admin-desk/Student.model";
 import { AttendanceSessionMapper } from "@/app/class-track/feats/attendance/infrastructure/mappers/attendanceSession.mapper";
 import StudentModule from "@/data/models/admin-desk/StudentModule.model";
