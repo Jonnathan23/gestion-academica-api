@@ -1,4 +1,4 @@
-import { StudentInClassProjection } from "@/app/class-track/feats/dashboard/domain/projections/StudentInClass.projection";
+import { StudentInClassProjection } from "@/app/class-track/feats/attendance/domain/projections/StudentInClass.projection";
 import { studentContractStatus, type StudentContractStatus } from "@/core/interfaces/Students.interface";
 import { CustomError } from "@/core/error/customError.error";
 

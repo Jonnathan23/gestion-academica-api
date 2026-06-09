@@ -7,6 +7,7 @@ import { StartAttendanceSessionDto } from "@/app/class-track/feats/attendance/do
 import { EndAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/EndAttendanceSession.dto";
 import { CustomError } from "@/core/error/customError.error";
 import { SuccessResponse } from "@/core/utils/SuccesResponse";
+import { GetActiveSessionsUseCase } from "@/app/class-track/feats/attendance/application/use-cases/getAllActiveSessions.use-case";
 
 export class AttendanceSessionController {
     constructor(
@@ -37,6 +38,27 @@ export class AttendanceSessionController {
         new EndAttendanceSessionUseCase(this.attendanceSessionRepository)
             .execute(endDto)
             .then((session) => SuccessResponse.ok(res, "Check-out successful", session))
+            .catch((error) => next(error));
+    };
+
+    public getActiveSessionsInProgress = (req: Request, res: Response, next: NextFunction) => {
+        new GetActiveSessionsUseCase(this.attendanceSessionRepository)
+            .executeInProgress()
+            .then((sessions) => SuccessResponse.ok(res, "Active sessions in progress retrieved successfully", sessions))
+            .catch((error) => next(error));
+    };
+
+    public getActiveSessionsPendingApproval = (req: Request, res: Response, next: NextFunction) => {
+        new GetActiveSessionsUseCase(this.attendanceSessionRepository)
+            .executePendingApproval()
+            .then((sessions) => SuccessResponse.ok(res, "Active sessions pending approval retrieved successfully", sessions))
+            .catch((error) => next(error));
+    };
+
+    public getActiveSessionsCompleted = (req: Request, res: Response, next: NextFunction) => {
+        new GetActiveSessionsUseCase(this.attendanceSessionRepository)
+            .executeCompleted()
+            .then((sessions) => SuccessResponse.ok(res, "Active sessions completed retrieved successfully", sessions))
             .catch((error) => next(error));
     };
 }

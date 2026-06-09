@@ -7,7 +7,7 @@ import type { EndAttendanceSessionDto } from "@/app/class-track/feats/attendance
 import type { AttendanceSessionEntity } from "@/app/class-track/feats/attendance/domain/entities/AttendanceSession.entity";
 import type { AbsentStudentProjection } from "@/app/class-track/feats/attendance/domain/projections/AbsentStudent.projection";
 import { AbsentStudentMapper } from "@/app/class-track/feats/attendance/infrastructure/mappers/absentStudent.mapper";
-import { StudentInClassProjection } from "@/app/class-track/feats/dashboard/domain/projections/StudentInClass.projection";
+import { StudentInClassProjection } from "@/app/class-track/feats/attendance/domain/projections/StudentInClass.projection";
 import { StudentInClassMapper } from "@/app/class-track/feats/attendance/infrastructure/mappers/studentInClass.mapper";
 import { attendanceSessionStatus } from "@/app/class-track/feats/attendance/domain/interfaces/Attendance.interface";
 import Student, { studentContractStatus } from "@/data/models/admin-desk/Student.model";

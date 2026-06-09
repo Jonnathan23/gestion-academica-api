@@ -4,7 +4,7 @@ import { AttendanceSessionRepositoryImpl } from "@/app/class-track/feats/attenda
 import { StudentProjectionDatasourceImpl } from "@/app/class-track/feats/attendance/infrastructure/datasource/studentProjection.datasource.impl";
 import { StudentProjectionRepositoryImpl } from "@/app/class-track/feats/attendance/infrastructure/repositories/studentProjection.repository.impl";
 import { AttendanceSessionController } from "@/app/class-track/feats/attendance/presentation/controllers/attendanceSession.controller";
-import { RoleMiddleware } from "@/core/middleware";
+import { RoleMiddleware, AuthMiddleware } from "@/core/middleware";
 import { systemPermissions } from "@/core/constants";
 
 export class AttendanceSessionRouter {
@@ -19,8 +19,31 @@ export class AttendanceSessionRouter {
 
         const controller = new AttendanceSessionController(attendanceRepository, studentProjectionRepository);
 
-        router.post("/check-in", RoleMiddleware.requirePermissions([systemPermissions.CLASSTRACK_SESSIONS_READ]), controller.checkIn);
-        router.patch("/check-out", RoleMiddleware.requirePermissions([systemPermissions.CLASSTRACK_SESSIONS_READ]), controller.checkOut);
+        router.post("/check-in", controller.checkIn);
+
+        //TODO: validar con el middleware de autenticación para estudiantes y/o docentes
+        router.patch("/check-out", controller.checkOut);
+
+        router.get(
+            "/in-progress",
+            AuthMiddleware.validateJWT,
+            RoleMiddleware.requirePermissions([systemPermissions.CLASSTRACK_SESSIONS_READ]),
+            controller.getActiveSessionsInProgress,
+        );
+
+        router.get(
+            "/pending-approval",
+            AuthMiddleware.validateJWT,
+            RoleMiddleware.requirePermissions([systemPermissions.CLASSTRACK_SESSIONS_READ]),
+            controller.getActiveSessionsPendingApproval,
+        );
+
+        router.get(
+            "/completed",
+            AuthMiddleware.validateJWT,
+            RoleMiddleware.requirePermissions([systemPermissions.CLASSTRACK_SESSIONS_READ]),
+            controller.getActiveSessionsCompleted,
+        );
 
         return router;
     }

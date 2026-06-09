@@ -27,8 +27,10 @@ export const systemPermissions = {
     CLASSTRACK_MAIN_ACCESS: "classtrack:main:access",
 
     CLASSTRACK_ATTENDANCE_READ: "classtrack:attendance:read",
-
     CLASSTRACK_ATTENDANCE_WRITE: "classtrack:attendance:write",
+
+    CLASSTRACK_STUDENTS_READ: "classtrack:students:read",
+    CLASSTRACK_STUDENTS_WRITE: "classtrack:students:write",
 
     CLASSTRACK_SESSIONS_READ: "classtrack:sessions:read",
     CLASSTRACK_SESSIONS_WRITE: "classtrack:sessions:write",
@@ -63,8 +65,6 @@ export const rolePermissionsMapping: Record<string, SystemPermission[]> = {
     [userRoles.ACADEMIC_DIRECTOR]: [
         systemPermissions.CLASSTRACK_MAIN_ACCESS,
 
-        systemPermissions.ADMINDESK_STUDENTS_READ,
-
         systemPermissions.ADMINDESK_CONTRACTS_READ,
 
         systemPermissions.ADMINDESK_MODULES_READ,
@@ -73,6 +73,9 @@ export const rolePermissionsMapping: Record<string, SystemPermission[]> = {
 
         systemPermissions.CLASSTRACK_ATTENDANCE_READ,
         systemPermissions.CLASSTRACK_ATTENDANCE_WRITE,
+
+        systemPermissions.CLASSTRACK_STUDENTS_READ,
+        systemPermissions.CLASSTRACK_STUDENTS_WRITE,
 
         systemPermissions.CLASSTRACK_SESSIONS_READ,
         systemPermissions.CLASSTRACK_SESSIONS_WRITE,
@@ -86,7 +89,7 @@ export const rolePermissionsMapping: Record<string, SystemPermission[]> = {
 
     [userRoles.TEACHER]: [
         systemPermissions.CLASSTRACK_MAIN_ACCESS,
-        systemPermissions.ADMINDESK_STUDENTS_READ,
+        systemPermissions.CLASSTRACK_STUDENTS_READ,
 
         systemPermissions.CLASSTRACK_ATTENDANCE_READ,
         systemPermissions.CLASSTRACK_ATTENDANCE_WRITE,
