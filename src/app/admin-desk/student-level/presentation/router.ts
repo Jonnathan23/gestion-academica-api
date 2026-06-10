@@ -5,6 +5,7 @@ import { StudentLevelRepositoryImpl } from "@/app/admin-desk/student-level/infra
 import { ContractController } from "@/app/admin-desk/student-level/presentation/controllers/contract.controller";
 import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
 import { systemPermissions } from "@/core/constants";
+import { InfoStudentsLevelRouter } from "@/app/admin-desk/student-level/presentation/infoStudentsLevel.router";
 
 export class ContractsRouter {
     static get routes(): Router {
@@ -16,6 +17,9 @@ export class ContractsRouter {
 
         // Required middleware for all routes in this module
         router.use(AuthMiddleware.validateJWT);
+
+        // Use the new info endpoints
+        router.use(InfoStudentsLevelRouter.routes);
 
         // Router-level params validation
         router.param("studentId", VerifyUUID.validate);

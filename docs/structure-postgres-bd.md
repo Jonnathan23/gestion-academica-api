@@ -32,7 +32,6 @@ export class DatabaseConnection {
     async connect(): Promise<void> {
         try {
             await this.sequelizeInstance.authenticate();
-            // Sincronización controlada por el flag forceSynchronization
             await this.sequelizeInstance.sync({ force: this.forceSynchronization });
         } catch (error) {
             console.error("Error connecting to the database", error);
@@ -41,15 +40,11 @@ export class DatabaseConnection {
 }
 ```
 
-### Lógica de Sincronización
-
-La sincronización de esquemas se maneja mediante el flag `forceSynchronization`. En entornos de desarrollo, este flag puede estar activo para reflejar cambios rápidos en los modelos, mientras que en producción se desactiva para preservar la integridad de los datos. El valor de este flag se deriva usualmente de la variable de entorno `NODE_ENV`.
-
 ---
 
 ## Esquema de Datos por Módulo
 
-### Módulo: Shared (Identidad y Transversales)
+### Módulo: Shared (Identidad)
 
 #### Tabla: `Users`
 
@@ -58,11 +53,11 @@ Almacena la información de los usuarios del sistema, incluyendo personal admini
 | Columna            | Tipo de Dato (Postgres) | Restricciones           | Descripción                                       |
 | :----------------- | :---------------------- | :---------------------- | :------------------------------------------------ |
 | `us_id`            | UUID                    | PK, Unique, Not Null    | Identificador único del usuario.                  |
-| `us_full_name`     | VARCHAR(255)            | Unique, Not Null        | Nombre completo del usuario.                      |
-| `us_email`         | VARCHAR(255)            | Unique, Not Null        | Correo electrónico institucional.                 |
-| `us_password_hash` | VARCHAR(255)            | Not Null                | Hash de la contraseña.                            |
+| `us_full_name`     | VARCHAR(255)            | Unique, Not Null        | Nombre completo.                                  |
+| `us_email`         | VARCHAR(255)            | Unique, Not Null        | Correo institucional.                             |
+| `us_password_hash` | VARCHAR(255)            | Not Null                | Contraseña encriptada.                            |
 | `us_role`          | ENUM                    | Not Null                | Rol (ADMIN, TEACHER, ADVISOR, ACADEMIC_DIRECTOR). |
-| `us_is_active`     | BOOLEAN                 | Not Null, Default: true | Estado de actividad del usuario.                  |
+| `us_is_active`     | BOOLEAN                 | Not Null, Default: true | Indica si el usuario puede acceder al sistema.    |
 | `us_created_at`    | TIMESTAMPTZ             | Not Null                | Fecha de creación del registro.                   |
 | `us_updated_at`    | TIMESTAMPTZ             | Not Null                | Fecha de última actualización.                    |
 
@@ -80,20 +75,20 @@ Almacena la información de los usuarios del sistema, incluyendo personal admini
 
 Contiene la información maestra de los estudiantes inscritos.
 
-| Columna                  | Tipo de Dato (Postgres) | Restricciones            | Descripción                                     |
-| :----------------------- | :---------------------- | :----------------------- | :---------------------------------------------- |
-| `st_id`                  | UUID                    | PK, Unique, Not Null     | Identificador único del estudiante.             |
-| `st_identification_card` | VARCHAR(255)            | Unique, Not Null         | Cédula o DNI del estudiante.                    |
-| `st_full_name`           | VARCHAR(255)            | Not Null                 | Nombre completo.                                |
-| `st_phone_number`        | VARCHAR(255)            | Not Null                 | Teléfono de contacto.                           |
-| `st_email`               | VARCHAR(255)            | Unique, Not Null         | Correo electrónico personal.                    |
-| `st_date_of_birth`       | DATE                    | Not Null                 | Fecha de nacimiento.                            |
-| `st_nationality`         | VARCHAR(255)            | Not Null                 | País de origen.                                 |
-| `st_certificate_type`    | ENUM                    | Not Null                 | Tipo de certificación (ONE_TONNE, TOEFL, etc).  |
-| `st_start_date`          | TIMESTAMPTZ             | Not Null                 | Fecha de inicio del programa.                   |
-| `st_is_graduated`        | BOOLEAN                 | Not Null, Default: false | Indica si completó sus estudios.                |
-| `st_contract_status`     | ENUM                    | Not Null                 | Estado del contrato (ACTIVE, FROZEN, INACTIVE). |
-| `st_progress_category`   | ENUM                    | Not Null                 | Categoría de avance (FAST, MODERATE, SLOW).     |
+| Columna                  | Tipo de Dato (Postgres) | Restricciones            | Descripción                                    |
+| :----------------------- | :---------------------- | :----------------------- | :--------------------------------------------- |
+| `st_id`                  | UUID                    | PK, Unique, Not Null     | Identificador único del estudiante.            |
+| `st_identification_card` | VARCHAR(255)            | Unique, Not Null         | Cédula o DNI del estudiante.                   |
+| `st_full_name`           | VARCHAR(255)            | Not Null                 | Nombre completo.                               |
+| `st_phone_number`        | VARCHAR(255)            | Not Null                 | Teléfono de contacto.                          |
+| `st_email`               | VARCHAR(255)            | Unique, Not Null         | Correo electrónico personal.                   |
+| `st_date_of_birth`       | DATE                    | Not Null                 | Fecha de nacimiento.                           |
+| `st_nationality`         | VARCHAR(255)            | Not Null                 | País de origen.                                |
+| `st_certificate_type`    | ENUM                    | Not Null                 | Tipo de certificación (ONE_TONNE, TOEFL, etc). |
+| `st_start_date`          | DATE                    | Not Null                 | Fecha de inicio del programa.                  |
+| `st_is_graduated`        | BOOLEAN                 | Not Null, Default: false | Indica si completó sus estudios.               |
+| `st_contract_status`     | ENUM                    | Not Null                 | Estado del contrato.                           |
+| `st_progress_category`   | ENUM                    | Not Null                 | Categoría de avance.                           |
 
 ---
 
@@ -106,6 +101,7 @@ Catálogo de módulos académicos disponibles.
 | `mo_id`          | UUID                    | PK, Unique, Not Null | Identificador del módulo.        |
 | `mo_name`        | VARCHAR(255)            | Unique, Not Null     | Nombre del módulo.               |
 | `mo_description` | VARCHAR(255)            | Not Null             | Descripción breve del contenido. |
+| `mo_level`       | INTEGER                 | Unique, Not Null     | Nivel numérico del módulo.       |
 
 ---
 
@@ -113,14 +109,16 @@ Catálogo de módulos académicos disponibles.
 
 Tabla de rotura que vincula estudiantes con sus módulos adquiridos.
 
-| Columna                | Tipo de Dato (Postgres) | Restricciones           | Descripción                                |
-| :--------------------- | :---------------------- | :---------------------- | :----------------------------------------- |
-| `st_mod_id`            | UUID                    | PK, Unique, Not Null    | Identificador de la inscripción al módulo. |
-| `st_mod_student_id`    | UUID                    | FK (Students), Not Null | Referencia al estudiante.                  |
-| `st_mod_module_id`     | UUID                    | FK (Modules), Not Null  | Referencia al módulo.                      |
-| `st_mod_seller_id`     | UUID                    | FK (Users), Not Null    | Referencia al asesor que realizó la venta. |
-| `st_mod_status`        | ENUM                    | Not Null                | Estado (ACTIVE, APPROVED, LOCKED).         |
-| `st_mod_purchase_date` | TIMESTAMPTZ             | Not Null                | Fecha de adquisición.                      |
+| Columna                     | Tipo de Dato (Postgres) | Restricciones           | Descripción                                |
+| :-------------------------- | :---------------------- | :---------------------- | :----------------------------------------- |
+| `st_mod_id`                 | UUID                    | PK, Unique, Not Null    | Identificador de la inscripción al módulo. |
+| `st_mod_student_id`         | UUID                    | FK (Students), Not Null | Referencia al estudiante.                  |
+| `st_mod_module_id`          | UUID                    | FK (Modules), Not Null  | Referencia al módulo.                      |
+| `st_mod_seller_id`          | UUID                    | FK (Users), Not Null    | Referencia al asesor que realizó la venta. |
+| `st_mod_status`             | ENUM                    | Not Null                | Estado (ACTIVE, APPROVED, LOCKED).         |
+| `st_mod_purchase_date`      | DATE                    | Not Null                | Fecha de adquisición.                      |
+| `st_mod_freeze_count`       | INTEGER                 | Not Null, Default: 0    | Conteo de veces que se congeló el módulo.  |
+| `st_mod_reactivation_count` | INTEGER                 | Not Null, Default: 0    | Conteo de veces que se reactivó.           |
 
 ---
 
@@ -170,7 +168,7 @@ Registro de asistencia diaria de los estudiantes.
 | `at_se_id`            | UUID                    | PK, Unique, Not Null    | Identificador de la sesión.                       |
 | `at_se_student_id`    | UUID                    | FK (Students), Not Null | Estudiante que asiste.                            |
 | `at_se_teacher_id`    | UUID                    | FK (Users), Nullable    | Docente que supervisa.                            |
-| `at_se_session_date`  | TIMESTAMPTZ             | Not Null                | Fecha de la sesión.                               |
+| `at_se_session_date`  | DATE                    | Not Null                | Fecha de la sesión.                               |
 | `at_se_entry_time`    | TIMESTAMPTZ             | Not Null                | Hora de entrada registrada.                       |
 | `at_se_exit_time`     | TIMESTAMPTZ             | Nullable                | Hora de salida registrada.                        |
 | `at_se_total_minutes` | INTEGER                 | Nullable                | Tiempo total de permanencia.                      |
@@ -199,67 +197,33 @@ Gestión de alertas para estudiantes en riesgo de deserción.
 | :--------------------------- | :---------------------- | :----------------------- | :----------------------------------------- |
 | `re_al_id`                   | UUID                    | PK, Unique, Not Null     | Identificador de la alerta.                |
 | `re_al_student_id`           | UUID                    | FK (Students), Not Null  | Estudiante afectado.                       |
-| `re_al_user_id`              | UUID                    | FK (Users), Not Null     | Asesor que gestiona la alerta.             |
-| `re_al_contact_date`         | TIMESTAMPTZ             | Not Null                 | Fecha de contacto.                         |
+| `re_al_user_id`              | UUID                    | FK (Users), Nullable     | Asesor que gestiona la alerta.             |
+| `re_al_contact_date`         | DATE                    | Not Null                 | Fecha de contacto.                         |
 | `re_al_has_responded`        | BOOLEAN                 | Not Null, Default: false | Indica si el estudiante contestó.          |
 | `re_al_days_absent`          | INTEGER                 | Not Null, Default: 0     | Días de ausencia acumulados.               |
 | `re_al_is_justified`         | BOOLEAN                 | Not Null, Default: false | Indica si la falta es justificada.         |
 | `re_al_justification_reason` | TEXT                    | Nullable                 | Razón de la justificación.                 |
-| `re_al_return_deadline`      | TIMESTAMPTZ             | Nullable                 | Fecha pactada de retorno.                  |
+| `re_al_return_deadline`      | DATE                    | Nullable                 | Fecha pactada de retorno.                  |
 | `re_al_observations`         | TEXT                    | Not Null                 | Notas sobre la gestión de retención.       |
 | `re_al_status`               | ENUM                    | Not Null                 | Estado (PENDING, RESOLVED, CLOSED_FROZEN). |
-| `re_al_resolution_date`      | TIMESTAMPTZ             | Nullable                 | Fecha de resolución de la alerta.          |
+| `re_al_resolution_date`      | DATE                    | Nullable                 | Fecha de resolución de la alerta.          |
 
 ---
 
-## Manejo de Excepciones de Persistencia
+#### Tabla: `AcademicObservations`
 
-Los errores generados por Sequelize son interceptados por la clase `SequelizeErrorHandler`, la cual mapea las excepciones técnicas a respuestas HTTP estandarizadas para el cliente.
+Observaciones académicas del desempeño de un estudiante.
 
-```typescript
-export class SequelizeErrorHandler implements DatabaseErrorHandler {
-    public handleDatabaseError(error: unknown): FormattedErrorResponse | null {
-        // Violación de restricción de unicidad (Ej: Email duplicado)
-        if (error instanceof UniqueConstraintError) {
-            return {
-                statusCode: 409,
-                errors: [
-                    /*...*/
-                ],
-            };
-        }
+| Columna             | Tipo de Dato (Postgres) | Restricciones           | Descripción                            |
+| :------------------ | :---------------------- | :---------------------- | :------------------------------------- |
+| `ac_ob_id`          | UUID                    | PK, Unique, Not Null    | Identificador de la observación.       |
+| `ac_ob_student_id`  | UUID                    | FK (Students), Not Null | Estudiante afectado.                   |
+| `ac_ob_teacher_id`  | UUID                    | FK (Users), Not Null    | Profesor que realiza la observación.   |
+| `ac_ob_observation` | TEXT                    | Not Null                | Contenido de la observación académica. |
+| `ac_ob_deadline`    | TIMESTAMPTZ             | Nullable                | Fecha límite para resolver.            |
 
-        // Violación de clave foránea (Ej: Eliminar estudiante con pagos)
-        if (error instanceof ForeignKeyConstraintError) {
-            return {
-                statusCode: 409,
-                errors: [
-                    /*...*/
-                ],
-            };
-        }
+---
 
-        // Error de validación a nivel de modelo (Ej: Campo null no permitido)
-        if (error instanceof ValidationError) {
-            return {
-                statusCode: 400,
-                errors: [
-                    /*...*/
-                ],
-            };
-        }
+## Nota
 
-        // Error genérico de base de datos o conexión
-        if (error instanceof DatabaseError) {
-            return {
-                statusCode: 503,
-                errors: [
-                    /*...*/
-                ],
-            };
-        }
-
-        return null;
-    }
-}
-```
+Se ha estandarizado el uso de `DATE` (DATEONLY) para todos los campos de tipo fecha donde no es necesaria la precisión de tiempo, manteniendo `TIMESTAMPTZ` únicamente para campos de auditoría como `created_at` y `updated_at`, o eventos que requieren registro horario exacto.os que requieren registro horario exacto.
