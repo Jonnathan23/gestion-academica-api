@@ -1,7 +1,6 @@
 export class EndAttendanceSessionDto {
     private constructor(
         public readonly sessionId: string,
-        public readonly teacherId: string,
         public readonly exitTime: Date,
     ) {}
 
@@ -19,6 +18,6 @@ export class EndAttendanceSessionDto {
             }
         }
 
-        return [undefined, new EndAttendanceSessionDto(sessionId, teacherId, validExitTime)];
+        return [undefined, new EndAttendanceSessionDto(sessionId, validExitTime)];
     }
 }

@@ -25,24 +25,31 @@ export class AttendanceSessionRouter {
         //TODO: validar con el middleware de autenticación para estudiantes y/o docentes
         router.patch("/check-out", controller.checkOut);
 
+        router.patch(
+            "/approve",
+            AuthMiddleware.validateJWT,
+            RoleMiddleware.requirePermissions([systemPermissions.CLASSTRACK_ATTENDANCE_WRITE]),
+            controller.approve,
+        );
+
         router.get(
             "/in-progress",
             AuthMiddleware.validateJWT,
-            RoleMiddleware.requirePermissions([systemPermissions.CLASSTRACK_SESSIONS_READ]),
+            RoleMiddleware.requirePermissions([systemPermissions.CLASSTRACK_ATTENDANCE_READ]),
             controller.getActiveSessionsInProgress,
         );
 
         router.get(
             "/pending-approval",
             AuthMiddleware.validateJWT,
-            RoleMiddleware.requirePermissions([systemPermissions.CLASSTRACK_SESSIONS_READ]),
+            RoleMiddleware.requirePermissions([systemPermissions.CLASSTRACK_ATTENDANCE_READ]),
             controller.getActiveSessionsPendingApproval,
         );
 
         router.get(
             "/completed",
             AuthMiddleware.validateJWT,
-            RoleMiddleware.requirePermissions([systemPermissions.CLASSTRACK_SESSIONS_READ]),
+            RoleMiddleware.requirePermissions([systemPermissions.CLASSTRACK_ATTENDANCE_READ]),
             controller.getActiveSessionsCompleted,
         );
 

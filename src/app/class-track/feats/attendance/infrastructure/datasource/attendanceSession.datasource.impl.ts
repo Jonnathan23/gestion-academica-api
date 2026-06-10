@@ -4,6 +4,7 @@ import { CustomError } from "@/core/error/customError.error";
 import { AttendanceSessionDatasource } from "@/app/class-track/feats/attendance/domain/datasource/attendanceSession.datasource";
 import type { StartAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/StartAttendanceSession.dto";
 import type { EndAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/EndAttendanceSession.dto";
+import type { ApproveAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/ApproveAttendanceSession.dto";
 import type { AttendanceSessionEntity } from "@/app/class-track/feats/attendance/domain/entities/AttendanceSession.entity";
 import type { AbsentStudentProjection } from "@/app/class-track/feats/attendance/domain/projections/AbsentStudent.projection";
 import { AbsentStudentMapper } from "@/app/class-track/feats/attendance/infrastructure/mappers/absentStudent.mapper";
@@ -60,10 +61,28 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
         const totalMinutes = Math.floor(diffMs / 60000);
 
         await session.update({
-            at_se_teacher_id: dto.teacherId,
             at_se_exit_time: exitTime,
             at_se_total_minutes: totalMinutes,
             at_se_status: attendanceSessionStatus.PendingApproval,
+        });
+
+        return this.convertToAttendanceSessionEntity(session);
+    }
+
+    public async approveSession(dto: ApproveAttendanceSessionDto): Promise<AttendanceSessionEntity> {
+        const session = await AttendanceSession.findByPk(dto.sessionId);
+
+        if (!session) {
+            throw CustomError.notFound("Attendance session not found");
+        }
+
+        if (session.at_se_status !== attendanceSessionStatus.PendingApproval) {
+            throw CustomError.conflict("Session is not PENDING_APPROVAL");
+        }
+
+        await session.update({
+            at_se_teacher_id: dto.teacherId,
+            at_se_status: attendanceSessionStatus.Approved,
         });
 
         return this.convertToAttendanceSessionEntity(session);

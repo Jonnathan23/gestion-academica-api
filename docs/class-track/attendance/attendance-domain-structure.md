@@ -32,6 +32,13 @@ Data Transfer Object for ending an attendance session.
 - `teacherId` (string, required): The identifier of the teacher ending the session.
 - `exitTime` (Date, required): The time the student checked out.
 
+### `ApproveAttendanceSessionDto`
+
+Data Transfer Object for approving a pending attendance session.
+
+- `sessionId` (string, required): The identifier of the session to approve.
+- `teacherId` (string, required): The identifier of the teacher approving the session.
+
 ## Interfaces
 
 ### `AttendanceSessionRepository`
@@ -41,4 +48,6 @@ Repository interface for managing attendance sessions.
 - `closeOrphanSessions(): Promise<number>`
 - `startSession(dto: StartAttendanceSessionDto): Promise<AttendanceSessionEntity>`
 - `endSession(dto: EndAttendanceSessionDto): Promise<AttendanceSessionEntity>`
+- `approveSession(dto: ApproveAttendanceSessionDto): Promise<AttendanceSessionEntity>`
 - `getStudentsAbsentForMoreThan(days: number): Promise<AbsentStudentProjection[]>`
+- `getActiveSessionsWithStudentDetails(status: AttendanceSessionStatus): Promise<StudentInClassProjection[]>`
