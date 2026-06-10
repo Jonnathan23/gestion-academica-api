@@ -1,4 +1,3 @@
-import { studentModuleStatus } from "@/app/admin-desk/student-level/domain/interfaces/Contracts.interface";
 import { Validators } from "@/core/utils";
 
 export class UpdateStudentLevelDto {
@@ -15,19 +14,14 @@ export class UpdateStudentLevelDto {
     }
 
     static create(object: { [key: string]: any }): [string?, UpdateStudentLevelDto?] {
-        const { contractId, studentId, status } = object;
+        const { studentLevelId, studentId } = object;
 
-        if (!contractId) return ["Missing contract"];
-        if (!status) return ["Missing status"];
-        if (!studentId) return ["Missing student"];
+        if (!studentLevelId) return ["Missing student level ID"];
+        if (!studentId) return ["Missing student ID"];
 
-        if (!Validators.IsUUID(contractId)) return ["Invalid contract format"];
-        if (!Validators.IsUUID(studentId)) return ["Invalid student format"];
+        if (!Validators.IsUUID(studentLevelId)) return ["Invalid student level ID format"];
+        if (!Validators.IsUUID(studentId)) return ["Invalid student ID format"];
 
-        if (![studentModuleStatus.Active, studentModuleStatus.Approved, studentModuleStatus.Locked].includes(status)) {
-            return ["status must be ACTIVE, APPROVED or LOCKED"];
-        }
-
-        return [undefined, new UpdateStudentLevelDto(contractId, studentId)];
+        return [undefined, new UpdateStudentLevelDto(studentLevelId, studentId)];
     }
 }

@@ -1,7 +1,6 @@
 import colors from "colors";
 
 export const ColorsAdapter = {
-
     //* Bold Colors
     setBlueBold(text: string): string {
         return colors.blue.bold(text);
@@ -46,6 +45,5 @@ export const ColorsAdapter = {
 
     setMagenta(text: string): string {
         return colors.magenta(text);
-    }
-
-}
+    },
+};

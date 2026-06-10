@@ -4,12 +4,11 @@ import { describe, test, expect, mock } from "bun:test";
 import { SuccessResponse } from "@/core/utils";
 
 describe("SuccessResponse Utility Test Suite", () => {
-
     describe("OK method", () => {
         test("Should format a 200 OK response correctly with default data", () => {
             const responseMock = {
                 status: mock().mockReturnThis(),
-                json: mock()
+                json: mock(),
             } as unknown as Response;
 
             const expectedMessage = "Operation completed successfully";
@@ -20,14 +19,14 @@ describe("SuccessResponse Utility Test Suite", () => {
             expect(responseMock.json).toHaveBeenCalledWith({
                 success: true,
                 message: expectedMessage,
-                data: null
+                data: null,
             });
         });
 
         test("Should format a 200 OK response correctly with payload data", () => {
             const responseMock = {
                 status: mock().mockReturnThis(),
-                json: mock()
+                json: mock(),
             } as unknown as Response;
 
             const expectedMessage = "Student profile retrieved";
@@ -39,14 +38,14 @@ describe("SuccessResponse Utility Test Suite", () => {
             expect(responseMock.json).toHaveBeenCalledWith({
                 success: true,
                 message: expectedMessage,
-                data: payloadData
+                data: payloadData,
             });
         });
 
         test("Should format a 200 OK response with the default message when none is provided", () => {
             const responseMock = {
                 status: mock().mockReturnThis(),
-                json: mock()
+                json: mock(),
             } as unknown as Response;
 
             SuccessResponse.ok(responseMock);
@@ -55,7 +54,7 @@ describe("SuccessResponse Utility Test Suite", () => {
             expect(responseMock.json).toHaveBeenCalledWith({
                 success: true,
                 message: "Operation completed successfully",
-                data: null
+                data: null,
             });
         });
     });
@@ -64,7 +63,7 @@ describe("SuccessResponse Utility Test Suite", () => {
         test("Should format a 201 Created response correctly with payload data", () => {
             const responseMock = {
                 status: mock().mockReturnThis(),
-                json: mock()
+                json: mock(),
             } as unknown as Response;
 
             const expectedMessage = "Student registered";
@@ -76,14 +75,14 @@ describe("SuccessResponse Utility Test Suite", () => {
             expect(responseMock.json).toHaveBeenCalledWith({
                 success: true,
                 message: expectedMessage,
-                data: payloadData
+                data: payloadData,
             });
         });
 
         test("Should format a 201 Created response with the default message when none is provided", () => {
             const responseMock = {
                 status: mock().mockReturnThis(),
-                json: mock()
+                json: mock(),
             } as unknown as Response;
 
             SuccessResponse.created(responseMock);
@@ -92,7 +91,7 @@ describe("SuccessResponse Utility Test Suite", () => {
             expect(responseMock.json).toHaveBeenCalledWith({
                 success: true,
                 message: "Resource created successfully",
-                data: null
+                data: null,
             });
         });
     });

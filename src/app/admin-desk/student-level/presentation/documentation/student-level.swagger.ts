@@ -5,7 +5,6 @@
  *   description: Management of student progression through academic modules (Purchases, Status Updates, Deletions)
  */
 
-
 /**
  * @swagger
  * /api/student-levels/student/{studentId}:
@@ -71,7 +70,6 @@
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 
-
 /**
  * @swagger
  * /api/student-levels/student/{studentId}:
@@ -120,7 +118,6 @@
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-
 
 /**
  * @swagger
@@ -197,7 +194,6 @@
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 
-
 /**
  * @swagger
  * /api/student-levels/{studentLevelId}:
@@ -242,7 +238,6 @@
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-
 
 /**
  * @swagger
@@ -295,5 +290,4 @@
  *           description: Detailed data of the associated academic module
  */
 
-
-export { };
+export {};

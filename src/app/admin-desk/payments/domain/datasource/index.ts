@@ -1,1 +1,1 @@
-export * from "@/app/admin-desk/payments/domain/datasource/Payment.datasource";
+export * from "@/app/admin-desk/payments/domain/datasource/payment.datasource";

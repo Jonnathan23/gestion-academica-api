@@ -4,13 +4,13 @@ import express from "express";
 
 import { StudentsRouter } from "@/app/admin-desk/students/presentation/router";
 import { environmentVariables } from "@/core/config/envs";
-import { DatabaseConnection } from "@/data/config/db-postgresql";
+import { DatabaseConnection } from "@/data/config/dbPostgresql";
 import { testGlobalErrorHandler } from "@/__test__/configTest";
-import { User } from "@/data/models/Shared";
-import { Student } from "@/data/models/AdminDesk";
+import { User } from "@/data/models/shared";
+import { Student } from "@/data/models/admin-desk";
 import { JwtAdapter, BcryptAdapter } from "@/core/utils";
 import { AuthMiddleware } from "@/core/middleware/auth.mid";
-import { certificateType } from "@/data/models/AdminDesk/Student.model";
+import { certificateType } from "@/data/models/admin-desk/Student.model";
 
 // ------------------------------------------------------------------ //
 // Micro-application: only the Students router (no other routes needed)

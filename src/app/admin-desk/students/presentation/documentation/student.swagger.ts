@@ -5,7 +5,6 @@
  *   description: Student management (registration, search, updates, and status changes)
  */
 
-
 /**
  * @swagger
  * /api/students/register:
@@ -77,7 +76,6 @@
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 
-
 /**
  * @swagger
  * /api/students/search:
@@ -120,7 +118,6 @@
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-
 
 /**
  * @swagger
@@ -201,7 +198,6 @@
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 
-
 /**
  * @swagger
  * /api/students/{id}/contract-status:
@@ -269,7 +265,6 @@
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 
-
 /**
  * @swagger
  * /api/students/{id}/graduated:
@@ -322,7 +317,6 @@
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-
 
 /**
  * @swagger
@@ -377,5 +371,4 @@
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 
-
-export { };
+export {};

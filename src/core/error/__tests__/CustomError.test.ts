@@ -2,7 +2,6 @@ import { describe, test, expect } from "bun:test";
 import { CustomError } from "@/core/error";
 
 describe("CustomError Class Test Suite", () => {
-
     test("Should create a 400 Bad Request error correctly", () => {
         const expectedMessage = "Invalid input data provided by the client";
         const badRequestError = CustomError.badRequest(expectedMessage);
