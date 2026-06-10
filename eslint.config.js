@@ -13,6 +13,7 @@ const eslintConfiguration = [
     },
 
     {
+        files: ["**/*.ts"],
         languageOptions: {
             globals: {
                 ...globals.node,
@@ -83,6 +84,7 @@ const eslintConfiguration = [
             "**/*.entities.ts",
             "**/*.error.ts",
             "**/*.integration.test.ts",
+            "**/__tests__/**/*.ts",
         ],
         rules: {
             // Apagamos la advertencia de interfaces vacías (Muy común en Sequelize)

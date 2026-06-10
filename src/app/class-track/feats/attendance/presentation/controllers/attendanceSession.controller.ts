@@ -3,8 +3,10 @@ import type { AttendanceSessionRepository } from "@/app/class-track/feats/attend
 
 import { StartAttendanceSessionUseCase } from "@/app/class-track/feats/attendance/application/use-cases/startAttendanceSession.use-case";
 import { EndAttendanceSessionUseCase } from "@/app/class-track/feats/attendance/application/use-cases/endAttendanceSession.use-case";
+import { ApproveAttendanceSessionUseCase } from "@/app/class-track/feats/attendance/application/use-cases/approveAttendanceSession.use-case";
 import { StartAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/StartAttendanceSession.dto";
 import { EndAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/EndAttendanceSession.dto";
+import { ApproveAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/ApproveAttendanceSession.dto";
 import { CustomError } from "@/core/error/customError.error";
 import { SuccessResponse } from "@/core/utils/SuccesResponse";
 import { GetActiveSessionsUseCase } from "@/app/class-track/feats/attendance/application/use-cases/getAllActiveSessions.use-case";
@@ -39,6 +41,19 @@ export class AttendanceSessionController {
         new EndAttendanceSessionUseCase(this.attendanceSessionRepository)
             .execute(endDto)
             .then((session) => SuccessResponse.ok(res, "Check-out successful", session))
+            .catch((error) => next(error));
+    };
+
+    public approve = (req: Request, res: Response, next: NextFunction) => {
+        const [error, approveDto] = ApproveAttendanceSessionDto.create(req.body);
+
+        if (error || !approveDto) {
+            return next(CustomError.badRequest(error || "Invalid request data"));
+        }
+
+        new ApproveAttendanceSessionUseCase(this.attendanceSessionRepository)
+            .execute(approveDto)
+            .then((session) => SuccessResponse.ok(res, "Check-out approved successfully", session))
             .catch((error) => next(error));
     };
 

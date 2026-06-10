@@ -2,6 +2,7 @@ import { AttendanceSessionRepository } from "@/app/class-track/feats/attendance/
 import { AttendanceSessionDatasource } from "@/app/class-track/feats/attendance/domain/datasource/attendanceSession.datasource";
 import type { StartAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/StartAttendanceSession.dto";
 import type { EndAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/EndAttendanceSession.dto";
+import type { ApproveAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/ApproveAttendanceSession.dto";
 import type { AttendanceSessionEntity } from "@/app/class-track/feats/attendance/domain/entities/AttendanceSession.entity";
 import type { AbsentStudentProjection } from "@/app/class-track/feats/attendance/domain/projections/AbsentStudent.projection";
 import type { StudentInClassProjection } from "@/app/class-track/core/students/domain/projections/StudentInClass.projection";
@@ -15,6 +16,10 @@ export class AttendanceSessionRepositoryImpl implements AttendanceSessionReposit
 
     public async endSession(dto: EndAttendanceSessionDto): Promise<AttendanceSessionEntity> {
         return this.datasource.endSession(dto);
+    }
+
+    public async approveSession(dto: ApproveAttendanceSessionDto): Promise<AttendanceSessionEntity> {
+        return this.datasource.approveSession(dto);
     }
 
     public async getStudentsAbsentForMoreThan(days: number): Promise<AbsentStudentProjection[]> {
