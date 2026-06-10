@@ -44,7 +44,7 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
 
             await Promise.all(updatePromises);
 
-            const finalPurchasedLevels = await this.getFinalPurchasedLevels(createdContracts);
+            const finalPurchasedLevels = await this.getFinalPurchasedLevels(createdContracts, transaction);
 
             return this.convertArrayToEntity(finalPurchasedLevels);
         });
@@ -106,9 +106,18 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
 
         targetLevel.st_mod_status = studentModuleStatus.Approved;
 
-        await targetLevel.save();
+        const sequelize = StudentModule.sequelize;
+        if (!sequelize) throw CustomError.serviceUnavailable("Sequelize instance not found");
 
-        return this.convertToEntity(targetLevel);
+        return await sequelize.transaction(async (transaction) => {
+            await targetLevel.save({ transaction });
+
+            const updatePromises = await this.selfHealingAlgorithm({ allStudentContracts: studentsLevels, transaction });
+
+            await Promise.all(updatePromises);
+
+            return this.convertToEntity(targetLevel);
+        });
     }
 
     async deleteStudentLevel(contractId: string): Promise<boolean> {
@@ -213,13 +222,14 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
         });
     }
 
-    private async getFinalPurchasedLevels(createdContracts: StudentModule[]) {
+    private async getFinalPurchasedLevels(createdContracts: StudentModule[], transaction: Transaction) {
         const createdContractIds = createdContracts.map((contract) => contract.st_mod_id);
 
         return await StudentModule.findAll({
             where: { st_mod_id: createdContractIds },
             include: [{ model: Module, as: "module" }],
             order: [[{ model: Module, as: "module" }, "mo_level", "ASC"]],
+            transaction,
         });
     }
 

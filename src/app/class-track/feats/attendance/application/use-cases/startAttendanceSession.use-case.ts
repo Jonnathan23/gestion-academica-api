@@ -1,17 +1,18 @@
 import { AttendanceSessionRepository } from "@/app/class-track/feats/attendance/domain/repositories/attendanceSession.repository";
-import { StudentProjectionRepository } from "@/app/class-track/feats/attendance/domain/repositories/studentProjection.repository";
+
 import type { StartAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/StartAttendanceSession.dto";
 import type { AttendanceSessionEntity } from "@/app/class-track/feats/attendance/domain/entities/AttendanceSession.entity";
 import { CustomError } from "@/core/error/customError.error";
+import type { StudentClassTrackRepository } from "@/app/class-track/core/students/domain/repositories/student.repository";
 
 export class StartAttendanceSessionUseCase {
     constructor(
         private readonly attendanceSessionRepository: AttendanceSessionRepository,
-        private readonly studentProjectionRepository: StudentProjectionRepository,
+        private readonly studentProjectionRepository: StudentClassTrackRepository,
     ) {}
 
     public async execute(dto: StartAttendanceSessionDto): Promise<AttendanceSessionEntity> {
-        const studentProfile = await this.studentProjectionRepository.getActiveStudentProfile(dto.studentId);
+        const studentProfile = await this.studentProjectionRepository.findStudentWithLevelActive(dto.studentId);
 
         if (studentProfile.isContractFrozen) {
             throw CustomError.forbidden("Contract is frozen");

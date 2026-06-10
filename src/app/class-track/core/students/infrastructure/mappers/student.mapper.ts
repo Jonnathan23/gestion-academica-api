@@ -1,5 +1,5 @@
+import { StudentClassTrackProjection } from "@/app/class-track/core/students/domain/projections/StudentClassTrack.projection";
 import { CustomError } from "@/core/error/customError.error";
-import { StudentClassTrackProjection } from "../../domain/projections/StudentClassTrack.projection";
 
 export class StudentMapper {
     public static studentClassTrackProjectionFromObject(object: { [key: string]: any }): StudentClassTrackProjection {

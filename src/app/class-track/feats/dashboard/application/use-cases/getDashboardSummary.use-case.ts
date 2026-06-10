@@ -1,12 +1,12 @@
 import type { AttendanceSessionRepository } from "@/app/class-track/feats/attendance/domain/repositories/attendanceSession.repository";
-import type { StudentProjectionRepository } from "@/app/class-track/feats/attendance/domain/repositories/studentProjection.repository";
 import { DashboardSummaryProjection } from "@/app/class-track/feats/dashboard/domain/projections/Dashboard.projection";
 import { attendanceSessionStatus } from "@/app/class-track/feats/attendance/domain/interfaces/Attendance.interface";
+import type { StudentClassTrackRepository } from "@/app/class-track/core/students/domain/repositories/student.repository";
 
 export class GetDashboardSummaryUseCase {
     constructor(
         private readonly attendanceRepository: AttendanceSessionRepository,
-        private readonly studentRepository: StudentProjectionRepository,
+        private readonly studentRepository: StudentClassTrackRepository,
     ) {}
 
     public async execute(): Promise<DashboardSummaryProjection> {

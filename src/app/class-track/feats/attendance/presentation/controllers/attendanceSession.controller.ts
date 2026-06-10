@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import type { AttendanceSessionRepository } from "@/app/class-track/feats/attendance/domain/repositories/attendanceSession.repository";
-import type { StudentProjectionRepository } from "@/app/class-track/feats/attendance/domain/repositories/studentProjection.repository";
+
 import { StartAttendanceSessionUseCase } from "@/app/class-track/feats/attendance/application/use-cases/startAttendanceSession.use-case";
 import { EndAttendanceSessionUseCase } from "@/app/class-track/feats/attendance/application/use-cases/endAttendanceSession.use-case";
 import { StartAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/StartAttendanceSession.dto";
@@ -8,11 +8,12 @@ import { EndAttendanceSessionDto } from "@/app/class-track/feats/attendance/doma
 import { CustomError } from "@/core/error/customError.error";
 import { SuccessResponse } from "@/core/utils/SuccesResponse";
 import { GetActiveSessionsUseCase } from "@/app/class-track/feats/attendance/application/use-cases/getAllActiveSessions.use-case";
+import type { StudentClassTrackRepository } from "@/app/class-track/core/students/domain/repositories/student.repository";
 
 export class AttendanceSessionController {
     constructor(
         private readonly attendanceSessionRepository: AttendanceSessionRepository,
-        private readonly studentProjectionRepository: StudentProjectionRepository,
+        private readonly studentProjectionRepository: StudentClassTrackRepository,
     ) {}
 
     public checkIn = (req: Request, res: Response, next: NextFunction) => {

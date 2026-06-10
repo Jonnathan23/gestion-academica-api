@@ -1,4 +1,4 @@
-import type { StudentInClassProjection } from "@/app/class-track/feats/attendance/domain/projections/StudentInClass.projection";
+import type { StudentInClassProjection } from "@/app/class-track/core/students/domain/projections/StudentInClass.projection";
 
 export class DashboardSummaryProjection {
     constructor(

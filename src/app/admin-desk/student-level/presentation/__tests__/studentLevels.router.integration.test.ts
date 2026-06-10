@@ -233,38 +233,34 @@ describe("Integration Tests: Student Levels Router (Contracts)", () => {
     // 2. Pruebas de Cascada (PATCH /api/student-levels/:studentLevelId/status)
     // ---------------------------------------------------------------- //
     describe("PATCH /api/student-levels/:studentLevelId/status", () => {
-        test("[400] Falla si el estado enviado no es valido o falta", async () => {
-            // Falla por falta de estado
+        test("[400] Falla si los parametros son malformados", async () => {
+            // Falla por malformed studentId
             const resNoStatus = await request(testingContractsApp)
-                .patch(`/api/student-levels/${studentLevelA1Id}/status`)
-                .set("Authorization", `Bearer ${adminToken}`)
-                .send({});
+                .patch(`/api/student-levels/${studentLevelA1Id}/status/finish-current/${MALFORMED_ID}`)
+                .set("Authorization", `Bearer ${adminToken}`);
 
             expect(resNoStatus.status).toBe(400);
 
-            // Falla por estado invalido
+            // Falla por malformed studentLevelId
             const resInvalidStatus = await request(testingContractsApp)
-                .patch(`/api/student-levels/${studentLevelA1Id}/status`)
-                .set("Authorization", `Bearer ${adminToken}`)
-                .send({ status: "INVALID_STATE", studentId: testStudentId });
+                .patch(`/api/student-levels/${MALFORMED_ID}/status/finish-current/${testStudentId}`)
+                .set("Authorization", `Bearer ${adminToken}`);
 
             expect(resInvalidStatus.status).toBe(400);
         });
 
         test("[404] Falla si el ID del nivel no existe en la BD", async () => {
             const res = await request(testingContractsApp)
-                .patch(`/api/student-levels/${NON_EXISTENT_UUID}/status`)
-                .set("Authorization", `Bearer ${adminToken}`)
-                .send({ status: "APPROVED", studentId: testStudentId });
+                .patch(`/api/student-levels/${NON_EXISTENT_UUID}/status/finish-current/${testStudentId}`)
+                .set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(404);
         });
 
         test("[200] Actualiza el nivel 'A1' a estado APPROVED. Verifica que el response sea exitoso", async () => {
             const res = await request(testingContractsApp)
-                .patch(`/api/student-levels/${studentLevelA1Id}/status`)
-                .set("Authorization", `Bearer ${adminToken}`)
-                .send({ status: "APPROVED", studentId: testStudentId });
+                .patch(`/api/student-levels/${studentLevelA1Id}/status/finish-current/${testStudentId}`)
+                .set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(200);
             expect(res.body.success).toBe(true);
@@ -351,11 +347,10 @@ describe("Integration Tests: Student Levels Router (Contracts)", () => {
             expect(res.body.errors[0].message).toContain("Access denied");
         });
 
-        test("[403] Should deny access to PATCH /api/student-levels/:studentLevelId/status if user lacks ADMINDESK_CONTRACTS_WRITE permission", async () => {
+        test("[403] Should deny access to PATCH /api/student-levels/:studentLevelId/status/finish-current/:studentId if user lacks ADMINDESK_CONTRACTS_WRITE permission", async () => {
             const res = await request(testingContractsApp)
-                .patch(`/api/student-levels/${studentLevelA1Id}/status`)
-                .set("Authorization", `Bearer ${teacherToken}`)
-                .send({ status: "APPROVED", studentId: testStudentId });
+                .patch(`/api/student-levels/${studentLevelA1Id}/status/finish-current/${testStudentId}`)
+                .set("Authorization", `Bearer ${teacherToken}`);
 
             expect(res.status).toBe(403);
             expect(res.body.errors[0].message).toContain("Access denied");

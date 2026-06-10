@@ -27,6 +27,7 @@ export class StudentLevelDetailsProjection {
         public readonly module: ModuleRelation,
         public readonly seller: SellerRelation,
         public readonly status: StudentModuleStatus,
+        public readonly freezeCount: number,
         public readonly purchaseDate: Date,
         public readonly createdAt: Date,
         public readonly updatedAt: Date,

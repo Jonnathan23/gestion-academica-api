@@ -7,6 +7,8 @@ export class StudentLevelEntity {
         public readonly moduleId: string,
         public readonly sellerId: string,
         public readonly status: StudentModuleStatus,
+        public readonly freezeCount: number,
+        public readonly reactivateCount: number,
         public readonly purchaseDate: Date,
         public readonly createdAt: Date,
         public readonly updatedAt: Date,

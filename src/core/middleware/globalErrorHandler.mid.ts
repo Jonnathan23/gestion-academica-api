@@ -15,6 +15,7 @@ interface ErrorResponse {
 // Función de orden superior que inyecta la dependencia
 export const createGlobalErrorHandler = (databaseErrorHandler: DatabaseErrorHandler) => {
     return (error: unknown, request: Request, response: Response, nextFunction: NextFunction) => {
+        console.log(error);
         // Errores de Dominio / Negocio
         if (error instanceof CustomError) {
             const errorResponse: ErrorResponse = {

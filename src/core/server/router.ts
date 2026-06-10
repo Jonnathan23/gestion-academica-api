@@ -10,7 +10,7 @@ import { UserSegurityDataSourceImpl } from "@/app/shared/identity/infrastructure
 import { AttendanceSessionRouter } from "@/app/class-track/feats/attendance/presentation/routes/attendanceSession.router";
 import { LessonLogRouter } from "@/app/class-track/feats/attendance/presentation/routes/lessonLog.router";
 import { DashboardRouter } from "@/app/class-track/feats/dashboard/presentation/routes/dashboard.router";
-import { StudentRouterClassTrack } from "@/app/class-track/feats/students/presentation/routes/student.router";
+import { StudentRouterClassTrack } from "@/app/class-track/core/students/presentation/routes/student.router";
 
 export class AppRouter {
     public static get routes(): Router {

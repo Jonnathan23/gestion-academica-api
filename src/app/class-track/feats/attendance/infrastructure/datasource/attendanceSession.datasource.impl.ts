@@ -7,12 +7,13 @@ import type { EndAttendanceSessionDto } from "@/app/class-track/feats/attendance
 import type { AttendanceSessionEntity } from "@/app/class-track/feats/attendance/domain/entities/AttendanceSession.entity";
 import type { AbsentStudentProjection } from "@/app/class-track/feats/attendance/domain/projections/AbsentStudent.projection";
 import { AbsentStudentMapper } from "@/app/class-track/feats/attendance/infrastructure/mappers/absentStudent.mapper";
-import { StudentInClassProjection } from "@/app/class-track/feats/attendance/domain/projections/StudentInClass.projection";
-import { StudentInClassMapper } from "@/app/class-track/feats/attendance/infrastructure/mappers/studentInClass.mapper";
+import { StudentInClassProjection } from "@/app/class-track/core/students/domain/projections/StudentInClass.projection";
+import { StudentInClassMapper } from "@/app/class-track/core/students/infrastructure/mappers/studentInClass.mapper";
 import { attendanceSessionStatus } from "@/app/class-track/feats/attendance/domain/interfaces/Attendance.interface";
-import Student, { studentContractStatus } from "@/data/models/admin-desk/Student.model";
+import Student from "@/data/models/admin-desk/Student.model";
 import { AttendanceSessionMapper } from "@/app/class-track/feats/attendance/infrastructure/mappers/attendanceSession.mapper";
 import StudentModule from "@/data/models/admin-desk/StudentModule.model";
+import { studentModuleStatus } from "@/core/interfaces/Contracts.interface";
 
 interface AbsentStudentQueryRow {
     at_se_student_id: string;
@@ -174,11 +175,9 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
                         {
                             model: StudentModule,
                             required: true,
-                            attributes: ["st_mod_status"],
+                            attributes: ["st_mod_module_id"],
                             where: {
-                                st_mod_status: {
-                                    [Op.in]: [studentContractStatus.Active, studentContractStatus.Frozen],
-                                },
+                                st_mod_status: studentModuleStatus.Active,
                             },
                         },
                     ],
@@ -190,9 +189,6 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
     }
 
     private convertArrayToStudentInClassProjections(attendanceSessions: AttendanceSession[]): StudentInClassProjection[] {
-        const arraySessins = attendanceSessions.map((attendanceSession) => {
-            return StudentInClassMapper.projectionFromDbRecord(attendanceSession);
-        });
-        return arraySessins;
+        return attendanceSessions.map((attendanceSession) => StudentInClassMapper.projectionFromDbRecord(attendanceSession));
     }
 }

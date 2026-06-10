@@ -1,13 +1,15 @@
 import type { Request, Response, NextFunction } from "express";
-import { SearchStudentsDto } from "@/app/class-track/feats/students/domain/dtos/SearchStudentDto.dto";
-import type { StudentRepository } from "@/app/class-track/feats/students/domain/repositories/student.repository";
-import { CustomError } from "@/core/error/customError.error";
-import { SearchStudentsUseCase } from "@/app/class-track/feats/students/application/use-cases/searchStudents.use-case";
-import type { StudentClassTrackProjection } from "@/app/class-track/feats/students/domain/projections/StudentClassTrack.projection";
-import { SuccessResponse } from "@/core/utils/SuccesResponse";
 
-export class StudentController {
-    constructor(private readonly studentRepository: StudentRepository) {}
+import { CustomError } from "@/core/error/customError.error";
+
+import { SuccessResponse } from "@/core/utils/SuccesResponse";
+import type { StudentClassTrackRepository } from "@/app/class-track/core/students/domain/repositories/student.repository";
+import { SearchStudentsDto } from "@/app/class-track/core/students/domain/dtos/SearchStudentDto.dto";
+import { SearchStudentsUseCase } from "@/app/class-track/core/students/application/use-cases/searchStudents.use-case";
+import type { StudentClassTrackProjection } from "@/app/class-track/core/students/domain/projections/StudentClassTrack.projection";
+
+export class StudentClassTrackController {
+    constructor(private readonly studentRepository: StudentClassTrackRepository) {}
 
     public searchStudents = (req: Request, res: Response, next: NextFunction) => {
         const [error, searchStudentsDto] = SearchStudentsDto.create(req.query);

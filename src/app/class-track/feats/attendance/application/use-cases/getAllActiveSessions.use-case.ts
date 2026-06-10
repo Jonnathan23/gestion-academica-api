@@ -1,5 +1,5 @@
 import { attendanceSessionStatus } from "@/app/class-track/feats/attendance/domain/interfaces/Attendance.interface";
-import type { StudentInClassProjection } from "@/app/class-track/feats/attendance/domain/projections/StudentInClass.projection";
+import type { StudentInClassProjection } from "@/app/class-track/core/students/domain/projections/StudentInClass.projection";
 import type { AttendanceSessionRepository } from "@/app/class-track/feats/attendance/domain/repositories/attendanceSession.repository";
 
 export class GetActiveSessionsUseCase {
