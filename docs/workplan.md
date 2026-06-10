@@ -9,45 +9,24 @@ You are operating within the `SALC` backend, a Node.js + TypeScript (Bun) system
 - We are currently developing the `ClassTrack` subsystem.
 
 ### 1.1 Strict Directory Structure
-
 You are FORBIDDEN from inventing new folders. You must strictly place all generated code within this exact tree:
 ├───application
-│ └───useCases
+│   └───useCases
 ├───domain
-│ ├───datasource
-│ ├───dtos
-│ ├───entities
-│ ├───interfaces
-│ ├───projections
-│ └───repositories
+│   ├───datasource
+│   ├───dtos
+│   ├───entities
+│   ├───interfaces
+│   ├───projections
+│   └───repositories
 ├───infrastructure
-│ ├───datasource
-│ ├───interfaces
-│ ├───mappers
-│ └───repositories
+│   ├───datasource
+│   ├───interfaces
+│   ├───mappers
+│   └───repositories
 └───presentation
-├───controllers
-├───documentation
-└───**tests**
-
-_Note: Routers or entry-point Workers must be placed directly inside the `presentation/` directory. Do not create a `routes` folder._
-
-### 1.2 Strict File Naming Conventions
-
-To comply with the project's ESLint rules, you MUST name files using the following strict suffixes. Never deviate from this pattern:
-
-- **Entities:** `[name].entity.ts` (e.g., `AttendanceSession.entity.ts`)
-- **DTOs:** `[name].dto.ts` (e.g., `CreateModule.dto.ts`)
-- **Datasource Interfaces:** `[name].datasource.ts`
-- **Datasource Implementations:** `[name].datasource.impl.ts`
-- **Repository Interfaces:** `[name].repository.ts`
-- **Repository Implementations:** `[name].repository.impl.ts`
-- **Mappers:** `[name].mapper.ts`
-- **Use Cases:** `[name].use-case.ts`
-- **Controllers:** `[name].controller.ts`
-- **Workers:** `[name].worker.ts`
-
----
+    ├───controllers
+    ├───documentation
 
 ## 2. Your Available Skills
 
