@@ -11,6 +11,7 @@ import { AttendanceSessionRouter } from "@/app/class-track/feats/attendance/pres
 import { LessonLogRouter } from "@/app/class-track/feats/attendance/presentation/routes/lessonLog.router";
 import { DashboardRouter } from "@/app/class-track/feats/dashboard/presentation/routes/dashboard.router";
 import { StudentRouterClassTrack } from "@/app/class-track/core/students/presentation/routes/student.router";
+import { RetentionAlertRoutes } from "@/app/class-track/feats/retention-alerts/presentation/retentionAlert.routes";
 
 export class AppRouter {
     public static get routes(): Router {
@@ -42,6 +43,8 @@ export class AppRouter {
         router.use("/dashboard", DashboardRouter.routes);
 
         router.use("/class-track/students", StudentRouterClassTrack.routes);
+
+        router.use("/class-track/retention-alerts", RetentionAlertRoutes.routes);
 
         return router;
     }

@@ -1,7 +1,19 @@
-import { Op } from "sequelize";
+import { Op, type FindOptions, type WhereOptions } from "sequelize";
 import RetentionAlert from "@/data/models/class-track/RetentionAlert.model";
+import Student from "@/data/models/admin-desk/Student.model";
 import type { RetentionAlertDatasource } from "@/app/class-track/feats/retention-alerts/domain/datasource/retentionAlert.datasource";
-import { retentionAlertStatus } from "@/app/class-track/feats/retention-alerts/domain/interfaces/RetentionAlert.interface";
+import {
+    retentionAlertStatus,
+    type RetentionAlertStatus,
+} from "@/app/class-track/feats/retention-alerts/domain/interfaces/RetentionAlert.interface";
+
+import { CustomError } from "@/core/error/customError.error";
+import type { RetentionAlertWithStudentProjection } from "@/app/class-track/feats/retention-alerts/domain/projections/RetentionAlertWithStudent.projection";
+import type { GetRetentionAlertsDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/GetRetentionAlerts.dto";
+import type { UpdateRetentionAlertDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/UpdateRetentionAlert.dto";
+import type { RetentionAlertEntity } from "@/app/class-track/feats/retention-alerts/domain/entities/RetentionAlert.entity";
+import { RetentionAlertWithStudentMapper } from "@/app/class-track/feats/retention-alerts/infrastructure/mappers/retentionAlertWithStudent.mapper";
+import { RetentionAlertMapper } from "@/app/class-track/feats/retention-alerts/infrastructure/mappers/retentionAlert.mapper";
 
 export class RetentionAlertDatasourceImpl implements RetentionAlertDatasource {
     public async upsertAlert(studentId: string, daysAbsent: number): Promise<void> {
@@ -9,7 +21,7 @@ export class RetentionAlertDatasourceImpl implements RetentionAlertDatasource {
             where: {
                 re_al_student_id: studentId,
                 re_al_status: {
-                    [Op.in]: ["PENDING", "IN_PROGRESS"],
+                    [Op.in]: [retentionAlertStatus.Pending, retentionAlertStatus.InProgress],
                 },
             },
         });
@@ -28,5 +40,79 @@ export class RetentionAlertDatasourceImpl implements RetentionAlertDatasource {
                 re_al_user_id: null, // Allow system to assign null initially
             });
         }
+    }
+
+    public async getAlerts(dto: GetRetentionAlertsDto): Promise<RetentionAlertWithStudentProjection[]> {
+        const queryOptions = this.buildGetAlertsQueryOptions(dto);
+        const alerts = await RetentionAlert.findAll(queryOptions);
+        return this.mapToRetentionAlertWithStudentProjections(alerts);
+    }
+
+    public async updateAlertInfo(id: string, dto: UpdateRetentionAlertDto): Promise<RetentionAlertEntity> {
+        const alert = await RetentionAlert.findByPk(id);
+        if (!alert) {
+            throw CustomError.notFound("Retention alert not found");
+        }
+
+        await alert.update({
+            re_al_has_responded: dto.hasResponded,
+            re_al_is_justified: dto.isJustified,
+            re_al_observations: dto.observations,
+            re_al_contact_date: dto.contactDate || alert.re_al_contact_date,
+            re_al_justification_reason: dto.justificationReason || alert.re_al_justification_reason,
+            re_al_return_deadline: dto.returnDeadline || alert.re_al_return_deadline,
+        });
+
+        return this.mapToRetentionAlertEntity(alert);
+    }
+
+    public async changeAlertStatus(id: string, status: RetentionAlertStatus): Promise<RetentionAlertEntity> {
+        const alert = await RetentionAlert.findByPk(id);
+        if (!alert) {
+            throw CustomError.notFound("Retention alert not found");
+        }
+
+        await alert.update({
+            re_al_status: status,
+            re_al_resolution_date:
+                status === retentionAlertStatus.Resolved || status === retentionAlertStatus.ClosedFrozen ? new Date() : null,
+        });
+
+        return this.mapToRetentionAlertEntity(alert);
+    }
+
+    private buildGetAlertsQueryOptions(dto: GetRetentionAlertsDto): FindOptions {
+        const whereClause: WhereOptions = {};
+        if (dto.status) {
+            whereClause.re_al_status = dto.status;
+        }
+
+        const limit = dto.limit || 10;
+        const page = dto.page || 1;
+        const offset = (page - 1) * limit;
+
+        return {
+            where: whereClause,
+            include: [
+                {
+                    model: Student,
+                    required: true,
+                },
+            ],
+            limit,
+            offset,
+            order: [["re_al_created_at", "DESC"]],
+        };
+    }
+
+    private async mapToRetentionAlertWithStudentProjections(alerts: RetentionAlert[]): Promise<RetentionAlertWithStudentProjection[]> {
+        return alerts.map((alert) => {
+            const rawObj = alert.toJSON();
+            return RetentionAlertWithStudentMapper.create(rawObj);
+        });
+    }
+
+    private async mapToRetentionAlertEntity(alert: RetentionAlert): Promise<RetentionAlertEntity> {
+        return RetentionAlertMapper.create(alert.toJSON());
     }
 }
