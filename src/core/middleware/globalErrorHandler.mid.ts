@@ -1,4 +1,4 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 
 import { CustomError } from "@/core/error";
 import type { DatabaseErrorHandler } from "@/core/interfaces/DatabaseErrorHandler.interface";
@@ -14,7 +14,8 @@ interface ErrorResponse {
 
 // Función de orden superior que inyecta la dependencia
 export const createGlobalErrorHandler = (databaseErrorHandler: DatabaseErrorHandler) => {
-    return (error: unknown, request: Request, response: Response) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    return (error: unknown, request: Request, response: Response, nextFunction: NextFunction) => {
         // Errores de Dominio / Negocio
         if (error instanceof CustomError) {
             const errorResponse: ErrorResponse = {

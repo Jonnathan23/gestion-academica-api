@@ -11,6 +11,7 @@ import type { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/e
 import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-level/domain/projections/ContractDetails.projection";
 import type { StudentLevelRepositoryImpl } from "@/app/admin-desk/student-level/infrastructure/repositories/contract.repository.impl";
 import { CustomError } from "@/core/error";
+import type { AuthRequest } from "@/core/middleware/auth.mid";
 import { SuccessResponse } from "@/core/utils";
 import type { Request, Response, NextFunction } from "express";
 
@@ -19,7 +20,7 @@ export class ContractController {
 
     purchaseModules = (req: Request, res: Response, next: NextFunction) => {
         const { studentId } = req.params;
-        const sellerId = (req as any).userSession?.id;
+        const sellerId = (req as AuthRequest).userSession?.id;
 
         const [error, purchaseModulesDto] = PurchaseModulesDto.create({
             ...req.body,

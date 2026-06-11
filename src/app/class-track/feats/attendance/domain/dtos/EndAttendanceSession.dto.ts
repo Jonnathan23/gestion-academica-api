@@ -5,10 +5,9 @@ export class EndAttendanceSessionDto {
     ) {}
 
     public static create(object: { [key: string]: any }): [string?, EndAttendanceSessionDto?] {
-        const { sessionId, teacherId, exitTime } = object;
+        const { sessionId, exitTime } = object;
 
         if (!sessionId) return ["Missing sessionId"];
-        if (!teacherId) return ["Missing teacherId"];
 
         let validExitTime = exitTime;
         if (!(exitTime instanceof Date) || isNaN(exitTime.getTime())) {

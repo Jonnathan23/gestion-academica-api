@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
+import type { AuthRequest } from "@/core/middleware/auth.mid";
 import type { AttendanceSessionRepository } from "@/app/class-track/feats/attendance/domain/repositories/attendanceSession.repository";
 
 import { StartAttendanceSessionUseCase } from "@/app/class-track/feats/attendance/application/use-cases/startAttendanceSession.use-case";
@@ -45,7 +46,8 @@ export class AttendanceSessionController {
     };
 
     public approve = (req: Request, res: Response, next: NextFunction) => {
-        const [error, approveDto] = ApproveAttendanceSessionDto.create(req.body);
+        const teacherId = (req as AuthRequest).userSession?.id;
+        const [error, approveDto] = ApproveAttendanceSessionDto.create(req.body, teacherId!.toString());
 
         if (error || !approveDto) {
             return next(CustomError.badRequest(error || "Invalid request data"));

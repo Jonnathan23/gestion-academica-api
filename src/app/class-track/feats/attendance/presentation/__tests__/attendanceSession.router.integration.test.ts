@@ -192,9 +192,7 @@ describe("Integration Tests: AttendanceSession Router", () => {
     // ---------------------------------------------------------------- //
     describe("PATCH /api/attendance/check-out", () => {
         test("[400] Missing 'sessionId' should fail", async () => {
-            const res = await request(testingApp)
-                .patch("/api/attendance/check-out")
-                .send({ teacherId: teacherUserId, exitTime: new Date() });
+            const res = await request(testingApp).patch("/api/attendance/check-out").send({ exitTime: new Date() });
 
             expect(res.status).toBe(400);
             expect(res.body.errors[0].message).toContain("Missing sessionId");
@@ -203,7 +201,6 @@ describe("Integration Tests: AttendanceSession Router", () => {
         test("[200] Valid payload should update session to PENDING_APPROVAL", async () => {
             const res = await request(testingApp).patch("/api/attendance/check-out").send({
                 sessionId: inProgressSessionId,
-                teacherId: teacherUserId,
                 exitTime: new Date(),
             });
 
@@ -227,20 +224,9 @@ describe("Integration Tests: AttendanceSession Router", () => {
             expect(res.body.errors[0].message).toBe("You must be logged in");
         });
 
-        test("[400] Missing 'teacherId' should fail", async () => {
-            const res = await request(testingApp)
-                .patch("/api/attendance/approve")
-                .set("Authorization", `Bearer ${adminToken}`)
-                .send({ sessionId: pendingApprovalSessionId });
-
-            expect(res.status).toBe(400);
-            expect(res.body.errors[0].message).toContain("Missing teacherId");
-        });
-
         test("[200] Valid payload should approve session", async () => {
             const res = await request(testingApp).patch("/api/attendance/approve").set("Authorization", `Bearer ${adminToken}`).send({
                 sessionId: pendingApprovalSessionId,
-                teacherId: adminUserId,
             });
 
             expect(res.status).toBe(200);

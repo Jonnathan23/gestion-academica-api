@@ -29,7 +29,6 @@ Data Transfer Object for starting an attendance session.
 Data Transfer Object for ending an attendance session.
 
 - `sessionId` (string, required): The identifier of the session to end.
-- `teacherId` (string, required): The identifier of the teacher ending the session.
 - `exitTime` (Date, required): The time the student checked out.
 
 ### `ApproveAttendanceSessionDto`
@@ -37,7 +36,6 @@ Data Transfer Object for ending an attendance session.
 Data Transfer Object for approving a pending attendance session.
 
 - `sessionId` (string, required): The identifier of the session to approve.
-- `teacherId` (string, required): The identifier of the teacher approving the session.
 
 ## Interfaces
 
