@@ -1,6 +1,6 @@
 import { CorsConfig, environmentVariables } from "@/core/config";
 import { AppRouter, Server } from "@/core/server";
-import { DatabaseConnection } from "@/data/config/db-postgresql";
+import { DatabaseConnection } from "@/data/config/dbPostgresql";
 import { ColorsAdapter } from "@/core/utils";
 import { SequelizeErrorHandler } from "@/data/errors/SequelizeErrorHandler";
 import { SwaggerConfiguration } from "@/core/config/swagger";

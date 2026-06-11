@@ -1,7 +1,5 @@
 import type { RegisterStudentDto, UpdateStudentDto, ChangeContractStatusDto, StudentEntity } from "@/app/admin-desk/students/domain";
 
-
-
 export abstract class StudentDataSource {
     abstract register(dto: RegisterStudentDto): Promise<StudentEntity>;
     abstract search(query: string): Promise<StudentEntity[]>;

@@ -2,12 +2,9 @@ import type { PaymentDataSource } from "@/app/admin-desk/payments/domain/datasou
 import type { CreatePaymentPlanDto, PayQuotaDto } from "@/app/admin-desk/payments/domain/dtos";
 import type { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/PaymentPlanEntity";
 import type { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/PaymentQuotaEntity";
-import type { PaymentRepository } from "@/app/admin-desk/payments/domain/repositories/Payment.repository";
-
-
+import type { PaymentRepository } from "@/app/admin-desk/payments/domain/repositories/payment.repository";
 
 export class PaymentRepositoryImpl implements PaymentRepository {
-    
     constructor(private readonly datasource: PaymentDataSource) {}
 
     async createPaymentPlan(dto: CreatePaymentPlanDto, generatedQuotas: PaymentQuotaEntity[]): Promise<PaymentPlanEntity> {

@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import { StudentDataSourceImpl } from "@/app/admin-desk/students/infrastructure/datasource/student.datasource.impl";
 import { StudentRepositoryImpl } from "@/app/admin-desk/students/infrastructure/repositories/student.repository.impl";
-import { StudentController } from "@/app/admin-desk/students/presentation/controllers/Student.Controller";
+import { StudentController } from "@/app/admin-desk/students/presentation/controllers/student.controller";
 import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
 import { systemPermissions } from "@/core/constants";
 

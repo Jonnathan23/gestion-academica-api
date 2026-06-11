@@ -14,6 +14,7 @@ interface ErrorResponse {
 
 // Función de orden superior que inyecta la dependencia
 export const createGlobalErrorHandler = (databaseErrorHandler: DatabaseErrorHandler) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return (error: unknown, request: Request, response: Response, nextFunction: NextFunction) => {
         // Errores de Dominio / Negocio
         if (error instanceof CustomError) {

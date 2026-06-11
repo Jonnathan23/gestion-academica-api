@@ -1,5 +1,5 @@
-import swaggerJsdoc, { type Options } from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
+import swaggerJsdoc, { type Options } from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 
 interface SwaggerUserInterfaceOptions {
     customCss: string;
@@ -13,25 +13,25 @@ export class SwaggerConfiguration {
     constructor() {
         const swaggerOptions: Options = {
             definition: {
-                openapi: '3.0.0',
+                openapi: "3.0.0",
                 info: {
-                    title: 'AdminDesk & ClassTrack API',
-                    version: '1.0.0',
-                    description: 'RESTful API documentation for the academic management system.'
+                    title: "AdminDesk & ClassTrack API",
+                    version: "1.0.0",
+                    description: "RESTful API documentation for the academic management system.",
                 },
                 components: {
                     securitySchemes: {
                         bearerAuth: {
-                            type: 'http',
-                            scheme: 'bearer',
-                            bearerFormat: 'JWT',
+                            type: "http",
+                            scheme: "bearer",
+                            bearerFormat: "JWT",
                         },
                     },
                 },
             },
             apis: [
-                './src/app/**/*.ts', // Para leer los comentarios de los controladores
-                './src/data/models/**/*.ts' // Para leer las definiciones de los esquemas
+                "./src/app/**/*.ts", // Para leer los comentarios de los controladores
+                "./src/data/models/**/*.ts", // Para leer las definiciones de los esquemas
             ],
         };
 
@@ -107,7 +107,7 @@ export class SwaggerConfiguration {
                 box-shadow: 0 2px 4px rgba(104, 92, 70, 0.1);
             }
             `,
-            customSiteTitle: 'API Docs - AdminDesk & ClassTrack'
+            customSiteTitle: "API Docs - AdminDesk & ClassTrack",
         };
     }
 

@@ -8,50 +8,61 @@ description: Create integration tests for the backend application
 **ROLE:** Act as a Senior QA Automation Engineer and Backend Developer expert in Node.js, `bun:test`, Supertest, and Clean Architecture.
 
 ## 1. Execution & Environment (CRITICAL)
+
 Whenever you suggest or execute commands to run the generated tests, you MUST use the predefined package.json script to ensure proper database routing and environment loading:
+
 - **Test Runner Command:** Use strictly `bun run test:local <file-path>`.
 - **Reasoning:** This script automatically injects the `.env.test.local` file, ensuring the tests target the isolated local testing database. Do NOT use the raw `bun test` command.
 
 **Execution Example:**
+
 ```bash
 bun run test:local src/app/admin-desk/modules/presentation/__tests__/module.router.integration.test.ts
 ```
 
 ## 2. Architecture: Success Responses
+
 All successful HTTP responses are formatted by the `SuccessResponse` utility class. You must assert against this exact structure:
+
 ```json
 {
   "success": true,
   "message": "Human readable message",
-  "data": { ... } 
+  "data": { ... }
 }
 ```
+
 **Assertion Example (`bun:test`):**
+
 ```typescript
-expect(res.status).toBe(200); 
+expect(res.status).toBe(200);
 expect(res.body.success).toBe(true);
 expect(res.body.message).toBe("Expected message");
 ```
 
 ## 3. Architecture: Error Handling (CRITICAL)
+
 All errors in the domain or controllers are thrown using the `CustomError` class. These are intercepted by a `globalErrorHandler` middleware, which ALWAYS returns errors inside an **array of objects**.
+
 ```json
 {
-  "errors": [
-    { "message": "Missing email" }
-  ]
+    "errors": [{ "message": "Missing email" }]
 }
 ```
+
 **Assertion Example (`bun:test`):**
 **DO NOT** use `res.body.error`. You MUST use `res.body.errors[0].message`:
+
 ```typescript
-expect(res.status).toBe(400); 
+expect(res.status).toBe(400);
 expect(res.body.errors[0].message).toContain("Missing email");
 ```
 
 ## 4. RBAC & Security Testing (Claims-Based)
-Endpoints are protected by `RoleMiddleware.requirePermissions([systemPermissions...])`. 
+
+Endpoints are protected by `RoleMiddleware.requirePermissions([systemPermissions...])`.
 The system uses a Role-Based Access Control mapping with four primary roles:
+
 - `ADMIN`: Has full access (`systemPermissions` all values).
 - `ADVISOR`: Can read/write Students, Contracts, and Payments. Can ONLY READ Modules.
 - `ACADEMIC_DIRECTOR`: Can read/write ClassTrack. Can ONLY READ AdminDesk entities.
@@ -62,6 +73,7 @@ The system uses a Role-Based Access Control mapping with four primary roles:
 Every integration test suite MUST include a specific `describe` block for RBAC security testing. You must assert that a role without the required permission receives a `403 Forbidden`.
 
 **Assertion Example (`bun:test`):**
+
 ```typescript
 describe("Authorization & Permissions (RBAC)", () => {
     let unauthorizedToken: string;
@@ -73,9 +85,9 @@ describe("Authorization & Permissions (RBAC)", () => {
             us_email: "teacher.rbac@test.com",
             us_password_hash: "MockHash123!",
             us_role: userRoles.TEACHER,
-            us_is_active: true // Ensure user is active for the AuthMiddleware
+            us_is_active: true, // Ensure user is active for the AuthMiddleware
         });
-        
+
         // 2. Generate Token
         unauthorizedToken = (await JwtAdapter.generateToken({
             id: teacherUser.us_id,
@@ -85,10 +97,7 @@ describe("Authorization & Permissions (RBAC)", () => {
     });
 
     test("[403] Should deny access to POST /api/resource if user lacks required permission", async () => {
-        const res = await request(app)
-            .post("/api/resource")
-            .set("Authorization", `Bearer ${unauthorizedToken}`)
-            .send(validPayload);
+        const res = await request(app).post("/api/resource").set("Authorization", `Bearer ${unauthorizedToken}`).send(validPayload);
 
         expect(res.status).toBe(403);
         expect(res.body.errors[0].message).toContain("Access denied");
@@ -97,6 +106,7 @@ describe("Authorization & Permissions (RBAC)", () => {
 ```
 
 ## 5. Testing Best Practices
+
 - Use `describe` to group endpoints and `test` for individual cases.
 - Prefix test descriptions with the expected HTTP status code (e.g., `test("[201] Valid payload creates...", ...)`).
 - Use the Arrange-Act-Assert pattern.
@@ -107,6 +117,7 @@ describe("Authorization & Permissions (RBAC)", () => {
 As a feature-specific testing agent, your scope is limited strictly to a single domain feature at a time. Before writing or updating any tests, you MUST be provided with the specific endpoint documentation context for the feature currently under test.
 
 **Your Execution Rules:**
+
 1. **Require Documentation:** DO NOT guess routes, payloads, or HTTP methods. You must wait for the user to provide the content of the specific feature's documentation (e.g., the contents of `docs\admin-desk\students\students-endpoint-structure.md`) before generating any code.
 2. **Extract Exact Routes:** Rely entirely on the provided document to accurately construct your Supertest calls. If the doc says `/api/v1/students`, you must use exactly that.
 3. **Strict Scope:** Only generate tests for the endpoints explicitly detailed in the provided documentation. Do not attempt to write tests for related modules or relationships unless their documentation is also explicitly provided in the same prompt.
@@ -114,11 +125,13 @@ As a feature-specific testing agent, your scope is limited strictly to a single 
 **Example of Expected Workflow:**
 
 **User Prompt:**
-> "Write integration tests for the new update student endpoint. Here is the documentation context: 
+
+> "Write integration tests for the new update student endpoint. Here is the documentation context:
 > `PUT /api/v1/students/:id`
 > Requires ADVISOR role. Body expects `us_full_name`."
 
 **Agent Action:**
+
 ```typescript
 import { describe, test, expect, beforeAll } from "bun:test";
 import request from "supertest";
@@ -137,3 +150,4 @@ describe("Students Feature - Update Endpoint", () => {
         expect(res.body.success).toBe(true);
     });
 });
+```

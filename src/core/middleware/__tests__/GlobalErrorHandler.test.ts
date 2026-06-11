@@ -5,10 +5,7 @@ import type { DatabaseErrorHandler, FormattedErrorResponse } from "@/core/interf
 import { CustomError } from "@/core/error";
 import { createGlobalErrorHandler } from "@/core/middleware";
 
-
-
 describe("GlobalErrorHandler Middleware Test Suite", () => {
-    
     let requestMock: Request;
     let responseMock: Response;
     let nextFunctionMock: NextFunction;
@@ -16,16 +13,16 @@ describe("GlobalErrorHandler Middleware Test Suite", () => {
 
     beforeEach(() => {
         requestMock = {} as Request;
-        
+
         responseMock = {
             status: mock().mockReturnThis(),
-            json: mock()
+            json: mock(),
         } as unknown as Response;
-        
+
         nextFunctionMock = mock();
 
         databaseErrorHandlerMock = {
-            handleDatabaseError: mock()
+            handleDatabaseError: mock(),
         };
     });
 
@@ -37,20 +34,20 @@ describe("GlobalErrorHandler Middleware Test Suite", () => {
 
         expect(responseMock.status).toHaveBeenCalledWith(400);
         expect(responseMock.json).toHaveBeenCalledWith({
-            errors: [{ message: "Invalid email format" }]
+            errors: [{ message: "Invalid email format" }],
         });
-        
-        // CORRECCIÓN: Como el middleware hace "return" temprano, 
+
+        // CORRECCIÓN: Como el middleware hace "return" temprano,
         // el manejador de base de datos NUNCA debe ser llamado.
         expect(databaseErrorHandlerMock.handleDatabaseError).not.toHaveBeenCalled();
     });
 
     test("Should delegate to DatabaseErrorHandler and format if it's a database error", () => {
         const fakeDatabaseError = new Error("Unique constraint failed");
-        
+
         const databaseFormattedResponse: FormattedErrorResponse = {
             statusCode: 409,
-            errors: [{ message: "Email already exists", path: "email" }]
+            errors: [{ message: "Email already exists", path: "email" }],
         };
         (databaseErrorHandlerMock.handleDatabaseError as ReturnType<typeof mock>).mockReturnValue(databaseFormattedResponse);
 
@@ -60,13 +57,13 @@ describe("GlobalErrorHandler Middleware Test Suite", () => {
 
         expect(responseMock.status).toHaveBeenCalledWith(409);
         expect(responseMock.json).toHaveBeenCalledWith({
-            errors: databaseFormattedResponse.errors
+            errors: databaseFormattedResponse.errors,
         });
     });
 
     test("Should fallback to 500 Internal Server Error for completely unknown errors", () => {
         const unknownError = new TypeError("Cannot read properties of undefined");
-        
+
         (databaseErrorHandlerMock.handleDatabaseError as ReturnType<typeof mock>).mockReturnValue(null);
 
         const errorHandlerMiddleware = createGlobalErrorHandler(databaseErrorHandlerMock);
@@ -78,7 +75,7 @@ describe("GlobalErrorHandler Middleware Test Suite", () => {
 
         expect(responseMock.status).toHaveBeenCalledWith(500);
         expect(responseMock.json).toHaveBeenCalledWith({
-            errors: [{ message: "Internal server error, please try again later" }]
+            errors: [{ message: "Internal server error, please try again later" }],
         });
 
         // Limpiamos el espía para que no afecte a futuros tests

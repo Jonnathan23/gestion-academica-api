@@ -3,10 +3,7 @@ import type { RegisterStudentDto, UpdateStudentDto, ChangeContractStatusDto, Stu
 import type { StudentRepository } from "@/app/admin-desk/students/domain/repositories/student.repository";
 
 export class StudentRepositoryImpl implements StudentRepository {
-
-    constructor(
-        private readonly datasource: StudentDataSource
-    ) { }
+    constructor(private readonly datasource: StudentDataSource) {}
 
     register(dto: RegisterStudentDto): Promise<StudentEntity> {
         return this.datasource.register(dto);

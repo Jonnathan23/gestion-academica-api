@@ -5,9 +5,9 @@ import cookieParser from "cookie-parser";
 
 import { ModulesRouter } from "@/app/admin-desk/modules/presentation/router";
 import { environmentVariables } from "@/core/config";
-import { DatabaseConnection } from "@/data/config/db-postgresql";
+import { DatabaseConnection } from "@/data/config/dbPostgresql";
 import { testGlobalErrorHandler } from "@/__test__/configTest";
-import { User } from "@/data/models/Shared";
+import { User } from "@/data/models/shared";
 import { JwtAdapter, BcryptAdapter } from "@/core/utils";
 import { AuthMiddleware } from "@/core/middleware/auth.mid";
 
@@ -48,7 +48,6 @@ const MALFORMED_ID = "not-a-uuid";
 // Test suite
 // ------------------------------------------------------------------ //
 describe("Integration Tests: Module Router (Authenticated)", () => {
-
     let adminToken: string;
     let createdModuleId: string;
 
@@ -88,7 +87,6 @@ describe("Integration Tests: Module Router (Authenticated)", () => {
     // AUTH — [401] Unauthenticated access
     // ---------------------------------------------------------------- //
     describe("Authentication guard", () => {
-
         test("[401] GET /api/modules without token should return 'You must be logged in'", async () => {
             const res = await request(testingModuleApp).get("/api/modules");
 
@@ -97,44 +95,35 @@ describe("Integration Tests: Module Router (Authenticated)", () => {
         });
 
         test("[401] POST /api/modules without token should be rejected", async () => {
-            const res = await request(testingModuleApp)
-                .post("/api/modules")
-                .send(VALID_MODULE_PAYLOAD);
+            const res = await request(testingModuleApp).post("/api/modules").send(VALID_MODULE_PAYLOAD);
 
             expect(res.status).toBe(401);
             expect(res.body.errors[0].message).toBe("You must be logged in");
         });
 
         test("[401] PATCH /api/modules/:id without token should be rejected", async () => {
-            const res = await request(testingModuleApp)
-                .patch(`/api/modules/${NON_EXISTENT_UUID}`)
-                .send({ mo_name: "Hacked" });
+            const res = await request(testingModuleApp).patch(`/api/modules/${NON_EXISTENT_UUID}`).send({ mo_name: "Hacked" });
 
             expect(res.status).toBe(401);
             expect(res.body.errors[0].message).toBe("You must be logged in");
         });
 
         test("[401] DELETE /api/modules/:id without token should be rejected", async () => {
-            const res = await request(testingModuleApp)
-                .delete(`/api/modules/${NON_EXISTENT_UUID}`);
+            const res = await request(testingModuleApp).delete(`/api/modules/${NON_EXISTENT_UUID}`);
 
             expect(res.status).toBe(401);
             expect(res.body.errors[0].message).toBe("You must be logged in");
         });
 
         test("[401] GET /api/modules with invalid token should return unauthorized", async () => {
-            const res = await request(testingModuleApp)
-                .get("/api/modules")
-                .set("Authorization", "Bearer this.is.not.valid");
+            const res = await request(testingModuleApp).get("/api/modules").set("Authorization", "Bearer this.is.not.valid");
 
             expect(res.status).toBe(401);
             expect(res.body).toHaveProperty("errors");
         });
 
         test("[401] Authorization header without 'Bearer ' prefix should be rejected", async () => {
-            const res = await request(testingModuleApp)
-                .get("/api/modules")
-                .set("Authorization", adminToken);
+            const res = await request(testingModuleApp).get("/api/modules").set("Authorization", adminToken);
 
             expect(res.status).toBe(401);
             expect(res.body.errors[0].message).toBe("You must be logged in");
@@ -146,7 +135,7 @@ describe("Integration Tests: Module Router (Authenticated)", () => {
                 us_email: "deact.module@test.com",
                 us_password_hash: "MockHash123!",
                 us_role: "TEACHER",
-                us_is_active: false
+                us_is_active: false,
             });
             const deactivatedToken = await JwtAdapter.generateToken({
                 id: deactivatedUser.us_id,
@@ -170,7 +159,6 @@ describe("Integration Tests: Module Router (Authenticated)", () => {
     // POST /api/modules — Create module
     // ---------------------------------------------------------------- //
     describe("POST /api/modules", () => {
-
         test("[400] Missing 'mo_name' should return validation error", async () => {
             const res = await request(testingModuleApp)
                 .post("/api/modules")
@@ -202,10 +190,7 @@ describe("Integration Tests: Module Router (Authenticated)", () => {
         });
 
         test("[400] Empty body should return validation error", async () => {
-            const res = await request(testingModuleApp)
-                .post("/api/modules")
-                .set("Authorization", `Bearer ${adminToken}`)
-                .send({});
+            const res = await request(testingModuleApp).post("/api/modules").set("Authorization", `Bearer ${adminToken}`).send({});
 
             expect(res.status).toBe(400);
             expect(res.body).toHaveProperty("errors");
@@ -237,11 +222,8 @@ describe("Integration Tests: Module Router (Authenticated)", () => {
     // GET /api/modules — Get all modules
     // ---------------------------------------------------------------- //
     describe("GET /api/modules", () => {
-
         test("[200] Should return a non-empty list of modules", async () => {
-            const res = await request(testingModuleApp)
-                .get("/api/modules")
-                .set("Authorization", `Bearer ${adminToken}`);
+            const res = await request(testingModuleApp).get("/api/modules").set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(200);
             expect(res.body.success).toBe(true);
@@ -258,11 +240,8 @@ describe("Integration Tests: Module Router (Authenticated)", () => {
     // GET /api/modules/:id — Get module by ID
     // ---------------------------------------------------------------- //
     describe("GET /api/modules/:id", () => {
-
         test("[200] Should return the module matching the given ID", async () => {
-            const res = await request(testingModuleApp)
-                .get(`/api/modules/${createdModuleId}`)
-                .set("Authorization", `Bearer ${adminToken}`);
+            const res = await request(testingModuleApp).get(`/api/modules/${createdModuleId}`).set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(200);
             expect(res.body.success).toBe(true);
@@ -280,9 +259,7 @@ describe("Integration Tests: Module Router (Authenticated)", () => {
         });
 
         test("[400] Malformed ID should return 400 (VerifyUUID)", async () => {
-            const res = await request(testingModuleApp)
-                .get(`/api/modules/${MALFORMED_ID}`)
-                .set("Authorization", `Bearer ${adminToken}`);
+            const res = await request(testingModuleApp).get(`/api/modules/${MALFORMED_ID}`).set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(400);
             expect(res.body.errors[0].message.toLowerCase()).toContain("invalid item");
@@ -293,7 +270,6 @@ describe("Integration Tests: Module Router (Authenticated)", () => {
     // PATCH /api/modules/:id — Update module
     // ---------------------------------------------------------------- //
     describe("PATCH /api/modules/:id", () => {
-
         test("[400] Empty body should return 'Missing fields'", async () => {
             const res = await request(testingModuleApp)
                 .patch(`/api/modules/${createdModuleId}`)
@@ -351,7 +327,6 @@ describe("Integration Tests: Module Router (Authenticated)", () => {
     // DELETE /api/modules/:id — Delete module
     // ---------------------------------------------------------------- //
     describe("DELETE /api/modules/:id", () => {
-
         test("[404] Delete on non-existent module should return 'Module not found'", async () => {
             const res = await request(testingModuleApp)
                 .delete(`/api/modules/${NON_EXISTENT_UUID}`)
@@ -362,9 +337,7 @@ describe("Integration Tests: Module Router (Authenticated)", () => {
         });
 
         test("[400] Malformed ID should return 400 (VerifyUUID)", async () => {
-            const res = await request(testingModuleApp)
-                .delete(`/api/modules/${MALFORMED_ID}`)
-                .set("Authorization", `Bearer ${adminToken}`);
+            const res = await request(testingModuleApp).delete(`/api/modules/${MALFORMED_ID}`).set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).toBe(400);
             expect(res.body.errors[0].message.toLowerCase()).toContain("invalid item");

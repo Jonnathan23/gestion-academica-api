@@ -1,67 +1,73 @@
 {
-  "name": "backend",
-  "module": "index.ts",
-  "private": true,
-  "engines": {
-    "node": "22.x.x"
-  },
-  "scripts": {
-    "dev": "bun run --watch src/app.ts",
-    "dev:api": "bun run --watch src/app.ts --api",
-    "test": "bun test",
-    "test:coverage": "bun test --coverage",
-    "dev:local": "bun run --env-file=.env.local --watch src/app.ts --api",
-    "test:local": "bun test --env-file=.env.test.local",
-    "test:coverage:local": "bun test --coverage --env-file=.env.test.local",
-    "start": "bun run src/app.ts",
-    "lint": "eslint \"src/**/*.ts\"",
-    "lint:fix": "eslint \"src/**/*.ts\" --fix",
-    "format": "prettier --write \"src/**/*.ts\"",
-    "typecheck": "tsc --noEmit",
-    "typecheck:generate-log-file": "cmd /c \"tsc --noEmit > tsc.logs 2>&1\""
-  },
-  "devDependencies": {
-    "@types/bun": "latest",
-    "@types/cookie-parser": "1.4.10",
-    "@types/cors": "2.8.19",
-    "@types/express": "5.0.6",
-    "@types/jsonwebtoken": "9.0.10",
-    "@types/morgan": "1.9.10",
-    "@types/supertest": "6.0.3",
-    "@types/swagger-ui-express": "4.1.8",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
-    "eslint": "^8.57.1",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.5",
-    "husky": "^9.1.7",
-    "lint-staged": "^17.0.5",
-    "prettier": "^3.8.3",
-    "supertest": "7.2.2"
-  },
-  "peerDependencies": {
-    "typescript": "5"
-  },
-  "dependencies": {
-    "@types/swagger-jsdoc": "6.0.4",
-    "bcryptjs": "3.0.3",
-    "colors": "1.4.0",
-    "cookie-parser": "1.4.7",
-    "cors": "2.8.6",
-    "env-var": "7.5.0",
-    "express": "5.2.1",
-    "jsonwebtoken": "9.0.3",
-    "morgan": "1.10.1",
-    "pg": "8.18.0",
-    "pg-hstore": "2.3.4",
-    "reflect-metadata": "0.2.2",
-    "sequelize": "6.37.7",
-    "sequelize-typescript": "2.1.6",
-    "swagger-jsdoc": "6.2.8",
-    "swagger-ui-express": "5.0.1"
-  },
-  "simple-git-hooks": {
-    "pre-commit": "pnpm lint-staged",
-    "commit-msg": "pnpm commitlint --edit ${1}"
-  }
+    "name": "backend",
+    "module": "index.ts",
+    "type": "module",
+    "private": true,
+    "engines": {
+        "node": "22.x.x"
+    },
+    "scripts": {
+        "dev": "bun run --watch src/app.ts",
+        "dev:api": "bun run --watch src/app.ts --api",
+        "test": "bun test",
+        "test:coverage": "bun test --coverage",
+        "dev:local": "bun run --env-file=.env.local --watch src/app.ts --api",
+        "test:local": "bun test --env-file=.env.test.local",
+        "test:coverage:local": "bun test --coverage --env-file=.env.test.local",
+        "start": "bun run src/app.ts",
+        "lint": "eslint \"src/**/*.ts\"",
+        "lint:fs": "ls-lint",
+        "lint:editorconfig": "editorconfig-checker",
+        "lint:fix": "eslint \"src/**/*.ts\" --fix",
+        "format": "prettier --write \"src/**/*.ts\"",
+        "typecheck": "tsc --noEmit",
+        "typecheck:generate-log-file": "cmd /c \"tsc --noEmit > tsc.logs 2>&1\"",
+        "prepare": "husky"
+    },
+    "devDependencies": {
+        "@eslint/js": "10.0.1",
+        "@ls-lint/ls-lint": "2.3.1",
+        "@types/bun": "latest",
+        "@types/cookie-parser": "1.4.10",
+        "@types/cors": "2.8.19",
+        "@types/express": "5.0.6",
+        "@types/jsonwebtoken": "9.0.10",
+        "@types/morgan": "1.9.10",
+        "@types/node-cron": "3.0.11",
+        "@types/supertest": "6.0.3",
+        "@types/swagger-ui-express": "4.1.8",
+        "@typescript-eslint/eslint-plugin": "8.60.1",
+        "@typescript-eslint/parser": "8.60.1",
+        "editorconfig-checker": "6.1.1",
+        "eslint": "10.4.1",
+        "eslint-config-prettier": "10.1.8",
+        "eslint-plugin-prettier": "5.5.6",
+        "globals": "17.6.0",
+        "husky": "9.1.7",
+        "lint-staged": "17.0.5",
+        "prettier": "3.8.3",
+        "supertest": "7.2.2"
+    },
+    "peerDependencies": {
+        "typescript": "5"
+    },
+    "dependencies": {
+        "@types/swagger-jsdoc": "6.0.4",
+        "bcryptjs": "3.0.3",
+        "colors": "1.4.0",
+        "cookie-parser": "1.4.7",
+        "cors": "2.8.6",
+        "env-var": "7.5.0",
+        "express": "5.2.1",
+        "jsonwebtoken": "9.0.3",
+        "morgan": "1.10.1",
+        "node-cron": "4.2.1",
+        "pg": "8.18.0",
+        "pg-hstore": "2.3.4",
+        "reflect-metadata": "0.2.2",
+        "sequelize": "6.37.7",
+        "sequelize-typescript": "2.1.6",
+        "swagger-jsdoc": "6.2.8",
+        "swagger-ui-express": "5.0.1"
+    }
 }

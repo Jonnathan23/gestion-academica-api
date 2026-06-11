@@ -2,11 +2,9 @@ import { describe, test, expect } from "bun:test";
 import { ColorsAdapter } from "@/core/utils/adapters/colors";
 
 describe("ColorsAdapter Utility Test Suite", () => {
-
     const inputText = "hello world";
 
     describe("Bold color methods", () => {
-
         test("Should return a non-empty styled string from setBlueBold", () => {
             const result = ColorsAdapter.setBlueBold(inputText);
 
@@ -57,7 +55,6 @@ describe("ColorsAdapter Utility Test Suite", () => {
     });
 
     describe("Normal color methods", () => {
-
         test("Should return a non-empty styled string from setCyan", () => {
             const result = ColorsAdapter.setCyan(inputText);
 

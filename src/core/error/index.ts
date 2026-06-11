@@ -1,1 +1,1 @@
-export * from '@/core/error/customError.error';
+export * from "@/core/error/customError.error";

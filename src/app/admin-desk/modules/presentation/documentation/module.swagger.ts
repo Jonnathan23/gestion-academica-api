@@ -5,7 +5,6 @@
  *   description: Academic module management (CRUD)
  */
 
-
 /**
  * @swagger
  * /api/modules:
@@ -65,7 +64,6 @@
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 
-
 /**
  * @swagger
  * /api/modules:
@@ -100,7 +98,6 @@
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-
 
 /**
  * @swagger
@@ -154,7 +151,6 @@
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-
 
 /**
  * @swagger
@@ -226,7 +222,6 @@
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 
-
 /**
  * @swagger
  * /api/modules/{id}:
@@ -282,5 +277,4 @@
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 
-
-export { };
+export {};

@@ -1,0 +1,5 @@
+echo "Auditando la estructura de archivos..."
+bun run lint:fs
+
+echo "Ejecutando validaciones de código (Lint-staged)..."
+bunx lint-staged
