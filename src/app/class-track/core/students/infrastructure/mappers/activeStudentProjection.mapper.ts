@@ -5,7 +5,8 @@ import { LevelActiveMapper } from "@/app/class-track/core/students/infrastructur
 
 export class StudentWithLevelActiveProjectionMapper {
     public static entityFromObject(object: { [key: string]: any }): StudentWithLevelActive {
-        const { st_id, st_full_name, st_contract_status, moduleActive } = object;
+        const { student, moduleActive } = object;
+        const { st_id, st_full_name, st_contract_status } = student;
 
         const levelActiveForStudentProjections = LevelActiveMapper.entityFromObject(moduleActive);
 
@@ -17,7 +18,7 @@ export class StudentWithLevelActiveProjectionMapper {
             st_id,
             st_full_name,
             levelActiveForStudentProjections.levelId,
-            st_contract_status === studentContractStatus.Frozen,
+            st_contract_status === studentContractStatus.Active,
             levelActiveForStudentProjections.contractFreezeCount,
             levelActiveForStudentProjections.contractReactivationCount,
         );

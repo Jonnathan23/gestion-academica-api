@@ -14,8 +14,8 @@ export class StartAttendanceSessionUseCase {
     public async execute(dto: StartAttendanceSessionDto): Promise<AttendanceSessionEntity> {
         const studentProfile = await this.studentProjectionRepository.findStudentWithLevelActive(dto.studentId);
 
-        if (studentProfile.isContractFrozen) {
-            throw CustomError.forbidden("Contract is frozen");
+        if (!studentProfile.isContractValid) {
+            throw CustomError.forbidden("The student does not have active contracts");
         }
 
         return await this.attendanceSessionRepository.startSession(dto);
