@@ -61,6 +61,7 @@ export class RetentionAlertDatasourceImpl implements RetentionAlertDatasource {
             re_al_contact_date: dto.contactDate || alert.re_al_contact_date,
             re_al_justification_reason: dto.justificationReason || alert.re_al_justification_reason,
             re_al_return_deadline: dto.returnDeadline || alert.re_al_return_deadline,
+            re_al_status: retentionAlertStatus.InProgress,
         });
 
         return this.mapToRetentionAlertEntity(alert);
