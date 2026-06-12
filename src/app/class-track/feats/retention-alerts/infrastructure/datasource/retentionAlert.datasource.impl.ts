@@ -76,7 +76,7 @@ export class RetentionAlertDatasourceImpl implements RetentionAlertDatasource {
         await alert.update({
             re_al_status: status,
             re_al_resolution_date:
-                status === retentionAlertStatus.Resolved || status === retentionAlertStatus.ClosedFrozen ? new Date() : null,
+                status === retentionAlertStatus.Resolved || status === retentionAlertStatus.Unresolved ? new Date() : null,
         });
 
         return this.mapToRetentionAlertEntity(alert);
@@ -87,6 +87,26 @@ export class RetentionAlertDatasourceImpl implements RetentionAlertDatasource {
         if (dto.status) {
             whereClause.re_al_status = dto.status;
         }
+        if (dto.daysAbsent !== undefined) {
+            whereClause.re_al_days_absent = { [Op.gte]: dto.daysAbsent };
+        }
+        if (dto.isJustified !== undefined) {
+            whereClause.re_al_is_justified = dto.isJustified;
+        }
+
+        const studentWhereClause: WhereOptions = {
+            ...(dto.studentParameter && {
+                [Op.or]: [
+                    { st_full_name: { [Op.iLike]: `%${dto.studentParameter}%` } },
+                    { st_identification_card: { [Op.iLike]: `%${dto.studentParameter}%` } },
+                    { st_phone_number: { [Op.iLike]: `%${dto.studentParameter}%` } },
+                    { st_email: { [Op.iLike]: `%${dto.studentParameter}%` } },
+                ],
+            }),
+            ...(dto.contractStatus && {
+                st_contract_status: dto.contractStatus,
+            }),
+        };
 
         const limit = dto.limit || 10;
         const page = dto.page || 1;
@@ -98,6 +118,7 @@ export class RetentionAlertDatasourceImpl implements RetentionAlertDatasource {
                 {
                     model: Student,
                     required: true,
+                    where: dto.studentParameter || dto.contractStatus ? studentWhereClause : undefined,
                 },
             ],
             limit,
