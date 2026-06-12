@@ -7,7 +7,7 @@ const retentionAlertStatus = {
     Pending: "PENDING",
     InProgress: "IN_PROGRESS",
     Resolved: "RESOLVED",
-    ClosedFrozen: "CLOSED_FROZEN",
+    Unresolved: "UNRESOLVED",
 } as const;
 
 export type RetentionAlertStatus = (typeof retentionAlertStatus)[keyof typeof retentionAlertStatus];
@@ -197,7 +197,7 @@ export default RetentionAlert;
  *           description: Observaciones generales registradas durante la gestión de la alerta
  *         re_al_status:
  *           type: string
- *           enum: [PENDING, RESOLVED, CLOSED_FROZEN]
+ *           enum: [PENDING, RESOLVED, UNRESOLVED]
  *           description: Estado actual de la alerta de retención
  *         re_al_resolution_date:
  *           type: string
