@@ -52,8 +52,12 @@ Projection combining a retention alert with basic student information.
 Data transfer object for querying retention alerts.
 
 - `status` (RetentionAlertStatus, optional): Filter alerts by their current status.
-- `page` (number, optional): The page number for pagination. Defaults to 1.
+- `page` (number, required): The page number for pagination.
 - `limit` (number, optional): The number of records per page. Defaults to 10.
+- `studentParameter` (string, optional): Term to search across student name, ID, phone, or email.
+- `contractStatus` (StudentContractStatus, optional): Filter by student contract status.
+- `daysAbsent` (number, optional): Filter by minimum days absent.
+- `isJustified` (boolean, optional): Filter by justification status.
 
 ### `UpdateRetentionAlertDto`
 
@@ -74,11 +78,15 @@ Data transfer object for changing the status of a retention alert.
 
 ## Interfaces
 
+### Tipos Generales
+
+- **`PaginatedResult<T>`**: Interfaz estándar de paginación que devuelve un objeto con la estructura `{ data: T[], meta: { totalItems, itemCount, itemsPerPage, totalPages, currentPage } }`.
+
 ### `RetentionAlertDatasource` / `RetentionAlertRepository`
 
 Repository interface for managing retention alerts persistence.
 
 - `upsertAlert(studentId: string, daysAbsent: number): Promise<void>`
-- `getAlerts(dto: GetRetentionAlertsDto): Promise<RetentionAlertWithStudentProjection[]>`
+- `getAlerts(dto: GetRetentionAlertsDto): Promise<PaginatedResult<RetentionAlertWithStudentProjection>>`
 - `updateAlertInfo(id: string, dto: UpdateRetentionAlertDto): Promise<RetentionAlertEntity>`
 - `changeAlertStatus(id: string, status: RetentionAlertStatus): Promise<RetentionAlertEntity>`

@@ -4,9 +4,11 @@ import type { RetentionAlertStatus } from "@/app/class-track/feats/retention-ale
 import type { UpdateRetentionAlertDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/UpdateRetentionAlert.dto";
 import type { RetentionAlertWithStudentProjection } from "@/app/class-track/feats/retention-alerts/domain/projections/RetentionAlertWithStudent.projection";
 
+import type { PaginatedResult } from "@/core/interfaces/PaginatedResult.interface";
+
 export abstract class RetentionAlertDatasource {
     public abstract upsertAlert(studentId: string, daysAbsent: number): Promise<void>;
-    public abstract getAlerts(dto: GetRetentionAlertsDto): Promise<RetentionAlertWithStudentProjection[]>;
+    public abstract getAlerts(dto: GetRetentionAlertsDto): Promise<PaginatedResult<RetentionAlertWithStudentProjection>>;
     public abstract updateAlertInfo(id: string, dto: UpdateRetentionAlertDto): Promise<RetentionAlertEntity>;
     public abstract changeAlertStatus(id: string, status: RetentionAlertStatus): Promise<RetentionAlertEntity>;
 }

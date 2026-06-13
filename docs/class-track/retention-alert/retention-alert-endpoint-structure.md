@@ -3,11 +3,15 @@
 ## `GET /api/class-track/retention-alerts`
 
 - **Description**: Fetches a paginated list of retention alerts along with their associated student information.
-- **Query**: 
+- **Query**:
     - `status` (RetentionAlertStatus, optional): Filter the alerts by their current status.
-    - `page` (number, optional): The page number for pagination.
+    - `page` (number, required): The page number for pagination.
     - `limit` (number, optional): The number of records to return per page.
-- **Response**: `SuccessResponse<RetentionAlertWithStudentProjection[]>`
+    - `studentParameter` (string, optional): Term to search across student name, ID, phone, or email.
+    - `contractStatus` (StudentContractStatus, optional): Filter by student contract status.
+    - `daysAbsent` (number, optional): Filter by minimum days absent.
+    - `isJustified` (boolean, optional): Filter by justification status.
+- **Response**: `SuccessResponse<PaginatedResult<RetentionAlertWithStudentProjection>>`
 
 ## `PATCH /api/class-track/retention-alerts/:id`
 

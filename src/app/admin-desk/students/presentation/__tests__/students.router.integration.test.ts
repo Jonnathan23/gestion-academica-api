@@ -430,11 +430,11 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
 
             expect(res.status).toBe(200);
             expect(res.body.success).toBe(true);
-            expect(res.body.data).toHaveProperty("response");
-            expect(res.body.data).toHaveProperty("pagination");
-            expect(Array.isArray(res.body.data.response)).toBe(true);
-            expect(res.body.data.response.length).toBeGreaterThan(0);
-            expect(res.body.data.response[0].fullName).toContain("Maria");
+            expect(res.body.data).toHaveProperty("data");
+            expect(res.body.data).toHaveProperty("meta");
+            expect(Array.isArray(res.body.data.data)).toBe(true);
+            expect(res.body.data.data.length).toBeGreaterThan(0);
+            expect(res.body.data.data[0].fullName).toContain("Maria");
         });
     });
 

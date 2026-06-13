@@ -6,6 +6,8 @@ import type { UpdateRetentionAlertDto } from "@/app/class-track/feats/retention-
 import type { RetentionAlertEntity } from "@/app/class-track/feats/retention-alerts/domain/entities/RetentionAlert.entity";
 import type { RetentionAlertStatus } from "@/data/models/class-track/RetentionAlert.model";
 
+import type { PaginatedResult } from "@/core/interfaces/PaginatedResult.interface";
+
 export class RetentionAlertRepositoryImpl implements RetentionAlertRepository {
     constructor(private readonly datasource: RetentionAlertDatasource) {}
 
@@ -13,7 +15,7 @@ export class RetentionAlertRepositoryImpl implements RetentionAlertRepository {
         return this.datasource.upsertAlert(studentId, daysAbsent);
     }
 
-    public async getAlerts(dto: GetRetentionAlertsDto): Promise<RetentionAlertWithStudentProjection[]> {
+    public async getAlerts(dto: GetRetentionAlertsDto): Promise<PaginatedResult<RetentionAlertWithStudentProjection>> {
         return this.datasource.getAlerts(dto);
     }
 
