@@ -10,6 +10,7 @@ import {
 import { CustomError } from "@/core/error/customError.error";
 import type { RetentionAlertWithStudentProjection } from "@/app/class-track/feats/retention-alerts/domain/projections/RetentionAlertWithStudent.projection";
 import type { GetRetentionAlertsDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/GetRetentionAlerts.dto";
+import type { GetCountAlertsDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/GetCountAlerts.dto";
 import type { UpdateRetentionAlertDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/UpdateRetentionAlert.dto";
 import type { RetentionAlertEntity } from "@/app/class-track/feats/retention-alerts/domain/entities/RetentionAlert.entity";
 import { RetentionAlertWithStudentMapper } from "@/app/class-track/feats/retention-alerts/infrastructure/mappers/retentionAlertWithStudent.mapper";
@@ -41,6 +42,14 @@ export class RetentionAlertDatasourceImpl implements RetentionAlertDatasource {
                 re_al_user_id: null, // Allow system to assign null initially
             });
         }
+    }
+
+    public async getCountAlerts(dto: GetCountAlertsDto): Promise<number> {
+        return await RetentionAlert.count({
+            where: {
+                re_al_status: dto.status,
+            },
+        });
     }
 
     public async getAlerts(dto: GetRetentionAlertsDto): Promise<PaginatedResult<RetentionAlertWithStudentProjection>> {

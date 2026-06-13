@@ -6,15 +6,21 @@ import type { AttendanceSessionRepository } from "@/app/class-track/feats/attend
 
 import type { DashboardSummaryProjection } from "@/app/class-track/feats/dashboard/domain/projections/Dashboard.projection";
 import type { StudentClassTrackRepository } from "@/app/class-track/core/students/domain/repositories/student.repository";
+import type { RetentionAlertRepository } from "@/app/class-track/feats/retention-alerts/domain/repositories/retentionAlert.repository";
 
 export class DashboardController {
     constructor(
         private readonly attendanceRepository: AttendanceSessionRepository,
+        private readonly retentionAlertRepository: RetentionAlertRepository,
         private readonly studentRepository: StudentClassTrackRepository,
     ) {}
 
     public getSummary = (req: Request, res: Response, next: NextFunction): void => {
-        const getDashboardSummary = new GetDashboardSummaryUseCase(this.attendanceRepository, this.studentRepository);
+        const getDashboardSummary = new GetDashboardSummaryUseCase(
+            this.attendanceRepository,
+            this.retentionAlertRepository,
+            this.studentRepository,
+        );
 
         getDashboardSummary
             .execute()
