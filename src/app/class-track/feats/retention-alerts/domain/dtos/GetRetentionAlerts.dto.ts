@@ -6,8 +6,8 @@ import { studentContractStatus, type StudentContractStatus } from "@/data/models
 
 export class GetRetentionAlertsDto {
     private constructor(
-        public readonly status?: RetentionAlertStatus,
-        public readonly page?: number,
+        public readonly status: RetentionAlertStatus | undefined,
+        public readonly page: number,
         public readonly limit?: number,
         public readonly studentParameter?: string,
         public readonly contractStatus?: StudentContractStatus,
@@ -32,12 +32,15 @@ export class GetRetentionAlertsDto {
             }
         }
 
-        let parsedPage = page ? parseInt(page) : 1;
+        const parsedPage = page ? parseInt(page) : undefined;
+        if (parsedPage === undefined || isNaN(parsedPage) || parsedPage <= 0) {
+            return [`page parameter is required and must be a valid positive number`];
+        }
+
         let parsedLimit = limit ? parseInt(limit) : 10;
         let parsedDaysAbsent = daysAbsent !== undefined ? parseInt(daysAbsent) : undefined;
         let parsedIsJustified = isJustified !== undefined ? isJustified === "true" || isJustified === true : undefined;
 
-        if (isNaN(parsedPage) || parsedPage <= 0) parsedPage = 1;
         if (isNaN(parsedLimit) || parsedLimit <= 0) parsedLimit = 10;
         if (daysAbsent !== undefined && isNaN(parsedDaysAbsent as number)) {
             return [`Invalid daysAbsent value`];

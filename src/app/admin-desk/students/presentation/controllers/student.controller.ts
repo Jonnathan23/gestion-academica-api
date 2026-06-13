@@ -1,7 +1,13 @@
 import type { Request, Response, NextFunction } from "express";
 
 import type { StudentRepository } from "@/app/admin-desk/students/domain/repositories/student.repository";
-import { RegisterStudentDto, UpdateStudentDto, ChangeContractStatusDto } from "@/app/admin-desk/students/domain";
+import type { PaginatedResult } from "@/core/interfaces/PaginatedResult.interface";
+import {
+    RegisterStudentDto,
+    UpdateStudentDto,
+    ChangeContractStatusDto,
+    SearchStudentsByCriteriaDto,
+} from "@/app/admin-desk/students/domain";
 import {
     RegisterStudent,
     SearchStudents,
@@ -9,6 +15,7 @@ import {
     ChangeContractStatus,
     ToggleGraduated,
     DeactivateStudent,
+    SearchStudentsByCriteria,
 } from "@/app/admin-desk/students/application";
 import { CustomError } from "@/core/error";
 import { SuccessResponse } from "@/core/utils";
@@ -60,6 +67,24 @@ export class StudentController {
             .then((students) => {
                 const successMessage = "Students found successfully";
                 SuccessResponse.ok<StudentEntity[]>(res, successMessage, students);
+            })
+            .catch((error) => {
+                next(error);
+            });
+    };
+
+    searchStudentsByCriteria = (req: Request, res: Response, next: NextFunction) => {
+        const [error, searchStudentsByCriteriaDto] = SearchStudentsByCriteriaDto.create(req.query);
+
+        if (error) throw CustomError.badRequest(error);
+
+        const searchStudentsByCriteria = new SearchStudentsByCriteria(this.studentRepository);
+
+        searchStudentsByCriteria
+            .execute(searchStudentsByCriteriaDto!)
+            .then((paginatedResult) => {
+                const successMessage = "Students found successfully";
+                SuccessResponse.ok<PaginatedResult<StudentEntity>>(res, successMessage, paginatedResult);
             })
             .catch((error) => {
                 next(error);

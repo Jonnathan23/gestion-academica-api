@@ -25,7 +25,7 @@ export class RetentionAlertController {
 
         useCase
             .execute(getRetentionAlertsDto)
-            .then((alerts) => SuccessResponse.ok(res, "Retention alerts fetched successfully", alerts))
+            .then((paginatedResult) => SuccessResponse.ok(res, "Retention alerts fetched successfully", paginatedResult))
             .catch((err) => next(err));
     };
 

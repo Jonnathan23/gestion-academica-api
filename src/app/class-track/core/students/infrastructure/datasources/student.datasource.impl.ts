@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import Student from "@/data/models/admin-desk/Student.model";
+import Student, { studentContractStatus } from "@/data/models/admin-desk/Student.model";
 
 import type { SearchStudentsDto } from "@/app/class-track/core/students/domain/dtos/SearchStudentDto.dto";
 import type { StudentClassTrackProjection } from "@/app/class-track/core/students/domain/projections/StudentClassTrack.projection";
@@ -45,11 +45,12 @@ export class StudentClassTrackDataSourceImpl implements StudentClassTrackDataSou
     }
 
     public async getActiveContractsCount(): Promise<number> {
-        const count = await StudentModule.count({
+        const count = await Student.count({
             where: {
-                st_mod_status: "ACTIVE",
+                st_contract_status: studentContractStatus.Active,
             },
         });
+
         return count;
     }
 

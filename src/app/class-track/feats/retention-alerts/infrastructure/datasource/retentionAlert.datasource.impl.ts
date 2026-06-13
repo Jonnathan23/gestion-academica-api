@@ -10,10 +10,12 @@ import {
 import { CustomError } from "@/core/error/customError.error";
 import type { RetentionAlertWithStudentProjection } from "@/app/class-track/feats/retention-alerts/domain/projections/RetentionAlertWithStudent.projection";
 import type { GetRetentionAlertsDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/GetRetentionAlerts.dto";
+import type { GetCountAlertsDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/GetCountAlerts.dto";
 import type { UpdateRetentionAlertDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/UpdateRetentionAlert.dto";
 import type { RetentionAlertEntity } from "@/app/class-track/feats/retention-alerts/domain/entities/RetentionAlert.entity";
 import { RetentionAlertWithStudentMapper } from "@/app/class-track/feats/retention-alerts/infrastructure/mappers/retentionAlertWithStudent.mapper";
 import { RetentionAlertMapper } from "@/app/class-track/feats/retention-alerts/infrastructure/mappers/retentionAlert.mapper";
+import type { PaginatedResult } from "@/core/interfaces/PaginatedResult.interface";
 
 export class RetentionAlertDatasourceImpl implements RetentionAlertDatasource {
     public async upsertAlert(studentId: string, daysAbsent: number): Promise<void> {
@@ -42,10 +44,36 @@ export class RetentionAlertDatasourceImpl implements RetentionAlertDatasource {
         }
     }
 
-    public async getAlerts(dto: GetRetentionAlertsDto): Promise<RetentionAlertWithStudentProjection[]> {
+    public async getCountAlerts(dto: GetCountAlertsDto): Promise<number> {
+        return await RetentionAlert.count({
+            where: {
+                re_al_status: dto.status,
+            },
+        });
+    }
+
+    public async getAlerts(dto: GetRetentionAlertsDto): Promise<PaginatedResult<RetentionAlertWithStudentProjection>> {
         const queryOptions = this.buildGetAlertsQueryOptions(dto);
-        const alerts = await RetentionAlert.findAll(queryOptions);
-        return this.mapToRetentionAlertWithStudentProjections(alerts);
+        const { rows, count } = await RetentionAlert.findAndCountAll(queryOptions);
+
+        const limit = dto.limit || 10;
+        const page = dto.page || 1;
+
+        const mappedAlerts = await this.mapToRetentionAlertWithStudentProjections(rows);
+        const totalPages = Math.ceil(count / limit);
+
+        const paginatedResult: PaginatedResult<RetentionAlertWithStudentProjection> = {
+            data: mappedAlerts,
+            meta: {
+                totalItems: count,
+                itemCount: mappedAlerts.length,
+                itemsPerPage: limit,
+                totalPages: totalPages,
+                currentPage: page,
+            },
+        };
+
+        return paginatedResult;
     }
 
     public async updateAlertInfo(id: string, dto: UpdateRetentionAlertDto): Promise<RetentionAlertEntity> {

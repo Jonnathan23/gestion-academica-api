@@ -67,7 +67,7 @@ export const rolePermissionsMapping: Record<string, SystemPermission[]> = {
 
         systemPermissions.ADMINDESK_CONTRACTS_READ,
 
-        systemPermissions.ADMINDESK_MODULES_READ,
+        systemPermissions.ADMINDESK_STUDENTS_READ,
 
         systemPermissions.ADMINDESK_PAYMENTS_READ,
 

@@ -6,6 +6,8 @@ import { AttendanceSessionDatasourceImpl } from "@/app/class-track/feats/attenda
 import { AttendanceSessionRepositoryImpl } from "@/app/class-track/feats/attendance/infrastructure/repositories/attendanceSession.repository.impl";
 import { StudentClassTrackDataSourceImpl } from "@/app/class-track/core/students/infrastructure/datasources/student.datasource.impl";
 import { StudentClassTrackRepositoryImpl } from "@/app/class-track/core/students/infrastructure/repositories/student.repository.impl";
+import { RetentionAlertDatasourceImpl } from "@/app/class-track/feats/retention-alerts/infrastructure/datasource/retentionAlert.datasource.impl";
+import { RetentionAlertRepositoryImpl } from "@/app/class-track/feats/retention-alerts/infrastructure/repositories/retentionAlert.repository.impl";
 
 export class DashboardRouter {
     public static get routes(): Router {
@@ -17,7 +19,10 @@ export class DashboardRouter {
         const studentClassTrackDataSource = new StudentClassTrackDataSourceImpl();
         const studentClassTrackRepository = new StudentClassTrackRepositoryImpl(studentClassTrackDataSource);
 
-        const controller = new DashboardController(attendanceRepository, studentClassTrackRepository);
+        const retentionAlertDatasource = new RetentionAlertDatasourceImpl();
+        const retentionAlertRepository = new RetentionAlertRepositoryImpl(retentionAlertDatasource);
+
+        const controller = new DashboardController(attendanceRepository, retentionAlertRepository, studentClassTrackRepository);
 
         router.get(
             "/summary",

@@ -126,6 +126,8 @@ describe("Integration Tests: AttendanceSession Router", () => {
             st_mod_seller_id: adminUserId,
             st_mod_status: "ACTIVE",
             st_mod_purchase_date: new Date(),
+            st_mod_freeze_count: 0,
+            st_mod_reactivation_count: 0,
         });
 
         // 6. Inject predefined Attendance Sessions for GET & PATCH endpoints

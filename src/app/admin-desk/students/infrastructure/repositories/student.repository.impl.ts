@@ -1,16 +1,27 @@
 import type { StudentDataSource } from "@/app/admin-desk/students/domain/datasource/student.datasource";
-import type { RegisterStudentDto, UpdateStudentDto, ChangeContractStatusDto, StudentEntity } from "@/app/admin-desk/students/domain";
+import type {
+    RegisterStudentDto,
+    UpdateStudentDto,
+    ChangeContractStatusDto,
+    SearchStudentsByCriteriaDto,
+    StudentEntity,
+} from "@/app/admin-desk/students/domain";
 import type { StudentRepository } from "@/app/admin-desk/students/domain/repositories/student.repository";
+import type { PaginatedResult } from "@/core/interfaces/PaginatedResult.interface";
 
 export class StudentRepositoryImpl implements StudentRepository {
     constructor(private readonly datasource: StudentDataSource) {}
 
-    register(dto: RegisterStudentDto): Promise<StudentEntity> {
+    async register(dto: RegisterStudentDto): Promise<StudentEntity> {
         return this.datasource.register(dto);
     }
 
-    search(query: string): Promise<StudentEntity[]> {
+    async search(query: string): Promise<StudentEntity[]> {
         return this.datasource.search(query);
+    }
+
+    async searchByCriteria(dto: SearchStudentsByCriteriaDto): Promise<PaginatedResult<StudentEntity>> {
+        return this.datasource.searchByCriteria(dto);
     }
 
     getAllStudents(): Promise<StudentEntity[]> {
