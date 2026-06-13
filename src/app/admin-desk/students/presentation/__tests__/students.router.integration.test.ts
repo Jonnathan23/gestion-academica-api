@@ -404,6 +404,41 @@ describe("Integration Tests: Students Router (Authenticated)", () => {
     });
 
     // ---------------------------------------------------------------- //
+    // GET /api/students/search/criteria — Search students by criteria
+    // ---------------------------------------------------------------- //
+    describe("GET /api/students/search/criteria", () => {
+        test("[400] Missing 'page' should return validation error", async () => {
+            const res = await request(testingStudentApp).get("/api/students/search/criteria").set("Authorization", `Bearer ${adminToken}`);
+
+            expect(res.status).toBe(400);
+            expect(res.body.errors[0].message).toContain("page");
+        });
+
+        test("[400] Invalid 'page' should return validation error", async () => {
+            const res = await request(testingStudentApp)
+                .get("/api/students/search/criteria?page=abc")
+                .set("Authorization", `Bearer ${adminToken}`);
+
+            expect(res.status).toBe(400);
+            expect(res.body.errors[0].message).toContain("page");
+        });
+
+        test("[200] Search with valid criteria should return matching students", async () => {
+            const res = await request(testingStudentApp)
+                .get(`/api/students/search/criteria?page=1&searchTerm=Maria`)
+                .set("Authorization", `Bearer ${adminToken}`);
+
+            expect(res.status).toBe(200);
+            expect(res.body.success).toBe(true);
+            expect(res.body.data).toHaveProperty("response");
+            expect(res.body.data).toHaveProperty("pagination");
+            expect(Array.isArray(res.body.data.response)).toBe(true);
+            expect(res.body.data.response.length).toBeGreaterThan(0);
+            expect(res.body.data.response[0].fullName).toContain("Maria");
+        });
+    });
+
+    // ---------------------------------------------------------------- //
     // PATCH /api/students/:id — Partial update
     // ---------------------------------------------------------------- //
     describe("PATCH /api/students/:id", () => {

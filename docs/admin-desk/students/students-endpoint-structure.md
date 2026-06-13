@@ -13,6 +13,19 @@
     - `q` (string): Término de búsqueda (ej. nombre o cédula).
 - **Response**: `SuccessResponse<StudentEntity[]>`
 
+## `GET /api/students/search/criteria`
+
+- **Description**: Busca estudiantes en el sistema mediante múltiples parámetros opcionales y retorna resultados paginados.
+- **Query**: (Recibe los parámetros del `SearchStudentsByCriteriaDto`)
+    - `page` (number, required): Página de resultados (cada página trae 10 estudiantes máximo).
+    - `searchTerm` (string, optional): Término general (cédula, nombre, teléfono o correo).
+    - `st_nationality` (string, optional): Nacionalidad.
+    - `st_certificate_type` (CertificateType, optional): Tipo de certificado.
+    - `st_is_graduated` (boolean, optional): Estado de graduado.
+    - `st_contract_status` (StudentContractStatus, optional): Estado de contrato.
+    - `st_progress_category` (StudentProgressCategory, optional): Categoría de progreso.
+- **Response**: `SuccessResponse<PaginatedResult<StudentEntity>>`
+
 ## `PATCH /api/students/:id`
 
 - **Description**: Actualiza la información parcial de un estudiante en específico.

@@ -28,6 +28,13 @@ export class StudentsRouter {
         // GET /search?q=nombre_o_ci
         router.get("/search", RoleMiddleware.requirePermissions([systemPermissions.ADMINDESK_STUDENTS_READ]), studentController.search);
 
+        // GET /search/criteria
+        router.get(
+            "/search/criteria",
+            RoleMiddleware.requirePermissions([systemPermissions.ADMINDESK_STUDENTS_READ]),
+            studentController.searchStudentsByCriteria,
+        );
+
         // GET /
         router.get("/", RoleMiddleware.requirePermissions([systemPermissions.ADMINDESK_STUDENTS_READ]), studentController.getAllStudents);
 
