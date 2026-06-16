@@ -1,4 +1,4 @@
-import { userRoles } from "@/core/interfaces";
+import { userRoles, clientRoles } from "@/core/interfaces";
 
 export const systemPermissions = {
     // Feature: AdminDesk/students
@@ -101,4 +101,6 @@ export const rolePermissionsMapping: Record<string, SystemPermission[]> = {
 
         systemPermissions.CLASSTRACK_RETENTION_ALERTS_READ,
     ],
+
+    [clientRoles.STUDENT]: [systemPermissions.CLASSTRACK_SESSIONS_READ, systemPermissions.CLASSTRACK_SESSIONS_WRITE],
 };

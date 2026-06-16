@@ -1,3 +1,4 @@
+import { headerConstants } from "@/core/constants/ClientContext";
 import type { CorsOptions } from "cors";
 
 interface CorsConfigurationOptions {
@@ -33,7 +34,7 @@ export class CorsConfig {
 
             methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
 
-            allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+            allowedHeaders: ["Content-Type", "Authorization", "Accept", headerConstants.clientContextName],
 
             credentials: true,
 

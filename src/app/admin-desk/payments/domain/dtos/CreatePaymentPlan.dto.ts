@@ -14,8 +14,8 @@ export class CreatePaymentPlanDto {
     static create(object: { [key: string]: any }): [string?, CreatePaymentPlanDto?] {
         const { studentId, sellerId, enrollmentFee, totalAmount, isSinglePayment, numberOfQuotas, firstQuotaDueDate } = object;
 
-        if (!studentId || !Validators.IsUUID(studentId)) return ["Invalid or missing studentId"];
-        if (!sellerId || !Validators.IsUUID(sellerId)) return ["Invalid or missing sellerId"];
+        if (!studentId || !Validators.isUUID(studentId)) return ["Invalid or missing studentId"];
+        if (!sellerId || !Validators.isUUID(sellerId)) return ["Invalid or missing sellerId"];
 
         if (enrollmentFee === undefined || enrollmentFee < 0) return ["enrollmentFee must be 0 or greater"];
         if (!totalAmount || totalAmount <= 0) return ["totalAmount must be greater than 0"];

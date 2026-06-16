@@ -11,7 +11,7 @@ export class PayQuotaDto {
     static create(object: { [key: string]: any }): [string?, PayQuotaDto?] {
         const { quotaId, amountPaid, paymentMethod: method } = object;
 
-        if (!quotaId || !Validators.IsUUID(quotaId)) return ["Invalid or missing quotaId"];
+        if (!quotaId || !Validators.isUUID(quotaId)) return ["Invalid or missing quotaId"];
 
         if (!amountPaid || amountPaid <= 0) return ["amountPaid must be greater than 0"];
 

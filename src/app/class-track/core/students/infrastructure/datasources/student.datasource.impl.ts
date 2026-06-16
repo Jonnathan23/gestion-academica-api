@@ -10,6 +10,7 @@ import StudentModule from "@/data/models/admin-desk/StudentModule.model";
 import { CustomError } from "@/core/error/customError.error";
 import { studentModuleStatus } from "@/core/interfaces/Contracts.interface";
 import { StudentWithLevelActiveProjectionMapper } from "@/app/class-track/core/students/infrastructure/mappers/activeStudentProjection.mapper";
+import { Validators } from "@/core/utils";
 
 export class StudentClassTrackDataSourceImpl implements StudentClassTrackDataSource {
     public async searchStudents(dto: SearchStudentsDto): Promise<StudentClassTrackProjection[]> {
@@ -56,12 +57,20 @@ export class StudentClassTrackDataSourceImpl implements StudentClassTrackDataSou
 
     private async fetchStudentsMatchingTerm(dto: SearchStudentsDto): Promise<Student[]> {
         const { searchTerm, limit } = dto;
-        const searchCondition = { [Op.iLike]: `%${searchTerm}%` };
+
+        const isUuidValid = Validators.isUUID(searchTerm);
+
+        const whereCondition = isUuidValid
+            ? { st_id: searchTerm }
+            : {
+                  [Op.or]: [
+                      { st_full_name: { [Op.iLike]: `%${searchTerm}%` } },
+                      { st_identification_card: { [Op.iLike]: `%${searchTerm}%` } },
+                  ],
+              };
 
         return await Student.findAll({
-            where: {
-                [Op.or]: [{ st_full_name: searchCondition }, { st_identification_card: searchCondition }],
-            },
+            where: whereCondition,
             limit,
             order: [["st_full_name", "ASC"]],
         });

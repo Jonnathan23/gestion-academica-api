@@ -2,6 +2,8 @@ import type { Request, Response, NextFunction } from "express";
 
 import { CustomError } from "@/core/error";
 import { JwtAdapter } from "@/core/utils";
+import type { ClientRoles } from "@/core/interfaces";
+import { headerConstants, clientContextValues } from "@/core/constants/ClientContext";
 
 export interface UserTokenPayload {
     id: string;
@@ -9,8 +11,15 @@ export interface UserTokenPayload {
     role: string;
 }
 
+export interface StudentTokenPayload {
+    id: string;
+    sessionId: string;
+    role: ClientRoles;
+}
+
 export interface AuthRequest extends Request {
     userSession?: UserTokenPayload;
+    studentSession?: StudentTokenPayload;
 }
 
 export class AuthMiddleware {
@@ -60,5 +69,126 @@ export class AuthMiddleware {
             console.error(error);
             next(CustomError.serviceUnavailable("Internal server error validating token"));
         }
+    }
+
+    public static async getUserPayload(req: AuthRequest, res: Response, next: NextFunction) {
+        let token = req.cookies?.auth_token;
+
+        if (!token) {
+            const authorization = req.header("Authorization");
+            if (authorization && authorization.startsWith("Bearer ")) {
+                token = authorization.split(" ").at(1);
+            }
+        }
+
+        if (!token) {
+            return next();
+        }
+
+        try {
+            const payload = await JwtAdapter.validateToken<UserTokenPayload>(token);
+
+            if (!payload) {
+                return next();
+            }
+
+            req.userSession = payload;
+            next();
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    public static async validateStudentJWT(req: AuthRequest, res: Response, next: NextFunction) {
+        let token = req.cookies?.classTrackSession;
+
+        if (!token) {
+            const authorization = req.header("Authorization");
+            if (authorization && authorization.startsWith("Bearer ")) {
+                token = authorization.split(" ").at(1);
+            }
+        }
+
+        if (!token) {
+            return next(CustomError.unauthorized("You must have an active student session"));
+        }
+
+        try {
+            const payload = await JwtAdapter.validateStudentToken<StudentTokenPayload>(token);
+
+            if (!payload) {
+                return next(CustomError.unauthorized("Invalid or expired student session"));
+            }
+
+            req.studentSession = payload;
+            next();
+        } catch (error) {
+            console.error(error);
+            next(CustomError.serviceUnavailable("Internal server error validating student token"));
+        }
+    }
+
+    public static async validateSharedAccess(req: AuthRequest, res: Response, next: NextFunction) {
+        const clientContext = req.header(headerConstants.clientContextName);
+
+        if (!clientContext || !Object.values(clientContextValues).some((contextValue) => contextValue === clientContext)) {
+            return next(CustomError.badRequest("Invalid or missing client context header"));
+        }
+
+        if (clientContext === clientContextValues.classTrackStudent) {
+            return AuthMiddleware.validateStudentJWT(req, res, next);
+        }
+
+        if (clientContext === clientContextValues.salcPortal) {
+            return AuthMiddleware.validateJWT(req, res, next);
+        }
+
+        return next(CustomError.badRequest("Unknown client context"));
+    }
+
+    public static async getStudentPayload(req: AuthRequest, res: Response, next: NextFunction) {
+        let token = req.cookies?.classTrackSession;
+
+        if (!token) {
+            const authorization = req.header("Authorization");
+            if (authorization && authorization.startsWith("Bearer ")) {
+                token = authorization.split(" ").at(1);
+            }
+        }
+
+        if (!token) {
+            return next();
+        }
+
+        try {
+            const payload = await JwtAdapter.validateStudentToken<StudentTokenPayload>(token);
+
+            if (!payload) {
+                return next();
+            }
+
+            req.studentSession = payload;
+            next();
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    public static async extractSharedPayload(req: AuthRequest, res: Response, next: NextFunction) {
+        const clientContext = req.header(headerConstants.clientContextName);
+
+        if (!clientContext || !Object.values(clientContextValues).some((contextValue) => contextValue === clientContext)) {
+            return next(CustomError.badRequest("Invalid or missing client context header"));
+        }
+
+        if (clientContext === clientContextValues.classTrackStudent) {
+            return AuthMiddleware.getStudentPayload(req, res, next);
+        }
+
+        if (clientContext === clientContextValues.salcPortal) {
+            return AuthMiddleware.getUserPayload(req, res, next);
+        }
+
+        return next(CustomError.badRequest("Unknown client context"));
     }
 }

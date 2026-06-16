@@ -7,6 +7,7 @@ import { RoleMiddleware, AuthMiddleware } from "@/core/middleware";
 import { systemPermissions } from "@/core/constants";
 import { StudentClassTrackDataSourceImpl } from "@/app/class-track/core/students/infrastructure/datasources/student.datasource.impl";
 import { StudentClassTrackRepositoryImpl } from "@/app/class-track/core/students/infrastructure/repositories/student.repository.impl";
+import { environmentVariables } from "@/core/config/envs";
 
 export class AttendanceSessionRouter {
     public static get routes(): Router {
@@ -18,12 +19,17 @@ export class AttendanceSessionRouter {
         const studentClassTrackDataSource = new StudentClassTrackDataSourceImpl();
         const studentClassTrackRepository = new StudentClassTrackRepositoryImpl(studentClassTrackDataSource);
 
-        const controller = new AttendanceSessionController(attendanceRepository, studentClassTrackRepository);
+        const useSecureCookies = environmentVariables.secureCookies;
+        const controller = new AttendanceSessionController(attendanceRepository, studentClassTrackRepository, useSecureCookies);
 
-        router.post("/check-in", controller.checkIn);
+        router.post("/check-in", AuthMiddleware.extractSharedPayload, controller.checkIn);
 
-        //TODO: validar con el middleware de autenticación para estudiantes y/o docentes
-        router.patch("/check-out", controller.checkOut);
+        router.patch(
+            "/check-out",
+            AuthMiddleware.validateSharedAccess,
+            RoleMiddleware.requireSharedPermissions([systemPermissions.CLASSTRACK_SESSIONS_WRITE]),
+            controller.checkOut,
+        );
 
         router.patch(
             "/approve",

@@ -1,73 +1,57 @@
-# System Prompt & Orchestration Plan for Antigravity AI
+# Fase 1: Implementación de la Identidad Compartida (Capa Core / Middlewares)
 
-## 1. Context & System Architecture
+**Archivo:** auth.mid.ts
 
-You are operating within the `SALC` backend, a Node.js + TypeScript (Bun) system. The architecture is a strict Modular Monolith using **Clean Architecture**.
+## Acciones:
 
-- The system is divided into Bounded Contexts (e.g., `AdminDesk` and `ClassTrack`).
-- **Rule of Thumb:** Domains must NEVER couple. `ClassTrack` cannot import `AdminDesk` repositories.
-- We are currently developing the `ClassTrack` subsystem.
-
-### 1.1 Strict Directory Structure
-You are FORBIDDEN from inventing new folders. You must strictly place all generated code within this exact tree:
-├───application
-│   └───useCases
-├───domain
-│   ├───datasource
-│   ├───dtos
-│   ├───entities
-│   ├───interfaces
-│   ├───projections
-│   └───repositories
-├───infrastructure
-│   ├───datasource
-│   ├───interfaces
-│   ├───mappers
-│   └───repositories
-└───presentation
-    ├───controllers
-    ├───documentation
-
-## 2. Your Available Skills
-
-You have three primary skills configured in your memory. Wait for the user to explicitly invoke them:
-
-1. `create-new-business-feature`: Scaffolds standard Clean Architecture CRUD workflows (Domain -> Infra -> App -> Presentation).
-2. `implement-cqrs-projection`: Scaffolds read-only models crossing domain boundaries safely.
-3. `create-scheduled-worker`: Scaffolds background tasks independent of Express controllers.
+- Definir la interfaz `StudentTokenPayload` e inyectarla en `AuthRequest`.
+- Crear el método estricto `validateStudentJWT` (para uso exclusivo de las rutas de estudiantes).
+- Crear el método híbrido `validateSharedAccess` (que intente validar primero al estudiante y luego al docente).
 
 ---
 
-## 3. Execution Roadmap (Phases)
+# Fase 2: Adaptación de la Autorización Híbrida (Capa Core / Middlewares)
 
-The user will guide you through these phases one by one. Do not generate code for a phase until the user provides the specific input for it.
+**Archivo:** role.mid.ts
 
-### Phase 1: Attendance & Synchronization (CQRS)
+## Acciones:
 
-- **Objective:** Allow `ClassTrack` to verify if a student has an active contract before Check-In, without coupling.
-- **Action:** The user will invoke `implement-cqrs-projection` providing the `ActiveStudentProjection` interface and instructing you to query the `Student` and `StudentModule` ORM models from `AdminDesk`.
+- Crear el método `requireSharedPermissions`.
 
-### Phase 2: The Orphan Session Manager
+**Lógica:** Si existe `request.studentSession`, permite el paso. Si no, aplica la validación estricta de `rolePermissionsMapping` usando el `request.userSession`.
 
-- **Objective:** Automatically close attendance sessions left `IN_PROGRESS` for more than 12 hours.
-- **Action:** The user will invoke `create-scheduled-worker` to build `CloseOrphanSessionsWorker`. You will generate a Use Case that calculates `at_se_total_minutes` and updates the `AttendanceSession` entity.
+---
 
-### Phase 3: The 3-Lesson Daily Limit & Check-In Workflow
+# Fase 3: Módulo de Identidad y Verificación (Capa de Presentación - Shared/Auth)
 
-- **Objective:** Implement the Check-In and Check-Out controllers and prevent registering more than 3 lessons per day.
-- **Action:** The user will invoke `create-new-business-feature` passing the `AttendanceSessionEntity`, `StartAttendanceSessionDto`, and `EndAttendanceSessionDto`. You will implement the Use Cases integrating the projection created in Phase 1 and the logic to throw `CustomError.conflict` if limits are exceeded.
+**Archivos implicados:** Tu controlador y enrutador de Autenticación principal (fuera de ClassTrack).
 
-### Phase 4: Retention Alerts Pre-Calculation
+## Acciones:
 
-- **Objective:** Offload heavy absence calculations from the database to a background process running at 7:30 AM.
-- **Action:** The user will invoke `create-scheduled-worker` to build `CalculateRetentionAlertsWorker`. It will evaluate `AttendanceSession` histories and write to the `RetentionAlerts` table.
+- Crear un endpoint `GET /verify-user` protegido por `AuthMiddleware.validateJWT`.
+- Crear un endpoint `GET /verify-student` protegido por `AuthMiddleware.validateStudentJWT`.
 
-### Phase 5: Academic Observations
+Ambos endpoints simplemente retornarán un `SuccessResponse.ok` si el middleware los deja pasar.
 
-- **Objective:** Standard CRUD for teachers to log student behavior.
-- **Action:** The user will invoke `create-new-business-feature` passing the `AcademicObservation` entity and DTOs.
+---
 
-## 4. Acknowledgment
+# Fase 4: Actualización de la Ruta de Check-Out (Capa de Presentación - ClassTrack)
 
-If you understand these instructions and the architecture, reply ONLY with:
-**"System Architecture loaded. Clean Architecture rules strictly acknowledged. Awaiting user input to begin Phase 1."**
+**Archivo:** attendanceSession.router.ts
+
+## Acciones:
+
+- Modificar la ruta `PATCH /check-out`.
+- Aplicar la nueva cadena de middlewares híbridos:
+    - `[AuthMiddleware.validateSharedAccess, RoleMiddleware.requireSharedPermissions([systemPermissions.CLASSTRACK_SESSIONS_WRITE])]`.
+
+---
+
+# Fase 5: Blindaje de las Reglas de Negocio (Capa de Aplicación y Dominio)
+
+**Archivos implicados:** EndAttendanceSession.dto.ts y EndAttendanceSessionUseCase.ts.
+
+## Acciones:
+
+- En `attendanceSession.controller.ts`, interceptar quién hace la petición (`studentSession` o `userSession`) y pasarlo al DTO.
+- En el Caso de Uso, validar que si el actor es un estudiante, solo pueda manipular la sesión que le pertenece criptográficamente a su token.

@@ -21,8 +21,8 @@ export class PurchaseModulesDto {
         if (!sellerId) return ["Missing seller"];
         if (!moduleIds || !Array.isArray(moduleIds) || moduleIds.length === 0) return ["module must be a non-empty array"];
 
-        if (!Validators.IsUUID(studentId)) return ["Invalid student"];
-        if (!Validators.IsUUID(sellerId)) return ["Invalid seller"];
+        if (!Validators.isUUID(studentId)) return ["Invalid student"];
+        if (!Validators.isUUID(sellerId)) return ["Invalid seller"];
 
         const uniqueModuleIds = new Set(moduleIds);
         if (uniqueModuleIds.size !== moduleIds.length) {
@@ -30,7 +30,7 @@ export class PurchaseModulesDto {
         }
 
         for (const currentModuleId of moduleIds) {
-            if (!Validators.IsUUID(currentModuleId)) {
+            if (!Validators.isUUID(currentModuleId)) {
                 return [`Invalid moduleId format`];
             }
         }
