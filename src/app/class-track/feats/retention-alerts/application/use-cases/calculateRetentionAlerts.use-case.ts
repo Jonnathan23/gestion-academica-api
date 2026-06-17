@@ -3,14 +3,19 @@ import type { RetentionAlertRepository } from "@/app/class-track/feats/retention
 import { CustomError } from "@/core/error/customError.error";
 
 export class CalculateRetentionAlertsUseCase {
+    private readonly thresholdDays: number;
+
     constructor(
         private readonly attendanceSessionRepository: AttendanceSessionRepository,
         private readonly retentionAlertRepository: RetentionAlertRepository,
-    ) {}
+        thresholdDays: number = 10,
+    ) {
+        this.thresholdDays = thresholdDays;
+    }
 
     public async execute(): Promise<number> {
         try {
-            const absentStudents = await this.attendanceSessionRepository.getStudentsAbsentForMoreThan(3);
+            const absentStudents = await this.attendanceSessionRepository.getStudentsAbsentForMoreThan(this.thresholdDays);
 
             for (const student of absentStudents) {
                 await this.retentionAlertRepository.upsertAlert(student.student.id, student.daysAbsent);

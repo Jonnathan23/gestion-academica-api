@@ -191,7 +191,7 @@ describe("Integration Tests: AttendanceSession Router", () => {
 
             expect(res.status).toBe(201);
             expect(res.body.success).toBe(true);
-            expect(res.body.message).toBe("Check-in successful");
+            expect(res.body.message).toBe("Student check-in successful");
             expect(res.body.data.atSeStatus).toBe("IN_PROGRESS");
         });
     });

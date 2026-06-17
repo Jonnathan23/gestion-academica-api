@@ -36,7 +36,7 @@ export class AttendanceSessionController {
 
         const isSystemUser =
             (req as AuthRequest).userSession?.role === userRoles.TEACHER ||
-            (req as AuthRequest).userSession?.role === userRoles.ACADEMIC_DIRECTOR;
+            (req as AuthRequest).userSession?.role === userRoles.academicDirector;
 
         if (isSystemUser) {
             return this.handleTeacherCheckIn(startDto, res, next);

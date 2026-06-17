@@ -7,10 +7,13 @@ import { RetentionAlertRepositoryImpl } from "@/app/class-track/feats/retention-
 import { CalculateRetentionAlertsUseCase } from "@/app/class-track/feats/retention-alerts/application/use-cases/calculateRetentionAlerts.use-case";
 
 export class CalculateRetentionAlertsWorker {
-    public static start(): void {
-        console.info(ColorsAdapter.setBlueBold("Initializing CalculateRetentionAlertsWorker... (Schedule: 30 7 * * *)"));
+    private static readonly thresholdDays: number = 10;
+    private static readonly cronExecutionTime: string = "30 7 * * *";
 
-        cron.schedule("30 7 * * *", () => {
+    public static start(): void {
+        console.info(ColorsAdapter.setBlueBold(`Initializing CalculateRetentionAlertsWorker... (Schedule: ${this.cronExecutionTime})`));
+
+        cron.schedule(this.cronExecutionTime, () => {
             console.info(ColorsAdapter.setBlueBold(`[${new Date().toISOString()}] Executing CalculateRetentionAlertsWorker...`));
 
             const attendanceDatasource = new AttendanceSessionDatasourceImpl();
@@ -19,7 +22,7 @@ export class CalculateRetentionAlertsWorker {
             const retentionDatasource = new RetentionAlertDatasourceImpl();
             const retentionRepository = new RetentionAlertRepositoryImpl(retentionDatasource);
 
-            const useCase = new CalculateRetentionAlertsUseCase(attendanceRepository, retentionRepository);
+            const useCase = new CalculateRetentionAlertsUseCase(attendanceRepository, retentionRepository, this.thresholdDays);
 
             useCase
                 .execute()
