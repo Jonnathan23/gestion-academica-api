@@ -1,8 +1,8 @@
 import { StudentClassTrackDataSourceImpl } from "@/app/class-track/core/students/infrastructure/datasources/student.datasource.impl";
 import { StudentClassTrackRepositoryImpl } from "@/app/class-track/core/students/infrastructure/repositories/student.repository.impl";
 import { StudentClassTrackController } from "@/app/class-track/core/students/presentation/controllers/student.controller";
-import { systemPermissions } from "@/core/constants/Permissions";
-import { RoleMiddleware } from "@/core/middleware";
+//import { systemPermissions } from "@/core/constants/Permissions";
+//import { RoleMiddleware } from "@/core/middleware";
 import { AuthMiddleware } from "@/core/middleware/auth.mid";
 import { Router } from "express";
 
@@ -17,7 +17,7 @@ export class StudentRouterClassTrack {
         router.get(
             "/search",
             AuthMiddleware.validateJWT,
-            RoleMiddleware.requirePermissions([systemPermissions.CLASSTRACK_STUDENTS_READ]),
+            // RoleMiddleware.requirePermissions([systemPermissions.CLASSTRACK_STUDENTS_READ]),
             controller.searchStudents,
         );
 
