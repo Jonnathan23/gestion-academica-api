@@ -3,7 +3,7 @@ import { StudentClassTrackRepositoryImpl } from "@/app/class-track/core/students
 import { StudentClassTrackController } from "@/app/class-track/core/students/presentation/controllers/student.controller";
 //import { systemPermissions } from "@/core/constants/Permissions";
 //import { RoleMiddleware } from "@/core/middleware";
-import { AuthMiddleware } from "@/core/middleware/auth.mid";
+//import { AuthMiddleware } from "@/core/middleware/auth.mid";
 import { Router } from "express";
 
 export class StudentRouterClassTrack {
@@ -16,7 +16,7 @@ export class StudentRouterClassTrack {
 
         router.get(
             "/search",
-            AuthMiddleware.validateJWT,
+            //AuthMiddleware.validateJWT,
             // RoleMiddleware.requirePermissions([systemPermissions.CLASSTRACK_STUDENTS_READ]),
             controller.searchStudents,
         );
