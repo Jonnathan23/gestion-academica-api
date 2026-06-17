@@ -73,8 +73,8 @@ export class UserController {
             .then((loginResponse) => {
                 res.cookie("auth_token", loginResponse.token, {
                     httpOnly: true,
-                    secure: this.useSecureCookies,
-                    sameSite: "lax",
+                    secure: true,
+                    sameSite: "none",
                     maxAge: 18 * 60 * 60 * 1000,
                 });
 
@@ -89,7 +89,11 @@ export class UserController {
 
     logout = (req: Request, res: Response, _next: NextFunction) => {
         //todo: realizar la lógica de desautenticación del usuario
-        res.clearCookie("auth_token");
+        res.clearCookie("auth_token", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+        });
         const succesMessage = "User logged out successfully";
         SuccessResponse.ok(res, succesMessage);
     };
