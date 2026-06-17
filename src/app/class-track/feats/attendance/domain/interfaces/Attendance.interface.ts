@@ -4,4 +4,4 @@ export const attendanceSessionStatus = {
     Approved: "APPROVED",
 } as const;
 
-export type AttendanceSessionStatus = keyof typeof attendanceSessionStatus;
+export type AttendanceSessionStatus = (typeof attendanceSessionStatus)[keyof typeof attendanceSessionStatus];

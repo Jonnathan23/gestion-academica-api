@@ -1,49 +1,49 @@
 import colors from "colors";
 
-export const ColorsAdapter = {
+export class ColorsAdapter {
     //* Bold Colors
-    setBlueBold(text: string): string {
+    static setBlueBold(text: string): string {
         return colors.blue.bold(text);
-    },
+    }
 
-    setCyanBold(text: string): string {
+    static setCyanBold(text: string): string {
         return colors.cyan.bold(text);
-    },
+    }
 
-    setRedBold(text: string): string {
+    static setRedBold(text: string): string {
         return colors.red.bold(text);
-    },
+    }
 
-    setGreenBold(text: string): string {
+    static setGreenBold(text: string): string {
         return colors.green.bold(text);
-    },
+    }
 
-    setYellowBold(text: string): string {
+    static setYellowBold(text: string): string {
         return colors.yellow.bold(text);
-    },
+    }
 
-    setMagentaBold(text: string): string {
+    static setMagentaBold(text: string): string {
         return colors.magenta.bold(text);
-    },
+    }
 
     //* Normal Colors
-    setCyan(text: string): string {
+    static setCyan(text: string): string {
         return colors.cyan(text);
-    },
+    }
 
-    setRed(text: string): string {
+    static setRed(text: string): string {
         return colors.red(text);
-    },
+    }
 
-    setGreen(text: string): string {
+    static setGreen(text: string): string {
         return colors.green(text);
-    },
+    }
 
-    setYellow(text: string): string {
+    static setYellow(text: string): string {
         return colors.yellow(text);
-    },
+    }
 
-    setMagenta(text: string): string {
+    static setMagenta(text: string): string {
         return colors.magenta(text);
-    },
-};
+    }
+}

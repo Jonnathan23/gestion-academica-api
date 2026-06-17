@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
+import type { AuthRequest } from "@/core/middleware/auth.mid";
 
 import type { PaymentRepository } from "@/app/admin-desk/payments/domain/repositories/payment.repository";
 import { CreatePaymentPlanUseCase } from "@/app/admin-desk/payments/application/use-cases/createPayment.use-case";
@@ -17,7 +18,7 @@ export class PaymentController {
 
     createPaymentPlan = (req: Request, res: Response, next: NextFunction) => {
         const { studentId } = req.params;
-        const sellerId = (req as any).userSession?.id;
+        const sellerId = (req as AuthRequest).userSession?.id;
 
         const [error, createPaymentPlanDto] = CreatePaymentPlanDto.create({
             ...req.body,

@@ -12,6 +12,7 @@ import AttendanceSession from "@/data/models/class-track/AttendanceSession.model
 import { JwtAdapter, BcryptAdapter } from "@/core/utils";
 import { AuthMiddleware } from "@/core/middleware/auth.mid";
 import { certificateType } from "@/data/models/admin-desk/Student.model";
+import { headerConstants, clientContextValues } from "@/core/constants/ClientContext";
 
 // ------------------------------------------------------------------ //
 // Micro-application: only the Attendance router
@@ -170,21 +171,27 @@ describe("Integration Tests: AttendanceSession Router", () => {
     // ---------------------------------------------------------------- //
     describe("POST /api/attendance/check-in", () => {
         test("[400] Missing 'studentId' should fail", async () => {
-            const res = await request(testingApp).post("/api/attendance/check-in").send({ entryTime: new Date() });
+            const res = await request(testingApp)
+                .post("/api/attendance/check-in")
+                .set(headerConstants.clientContextName, clientContextValues.classTrackStudent)
+                .send({ entryTime: new Date() });
 
             expect(res.status).toBe(400);
             expect(res.body.errors[0].message).toContain("Missing student");
         });
 
         test("[201] Valid payload should create an IN_PROGRESS session", async () => {
-            const res = await request(testingApp).post("/api/attendance/check-in").send({
-                studentId: targetStudentId,
-                entryTime: new Date(),
-            });
+            const res = await request(testingApp)
+                .post("/api/attendance/check-in")
+                .set(headerConstants.clientContextName, clientContextValues.classTrackStudent)
+                .send({
+                    studentId: targetStudentId,
+                    entryTime: new Date(),
+                });
 
             expect(res.status).toBe(201);
             expect(res.body.success).toBe(true);
-            expect(res.body.message).toBe("Check-in successful");
+            expect(res.body.message).toBe("Student check-in successful");
             expect(res.body.data.atSeStatus).toBe("IN_PROGRESS");
         });
     });
@@ -193,18 +200,36 @@ describe("Integration Tests: AttendanceSession Router", () => {
     // PATCH /api/attendance/check-out
     // ---------------------------------------------------------------- //
     describe("PATCH /api/attendance/check-out", () => {
+        test("[400] Missing X-Client-Context header should fail", async () => {
+            const res = await request(testingApp).patch("/api/attendance/check-out").send({
+                sessionId: inProgressSessionId,
+                exitTime: new Date(),
+            });
+
+            expect(res.status).toBe(400);
+            expect(res.body.errors[0].message).toContain("Invalid or missing client context header");
+        });
+
         test("[400] Missing 'sessionId' should fail", async () => {
-            const res = await request(testingApp).patch("/api/attendance/check-out").send({ exitTime: new Date() });
+            const res = await request(testingApp)
+                .patch("/api/attendance/check-out")
+                .set(headerConstants.clientContextName, clientContextValues.salcPortal)
+                .set("Authorization", `Bearer ${adminToken}`)
+                .send({ exitTime: new Date() });
 
             expect(res.status).toBe(400);
             expect(res.body.errors[0].message).toContain("Missing sessionId");
         });
 
         test("[200] Valid payload should update session to PENDING_APPROVAL", async () => {
-            const res = await request(testingApp).patch("/api/attendance/check-out").send({
-                sessionId: inProgressSessionId,
-                exitTime: new Date(),
-            });
+            const res = await request(testingApp)
+                .patch("/api/attendance/check-out")
+                .set(headerConstants.clientContextName, clientContextValues.salcPortal)
+                .set("Authorization", `Bearer ${adminToken}`)
+                .send({
+                    sessionId: inProgressSessionId,
+                    exitTime: new Date(),
+                });
 
             expect(res.status).toBe(200);
             expect(res.body.success).toBe(true);

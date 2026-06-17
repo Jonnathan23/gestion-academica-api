@@ -1,4 +1,5 @@
 // hash.ts
+/* global Bun */
 const password = Bun.argv[2];
 
 if (!password) {

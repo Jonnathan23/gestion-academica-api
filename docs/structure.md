@@ -9,66 +9,75 @@ src/
 │   ├── interfaces/                 <-- Definiciones de tipos y contratos globales
 │   ├── middleware/                 <-- Interceptores de peticiones HTTP
 │   ├── server/                     <-- Configuración del servidor (Express/Bun)
+│   ├── types/                      <-- Tipos globales
 │   └── utils/                      <-- Utilidades y funciones auxiliares
 │
 ├── data/                           <-- Capa de persistencia (Infraestructura de DB)
 │   ├── config/                     <-- Configuración de base de datos (ORM)
 │   ├── errors/                     <-- Errores específicos de la capa de datos
 │   └── models/                     <-- Definiciones de esquemas y modelos
+│       ├── admin-desk/
+│       ├── class-track/
+│       └── shared/
 │
-└── app/                            <-- Reglas de negocio divididas por módulos (Features)
-    ├── admin-desk/                 <-- Lógica exclusiva de AdminDesk (Administración)
-    │   ├── contracts/              <-- Gestión de contratos y matrículas
-    │   │   ├── application/        <-- (Casos de uso)
-    │   │   ├── domain/             <-- (Entidades, DTOs, interfaces de datasources)
-    │   │   ├── infrastructure/     <-- (Repositorios, mappers, datasources impl)
-    │   │   └── presentation/       <-- (Controladores, rutas, DI)
-    │   ├── modules/                <-- Gestión de catálogo de módulos
-    │   │   ├── application/
-    │   │   ├── domain/
-    │   │   ├── infrastructure/
-    │   │   └── presentation/
-    │   ├── payments/               <-- Gestión de pagos y finanzas
-    │   │   ├── application/
-    │   │   ├── domain/
-    │   │   ├── infrastructure/
-    │   │   └── presentation/
-    │   └── students/               <-- Gestión de expedientes de estudiantes
-    │       ├── application/
-    │       ├── domain/
-    │       ├── infrastructure/
-    │       └── presentation/
-    │
-    ├── class-track/                <-- Módulo de control académico
-    │   ├── attendance/             <-- Feature: Control de Ingreso/Salida
-    │   │   ├── application/
-    │   │   ├── domain/
-    │   │   ├── infrastructure/
-    │   │   └── presentation/
-    │   ├── lessons/                <-- Feature: Registro de Lecciones
-    │   │   ├── application/
-    │   │   ├── domain/
-    │   │   ├── infrastructure/
-    │   │   └── presentation/
-    │   ├── retention-alerts/       <-- Feature: Alertas de Inasistencia
-    │   │   ├── application/
-    │   │   ├── domain/
-    │   │   ├── infrastructure/
-    │   │   └── presentation/
-    │   ├── performance/            <-- Feature: Cálculo de Avance diario (Cron/Fantasma)
-    │   │   ├── application/
-    │   │   ├── domain/
-    │   │   ├── infrastructure/
-    │   │   └── presentation/
-    │   └── core/                   <-- Middlewares, utilidades y routers EXCLUSIVOS
-    │
-    └── shared/                     <-- Lógica compartida entre aplicaciones
-        └── identity/               <-- Login, Autenticación y Tokens
-            ├── application/
-            ├── domain/
-            ├── infrastructure/
-            └── presentation/
-
+├── app/                            <-- Reglas de negocio divididas por módulos (Features)
+│   ├── admin-desk/                 <-- Lógica exclusiva de AdminDesk (Administración)
+│   │   ├── modules/                <-- Gestión de catálogo de módulos
+│   │   │   ├── application/        <-- (Casos de uso)
+│   │   │   ├── domain/             <-- (Entidades, DTOs, interfaces de datasources)
+│   │   │   ├── infrastructure/     <-- (Repositorios, mappers, datasources impl)
+│   │   │   └── presentation/       <-- (Controladores, rutas, DI)
+│   │   ├── payments/               <-- Gestión de pagos y finanzas
+│   │   │   ├── application/
+│   │   │   ├── domain/
+│   │   │   ├── infrastructure/
+│   │   │   └── presentation/
+│   │   ├── student-level/          <-- Gestión de niveles/contratos
+│   │   │   ├── application/
+│   │   │   ├── domain/
+│   │   │   ├── infrastructure/
+│   │   │   └── presentation/
+│   │   └── students/               <-- Gestión de expedientes de estudiantes
+│   │       ├── application/
+│   │       ├── domain/
+│   │       ├── infrastructure/
+│   │       └── presentation/
+│   │
+│   ├── class-track/                <-- Módulo de control académico
+│   │   ├── core/                   <-- Middlewares, utilidades, enums y sub-módulos core
+│   │   │   ├── enums/
+│   │   │   └── students/           <-- Core de estudiantes para class-track
+│   │   └── feats/                  <-- Features de control académico
+│   │       ├── attendance/         <-- Feature: Control de Ingreso/Salida
+│   │       │   ├── application/
+│   │       │   ├── domain/
+│   │       │   ├── infrastructure/
+│   │       │   └── presentation/
+│   │       ├── dashboard/          <-- Feature: Panel de control académico
+│   │       │   ├── application/
+│   │       │   ├── domain/
+│   │       │   └── presentation/
+│   │       ├── observation/        <-- Feature: Observaciones académicas
+│   │       │   ├── application/
+│   │       │   ├── domain/
+│   │       │   ├── infrastructure/
+│   │       │   └── presentation/
+│   │       └── retention-alerts/   <-- Feature: Alertas de Inasistencia / Retención
+│   │           ├── application/
+│   │           ├── domain/
+│   │           ├── infrastructure/
+│   │           └── presentation/
+│   │
+│   └── shared/                     <-- Lógica compartida entre aplicaciones
+│       ├── identity/               <-- Login, Autenticación y Tokens
+│       │   ├── application/
+│       │   ├── domain/
+│       │   ├── infrastructure/
+│       │   └── presentation/
+│       └── verify/                 <-- Verificación y utilidades compartidas
+│           └── presentation/
+│
+└── __test__/                       <-- Pruebas de integración o e2e globales
 ```
 
 # Descripción de Capas (Clean Architecture)

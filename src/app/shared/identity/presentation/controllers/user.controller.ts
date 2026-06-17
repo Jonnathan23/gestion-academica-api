@@ -87,7 +87,7 @@ export class UserController {
             });
     };
 
-    logout = (req: Request, res: Response, next: NextFunction) => {
+    logout = (req: Request, res: Response, _next: NextFunction) => {
         //todo: realizar la lógica de desautenticación del usuario
         res.clearCookie("auth_token");
         const succesMessage = "User logged out successfully";

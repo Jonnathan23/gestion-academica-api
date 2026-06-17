@@ -1,4 +1,4 @@
-export const moduleLimitsDictionary: Record<string, number> = {
+export const moduleLimitsDictionary = {
     A1: 12,
     A2: 26,
     B1: 40,

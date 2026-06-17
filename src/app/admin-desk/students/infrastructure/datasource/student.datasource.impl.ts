@@ -47,7 +47,7 @@ export class StudentDataSourceImpl implements StudentDataSource {
     }
 
     async search(searchQuery: string): Promise<StudentEntity[]> {
-        const isUuidValid = Validators.IsUUID(searchQuery);
+        const isUuidValid = Validators.isUUID(searchQuery);
 
         const searchConditions: any[] = [
             { st_identification_card: { [Op.iLike]: `%${searchQuery}%` } },

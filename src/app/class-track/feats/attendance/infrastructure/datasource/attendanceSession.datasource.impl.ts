@@ -19,13 +19,7 @@ import { studentModuleStatus } from "@/core/interfaces/Contracts.interface";
 interface AbsentStudentQueryRow {
     at_se_student_id: string;
     lastAttendance: Date;
-    student: {
-        st_id: string;
-        st_identification_card: string;
-        st_full_name: string;
-        st_phone_number: string;
-        st_email: string;
-    };
+    student: Record<string, any>;
 }
 
 export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasource {
@@ -92,35 +86,43 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
         const targetDate = new Date();
         targetDate.setDate(targetDate.getDate() - days);
 
-        const results = (await AttendanceSession.findAll({
+        const sessionResults = (await AttendanceSession.findAll({
             attributes: [
                 "at_se_student_id",
                 [AttendanceSession.sequelize!.fn("MAX", AttendanceSession.sequelize!.col("at_se_entry_time")), "lastAttendance"],
             ],
-            include: [
-                {
-                    model: Student,
-                    as: "student",
-                    attributes: ["st_id", "st_identification_card", "st_full_name", "st_phone_number", "st_email"],
-                },
-            ],
-            group: [
-                "at_se_student_id",
-                "student.st_id",
-                "student.st_identification_card",
-                "student.st_full_name",
-                "student.st_phone_number",
-                "student.st_email",
-            ],
+            group: ["at_se_student_id"],
             having: AttendanceSession.sequelize!.where(
                 AttendanceSession.sequelize!.fn("MAX", AttendanceSession.sequelize!.col("at_se_entry_time")),
                 { [Op.lt]: targetDate },
             ),
             raw: true,
-            nest: true,
-        })) as unknown as AbsentStudentQueryRow[];
+        })) as unknown as { at_se_student_id: string; lastAttendance: string }[];
 
-        return this.convertArrayToAbsentStudentProjections(results);
+        if (sessionResults.length === 0) return [];
+
+        const studentIds = sessionResults.map((r) => r.at_se_student_id);
+
+        const students = await Student.findAll({
+            where: {
+                st_id: {
+                    [Op.in]: studentIds,
+                },
+            },
+            raw: true,
+            nest: true,
+        });
+
+        const combinedResults: AbsentStudentQueryRow[] = sessionResults.map((sessionResult) => {
+            const student = students.find((s) => s.st_id === sessionResult.at_se_student_id);
+            return {
+                at_se_student_id: sessionResult.at_se_student_id,
+                lastAttendance: new Date(sessionResult.lastAttendance),
+                student: student as Record<string, any>,
+            };
+        });
+
+        return this.convertArrayToAbsentStudentProjections(combinedResults);
     }
 
     private convertArrayToAbsentStudentProjections(attendanceSessions: AbsentStudentQueryRow[]): AbsentStudentProjection[] {
@@ -209,5 +211,11 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
 
     private convertArrayToStudentInClassProjections(attendanceSessions: AttendanceSession[]): StudentInClassProjection[] {
         return attendanceSessions.map((attendanceSession) => StudentInClassMapper.projectionFromDbRecord(attendanceSession));
+    }
+
+    public async getAttendanceSessionById(id: string): Promise<AttendanceSessionEntity | null> {
+        const session = await AttendanceSession.findByPk(id);
+        if (!session) return null;
+        return this.convertToAttendanceSessionEntity(session);
     }
 }

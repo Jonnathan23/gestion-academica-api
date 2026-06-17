@@ -2,7 +2,13 @@ export const userRoles = {
     ADMIN: "ADMIN",
     TEACHER: "TEACHER",
     ADVISOR: "ADVISOR",
-    ACADEMIC_DIRECTOR: "ACADEMIC_DIRECTOR",
+    AcademicDirector: "ACADEMIC_DIRECTOR",
 } as const;
 
 export type UserRoles = (typeof userRoles)[keyof typeof userRoles];
+
+export const clientRoles = {
+    STUDENT: "STUDENT",
+} as const;
+
+export type ClientRoles = (typeof clientRoles)[keyof typeof clientRoles];

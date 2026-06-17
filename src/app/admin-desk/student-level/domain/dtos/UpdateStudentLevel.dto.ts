@@ -19,8 +19,8 @@ export class UpdateStudentLevelDto {
         if (!studentLevelId) return ["Missing student level ID"];
         if (!studentId) return ["Missing student ID"];
 
-        if (!Validators.IsUUID(studentLevelId)) return ["Invalid student level ID format"];
-        if (!Validators.IsUUID(studentId)) return ["Invalid student ID format"];
+        if (!Validators.isUUID(studentLevelId)) return ["Invalid student level ID format"];
+        if (!Validators.isUUID(studentId)) return ["Invalid student ID format"];
 
         return [undefined, new UpdateStudentLevelDto(studentLevelId, studentId)];
     }

@@ -8,7 +8,7 @@ export class DeleteStudentLevelDto {
 
         if (!studentLevelId) return ["Missing studentLevelId"];
 
-        if (!Validators.IsUUID(studentLevelId)) return ["Invalid studentLevelId format"];
+        if (!Validators.isUUID(studentLevelId)) return ["Invalid studentLevelId format"];
 
         return [undefined, new DeleteStudentLevelDto(studentLevelId)];
     }

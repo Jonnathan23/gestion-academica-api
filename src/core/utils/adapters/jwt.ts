@@ -4,7 +4,7 @@ import { environmentVariables } from "@/core/config";
 export class JwtAdapter {
     //*  TOKENS DE IDENTIDAD (Administradores, Profesores, Sistema)
 
-    public static async generateToken(payload: Object, duration: SignOptions["expiresIn"] = "20h"): Promise<string | null> {
+    public static async generateToken(payload: object, duration: SignOptions["expiresIn"] = "20h"): Promise<string | null> {
         const jwtSeed = environmentVariables.JwtSeed;
 
         return new Promise((resolve) => {
@@ -27,7 +27,7 @@ export class JwtAdapter {
 
     //*  TOKENS DE ESTUDIANTES (ClassTrack - Sesiones Efímeras)
 
-    public static async generateStudentToken(payload: Object, duration: SignOptions["expiresIn"] = "12h"): Promise<string | null> {
+    public static async generateStudentToken(payload: object, duration: SignOptions["expiresIn"] = "8h"): Promise<string | null> {
         const jwtStudentSeed = environmentVariables.JwtStudentSeed;
 
         return new Promise((resolve) => {

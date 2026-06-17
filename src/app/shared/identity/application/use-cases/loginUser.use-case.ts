@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import type { LoginUserDto } from "@/app/shared/identity/domain/dtos";
 import type { UserEntity } from "@/app/shared/identity/domain/entities";
 import type { UserRepository } from "@/app/shared/identity/domain/repositories/user.repository";
