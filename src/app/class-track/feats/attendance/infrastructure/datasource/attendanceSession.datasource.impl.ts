@@ -212,4 +212,10 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
     private convertArrayToStudentInClassProjections(attendanceSessions: AttendanceSession[]): StudentInClassProjection[] {
         return attendanceSessions.map((attendanceSession) => StudentInClassMapper.projectionFromDbRecord(attendanceSession));
     }
+
+    public async getAttendanceSessionById(id: string): Promise<AttendanceSessionEntity | null> {
+        const session = await AttendanceSession.findByPk(id);
+        if (!session) return null;
+        return this.convertToAttendanceSessionEntity(session);
+    }
 }

@@ -9,15 +9,24 @@ class LessonItemDto {
         const { lessonNumber, oralPracticeScore, isCompleted } = object;
 
         if (typeof lessonNumber !== "number" || lessonNumber <= 0) {
-            return ["lessonNumber must be a positive integer", undefined];
-        }
-
-        if (oralPracticeScore !== null && typeof oralPracticeScore !== "number") {
-            return ["oralPracticeScore must be a number or null", undefined];
+            return ["Invalid lesson number", undefined];
         }
 
         if (typeof isCompleted !== "boolean") {
-            return ["isCompleted must be a boolean", undefined];
+            return ["Invalid completion status", undefined];
+        }
+
+        if (isCompleted && oralPracticeScore === null) {
+            return ["Score is required for completed lessons", undefined];
+        }
+
+        if (oralPracticeScore !== null) {
+            if (typeof oralPracticeScore !== "number") {
+                return ["Invalid score format", undefined];
+            }
+            if (oralPracticeScore < 0 || oralPracticeScore > 100) {
+                return ["Score must be between 0 and 100", undefined];
+            }
         }
 
         return [undefined, new LessonItemDto(lessonNumber, oralPracticeScore, isCompleted)];
@@ -34,15 +43,15 @@ export class CreateLessonLogsDto {
         const { attendanceSessionId, lessonsStudied } = object;
 
         if (!attendanceSessionId || typeof attendanceSessionId !== "string") {
-            return ["attendanceSessionId is missing or invalid", undefined];
+            return ["Invalid attendance session", undefined];
         }
 
         if (!Array.isArray(lessonsStudied) || lessonsStudied.length === 0) {
-            return ["lessonsStudied must be a non-empty array", undefined];
+            return ["Lessons are required", undefined];
         }
 
         if (lessonsStudied.length > 3) {
-            return ["A maximum of 3 lessons can be registered per session", undefined];
+            return ["Maximum 3 lessons allowed", undefined];
         }
 
         const validLessons: LessonItemDto[] = [];
@@ -50,9 +59,27 @@ export class CreateLessonLogsDto {
         for (const lesson of lessonsStudied) {
             const [error, lessonDto] = LessonItemDto.create(lesson as Record<string, unknown>);
             if (error || !lessonDto) {
-                return [`Invalid lesson item: ${error}`, undefined];
+                return [error, undefined];
             }
             validLessons.push(lessonDto);
+        }
+
+        if (validLessons.length > 1) {
+            validLessons.sort((a, b) => a.lessonNumber - b.lessonNumber);
+        }
+
+        if (validLessons.length > 1) {
+            for (let i = 0; i < validLessons.length - 1; i++) {
+                const prevLesson = validLessons[i]!;
+                if (!prevLesson.isCompleted) {
+                    return [`Lesson ${prevLesson.lessonNumber} must be completed first`, undefined];
+                }
+            }
+        }
+
+        const lastLesson = validLessons[validLessons.length - 1]!;
+        if (!lastLesson.isCompleted && lastLesson.oralPracticeScore !== null) {
+            return ["Incomplete lessons cannot have a score", undefined];
         }
 
         return [undefined, new CreateLessonLogsDto(attendanceSessionId, validLessons)];

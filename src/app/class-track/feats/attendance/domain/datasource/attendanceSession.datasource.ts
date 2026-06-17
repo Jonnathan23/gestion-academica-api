@@ -13,4 +13,5 @@ export abstract class AttendanceSessionDatasource {
     public abstract approveSession(dto: ApproveAttendanceSessionDto): Promise<AttendanceSessionEntity>;
     public abstract getStudentsAbsentForMoreThan(days: number): Promise<AbsentStudentProjection[]>;
     public abstract getActiveSessionsWithStudentDetails(status: AttendanceSessionStatus): Promise<StudentInClassProjection[]>;
+    public abstract getAttendanceSessionById(id: string): Promise<AttendanceSessionEntity | null>;
 }

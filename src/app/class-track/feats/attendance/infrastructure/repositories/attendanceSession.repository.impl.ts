@@ -33,4 +33,8 @@ export class AttendanceSessionRepositoryImpl implements AttendanceSessionReposit
     public async getActiveSessionsWithStudentDetails(status: AttendanceSessionStatus): Promise<StudentInClassProjection[]> {
         return this.datasource.getActiveSessionsWithStudentDetails(status);
     }
+
+    public async getAttendanceSessionById(id: string): Promise<AttendanceSessionEntity | null> {
+        return this.datasource.getAttendanceSessionById(id);
+    }
 }

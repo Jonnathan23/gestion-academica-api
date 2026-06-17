@@ -9,10 +9,11 @@ import { PaymentRouter } from "@/app/admin-desk/payments/presentation/router";
 import { AuthMiddleware } from "@/core/middleware";
 import { UserSegurityDataSourceImpl } from "@/app/shared/identity/infrastructure/datasources/userSegurity.datasource.impl";
 import { AttendanceSessionRouter } from "@/app/class-track/feats/attendance/presentation/routes/attendanceSession.router";
-import { LessonLogRouter } from "@/app/class-track/feats/attendance/presentation/routes/lessonLog.router";
+
 import { DashboardRouter } from "@/app/class-track/feats/dashboard/presentation/routes/dashboard.router";
 import { StudentRouterClassTrack } from "@/app/class-track/core/students/presentation/routes/student.router";
 import { RetentionAlertRoutes } from "@/app/class-track/feats/retention-alerts/presentation/retentionAlert.routes";
+import { LessonLogRoutes } from "@/app/class-track/feats/lesson-logs/presentation/lessonLog.routes";
 
 export class AppRouter {
     public static get routes(): Router {
@@ -40,7 +41,7 @@ export class AppRouter {
         // Class Track
         router.use("/attendance", AttendanceSessionRouter.routes);
 
-        router.use("/lesson-log", LessonLogRouter.routes);
+        router.use("/lesson-log", LessonLogRoutes.routes);
 
         router.use("/dashboard", DashboardRouter.routes);
 
