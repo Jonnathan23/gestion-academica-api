@@ -1,5 +1,6 @@
 import { headerConstants } from "@/core/constants/ClientContext";
 import type { CorsOptions } from "cors";
+import { CustomError } from "@/core/error";
 
 interface CorsConfigurationOptions {
     frontendUrls: string[];
@@ -28,7 +29,7 @@ export class CorsConfig {
                 if (allowedOrigins.includes(requestOrigin)) {
                     callbackFunction(null, true);
                 } else {
-                    callbackFunction(new Error("Origin not allowed by CORS policy"));
+                    callbackFunction(CustomError.forbidden(`Origin not allowed by CORS policy: ${requestOrigin}`));
                 }
             },
 

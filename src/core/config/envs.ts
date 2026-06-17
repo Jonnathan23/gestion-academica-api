@@ -19,14 +19,14 @@ let validatedEnvs: EnvironmentVariables;
 try {
     validatedEnvs = {
         listeningPort: get("PORT").required().asPortNumber(),
-        adminDeskUrl: get("ADMIN_DESK_URL").required().asString(),
-        classTrackUrl: get("CLASS_TRACK_URL").required().asString(),
-        databaseUrl: get("DATABASE_URL").required().asString(),
-        nodeEnvironment: get("NODE_ENV").default("development").asString(),
-        documentationUrl: get("DOCUMENTATION_URL").asString() ?? "",
-        JwtSeed: get("JWT_SEED").required().asString(),
-        JwtStudentSeed: get("JWT_STUDENT_SEED").required().asString(),
-        argumentValue: process.argv[2] ?? "",
+        adminDeskUrl: get("ADMIN_DESK_URL").required().asString().trim(),
+        classTrackUrl: get("CLASS_TRACK_URL").required().asString().trim(),
+        databaseUrl: get("DATABASE_URL").required().asString().trim(),
+        nodeEnvironment: get("NODE_ENV").default("development").asString().trim(),
+        documentationUrl: get("DOCUMENTATION_URL").asString()?.trim() ?? "",
+        JwtSeed: get("JWT_SEED").required().asString().trim(),
+        JwtStudentSeed: get("JWT_STUDENT_SEED").required().asString().trim(),
+        argumentValue: process.argv[2]?.trim() ?? "",
         secureCookies: get("USE_SECURE_COOKIES").default("false").asBool(),
     };
 } catch (error: unknown) {
