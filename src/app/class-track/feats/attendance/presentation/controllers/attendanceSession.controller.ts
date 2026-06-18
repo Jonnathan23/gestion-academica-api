@@ -118,8 +118,8 @@ export class AttendanceSessionController {
                 // Manejo de la cookie
                 response.cookie(this.cookieStudentSessionName, studentToken, {
                     httpOnly: true,
-                    secure: this.useSecureCookies,
-                    sameSite: "lax",
+                    secure: true,
+                    sameSite: "none",
                     maxAge: this.cookieStudentSessionMaxAge,
                 });
 
@@ -143,7 +143,11 @@ export class AttendanceSessionController {
         new EndAttendanceSessionUseCase(this.attendanceSessionRepository)
             .execute(endDto)
             .then((session) => {
-                response.clearCookie(this.cookieStudentSessionName);
+                response.clearCookie(this.cookieStudentSessionName, {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "none",
+                });
                 SuccessResponse.ok(response, "Student check-out successful", session);
             })
             .catch((processError) => next(processError));
