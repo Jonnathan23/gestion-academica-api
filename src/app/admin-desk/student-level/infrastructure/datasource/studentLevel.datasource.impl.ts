@@ -9,6 +9,8 @@ import type { StudentLevelDataSource } from "@/app/admin-desk/student-level/doma
 import type { PurchaseModulesDto, UpdateStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos";
 import { StudentLevelMapper } from "@/app/admin-desk/student-level/infrastructure/mappers/contract.mapper";
 import type { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/StudentLevel.entity";
+import type { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
+import { ModuleMapper } from "@/app/admin-desk/modules/infrastructure/mappers/module.mapper";
 
 import { StudentModule, Module, Student } from "@/data/models/admin-desk";
 import { User } from "@/data/models/shared";
@@ -24,11 +26,13 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
         return await this.convertArrayToDetailsEntity(studentContracts);
     }
 
+    async getModulesByIds(moduleIds: string[]): Promise<ModuleEntity[]> {
+        const modulesFromDb = await this.searchModules(moduleIds);
+        return modulesFromDb.map((module) => ModuleMapper.moduleModelToEntity(module));
+    }
+
     async purchaseModules(dto: PurchaseModulesDto): Promise<StudentLevelEntity[]> {
         const { studentId, sellerId, moduleIds } = dto;
-        //TODO: validar que no puede comprar un modulo si ya lo tiene
-        //TODO: validar que no puede comprar un modulo posterior a uno que no ha adquirido, por ejemplo no puede adquirir el 3 si ha adquirido el 1 pero no el 2
-        //TODO: validar que no puede adquirir modulos con salto de nivels, no puede 1 y 4, debe ser 1,2,3,4
         const sequelize = StudentModule.sequelize;
 
         if (!sequelize) throw CustomError.serviceUnavailable("Sequelize instance not found");

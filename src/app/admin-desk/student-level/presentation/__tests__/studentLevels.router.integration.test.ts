@@ -180,6 +180,17 @@ describe("Integration Tests: Student Levels Router (Contracts)", () => {
             expect(res.status).toBe(400);
         });
 
+        test("[400] Falla si el estudiante intenta adquirir módulos con un salto de nivel", async () => {
+            // Estudiante no tiene módulos, por ende su primer nivel debe ser 1 (A1). Intenta comprar B1 (nivel 3).
+            const res = await request(testingContractsApp)
+                .post(`/api/student-levels/student/${testStudentId}`)
+                .set("Authorization", `Bearer ${adminToken}`)
+                .send({ moduleIds: [moduleB1Id] });
+
+            expect(res.status).toBe(400);
+            expect(res.body.errors[0].message).toContain("El progreso de módulos es inválido");
+        });
+
         test("[201] Compra exitosa de 'A1' y 'A2'. Verifica que el response devuelva A1 como ACTIVE y A2 como LOCKED", async () => {
             const res = await request(testingContractsApp)
                 .post(`/api/student-levels/student/${testStudentId}`)
@@ -205,6 +216,17 @@ describe("Integration Tests: Student Levels Router (Contracts)", () => {
             // Guardar sus IDs devueltos de la respuesta
             studentLevelA1Id = contractA1.id;
             studentLevelA2Id = contractA2.id;
+        });
+
+        test("[400] Falla si el estudiante intenta comprar un módulo que ya posee (ej: A1)", async () => {
+            // El estudiante ya compró A1 y A2 en la prueba anterior
+            const res = await request(testingContractsApp)
+                .post(`/api/student-levels/student/${testStudentId}`)
+                .set("Authorization", `Bearer ${adminToken}`)
+                .send({ moduleIds: [moduleA1Id] });
+
+            expect(res.status).toBe(400);
+            expect(res.body.errors[0].message).toContain("El estudiante ya posee el módulo de nivel 1");
         });
 
         test("[503] PRUEBA DE ATOMICIDAD (ROLLBACK): Falla forzada en BD y evita incremento", async () => {
