@@ -9,6 +9,7 @@ import {
 import { DeleteStudentLevelDto, PurchaseModulesDto, UpdateStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos";
 import type { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/StudentLevel.entity";
 import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-level/domain/projections/ContractDetails.projection";
+import { type LevelProgressionDomainService } from "@/app/admin-desk/student-level/domain/services/levelProgression.domain.service";
 import type { StudentLevelRepositoryImpl } from "@/app/admin-desk/student-level/infrastructure/repositories/studentLevel.repository.impl";
 import { CustomError } from "@/core/error";
 import type { AuthRequest } from "@/core/middleware/auth.mid";
@@ -16,9 +17,12 @@ import { SuccessResponse } from "@/core/utils";
 import type { Request, Response, NextFunction } from "express";
 
 export class ContractController {
-    constructor(private readonly studentLevelRepository: StudentLevelRepositoryImpl) {}
+    constructor(
+        private readonly studentLevelRepository: StudentLevelRepositoryImpl,
+        private readonly levelProgressionDomainService: LevelProgressionDomainService,
+    ) {}
 
-    purchaseModules = (req: Request, res: Response, next: NextFunction) => {
+    public purchaseModules = (req: Request, res: Response, next: NextFunction) => {
         const { studentId } = req.params;
         const sellerId = (req as AuthRequest).userSession?.id;
 
@@ -30,7 +34,7 @@ export class ContractController {
 
         if (error) throw CustomError.badRequest(error);
 
-        const purchaseModules = new PurchaseModules(this.studentLevelRepository);
+        const purchaseModules = new PurchaseModules(this.studentLevelRepository, this.levelProgressionDomainService);
 
         purchaseModules
             .execute(purchaseModulesDto!)
@@ -43,7 +47,7 @@ export class ContractController {
             });
     };
 
-    getStudentContracts = (req: Request, res: Response, next: NextFunction) => {
+    public getStudentContracts = (req: Request, res: Response, next: NextFunction) => {
         const { studentId } = req.params;
 
         const getStudentContracts = new GetStudentContracts(this.studentLevelRepository);
@@ -59,7 +63,7 @@ export class ContractController {
             });
     };
 
-    deleteStudentLevel = (req: Request, res: Response, next: NextFunction) => {
+    public deleteStudentLevel = (req: Request, res: Response, next: NextFunction) => {
         const { studentLevelId } = req.params;
 
         const [error, deleteStudentLevelDto] = DeleteStudentLevelDto.create({
@@ -80,7 +84,7 @@ export class ContractController {
             });
     };
 
-    blockLevel = (req: Request, res: Response, next: NextFunction) => {
+    public blockLevel = (req: Request, res: Response, next: NextFunction) => {
         const { studentLevelId, studentId } = req.params;
 
         const [error, blockLevelDto] = UpdateStudentLevelDto.create({
@@ -102,7 +106,7 @@ export class ContractController {
             });
     };
 
-    unlockLevel = (req: Request, res: Response, next: NextFunction) => {
+    public unlockLevel = (req: Request, res: Response, next: NextFunction) => {
         const { studentLevelId, studentId } = req.params;
 
         const [error, unlockLevelDto] = UpdateStudentLevelDto.create({
@@ -124,7 +128,7 @@ export class ContractController {
             });
     };
 
-    finishCurrentLevel = (req: Request, res: Response, next: NextFunction) => {
+    public finishCurrentLevel = (req: Request, res: Response, next: NextFunction) => {
         const { studentLevelId, studentId } = req.params;
 
         const [error, finishCurrentLevelDto] = UpdateStudentLevelDto.create({

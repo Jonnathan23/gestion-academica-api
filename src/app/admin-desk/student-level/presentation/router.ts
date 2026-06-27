@@ -6,14 +6,17 @@ import { ContractController } from "@/app/admin-desk/student-level/presentation/
 import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
 import { systemPermissions } from "@/core/constants";
 import { InfoStudentsLevelRouter } from "@/app/admin-desk/student-level/presentation/infoStudentsLevel.router";
+import { LevelProgressionDomainServiceImpl } from "@/app/admin-desk/student-level/domain/services/levelProgression.domain.service";
 
 export class ContractsRouter {
-    static get routes(): Router {
+    public static get routes(): Router {
         const router = Router();
 
-        const studentLevelDataSource = new StudentLevelDataSourceImpl();
+        const levelProgressionDomainService = new LevelProgressionDomainServiceImpl();
+
+        const studentLevelDataSource = new StudentLevelDataSourceImpl(levelProgressionDomainService);
         const studentLevelRepository = new StudentLevelRepositoryImpl(studentLevelDataSource);
-        const contractController = new ContractController(studentLevelRepository);
+        const contractController = new ContractController(studentLevelRepository, levelProgressionDomainService);
 
         // Required middleware for all routes in this module
         router.use(AuthMiddleware.validateJWT);
