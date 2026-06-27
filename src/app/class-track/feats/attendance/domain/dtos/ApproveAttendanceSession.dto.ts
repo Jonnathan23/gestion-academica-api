@@ -1,3 +1,5 @@
+import { Validators } from "@/core/utils";
+
 export class ApproveAttendanceSessionDto {
     private constructor(
         public readonly sessionId: string,
@@ -6,9 +8,12 @@ export class ApproveAttendanceSessionDto {
 
     public static create(object: { [key: string]: any }, teacherId: string): [string?, ApproveAttendanceSessionDto?] {
         const { sessionId } = object;
-        //TODO: agregar validaciones de UUID
-        if (!sessionId) return ["Missing sessionId"];
-        if (!teacherId) return ["Missing teacherId"];
+
+        if (!sessionId) return ["Invalid session"];
+        if (!Validators.isUUID(sessionId)) return ["Invalid session"];
+
+        if (!teacherId) return ["Missing teacher"];
+        if (!Validators.isUUID(teacherId)) return ["Invalid teacher"];
 
         return [undefined, new ApproveAttendanceSessionDto(sessionId, teacherId)];
     }

@@ -15,12 +15,7 @@ import { CustomError } from "@/core/error";
 import { Validators } from "@/core/utils";
 import type { PaginatedResult } from "@/core/interfaces/PaginatedResult.interface";
 
-type StudentEntityFromObject = typeof StudentMapper.studentModelToEntity;
-
 export class StudentDataSourceImpl implements StudentDataSource {
-    // FIXME: Esto no es lo mejor del mundo, pero funciona por ahora
-    constructor(private readonly studentEntityFromObject: StudentEntityFromObject = StudentMapper.studentModelToEntity) {}
-
     async register(dto: RegisterStudentDto): Promise<StudentEntity> {
         const { identificationCard, fullName, phoneNumber, email, dateOfBirth, nationality, certificateType, startDate } = dto;
 
@@ -43,7 +38,7 @@ export class StudentDataSourceImpl implements StudentDataSource {
             st_is_graduated: false,
         });
 
-        return this.studentEntityFromObject(newStudent);
+        return StudentMapper.studentModelToEntity(newStudent);
     }
 
     async search(searchQuery: string): Promise<StudentEntity[]> {
@@ -62,7 +57,7 @@ export class StudentDataSourceImpl implements StudentDataSource {
             where: finalCondition,
         });
 
-        return students.map((student) => this.studentEntityFromObject(student));
+        return students.map((student) => StudentMapper.studentModelToEntity(student));
     }
 
     async searchByCriteria(dto: SearchStudentsByCriteriaDto): Promise<PaginatedResult<StudentEntity>> {
@@ -115,7 +110,7 @@ export class StudentDataSourceImpl implements StudentDataSource {
 
     async getAllStudents(): Promise<StudentEntity[]> {
         const students = await Student.findAll();
-        return students.map((student) => this.studentEntityFromObject(student));
+        return students.map((student) => StudentMapper.studentModelToEntity(student));
     }
 
     async update(id: string, dto: UpdateStudentDto): Promise<StudentEntity> {
@@ -124,7 +119,7 @@ export class StudentDataSourceImpl implements StudentDataSource {
 
         await student.update(dto.value);
 
-        return this.studentEntityFromObject(student);
+        return StudentMapper.studentModelToEntity(student);
     }
 
     async changeContractStatus(id: string, dto: ChangeContractStatusDto): Promise<StudentEntity> {
@@ -134,7 +129,7 @@ export class StudentDataSourceImpl implements StudentDataSource {
 
         await student.update({ st_contract_status: contractStatus });
 
-        return this.studentEntityFromObject(student);
+        return StudentMapper.studentModelToEntity(student);
     }
 
     async toggleGraduated(id: string): Promise<StudentEntity> {
@@ -143,7 +138,7 @@ export class StudentDataSourceImpl implements StudentDataSource {
 
         await student.update({ st_is_graduated: !student.st_is_graduated });
 
-        return this.studentEntityFromObject(student);
+        return StudentMapper.studentModelToEntity(student);
     }
 
     async deactivate(id: string): Promise<StudentEntity> {
@@ -152,7 +147,7 @@ export class StudentDataSourceImpl implements StudentDataSource {
 
         await student.update({ st_contract_status: studentContractStatus.Inactive });
 
-        return this.studentEntityFromObject(student);
+        return StudentMapper.studentModelToEntity(student);
     }
 
     private async mapStudentsArray(students: Student[]): Promise<StudentEntity[]> {
