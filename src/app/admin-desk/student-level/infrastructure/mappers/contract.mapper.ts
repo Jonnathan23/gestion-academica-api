@@ -13,7 +13,6 @@ import { StudentMapper } from "@/app/admin-desk/students/infrastructure/mappers/
 
 export class StudentLevelMapper {
     public static studentLevelEntityFromObject(object: { [key: string]: any }): StudentLevelEntity {
-        //TODO: cambiar por mensajes no relevativos y más amigables al cliente
         const {
             st_mod_id,
             st_mod_student_id,
@@ -26,11 +25,12 @@ export class StudentLevelMapper {
             st_mod_created_at,
             st_mod_updated_at,
         } = object;
-        if (!st_mod_id) throw CustomError.internalServer("Missing st_mod_id");
-        if (!st_mod_student_id) throw CustomError.internalServer("Missing st_mod_student_id");
-        if (!st_mod_module_id) throw CustomError.internalServer("Missing st_mod_module_id");
-        if (!st_mod_seller_id) throw CustomError.internalServer("Missing st_mod_seller_id");
-        if (!st_mod_status) throw CustomError.internalServer("Missing st_mod_status");
+
+        if (!st_mod_id) throw CustomError.internalServer("No se proporcionó el contrato requerido");
+        if (!st_mod_student_id) throw CustomError.internalServer("El estudiante es requerido");
+        if (!st_mod_module_id) throw CustomError.internalServer("El módulo es requerido");
+        if (!st_mod_seller_id) throw CustomError.internalServer("El vendedor es requerido");
+        if (!st_mod_status) throw CustomError.internalServer("El estado del contrato es requerido");
 
         const freezeCount = st_mod_freeze_count ?? 0;
         const reactivationCount = st_mod_reactivation_count ?? 0;
@@ -50,7 +50,6 @@ export class StudentLevelMapper {
     }
 
     public static studentLevelDetailsEntityFromObject(object: { [key: string]: any }): StudentLevelDetailsProjection {
-        // Añadimos st_mod_created_at y st_mod_updated_at para extraerlas del objeto
         const {
             st_mod_id,
             st_mod_status,
@@ -64,12 +63,12 @@ export class StudentLevelMapper {
         } = object;
 
         if (!st_mod_id || !st_mod_status) {
-            throw CustomError.internalServer("Missing required contract fields");
+            throw CustomError.internalServer("Faltan campos requeridos del contrato");
         }
 
-        if (!module) throw CustomError.internalServer("Missing module");
-        if (!seller) throw CustomError.internalServer("Missing seller");
-        if (!student) throw CustomError.internalServer("Missing student");
+        if (!module) throw CustomError.internalServer("El nivel de inglés es requerido");
+        if (!seller) throw CustomError.internalServer("El vendedor es requerido");
+        if (!student) throw CustomError.internalServer("El estudiante es requerido");
 
         const moduleEntity = ModuleMapper.moduleModelToEntity(module);
         const sellerEntity = UserMapper.userModelToEntity(seller);
