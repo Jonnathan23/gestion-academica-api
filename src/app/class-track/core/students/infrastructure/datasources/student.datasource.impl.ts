@@ -1,16 +1,22 @@
 import { Op } from "sequelize";
-import Student, { studentContractStatus } from "@/data/models/admin-desk/Student.model";
 
-import type { SearchStudentsDto } from "@/app/class-track/core/students/domain/dtos/SearchStudentDto.dto";
-import type { StudentClassTrackProjection } from "@/app/class-track/core/students/domain/projections/StudentClassTrack.projection";
-import { StudentMapper } from "@/app/class-track/core/students/infrastructure/mappers/student.mapper";
-import type { StudentClassTrackDataSource } from "@/app/class-track/core/students/domain/datasources/student.datasource";
-import type { StudentWithLevelActive } from "@/app/class-track/core/students/domain/projections/StudentWithLevelActive.projection";
+import Student, { studentContractStatus } from "@/data/models/admin-desk/Student.model";
 import StudentModule from "@/data/models/admin-desk/StudentModule.model";
-import { CustomError } from "@/core/error/customError.error";
+import Module from "@/data/models/admin-desk/Module.model";
+
 import { studentModuleStatus } from "@/core/interfaces/Contracts.interface";
+import { CustomError } from "@/core/error/customError.error";
+import { Validators } from "@/core/utils/Validators";
+
+import type { StudentWithLevelActiveDetails } from "@/app/class-track/core/students/domain/projections/StudentWithLevelActiveDetails.projection";
+import type { StudentWithLevelActive } from "@/app/class-track/core/students/domain/projections/StudentWithLevelActive.projection";
+import type { StudentClassTrackProjection } from "@/app/class-track/core/students/domain/projections/StudentClassTrack.projection";
+import type { StudentClassTrackDataSource } from "@/app/class-track/core/students/domain/datasources/student.datasource";
+import type { SearchStudentsDto } from "@/app/class-track/core/students/domain/dtos/SearchStudentDto.dto";
+
+import { StudentWithLevelActiveDetailsProjectionMapper } from "@/app/class-track/core/students/infrastructure/mappers/activeStudentDetailsProjection.mapper";
 import { StudentWithLevelActiveProjectionMapper } from "@/app/class-track/core/students/infrastructure/mappers/activeStudentProjection.mapper";
-import { Validators } from "@/core/utils";
+import { StudentMapper } from "@/app/class-track/core/students/infrastructure/mappers/student.mapper";
 
 export class StudentClassTrackDataSourceImpl implements StudentClassTrackDataSource {
     public async searchStudents(dto: SearchStudentsDto): Promise<StudentClassTrackProjection[]> {
@@ -43,6 +49,39 @@ export class StudentClassTrackDataSourceImpl implements StudentClassTrackDataSou
         }
 
         return StudentWithLevelActiveProjectionMapper.entityFromObject({ student, moduleActive });
+    }
+
+    public async findStudentWithLevelActiveDetails(studentId: string): Promise<StudentWithLevelActiveDetails> {
+        const student = await Student.findOne({
+            where: { st_id: studentId },
+            include: [
+                {
+                    model: StudentModule,
+                    where: {
+                        st_mod_status: studentModuleStatus.Active,
+                    },
+                    required: false,
+                    include: [
+                        {
+                            model: Module,
+                            required: true,
+                        },
+                    ],
+                },
+            ],
+        });
+
+        if (!student) {
+            throw CustomError.notFound("Estudiante no encontrado en el sistema");
+        }
+
+        const moduleActive = student.student_modules.find((module) => module.st_mod_status === studentModuleStatus.Active);
+
+        if (!moduleActive) {
+            throw CustomError.forbidden("El estudiante no tiene contratos o módulos activos");
+        }
+
+        return StudentWithLevelActiveDetailsProjectionMapper.entityFromObject({ student, moduleActive, moduleInfo: moduleActive.module });
     }
 
     public async getActiveContractsCount(): Promise<number> {
