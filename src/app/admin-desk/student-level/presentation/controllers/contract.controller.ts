@@ -9,7 +9,7 @@ import {
 import { DeleteStudentLevelDto, PurchaseModulesDto, UpdateStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos";
 import type { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/StudentLevel.entity";
 import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-level/domain/projections/ContractDetails.projection";
-import type { StudentLevelRepositoryImpl } from "@/app/admin-desk/student-level/infrastructure/repositories/contract.repository.impl";
+import type { StudentLevelRepositoryImpl } from "@/app/admin-desk/student-level/infrastructure/repositories/studentLevel.repository.impl";
 import { CustomError } from "@/core/error";
 import type { AuthRequest } from "@/core/middleware/auth.mid";
 import { SuccessResponse } from "@/core/utils";
