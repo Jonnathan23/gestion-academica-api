@@ -2,34 +2,34 @@ import { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entiti
 import { studentModuleStatus } from "@/core/interfaces/Contracts.interface";
 
 export interface LevelProgressionDomainService {
-    applySelfHealing(allContracts: StudentLevelEntity[]): StudentLevelEntity[];
+    applySelfHealing(studentLevels: StudentLevelEntity[]): StudentLevelEntity[];
 }
 
 export class LevelProgressionDomainServiceImpl implements LevelProgressionDomainService {
-    public applySelfHealing(allContracts: StudentLevelEntity[]): StudentLevelEntity[] {
-        const contractsToUpdate: StudentLevelEntity[] = [];
+    public applySelfHealing(studentLevels: StudentLevelEntity[]): StudentLevelEntity[] {
+        const levelsToUpdate: StudentLevelEntity[] = [];
         let isProgressionActive: boolean = false;
 
-        for (const currentContract of allContracts) {
-            if (!currentContract) {
+        for (const currentStudentLevel of studentLevels) {
+            if (!currentStudentLevel) {
                 continue;
             }
 
-            let newContractStatus = currentContract.status;
+            let newLevelStatus = currentStudentLevel.status;
 
             if (isProgressionActive) {
-                newContractStatus = studentModuleStatus.Locked;
-            } else if (currentContract.status !== studentModuleStatus.Approved) {
-                newContractStatus = studentModuleStatus.Active;
+                newLevelStatus = studentModuleStatus.Locked;
+            } else if (currentStudentLevel.status !== studentModuleStatus.Approved) {
+                newLevelStatus = studentModuleStatus.Active;
                 isProgressionActive = true;
             }
 
-            if (currentContract.status !== newContractStatus) {
-                currentContract.updateStatus(newContractStatus);
-                contractsToUpdate.push(currentContract);
+            if (currentStudentLevel.status !== newLevelStatus) {
+                currentStudentLevel.updateStatus(newLevelStatus);
+                levelsToUpdate.push(currentStudentLevel);
             }
         }
 
-        return contractsToUpdate;
+        return levelsToUpdate;
     }
 }
