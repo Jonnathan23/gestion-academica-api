@@ -1,3 +1,3 @@
 export abstract class UserSegurityDataSource {
-    abstract checkUserActiveStatus(id: string): Promise<boolean>;
+    public abstract checkUserActiveStatus(id: string): Promise<boolean>;
 }

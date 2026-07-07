@@ -11,7 +11,7 @@ export class CreatePaymentPlanDto {
         public readonly firstQuotaDueDate: Date,
     ) {}
 
-    static create(object: { [key: string]: any }): [string?, CreatePaymentPlanDto?] {
+    public static create(object: { [key: string]: any }): [string?, CreatePaymentPlanDto?] {
         const { studentId, sellerId, enrollmentFee, totalAmount, isSinglePayment, numberOfQuotas, firstQuotaDueDate } = object;
 
         if (!studentId || !Validators.isUUID(studentId)) return ["Invalid or missing studentId"];
@@ -23,10 +23,12 @@ export class CreatePaymentPlanDto {
         if (isSinglePayment === undefined) return ["Missing isSinglePayment boolean flag"];
 
         const finalNumberOfQuotas = isSinglePayment ? 1 : numberOfQuotas;
+
         if (!finalNumberOfQuotas || finalNumberOfQuotas < 1) return ["numberOfQuotas must be at least 1"];
 
         if (!firstQuotaDueDate) return ["Missing firstQuotaDueDate"];
         const parsedDueDate = new Date(firstQuotaDueDate);
+
         if (isNaN(parsedDueDate.getTime())) return ["Invalid firstQuotaDueDate format"];
 
         return [

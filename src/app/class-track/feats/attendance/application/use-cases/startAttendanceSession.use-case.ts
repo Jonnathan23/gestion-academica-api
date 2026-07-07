@@ -6,7 +6,7 @@ import { CustomError } from "@/core/error/customError.error";
 import type { StudentClassTrackRepository } from "@/app/class-track/core/students/domain/repositories/student.repository";
 
 export class StartAttendanceSessionUseCase {
-    constructor(
+    public constructor(
         private readonly attendanceSessionRepository: AttendanceSessionRepository,
         private readonly studentProjectionRepository: StudentClassTrackRepository,
     ) {}

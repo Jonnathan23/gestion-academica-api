@@ -78,6 +78,7 @@ export class RetentionAlertDatasourceImpl implements RetentionAlertDatasource {
 
     public async updateAlertInfo(id: string, dto: UpdateRetentionAlertDto): Promise<RetentionAlertEntity> {
         const alert = await RetentionAlert.findByPk(id);
+
         if (!alert) {
             throw CustomError.notFound("Retention alert not found");
         }
@@ -97,6 +98,7 @@ export class RetentionAlertDatasourceImpl implements RetentionAlertDatasource {
 
     public async changeAlertStatus(id: string, status: RetentionAlertStatus): Promise<RetentionAlertEntity> {
         const alert = await RetentionAlert.findByPk(id);
+
         if (!alert) {
             throw CustomError.notFound("Retention alert not found");
         }
@@ -112,6 +114,7 @@ export class RetentionAlertDatasourceImpl implements RetentionAlertDatasource {
 
     private buildGetAlertsQueryOptions(dto: GetRetentionAlertsDto): FindOptions {
         const whereClause: WhereOptions = {};
+
         if (dto.status) {
             whereClause.re_al_status = dto.status;
         }
@@ -158,6 +161,7 @@ export class RetentionAlertDatasourceImpl implements RetentionAlertDatasource {
     private async mapToRetentionAlertWithStudentProjections(alerts: RetentionAlert[]): Promise<RetentionAlertWithStudentProjection[]> {
         return alerts.map((alert) => {
             const rawObj = alert.toJSON();
+
             return RetentionAlertWithStudentMapper.create(rawObj);
         });
     }

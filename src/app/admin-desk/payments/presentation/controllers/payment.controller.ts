@@ -14,9 +14,9 @@ import { CustomError } from "@/core/error";
 import { SuccessResponse } from "@/core/utils";
 
 export class PaymentController {
-    constructor(private readonly paymentRepository: PaymentRepository) {}
+    public constructor(private readonly paymentRepository: PaymentRepository) {}
 
-    createPaymentPlan = (req: Request, res: Response, next: NextFunction) => {
+    public createPaymentPlan = (req: Request, res: Response, next: NextFunction) => {
         const { studentId } = req.params;
         const sellerId = (req as AuthRequest).userSession?.id;
 
@@ -40,7 +40,7 @@ export class PaymentController {
             });
     };
 
-    getStudentPaymentPlans = (req: Request, res: Response, next: NextFunction) => {
+    public getStudentPaymentPlans = (req: Request, res: Response, next: NextFunction) => {
         const { studentId } = req.params;
 
         const getStudentPaymentPlans = new GetStudentPaymentPlansUseCase(this.paymentRepository);
@@ -55,7 +55,7 @@ export class PaymentController {
             });
     };
 
-    processQuotaPayment = (req: Request, res: Response, next: NextFunction) => {
+    public processQuotaPayment = (req: Request, res: Response, next: NextFunction) => {
         const { quotaId } = req.params;
 
         const [error, payQuotaDto] = PayQuotaDto.create({
@@ -77,7 +77,7 @@ export class PaymentController {
             });
     };
 
-    revertQuotaPayment = (req: Request, res: Response, next: NextFunction) => {
+    public revertQuotaPayment = (req: Request, res: Response, next: NextFunction) => {
         const { quotaId } = req.params;
 
         const revertQuotaPayment = new RevertQuotaPaymentUseCase(this.paymentRepository);

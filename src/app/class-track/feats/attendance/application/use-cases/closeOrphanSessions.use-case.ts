@@ -1,7 +1,7 @@
 import { AttendanceSessionRepository } from "@/app/class-track/feats/attendance/domain/repositories/attendanceSession.repository";
 
 export class CloseOrphanSessionsUseCase {
-    constructor(private readonly repository: AttendanceSessionRepository) {}
+    public constructor(private readonly repository: AttendanceSessionRepository) {}
 
     public async execute(): Promise<number> {
         return await this.repository.closeOrphanSessions();

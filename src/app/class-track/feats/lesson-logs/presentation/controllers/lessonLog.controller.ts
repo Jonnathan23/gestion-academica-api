@@ -11,7 +11,7 @@ import type { AttendanceSessionRepository } from "@/app/class-track/feats/attend
 import type { LessonLogRepository } from "@/app/class-track/feats/lesson-logs/domain/repositories/lessonLog.repository";
 
 export class LessonLogController {
-    constructor(
+    public constructor(
         private readonly repository: LessonLogRepository,
         private readonly studentRepository: StudentClassTrackRepository,
         private readonly attendanceSessionRepository: AttendanceSessionRepository,
@@ -32,7 +32,6 @@ export class LessonLogController {
                 SuccessResponse.created(res, "Lesson logs successfully created", result);
             })
             .catch((error) => {
-                console.log(error);
                 next(error);
             });
     };

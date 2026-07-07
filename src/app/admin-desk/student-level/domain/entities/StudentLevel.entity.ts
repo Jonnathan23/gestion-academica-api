@@ -27,7 +27,7 @@ export class StudentLevelEntity {
     public readonly updatedAt: Date;
     public readonly moduleLevel: number;
 
-    constructor(props: StudentLevelEntityProps) {
+    public constructor(props: StudentLevelEntityProps) {
         this.id = props.id || "";
         this.studentId = props.studentId;
         this.moduleId = props.moduleId;

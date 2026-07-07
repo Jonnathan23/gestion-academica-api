@@ -11,6 +11,7 @@ import AttendanceSession from "@/data/models/class-track/AttendanceSession.model
 export class LessonLogDataSourceImpl implements LessonLogDataSource {
     public async createLessonLogs(dto: CreateLessonLogsDto): Promise<LessonLogEntity[]> {
         const sequelize = LessonLog.sequelize;
+
         if (!sequelize) throw CustomError.serviceUnavailable("Database connection not found");
 
         const transactionLessonLogs = await sequelize.transaction();
@@ -28,19 +29,22 @@ export class LessonLogDataSourceImpl implements LessonLogDataSource {
                     },
                     { transaction: transactionLessonLogs },
                 );
+
                 createdLogs.push(newLog);
             }
 
             const entities = this.convertArrayToEntity(createdLogs);
+
             await transactionLessonLogs.commit();
+
             return entities;
         } catch (error) {
             await transactionLessonLogs.rollback();
             if (error instanceof CustomError) {
-                console.log(error);
+                console.error(error);
                 throw error;
             }
-            console.log(error);
+            console.error(error);
             throw CustomError.internalServer("Error creating lesson logs in database");
         }
     }
@@ -62,6 +66,7 @@ export class LessonLogDataSourceImpl implements LessonLogDataSource {
         });
 
         if (!lastLog) return null;
+
         return LessonLogMapper.lessonLogEntityFromObject(lastLog.toJSON());
     }
 }

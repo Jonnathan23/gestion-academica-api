@@ -40,33 +40,33 @@ class StudentModule extends Model<StudentModuleAttributes, StudentModuleCreation
         unique: true,
         defaultValue: DataType.UUIDV4,
     })
-    declare st_mod_id: string;
+    declare public st_mod_id: string;
 
     @Column({
         type: DataType.ENUM(...Object.values(studentModuleStatus)),
         allowNull: false,
     })
-    declare st_mod_status: StudentModuleStatus;
+    declare public st_mod_status: StudentModuleStatus;
 
     @Column({
         type: DataType.DATEONLY,
         allowNull: false,
     })
-    declare st_mod_purchase_date: Date;
+    declare public st_mod_purchase_date: Date;
 
     @Column({
         type: DataType.INTEGER,
         allowNull: false,
         defaultValue: 0,
     })
-    declare st_mod_freeze_count: number;
+    declare public st_mod_freeze_count: number;
 
     @Column({
         type: DataType.INTEGER,
         allowNull: false,
         defaultValue: 0,
     })
-    declare st_mod_reactivation_count: number;
+    declare public st_mod_reactivation_count: number;
 
     //* Foreign Keys
     @ForeignKey(() => Student)
@@ -74,30 +74,30 @@ class StudentModule extends Model<StudentModuleAttributes, StudentModuleCreation
         type: DataType.UUID,
         allowNull: false,
     })
-    declare st_mod_student_id: string;
+    declare public st_mod_student_id: string;
 
     @BelongsTo(() => Student)
-    declare student: Student;
+    declare public student: Student;
 
     @ForeignKey(() => Module)
     @Column({
         type: DataType.UUID,
         allowNull: false,
     })
-    declare st_mod_module_id: string;
+    declare public st_mod_module_id: string;
 
     @BelongsTo(() => Module)
-    declare module: Module;
+    declare public module: Module;
 
     @ForeignKey(() => User)
     @Column({
         type: DataType.UUID,
         allowNull: false,
     })
-    declare st_mod_seller_id: string;
+    declare public st_mod_seller_id: string;
 
     @BelongsTo(() => User)
-    declare seller: User;
+    declare public seller: User;
 }
 
 export default StudentModule;

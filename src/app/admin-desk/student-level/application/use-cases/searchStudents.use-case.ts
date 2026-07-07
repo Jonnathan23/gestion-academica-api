@@ -3,7 +3,7 @@ import type { SearchStudentsLevelsDto } from "@/app/admin-desk/student-level/dom
 import type { StudentSearchProjection } from "@/app/admin-desk/student-level/domain/projections/StudentSearch.projection";
 
 export class SearchStudentsUseCase {
-    constructor(private readonly repository: InfoStudentsLevelRepository) {}
+    public constructor(private readonly repository: InfoStudentsLevelRepository) {}
 
     public async execute(dto: SearchStudentsLevelsDto): Promise<StudentSearchProjection[]> {
         return this.repository.searchStudents(dto);

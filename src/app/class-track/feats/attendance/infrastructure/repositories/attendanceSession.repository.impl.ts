@@ -7,8 +7,9 @@ import type { AttendanceSessionEntity } from "@/app/class-track/feats/attendance
 import type { AbsentStudentProjection } from "@/app/class-track/feats/attendance/domain/projections/AbsentStudent.projection";
 import type { StudentInClassProjection } from "@/app/class-track/core/students/domain/projections/StudentInClass.projection";
 import type { AttendanceSessionStatus } from "@/data/models/class-track/AttendanceSession.model";
+
 export class AttendanceSessionRepositoryImpl implements AttendanceSessionRepository {
-    constructor(private readonly datasource: AttendanceSessionDatasource) {}
+    public constructor(private readonly datasource: AttendanceSessionDatasource) {}
 
     public async startSession(dto: StartAttendanceSessionDto): Promise<AttendanceSessionEntity> {
         return this.datasource.startSession(dto);

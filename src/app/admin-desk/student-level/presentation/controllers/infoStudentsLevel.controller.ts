@@ -11,7 +11,7 @@ import type { StudentSearchProjection } from "@/app/admin-desk/student-level/dom
 import type { StudentTimelineProjection } from "@/app/admin-desk/student-level/domain/projections/StudentTimeline.projection";
 
 export class InfoStudentsLevelController {
-    constructor(private readonly repository: InfoStudentsLevelRepository) {}
+    public constructor(private readonly repository: InfoStudentsLevelRepository) {}
 
     public searchStudents = (req: Request, res: Response, next: NextFunction) => {
         const [error, dto] = SearchStudentsLevelsDto.create(req.query);

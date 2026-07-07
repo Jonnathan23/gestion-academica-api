@@ -9,7 +9,7 @@ export interface BasicStudentInfo {
 }
 
 export class RetentionAlertWithStudentProjection {
-    constructor(
+    public constructor(
         public readonly id: string,
         public readonly contactDate: Date | null,
         public readonly hasResponded: boolean,

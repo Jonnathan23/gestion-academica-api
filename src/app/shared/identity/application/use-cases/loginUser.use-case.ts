@@ -29,12 +29,12 @@ interface LoginUserUseCase {
 type FuntionGenerateToken = typeof JwtAdapter.generateToken;
 
 export class LoginUser implements LoginUserUseCase {
-    constructor(
+    public constructor(
         private readonly userRepository: UserRepository,
         private readonly generateJWT: FuntionGenerateToken = JwtAdapter.generateToken,
     ) {}
 
-    async execute(user: LoginUserDto): Promise<LoginResponse> {
+    public async execute(user: LoginUserDto): Promise<LoginResponse> {
         const userExist = await this.userRepository.login(user);
 
         // 2. Obtenemos los permisos basados en el rol del usuario autenticado
@@ -65,6 +65,7 @@ export class LoginUser implements LoginUserUseCase {
         };
 
         const token = await this.generateJWT(payload);
+
         if (!token) throw CustomError.serviceUnavailable("Error generating token");
 
         return token;

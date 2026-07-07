@@ -7,7 +7,7 @@ import { systemPermissions } from "@/core/constants";
 import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
 
 export class PaymentRouter {
-    static get routes(): Router {
+    public static get routes(): Router {
         const router = Router();
 
         // 1. Inyección de Dependencias

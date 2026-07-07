@@ -42,6 +42,30 @@ const eslintConfiguration = [
             "no-console": ["warn", { allow: ["warn", "error", "info"] }],
             "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
 
+            "@typescript-eslint/no-magic-numbers": [
+                "warn",
+                {
+                    ignoreEnums: true,
+                    ignoreNumericLiteralTypes: true,
+                    ignoreReadonlyClassProperties: true,
+                    ignore: [-1, 0, 1],
+                },
+            ],
+            "@typescript-eslint/explicit-member-accessibility": [
+                "error",
+                {
+                    accessibility: "explicit",
+                },
+            ],
+            "padding-line-between-statements": [
+                "error",
+                { blankLine: "always", prev: "import", next: "*" },
+                { blankLine: "any", prev: "import", next: "import" },
+                { blankLine: "always", prev: "*", next: "return" },
+                { blankLine: "always", prev: ["const", "let", "var"], next: "*" },
+                { blankLine: "any", prev: ["const", "let", "var"], next: ["const", "let", "var"] },
+            ],
+
             "@typescript-eslint/naming-convention": [
                 "error",
                 {
@@ -147,6 +171,7 @@ const eslintConfiguration = [
         ],
         rules: {
             "@typescript-eslint/no-explicit-any": "off",
+            "@typescript-eslint/no-magic-numbers": "off",
         },
     },
 

@@ -6,9 +6,9 @@ interface RegisterUserUseCase {
 }
 
 export class RegisterUser implements RegisterUserUseCase {
-    constructor(private readonly userRepository: UserRepository) {}
+    public constructor(private readonly userRepository: UserRepository) {}
 
-    async execute(registerUserDto: RegisterUserDto): Promise<void> {
+    public async execute(registerUserDto: RegisterUserDto): Promise<void> {
         await this.userRepository.create(registerUserDto);
     }
 }

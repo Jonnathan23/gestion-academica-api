@@ -5,9 +5,9 @@ export interface ChangeContractStatusUseCase {
 }
 
 export class ChangeContractStatus implements ChangeContractStatusUseCase {
-    constructor(private readonly repository: StudentRepository) {}
+    public constructor(private readonly repository: StudentRepository) {}
 
-    execute(id: string, dto: ChangeContractStatusDto): Promise<StudentEntity> {
+    public execute(id: string, dto: ChangeContractStatusDto): Promise<StudentEntity> {
         return this.repository.changeContractStatus(id, dto);
     }
 }

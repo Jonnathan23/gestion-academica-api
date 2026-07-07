@@ -14,11 +14,13 @@ import { InfoStudentsLevelMapper } from "@/app/admin-desk/student-level/infrastr
 export class InfoStudentsLevelDataSourceImpl implements InfoStudentsLevelDataSource {
     public async searchStudents(dto: SearchStudentsLevelsDto): Promise<StudentSearchProjection[]> {
         const rawStudents = await this.fetchStudentsWithEnrolledCount(dto);
+
         return await this.mapToSearchProjections(rawStudents);
     }
 
     public async getStudentTimeline(dto: GetStudentTimelineDto): Promise<StudentTimelineProjection> {
         const student = await this.fetchStudentProfile(dto.studentId);
+
         if (!student) {
             throw CustomError.notFound("Student profile not found");
         }
@@ -71,6 +73,7 @@ export class InfoStudentsLevelDataSourceImpl implements InfoStudentsLevelDataSou
             attributes: ["st_id", "st_full_name", "st_phone_number", "st_start_date"],
             raw: true,
         });
+
         return student;
     }
 
@@ -88,6 +91,7 @@ export class InfoStudentsLevelDataSourceImpl implements InfoStudentsLevelDataSou
             raw: true,
             nest: true,
         });
+
         return enrolled;
     }
 
@@ -106,6 +110,7 @@ export class InfoStudentsLevelDataSourceImpl implements InfoStudentsLevelDataSou
             attributes: ["mo_id", "mo_name", "mo_level", "mo_description"],
             raw: true,
         });
+
         return available;
     }
 

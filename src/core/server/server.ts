@@ -25,7 +25,9 @@ export class Server {
     private readonly databaseErrorHandler: DatabaseErrorHandler;
     private readonly documentation?: SwaggerConfiguration;
 
-    constructor({ port = 4000, routes, cors, databaseErrorHandler, documentation }: ServerProps) {
+    private readonly defaultPort = 4000;
+
+    public constructor({ port = this.defaultPort, routes, cors, databaseErrorHandler, documentation }: ServerProps) {
         this.port = port;
         this.routes = routes;
         this.cors = cors;
@@ -33,7 +35,7 @@ export class Server {
         this.documentation = documentation;
     }
 
-    async start() {
+    public async start() {
         // Middlewares
         this.app.use(morgan("dev"));
         this.app.use(express.json());
@@ -42,6 +44,7 @@ export class Server {
         this.app.use(cookieParser());
 
         const corsOptions = this.cors.corsOptions;
+
         this.app.use(cors(corsOptions));
 
         if (this.documentation) {

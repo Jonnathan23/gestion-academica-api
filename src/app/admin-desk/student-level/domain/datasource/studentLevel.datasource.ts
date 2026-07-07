@@ -2,6 +2,7 @@ import type { UpdateStudentLevelDto } from "@/app/admin-desk/student-level/domai
 import type { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/StudentLevel.entity";
 import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-level/domain/projections/ContractDetails.projection";
 import type { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
+
 export abstract class StudentLevelDataSource {
     public abstract saveProgressionTransaction(
         newContracts: StudentLevelEntity[],

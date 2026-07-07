@@ -7,9 +7,9 @@ interface ProcessQuotaPaymentUseCaseProps {
 }
 
 export class ProcessQuotaPaymentUseCase implements ProcessQuotaPaymentUseCaseProps {
-    constructor(private readonly paymentRepository: PaymentRepository) {}
+    public constructor(private readonly paymentRepository: PaymentRepository) {}
 
-    async execute(dto: PayQuotaDto): Promise<PaymentQuotaEntity> {
+    public async execute(dto: PayQuotaDto): Promise<PaymentQuotaEntity> {
         return await this.paymentRepository.processQuotaPayment(dto);
     }
 }

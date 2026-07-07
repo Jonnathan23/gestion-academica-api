@@ -23,9 +23,9 @@ import type { StudentEntity } from "@/app/admin-desk/students/domain/entities/St
 import { GetAllStudents } from "@/app/admin-desk/students/application/use-cases/getAllStudents.use-case";
 
 export class StudentController {
-    constructor(private readonly studentRepository: StudentRepository) {}
+    public constructor(private readonly studentRepository: StudentRepository) {}
 
-    register = (req: Request, res: Response, next: NextFunction) => {
+    public register = (req: Request, res: Response, next: NextFunction) => {
         const [error, registerStudentDto] = RegisterStudentDto.create(req.body);
 
         if (error) throw CustomError.badRequest(error);
@@ -36,6 +36,7 @@ export class StudentController {
             .execute(registerStudentDto!)
             .then((student) => {
                 const successMessage = "Student registered successfully";
+
                 SuccessResponse.created<StudentEntity>(res, successMessage, student);
             })
             .catch((error) => {
@@ -43,13 +44,14 @@ export class StudentController {
             });
     };
 
-    getAllStudents = (req: Request, res: Response, next: NextFunction) => {
+    public getAllStudents = (req: Request, res: Response, next: NextFunction) => {
         const getAllStudents = new GetAllStudents(this.studentRepository);
 
         getAllStudents
             .execute()
             .then((students) => {
                 const successMessage = "Students found successfully";
+
                 SuccessResponse.ok<StudentEntity[]>(res, successMessage, students);
             })
             .catch((error) => {
@@ -57,7 +59,7 @@ export class StudentController {
             });
     };
 
-    search = (req: Request, res: Response, next: NextFunction) => {
+    public search = (req: Request, res: Response, next: NextFunction) => {
         const query = (req.query.q as string) || "";
 
         const searchStudents = new SearchStudents(this.studentRepository);
@@ -66,6 +68,7 @@ export class StudentController {
             .execute(query)
             .then((students) => {
                 const successMessage = "Students found successfully";
+
                 SuccessResponse.ok<StudentEntity[]>(res, successMessage, students);
             })
             .catch((error) => {
@@ -73,7 +76,7 @@ export class StudentController {
             });
     };
 
-    searchStudentsByCriteria = (req: Request, res: Response, next: NextFunction) => {
+    public searchStudentsByCriteria = (req: Request, res: Response, next: NextFunction) => {
         const [error, searchStudentsByCriteriaDto] = SearchStudentsByCriteriaDto.create(req.query);
 
         if (error) throw CustomError.badRequest(error);
@@ -84,6 +87,7 @@ export class StudentController {
             .execute(searchStudentsByCriteriaDto!)
             .then((paginatedResult) => {
                 const successMessage = "Students found successfully";
+
                 SuccessResponse.ok<PaginatedResult<StudentEntity>>(res, successMessage, paginatedResult);
             })
             .catch((error) => {
@@ -91,7 +95,7 @@ export class StudentController {
             });
     };
 
-    update = (req: Request, res: Response, next: NextFunction) => {
+    public update = (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         const [error, updateStudentDto] = UpdateStudentDto.create(req.body);
 
@@ -103,6 +107,7 @@ export class StudentController {
             .execute(id as string, updateStudentDto!)
             .then((student) => {
                 const successMessage = "Student updated successfully";
+
                 SuccessResponse.ok<StudentEntity>(res, successMessage, student);
             })
             .catch((error) => {
@@ -110,7 +115,7 @@ export class StudentController {
             });
     };
 
-    changeContractStatus = (req: Request, res: Response, next: NextFunction) => {
+    public changeContractStatus = (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         const [error, changeContractStatusDto] = ChangeContractStatusDto.create(req.body);
 
@@ -122,6 +127,7 @@ export class StudentController {
             .execute(id as string, changeContractStatusDto!)
             .then((student) => {
                 const successMessage = "Student contract status changed successfully";
+
                 SuccessResponse.ok<StudentEntity>(res, successMessage, student);
             })
             .catch((error) => {
@@ -129,7 +135,7 @@ export class StudentController {
             });
     };
 
-    toggleGraduated = (req: Request, res: Response, next: NextFunction) => {
+    public toggleGraduated = (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
 
         const toggleGraduated = new ToggleGraduated(this.studentRepository);
@@ -138,6 +144,7 @@ export class StudentController {
             .execute(id as string)
             .then((student) => {
                 const successMessage = "Student graduated status toggled successfully";
+
                 SuccessResponse.ok<StudentEntity>(res, successMessage, student);
             })
             .catch((error) => {
@@ -145,7 +152,7 @@ export class StudentController {
             });
     };
 
-    deactivate = (req: Request, res: Response, next: NextFunction) => {
+    public deactivate = (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
 
         const deactivateStudent = new DeactivateStudent(this.studentRepository);
@@ -154,6 +161,7 @@ export class StudentController {
             .execute(id as string)
             .then((student) => {
                 const successMessage = "Student deactivated successfully";
+
                 SuccessResponse.ok<StudentEntity>(res, successMessage, student);
             })
             .catch((error) => {

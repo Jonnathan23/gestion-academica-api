@@ -6,9 +6,9 @@ interface UpdateModuleUseCase {
 }
 
 export class UpdateModule implements UpdateModuleUseCase {
-    constructor(private readonly moduleRepository: ModuleRepository) {}
+    public constructor(private readonly moduleRepository: ModuleRepository) {}
 
-    async execute(id: string, module: UpdateModuleDto): Promise<void> {
+    public async execute(id: string, module: UpdateModuleDto): Promise<void> {
         await this.moduleRepository.updateModule(id, module);
     }
 }

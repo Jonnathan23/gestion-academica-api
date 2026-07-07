@@ -16,8 +16,9 @@ export class UpdateStudentDto {
         public readonly isGraduated?: boolean,
     ) {}
 
-    get value() {
+    public get value() {
         const returnObject: { [key: string]: any } = {};
+
         if (this.identificationCard) returnObject.st_identification_card = this.identificationCard;
         if (this.fullName) returnObject.st_full_name = this.fullName;
         if (this.phoneNumber) returnObject.st_phone_number = this.phoneNumber;
@@ -33,7 +34,7 @@ export class UpdateStudentDto {
         return returnObject;
     }
 
-    static create(object: { [key: string]: any }): [string?, UpdateStudentDto?] {
+    public static create(object: { [key: string]: any }): [string?, UpdateStudentDto?] {
         const {
             identificationCard,
             fullName,

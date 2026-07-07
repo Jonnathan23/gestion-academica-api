@@ -5,21 +5,21 @@ import type { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entiti
 import type { PaymentRepository } from "@/app/admin-desk/payments/domain/repositories/payment.repository";
 
 export class PaymentRepositoryImpl implements PaymentRepository {
-    constructor(private readonly datasource: PaymentDataSource) {}
+    public constructor(private readonly datasource: PaymentDataSource) {}
 
-    async createPaymentPlan(dto: CreatePaymentPlanDto, generatedQuotas: PaymentQuotaEntity[]): Promise<PaymentPlanEntity> {
+    public async createPaymentPlan(dto: CreatePaymentPlanDto, generatedQuotas: PaymentQuotaEntity[]): Promise<PaymentPlanEntity> {
         return this.datasource.createPaymentPlan(dto, generatedQuotas);
     }
 
-    async getStudentPaymentPlans(studentId: string): Promise<PaymentPlanEntity[]> {
+    public async getStudentPaymentPlans(studentId: string): Promise<PaymentPlanEntity[]> {
         return this.datasource.getStudentPaymentPlans(studentId);
     }
 
-    async processQuotaPayment(dto: PayQuotaDto): Promise<PaymentQuotaEntity> {
+    public async processQuotaPayment(dto: PayQuotaDto): Promise<PaymentQuotaEntity> {
         return this.datasource.processQuotaPayment(dto);
     }
 
-    async revertQuotaPayment(quotaId: string): Promise<boolean> {
+    public async revertQuotaPayment(quotaId: string): Promise<boolean> {
         return this.datasource.revertQuotaPayment(quotaId);
     }
 }

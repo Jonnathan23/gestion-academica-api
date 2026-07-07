@@ -84,6 +84,7 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
 
     public async getStudentsAbsentForMoreThan(days: number): Promise<AbsentStudentProjection[]> {
         const targetDate = new Date();
+
         targetDate.setDate(targetDate.getDate() - days);
 
         const sessionResults = (await AttendanceSession.findAll({
@@ -115,6 +116,7 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
 
         const combinedResults: AbsentStudentQueryRow[] = sessionResults.map((sessionResult) => {
             const student = students.find((s) => s.st_id === sessionResult.at_se_student_id);
+
             return {
                 at_se_student_id: sessionResult.at_se_student_id,
                 lastAttendance: new Date(sessionResult.lastAttendance),
@@ -139,6 +141,7 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
 
     public async closeOrphanSessions(): Promise<number> {
         const sequelize = AttendanceSession.sequelize;
+
         if (!sequelize) {
             throw CustomError.internalServer("Error initializing database transaction");
         }
@@ -215,7 +218,9 @@ export class AttendanceSessionDatasourceImpl implements AttendanceSessionDatasou
 
     public async getAttendanceSessionById(id: string): Promise<AttendanceSessionEntity | null> {
         const session = await AttendanceSession.findByPk(id);
+
         if (!session) return null;
+
         return this.convertToAttendanceSessionEntity(session);
     }
 }

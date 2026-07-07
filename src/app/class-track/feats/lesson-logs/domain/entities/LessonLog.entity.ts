@@ -1,5 +1,5 @@
 export class LessonLogEntity {
-    constructor(
+    public constructor(
         public id: string,
         public attendanceSessionId: string,
         public lessonNumber: string,

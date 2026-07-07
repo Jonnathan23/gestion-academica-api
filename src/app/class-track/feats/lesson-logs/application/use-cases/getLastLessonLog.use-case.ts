@@ -4,7 +4,7 @@ import type { GetLastLessonLogDto } from "@/app/class-track/feats/lesson-logs/do
 import type { LessonLogEntity } from "@/app/class-track/feats/lesson-logs/domain/entities/LessonLog.entity";
 
 export class GetLastLessonLogUseCase {
-    constructor(private readonly repository: LessonLogRepository) {}
+    public constructor(private readonly repository: LessonLogRepository) {}
 
     public async execute(dto: GetLastLessonLogDto): Promise<LessonLogEntity> {
         const lastLog = await this.repository.getLastLessonLog(dto);

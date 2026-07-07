@@ -5,15 +5,17 @@ export class UpdateModuleDto {
         public readonly mo_level?: number,
     ) {}
 
-    get values() {
+    public get values() {
         const returnObject: { [key: string]: any } = {};
+
         if (this.mo_name) returnObject.mo_name = this.mo_name;
         if (this.mo_description) returnObject.mo_description = this.mo_description;
         if (this.mo_level) returnObject.mo_level = this.mo_level;
+
         return returnObject;
     }
 
-    static create(object: { [key: string]: any }): [string?, UpdateModuleDto?] {
+    public static create(object: { [key: string]: any }): [string?, UpdateModuleDto?] {
         const { mo_name, mo_description, mo_level } = object;
 
         if (!mo_name && !mo_description && !mo_level) return ["Missing fields"];

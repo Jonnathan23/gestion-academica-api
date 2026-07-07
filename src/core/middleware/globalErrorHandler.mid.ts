@@ -21,15 +21,18 @@ export const createGlobalErrorHandler = (databaseErrorHandler: DatabaseErrorHand
             const errorResponse: ErrorResponse = {
                 errors: error.errors,
             };
+
             return response.status(error.statusCode).json(errorResponse);
         }
 
         // Errores delegados a la base de datos
         const mappedDatabaseError = databaseErrorHandler.handleDatabaseError(error);
+
         if (mappedDatabaseError) {
             const errorResponse: ErrorResponse = {
                 errors: mappedDatabaseError.errors,
             };
+
             return response.status(mappedDatabaseError.statusCode).json(errorResponse);
         }
 
@@ -39,6 +42,7 @@ export const createGlobalErrorHandler = (databaseErrorHandler: DatabaseErrorHand
         const errorResponse: ErrorResponse = {
             errors: internalError.errors,
         };
+
         return response.status(internalError.statusCode).json(errorResponse);
     };
 };

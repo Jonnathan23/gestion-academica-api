@@ -3,7 +3,7 @@ import type { StudentClassTrackProjection } from "@/app/class-track/core/student
 import type { StudentClassTrackRepository } from "@/app/class-track/core/students/domain/repositories/student.repository";
 
 export class SearchStudentsUseCase {
-    constructor(private readonly studentRepository: StudentClassTrackRepository) {}
+    public constructor(private readonly studentRepository: StudentClassTrackRepository) {}
 
     public execute(dto: SearchStudentsDto): Promise<StudentClassTrackProjection[]> {
         return this.studentRepository.searchStudents(dto);

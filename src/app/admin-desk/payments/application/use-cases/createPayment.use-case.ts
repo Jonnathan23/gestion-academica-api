@@ -8,9 +8,9 @@ interface CreatePaymentPlanUseCaseProps {
 }
 
 export class CreatePaymentPlanUseCase implements CreatePaymentPlanUseCaseProps {
-    constructor(private readonly paymentRepository: PaymentRepository) {}
+    public constructor(private readonly paymentRepository: PaymentRepository) {}
 
-    async execute(dto: CreatePaymentPlanDto): Promise<PaymentPlanEntity> {
+    public async execute(dto: CreatePaymentPlanDto): Promise<PaymentPlanEntity> {
         const paymentPlan = new PaymentPlanEntity(
             "",
             dto.studentId,

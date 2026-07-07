@@ -1,7 +1,7 @@
 import type { UserRoles } from "@/core/interfaces";
 
 export class UserEntity {
-    constructor(
+    public constructor(
         public us_id: string,
         public us_full_name: string,
         public us_email: string,

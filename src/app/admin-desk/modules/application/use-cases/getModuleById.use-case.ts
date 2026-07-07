@@ -6,9 +6,9 @@ interface GetModuleByIdUseCase {
 }
 
 export class GetModuleById implements GetModuleByIdUseCase {
-    constructor(private readonly moduleRepository: ModuleRepository) {}
+    public constructor(private readonly moduleRepository: ModuleRepository) {}
 
-    async execute(id: string): Promise<ModuleEntity> {
+    public async execute(id: string): Promise<ModuleEntity> {
         return await this.moduleRepository.getModuleById(id);
     }
 }

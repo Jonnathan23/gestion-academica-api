@@ -5,9 +5,9 @@ export interface DeactivateStudentUseCase {
 }
 
 export class DeactivateStudent implements DeactivateStudentUseCase {
-    constructor(private readonly repository: StudentRepository) {}
+    public constructor(private readonly repository: StudentRepository) {}
 
-    execute(id: string): Promise<StudentEntity> {
+    public execute(id: string): Promise<StudentEntity> {
         return this.repository.deactivate(id);
     }
 }

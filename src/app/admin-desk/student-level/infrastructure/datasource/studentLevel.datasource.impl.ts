@@ -12,24 +12,25 @@ import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-lev
 import { studentModuleStatus } from "@/core/interfaces/Contracts.interface";
 
 export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
-    constructor() {}
-
     //* Public methods
-    async getStudentContracts(studentId: string): Promise<StudentLevelDetailsProjection[]> {
+    public async getStudentContracts(studentId: string): Promise<StudentLevelDetailsProjection[]> {
         const studentContracts = await this.fetchAllStudentContractsWithSellers(studentId);
+
         return await this.convertArrayToDetailsEntity(studentContracts);
     }
 
-    async getModulesByIds(moduleIds: string[]): Promise<ModuleEntity[]> {
+    public async getModulesByIds(moduleIds: string[]): Promise<ModuleEntity[]> {
         const modulesFromDb = await this.searchModules(moduleIds);
+
         return modulesFromDb.map((module) => ModuleMapper.moduleModelToEntity(module));
     }
 
-    async saveProgressionTransaction(
+    public async saveProgressionTransaction(
         newContracts: StudentLevelEntity[],
         contractsToUpdate: StudentLevelEntity[],
     ): Promise<StudentLevelEntity[]> {
         const sequelize = StudentModule.sequelize;
+
         if (!sequelize) {
             throw CustomError.serviceUnavailable("Sequelize instance not found");
         }
@@ -52,6 +53,7 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
 
                 created.forEach((record, index) => {
                     const originalEntity = newContracts[index];
+
                     if (originalEntity) {
                         Object.defineProperty(originalEntity, "id", { value: record.st_mod_id, writable: false });
                     }
@@ -60,6 +62,7 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
 
             const updatePromises = contractsToUpdate.map((entity) => {
                 if (!entity.id) return Promise.resolve();
+
                 return StudentModule.update({ st_mod_status: entity.status }, { where: { st_mod_id: entity.id }, transaction });
             });
 
@@ -83,7 +86,7 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
         });
     }
 
-    async unlockLevel(dto: UpdateStudentLevelDto): Promise<StudentLevelEntity> {
+    public async unlockLevel(dto: UpdateStudentLevelDto): Promise<StudentLevelEntity> {
         const { studentLevelId, studentId } = dto;
 
         const studentsLevels = await this.fetchAllStudentContractsWithSellers(studentId);
@@ -107,7 +110,7 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
         return this.convertToEntity(targetLevel);
     }
 
-    async blockLevel(dto: UpdateStudentLevelDto): Promise<StudentLevelEntity> {
+    public async blockLevel(dto: UpdateStudentLevelDto): Promise<StudentLevelEntity> {
         const { studentLevelId } = dto;
         const targetLevel = await this.fetchContractById(studentLevelId);
 
@@ -118,15 +121,17 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
         return this.convertToEntity(targetLevel);
     }
 
-    async getStudentIdByContract(contractId: string): Promise<string> {
+    public async getStudentIdByContract(contractId: string): Promise<string> {
         const targetContract = await this.fetchContractById(contractId);
+
         return targetContract.st_mod_student_id;
     }
 
-    async deleteProgressionTransaction(contractId: string, contractsToUpdate: StudentLevelEntity[]): Promise<boolean> {
+    public async deleteProgressionTransaction(contractId: string, contractsToUpdate: StudentLevelEntity[]): Promise<boolean> {
         const targetContract = await this.fetchContractById(contractId);
 
         const sequelize = StudentModule.sequelize;
+
         if (!sequelize) {
             throw CustomError.serviceUnavailable("Sequelize instance not found");
         }

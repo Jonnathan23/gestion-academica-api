@@ -3,7 +3,7 @@ import type { AttendanceSessionRepository } from "@/app/class-track/feats/attend
 import type { ApproveAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/ApproveAttendanceSession.dto";
 
 export class ApproveAttendanceSessionUseCase {
-    constructor(private readonly repository: AttendanceSessionRepository) {}
+    public constructor(private readonly repository: AttendanceSessionRepository) {}
 
     public async execute(dto: ApproveAttendanceSessionDto): Promise<AttendanceSessionEntity> {
         return this.repository.approveSession(dto);

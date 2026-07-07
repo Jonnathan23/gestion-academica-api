@@ -4,7 +4,7 @@ import type { CreateAcademicObservationDto } from "@/app/class-track/feats/obser
 import type { AcademicObservationEntity } from "@/app/class-track/feats/observation/domain/entities/AcademicObservation.entity";
 
 export class AcademicObservationRepositoryImpl implements AcademicObservationRepository {
-    constructor(private readonly datasource: AcademicObservationDatasource) {}
+    public constructor(private readonly datasource: AcademicObservationDatasource) {}
 
     public async createObservation(dto: CreateAcademicObservationDto): Promise<AcademicObservationEntity> {
         return this.datasource.createObservation(dto);

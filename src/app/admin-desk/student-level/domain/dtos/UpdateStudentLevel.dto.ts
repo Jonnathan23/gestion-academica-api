@@ -6,14 +6,19 @@ export class UpdateStudentLevelDto {
         public readonly studentId: string,
     ) {}
 
-    get values() {
+    public get values() {
         const returnObject: { [key: string]: any } = {};
-        if (this.studentLevelId) returnObject.studentLevelId = this.studentLevelId;
+
+        if (this.studentLevelId) {
+            returnObject.studentLevelId = this.studentLevelId;
+        }
+
         if (this.studentId) returnObject.studentId = this.studentId;
+
         return returnObject;
     }
 
-    static create(object: { [key: string]: any }): [string?, UpdateStudentLevelDto?] {
+    public static create(object: { [key: string]: any }): [string?, UpdateStudentLevelDto?] {
         const { studentLevelId, studentId } = object;
 
         if (!studentLevelId) return ["Missing student level ID"];

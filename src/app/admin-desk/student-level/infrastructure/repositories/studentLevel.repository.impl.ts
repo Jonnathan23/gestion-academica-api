@@ -6,7 +6,7 @@ import type { StudentLevelRepository } from "@/app/admin-desk/student-level/doma
 import type { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
 
 export class StudentLevelRepositoryImpl implements StudentLevelRepository {
-    constructor(private readonly datasource: StudentLevelDataSource) {}
+    public constructor(private readonly datasource: StudentLevelDataSource) {}
 
     public saveProgressionTransaction(
         newContracts: StudentLevelEntity[],

@@ -6,9 +6,9 @@ interface FindAllUsersUseCase {
 }
 
 export class FindAllUsers implements FindAllUsersUseCase {
-    constructor(private readonly userRepository: UserRepository) {}
+    public constructor(private readonly userRepository: UserRepository) {}
 
-    async execute(): Promise<UserDataEntity[]> {
+    public async execute(): Promise<UserDataEntity[]> {
         return await this.userRepository.findAll();
     }
 }

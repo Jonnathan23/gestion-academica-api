@@ -4,25 +4,25 @@ import type { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/modu
 import type { ModuleRepository } from "@/app/admin-desk/modules/domain/repositories/module.repository";
 
 export class ModuleRepositoryImpl implements ModuleRepository {
-    constructor(private readonly moduleDataSource: ModuleDataSource) {}
+    public constructor(private readonly moduleDataSource: ModuleDataSource) {}
 
-    getAllModules(): Promise<ModuleEntity[]> {
+    public getAllModules(): Promise<ModuleEntity[]> {
         return this.moduleDataSource.getAllModules();
     }
 
-    getModuleById(moduleId: string): Promise<ModuleEntity> {
+    public getModuleById(moduleId: string): Promise<ModuleEntity> {
         return this.moduleDataSource.getModuleById(moduleId);
     }
 
-    createModule(module: CreateModuleDto): Promise<void> {
+    public createModule(module: CreateModuleDto): Promise<void> {
         return this.moduleDataSource.createModule(module);
     }
 
-    updateModule(id: string, module: UpdateModuleDto): Promise<void> {
+    public updateModule(id: string, module: UpdateModuleDto): Promise<void> {
         return this.moduleDataSource.updateModule(id, module);
     }
 
-    deleteModule(id: string): Promise<void> {
+    public deleteModule(id: string): Promise<void> {
         return this.moduleDataSource.deleteModule(id);
     }
 }

@@ -17,7 +17,7 @@ import { SuccessResponse } from "@/core/utils";
 import type { Request, Response, NextFunction } from "express";
 
 export class ContractController {
-    constructor(
+    public constructor(
         private readonly studentLevelRepository: StudentLevelRepositoryImpl,
         private readonly levelProgressionDomainService: LevelProgressionDomainService,
     ) {}
@@ -40,6 +40,7 @@ export class ContractController {
             .execute(purchaseModulesDto!)
             .then((contracts) => {
                 const successMessage = "Modules purchased successfully";
+
                 SuccessResponse.created<StudentLevelEntity[]>(res, successMessage, contracts);
             })
             .catch((error) => {
@@ -56,6 +57,7 @@ export class ContractController {
             .execute(studentId as string)
             .then((contracts) => {
                 const successMessage = "Contracts retrieved successfully";
+
                 SuccessResponse.ok<StudentLevelDetailsProjection[]>(res, successMessage, contracts);
             })
             .catch((error) => {

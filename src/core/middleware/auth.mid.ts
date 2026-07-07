@@ -34,6 +34,7 @@ export class AuthMiddleware {
 
         if (!token) {
             const authorization = req.header("Authorization");
+
             if (authorization && authorization.startsWith("Bearer ")) {
                 token = authorization.split(" ").at(1);
             }
@@ -60,6 +61,7 @@ export class AuthMiddleware {
 
             if (!isActive) {
                 if (req.cookies?.auth_token) res.clearCookie("auth_token");
+
                 return next(CustomError.unauthorized("Your account has been deactivated by an administrator"));
             }
 
@@ -76,6 +78,7 @@ export class AuthMiddleware {
 
         if (!token) {
             const authorization = req.header("Authorization");
+
             if (authorization && authorization.startsWith("Bearer ")) {
                 token = authorization.split(" ").at(1);
             }
@@ -104,6 +107,7 @@ export class AuthMiddleware {
 
         if (!token) {
             const authorization = req.header("Authorization");
+
             if (authorization && authorization.startsWith("Bearer ")) {
                 token = authorization.split(" ").at(1);
             }
@@ -151,6 +155,7 @@ export class AuthMiddleware {
 
         if (!token) {
             const authorization = req.header("Authorization");
+
             if (authorization && authorization.startsWith("Bearer ")) {
                 token = authorization.split(" ").at(1);
             }

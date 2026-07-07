@@ -6,9 +6,9 @@ interface FindUserByIdUseCase {
 }
 
 export class FindUserById implements FindUserByIdUseCase {
-    constructor(private readonly userRepository: UserRepository) {}
+    public constructor(private readonly userRepository: UserRepository) {}
 
-    async execute(id: string): Promise<UserDataEntity> {
+    public async execute(id: string): Promise<UserDataEntity> {
         return await this.userRepository.findById(id);
     }
 }

@@ -5,9 +5,9 @@ interface ChangePasswordUseCase {
 }
 
 export class ChangePassword implements ChangePasswordUseCase {
-    constructor(private readonly userRepository: UserRepository) {}
+    public constructor(private readonly userRepository: UserRepository) {}
 
-    async execute(id: string, password: string): Promise<void> {
+    public async execute(id: string, password: string): Promise<void> {
         await this.userRepository.changePassword(id, password);
     }
 }

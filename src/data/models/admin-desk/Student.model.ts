@@ -62,87 +62,87 @@ class Student extends Model<StudentAttributes, StudentCreationAttributes> {
         unique: true,
         defaultValue: DataType.UUIDV4,
     })
-    declare st_id: string;
+    declare public st_id: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
         unique: true,
     })
-    declare st_identification_card: string;
+    declare public st_identification_card: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
     })
-    declare st_full_name: string;
+    declare public st_full_name: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
     })
-    declare st_phone_number: string;
+    declare public st_phone_number: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
         unique: true,
     })
-    declare st_email: string;
+    declare public st_email: string;
 
     @Column({
         type: DataType.DATEONLY,
         allowNull: false,
     })
-    declare st_date_of_birth: Date;
+    declare public st_date_of_birth: Date;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
     })
-    declare st_nationality: string;
+    declare public st_nationality: string;
 
     @Column({
         type: DataType.ENUM(...Object.values(certificateType)),
         allowNull: false,
     })
-    declare st_certificate_type: CertificateType;
+    declare public st_certificate_type: CertificateType;
 
     @Column({
         type: DataType.DATEONLY,
         allowNull: false,
     })
-    declare st_start_date: Date;
+    declare public st_start_date: Date;
 
     @Column({
         type: DataType.BOOLEAN,
         allowNull: false,
         defaultValue: false,
     })
-    declare st_is_graduated: boolean;
+    declare public st_is_graduated: boolean;
 
     @Column({
         type: DataType.ENUM(...Object.values(studentContractStatus)),
         allowNull: false,
     })
-    declare st_contract_status: StudentContractStatus;
+    declare public st_contract_status: StudentContractStatus;
 
     @Column({
         type: DataType.ENUM(...Object.values(studentProgressCategory)),
         allowNull: false,
     })
-    declare st_progress_category: StudentProgressCategory;
+    declare public st_progress_category: StudentProgressCategory;
 
     //* Relaciones (Has Many)
 
     @HasMany(() => StudentModule)
-    declare student_modules: StudentModule[];
+    declare public student_modules: StudentModule[];
 
     @HasMany(() => AttendanceSession)
-    declare attendance_sessions: AttendanceSession[];
+    declare public attendance_sessions: AttendanceSession[];
 
     @HasMany(() => RetentionAlert)
-    declare retention_alerts: RetentionAlert[];
+    declare public retention_alerts: RetentionAlert[];
 
     /* * Preparación para el nuevo módulo de facturación.
      * Un estudiante puede tener múltiples planes de pago a lo largo de su vida académica.

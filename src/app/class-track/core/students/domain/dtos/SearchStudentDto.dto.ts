@@ -22,8 +22,10 @@ export class SearchStudentsDto {
         }
 
         let parsedLimit = 10;
+
         if (limit !== undefined && limit !== null) {
             const limitNumber = Number(limit);
+
             if (Number.isNaN(limitNumber) || limitNumber <= 0) {
                 return ["limit must be a valid positive number"];
             }

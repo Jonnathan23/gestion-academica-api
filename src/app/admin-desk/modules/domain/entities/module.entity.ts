@@ -1,5 +1,5 @@
 export class ModuleEntity {
-    constructor(
+    public constructor(
         public mo_id: string,
         public mo_name: string,
         public mo_description: string,

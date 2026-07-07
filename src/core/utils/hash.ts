@@ -1,6 +1,7 @@
 // hash.ts
 /* global Bun */
-const password = Bun.argv[2];
+const DEFAULT_ARGUMENT_INDEX: number = 2;
+const password = Bun.argv[DEFAULT_ARGUMENT_INDEX];
 
 if (!password) {
     console.error("Por favor, proporciona una contraseña como argumento.");

@@ -5,7 +5,7 @@ import type { RetentionAlertWithStudentProjection } from "@/app/class-track/feat
 import type { PaginatedResult } from "@/core/interfaces/PaginatedResult.interface";
 
 export class GetRetentionAlertsUseCase {
-    constructor(private readonly repository: RetentionAlertRepository) {}
+    public constructor(private readonly repository: RetentionAlertRepository) {}
 
     public execute(dto: GetRetentionAlertsDto): Promise<PaginatedResult<RetentionAlertWithStudentProjection>> {
         return this.repository.getAlerts(dto);

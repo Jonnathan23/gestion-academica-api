@@ -11,11 +11,11 @@ import PaymentPlanModel from "@/data/models/admin-desk/PaymentPlan.model";
 import PaymentQuotaModel from "@/data/models/admin-desk/PaymentQuota.model";
 
 export class PaymentDataSourceImpl implements PaymentDataSource {
-    constructor() {}
+    public constructor() {}
 
     //* PUBLIC METHODS (ORCHESTRATORS)
 
-    async createPaymentPlan(dto: CreatePaymentPlanDto, generatedQuotas: PaymentQuotaEntity[]): Promise<PaymentPlanEntity> {
+    public async createPaymentPlan(dto: CreatePaymentPlanDto, generatedQuotas: PaymentQuotaEntity[]): Promise<PaymentPlanEntity> {
         return await PaymentPlanModel.sequelize!.transaction(async (transaction) => {
             const createdPlan = await this._insertPaymentPlan(dto, transaction);
             const createdQuotas = await this._insertGeneratedQuotas(createdPlan.pp_id, generatedQuotas, transaction);
@@ -27,7 +27,7 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
         });
     }
 
-    async getStudentPaymentPlans(studentId: string): Promise<PaymentPlanEntity[]> {
+    public async getStudentPaymentPlans(studentId: string): Promise<PaymentPlanEntity[]> {
         const plans = await PaymentPlanModel.findAll({
             where: { pp_student_id: studentId },
             include: [
@@ -45,7 +45,7 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
         return plans.map((plan) => PaymentMapper.planEntityFromObject(plan.toJSON()));
     }
 
-    async processQuotaPayment(dto: PayQuotaDto): Promise<PaymentQuotaEntity> {
+    public async processQuotaPayment(dto: PayQuotaDto): Promise<PaymentQuotaEntity> {
         return await PaymentQuotaModel.sequelize!.transaction(async (transaction) => {
             const currentQuota = await this._findAndValidateQuotaForPayment(dto.quotaId, dto.amountPaid, transaction);
 
@@ -62,7 +62,7 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
         });
     }
 
-    async revertQuotaPayment(quotaId: string): Promise<boolean> {
+    public async revertQuotaPayment(quotaId: string): Promise<boolean> {
         return await PaymentQuotaModel.sequelize!.transaction(async (transaction) => {
             const currentQuota = await this._findQuotaOrThrow(quotaId, transaction);
 
@@ -116,9 +116,11 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
 
     private async _findQuotaOrThrow(quotaId: string, transaction: Transaction): Promise<PaymentQuotaModel> {
         const quota = await PaymentQuotaModel.findByPk(quotaId, { transaction });
+
         if (!quota) {
             throw CustomError.notFound("Payment Quota not found");
         }
+
         return quota;
     }
 
@@ -134,6 +136,7 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
         }
 
         const expectedAmount = Number(quota.pq_total_expected);
+
         if (amountPaid > expectedAmount) {
             throw CustomError.badRequest(`Amount paid cannot exceed the expected total of $${expectedAmount}`);
         }
@@ -176,6 +179,7 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
         if (nextQuota) {
             const newRollover = Number(nextQuota.pq_rollover_debt) + remainingDebt;
             const newExpected = Number(nextQuota.pq_base_amount) + newRollover;
+
             await nextQuota.update(
                 {
                     pq_rollover_debt: newRollover,
@@ -185,6 +189,7 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
             );
         } else {
             const nextMonthDate = new Date(currentQuota.pq_due_date);
+
             nextMonthDate.setMonth(nextMonthDate.getMonth() + 1);
 
             await PaymentQuotaModel.create(
@@ -234,6 +239,7 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
                 await nextQuota.destroy({ transaction });
             } else {
                 const newExpected = currentBase + newRollover;
+
                 await nextQuota.update(
                     {
                         pq_rollover_debt: newRollover,

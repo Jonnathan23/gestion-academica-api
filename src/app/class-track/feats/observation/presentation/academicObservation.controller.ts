@@ -6,7 +6,7 @@ import { CustomError } from "@/core/error/customError.error";
 import { SuccessResponse } from "@/core/utils/SuccesResponse";
 
 export class AcademicObservationController {
-    constructor(private readonly academicObservationRepository: AcademicObservationRepository) {}
+    public constructor(private readonly academicObservationRepository: AcademicObservationRepository) {}
 
     public createObservation = (req: Request, res: Response, next: NextFunction) => {
         const [error, dto] = CreateAcademicObservationDto.create(req.body);

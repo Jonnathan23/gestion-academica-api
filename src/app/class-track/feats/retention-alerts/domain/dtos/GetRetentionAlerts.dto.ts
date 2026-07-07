@@ -20,6 +20,7 @@ export class GetRetentionAlertsDto {
 
         if (status) {
             const validStatuses = Object.values(retentionAlertStatus);
+
             if (!validStatuses.includes(status as RetentionAlertStatus)) {
                 return [`Invalid status value`];
             }
@@ -27,12 +28,14 @@ export class GetRetentionAlertsDto {
 
         if (contractStatus) {
             const validContractStatuses = Object.values(studentContractStatus);
+
             if (!validContractStatuses.includes(contractStatus as StudentContractStatus)) {
                 return [`Invalid contractStatus value`];
             }
         }
 
         const parsedPage = page ? parseInt(page) : undefined;
+
         if (parsedPage === undefined || isNaN(parsedPage) || parsedPage <= 0) {
             return [`page parameter is required and must be a valid positive number`];
         }

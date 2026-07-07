@@ -3,7 +3,7 @@ import { studentContractStatus, type StudentContractStatus } from "@/core/interf
 export class ChangeContractStatusDto {
     private constructor(public readonly contractStatus: StudentContractStatus) {}
 
-    static create(object: { [key: string]: any }): [string?, ChangeContractStatusDto?] {
+    public static create(object: { [key: string]: any }): [string?, ChangeContractStatusDto?] {
         const { contractStatus } = object;
 
         if (!contractStatus) return ["Missing contractStatus"];

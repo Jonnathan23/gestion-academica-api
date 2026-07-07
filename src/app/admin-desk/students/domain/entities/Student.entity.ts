@@ -1,7 +1,7 @@
 import type { StudentContractStatus, StudentProgressCategory } from "@/core/interfaces/Students.interface";
 
 export class StudentEntity {
-    constructor(
+    public constructor(
         public readonly id: string,
         public readonly identificationCard: string,
         public readonly fullName: string,

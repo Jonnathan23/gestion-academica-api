@@ -8,15 +8,17 @@ import { Module } from "@/data/models/admin-desk";
 type ModuleEntityFromObject = typeof ModuleMapper.moduleModelToEntity;
 
 export class ModuleDataSourceImpl implements ModuleDataSource {
-    constructor(private readonly moduleEntityFromObject: ModuleEntityFromObject = ModuleMapper.moduleModelToEntity) {}
+    public constructor(private readonly moduleEntityFromObject: ModuleEntityFromObject = ModuleMapper.moduleModelToEntity) {}
 
-    async getAllModules(): Promise<ModuleEntity[]> {
+    public async getAllModules(): Promise<ModuleEntity[]> {
         const modules = await Module.findAll({ order: [["mo_level", "ASC"]] });
+
         return modules.map((module) => this.moduleEntityFromObject(module));
     }
 
-    async getModuleById(moduleId: string): Promise<ModuleEntity> {
+    public async getModuleById(moduleId: string): Promise<ModuleEntity> {
         const module = await Module.findByPk(moduleId);
+
         if (!module) {
             throw CustomError.notFound("Module not found");
         }
@@ -24,10 +26,11 @@ export class ModuleDataSourceImpl implements ModuleDataSource {
         return this.moduleEntityFromObject(module);
     }
 
-    async createModule(module: CreateModuleDto): Promise<void> {
+    public async createModule(module: CreateModuleDto): Promise<void> {
         const { mo_name, mo_description, mo_level } = module;
 
         const moduleExist = await Module.findOne({ where: { mo_name } });
+
         if (moduleExist) {
             throw CustomError.badRequest("Module already exists");
         }
@@ -39,8 +42,9 @@ export class ModuleDataSourceImpl implements ModuleDataSource {
         });
     }
 
-    async updateModule(id: string, module: UpdateModuleDto): Promise<void> {
+    public async updateModule(id: string, module: UpdateModuleDto): Promise<void> {
         const moduleExist = await Module.findOne({ where: { mo_id: id } });
+
         if (!moduleExist) {
             throw CustomError.notFound("Module not found");
         }
@@ -48,8 +52,9 @@ export class ModuleDataSourceImpl implements ModuleDataSource {
         await moduleExist.update(module.values);
     }
 
-    async deleteModule(id: string): Promise<void> {
+    public async deleteModule(id: string): Promise<void> {
         const moduleExist = await Module.findOne({ where: { mo_id: id } });
+
         if (!moduleExist) {
             throw CustomError.notFound("Module not found");
         }

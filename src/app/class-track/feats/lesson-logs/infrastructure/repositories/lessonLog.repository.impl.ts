@@ -5,7 +5,7 @@ import type { LessonLogEntity } from "@/app/class-track/feats/lesson-logs/domain
 import type { LessonLogRepository } from "@/app/class-track/feats/lesson-logs/domain/repositories/lessonLog.repository";
 
 export class LessonLogRepositoryImpl implements LessonLogRepository {
-    constructor(private readonly datasource: LessonLogDataSource) {}
+    public constructor(private readonly datasource: LessonLogDataSource) {}
 
     public createLessonLogs(dto: CreateLessonLogsDto): Promise<LessonLogEntity[]> {
         return this.datasource.createLessonLogs(dto);
