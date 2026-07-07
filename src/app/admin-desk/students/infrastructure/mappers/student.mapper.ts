@@ -1,7 +1,7 @@
-import { StudentEntity } from "@/app/admin-desk/students/domain";
 import { studentContractStatus, studentProgressCategory } from "@/core/interfaces/students.interface";
 import { type StudentContractStatus, type StudentProgressCategory } from "@/core/interfaces/students.interface";
-import { CustomError } from "@/core/error";
+import { StudentEntity } from "@/app/admin-desk/students/domain/entities/student.entity";
+import { CustomError } from "@/core/error/customError.error";
 
 export class StudentMapper {
     public static studentModelToEntity(object: { [key: string]: any }): StudentEntity {

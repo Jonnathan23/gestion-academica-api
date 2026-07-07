@@ -7,9 +7,8 @@ import {
     HostNotFoundError,
     UniqueConstraintError,
 } from "sequelize";
-
-import { ColorsAdapter } from "@/core/utils";
-import { CustomError } from "@/core/error";
+import { ColorsAdapter } from "@/core/utils/adapters/colors";
+import { CustomError } from "@/core/error/customError.error";
 
 export class CustomPostgresDatabaseConnectionError extends Error {
     private static databaseKindErrors = {

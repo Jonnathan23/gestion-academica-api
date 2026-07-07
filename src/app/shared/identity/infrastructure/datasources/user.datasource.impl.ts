@@ -1,11 +1,14 @@
 import type { UserDataSource } from "@/app/shared/identity/domain/datasource/user.datasource";
-import type { LoginUserDto, RegisterUserDto, UpdateUserDto } from "@/app/shared/identity/domain/dtos";
-import type { UserDataEntity, UserEntity } from "@/app/shared/identity/domain/entities";
 import { UserMapper } from "@/app/shared/identity/infrastructure/mappers/user.mapper";
 import { UserDataMapper } from "@/app/shared/identity/infrastructure/mappers/user-data.mapper";
-import { CustomError } from "@/core/error";
-import { BcryptAdapter } from "@/core/utils";
-import { User } from "@/data/models/shared";
+import { LoginUserDto } from "@/app/shared/identity/domain/dtos/login-user.dto";
+import { RegisterUserDto } from "@/app/shared/identity/domain/dtos/register-user.dto";
+import { UpdateUserDto } from "@/app/shared/identity/domain/dtos/update-user.dto";
+import { UserDataEntity } from "@/app/shared/identity/domain/entities/user-data.entity";
+import { UserEntity } from "@/app/shared/identity/domain/entities/user.entity";
+import { CustomError } from "@/core/error/customError.error";
+import { BcryptAdapter } from "@/core/utils/adapters/bcrypt";
+import User from "@/data/models/shared/user.model";
 
 type HashFunction = typeof BcryptAdapter.hash;
 type CompareFunction = typeof BcryptAdapter.compare;

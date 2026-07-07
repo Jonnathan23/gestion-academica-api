@@ -1,5 +1,5 @@
 import type { DtoParameters } from "@/core/types/Parameters.type";
-import { Validators } from "@/core/utils";
+import { Validators } from "@/core/utils/validators";
 
 interface PurchaseModulesDtoProps extends Record<string, unknown> {
     studentId: string;

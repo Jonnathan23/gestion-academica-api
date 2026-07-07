@@ -1,14 +1,15 @@
 import { Transaction } from "sequelize";
-
-import type { PaymentDataSource } from "@/app/admin-desk/payments/domain/datasource";
-import type { CreatePaymentPlanDto, PayQuotaDto } from "@/app/admin-desk/payments/domain/dtos";
 import type { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/payment-plan.entity";
 import type { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/payment-quota.entity";
-import { paymentPlanStatus, paymentQuotaStatus, type PaymentQuotaStatus } from "@/app/admin-desk/payments/domain/interfaces";
 import { PaymentMapper } from "@/app/admin-desk/payments/infrastructure/mappers/payment.mapper";
-import { CustomError } from "@/core/error";
 import PaymentPlanModel from "@/data/models/admin-desk/payment-plan.model";
 import PaymentQuotaModel from "@/data/models/admin-desk/payment-quota.model";
+import { PaymentDataSource } from "@/app/admin-desk/payments/domain/datasource/payment.datasource";
+import { CreatePaymentPlanDto } from "@/app/admin-desk/payments/domain/dtos/create-payment-plan.dto";
+import { PayQuotaDto } from "@/app/admin-desk/payments/domain/dtos/pay-quota.dto";
+import { paymentPlanStatus } from "@/app/admin-desk/payments/domain/interfaces/payment-plan-status.interface";
+import { paymentQuotaStatus, type PaymentQuotaStatus } from "@/app/admin-desk/payments/domain/interfaces/payment-quota-status.interface";
+import { CustomError } from "@/core/error/customError.error";
 
 export class PaymentDataSourceImpl implements PaymentDataSource {
     public constructor() {}

@@ -1,9 +1,11 @@
-import { CorsConfig, environmentVariables } from "@/core/config";
-import { AppRouter, Server } from "@/core/server";
 import { DatabaseConnection } from "@/data/config/db-postgresql";
-import { ColorsAdapter } from "@/core/utils";
 import { SequelizeErrorHandler } from "@/data/errors/sequelize-error-handler.error";
 import { SwaggerConfiguration } from "@/core/config/swagger";
+import { CorsConfig } from "@/core/config/cors";
+import { environmentVariables } from "@/core/config/envs";
+import { AppRouter } from "@/core/server/router";
+import { Server } from "@/core/server/server";
+import { ColorsAdapter } from "@/core/utils/adapters/colors";
 
 (() => {
     main();

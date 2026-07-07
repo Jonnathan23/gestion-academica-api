@@ -2,7 +2,7 @@ import type { LessonLogDataSource } from "@/app/class-track/feats/lesson-logs/do
 import type { CreateLessonLogsDto } from "@/app/class-track/feats/lesson-logs/domain/dtos/create-lessong-log.dto";
 import type { GetLastLessonLogDto } from "@/app/class-track/feats/lesson-logs/domain/dtos/get-last-lesson-log.dto";
 import type { LessonLogEntity } from "@/app/class-track/feats/lesson-logs/domain/entities/lesson-log.entity";
-import type { LessonLogRepository } from "@/app/class-track/feats/lesson-logs/domain/repositories/lessonLog.repository";
+import type { LessonLogRepository } from "@/app/class-track/feats/lesson-logs/domain/repositories/lesson-log.repository";
 
 export class LessonLogRepositoryImpl implements LessonLogRepository {
     public constructor(private readonly datasource: LessonLogDataSource) {}

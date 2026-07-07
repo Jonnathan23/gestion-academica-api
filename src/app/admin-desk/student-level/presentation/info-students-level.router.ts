@@ -3,9 +3,10 @@ import { Router } from "express";
 import { InfoStudentsLevelDataSourceImpl } from "@/app/admin-desk/student-level/infrastructure/datasource/infoStudentsLevel.datasource.impl";
 import { InfoStudentsLevelRepositoryImpl } from "@/app/admin-desk/student-level/infrastructure/repositories/info-students-level.repository.impl";
 import { InfoStudentsLevelController } from "@/app/admin-desk/student-level/presentation/controllers/info-students-level.controller";
-
-import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
-import { systemPermissions } from "@/core/constants";
+import { AuthMiddleware } from "@/core/middleware/auth.mid";
+import { RoleMiddleware } from "@/core/middleware/role.mid";
+import { VerifyUUID } from "@/core/middleware/verifyUuId.mid";
+import { systemPermissions } from "@/core/constants/permissions";
 
 export class InfoStudentsLevelRouter {
     public static get routes(): Router {

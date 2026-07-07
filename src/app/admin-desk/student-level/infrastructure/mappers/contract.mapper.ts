@@ -6,11 +6,11 @@ import {
 } from "@/app/admin-desk/student-level/domain/projections/ContractDetails.projection";
 import { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/student-level.entity";
 import { pickFields } from "@/core/utils/object-tools";
-import { CustomError } from "@/core/error";
 import { ModuleMapper } from "@/app/admin-desk/modules/infrastructure/mappers/module.mapper";
 import { UserMapper } from "@/app/shared/identity/infrastructure/mappers/user.mapper";
 import { StudentMapper } from "@/app/admin-desk/students/infrastructure/mappers/student.mapper";
 import type { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
+import { CustomError } from "@/core/error/customError.error";
 
 export class StudentLevelMapper {
     public static studentLevelEntityFromObject(object: { [key: string]: any }): StudentLevelEntity {

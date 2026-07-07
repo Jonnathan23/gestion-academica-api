@@ -6,12 +6,12 @@ import { CreatePaymentPlanUseCase } from "@/app/admin-desk/payments/application/
 import { GetStudentPaymentPlansUseCase } from "@/app/admin-desk/payments/application/use-cases/get-student-payment-plans.use-case";
 import { ProcessQuotaPaymentUseCase } from "@/app/admin-desk/payments/application/use-cases/process-quota-payment.use-case";
 import { RevertQuotaPaymentUseCase } from "@/app/admin-desk/payments/application/use-cases/revert-quota-payment.use-case";
-import { CreatePaymentPlanDto } from "@/app/admin-desk/payments/domain/dtos";
-import { PayQuotaDto } from "@/app/admin-desk/payments/domain/dtos";
 import { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/payment-plan.entity";
 import { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/payment-quota.entity";
-import { CustomError } from "@/core/error";
-import { SuccessResponse } from "@/core/utils";
+import { CreatePaymentPlanDto } from "@/app/admin-desk/payments/domain/dtos/create-payment-plan.dto";
+import { PayQuotaDto } from "@/app/admin-desk/payments/domain/dtos/pay-quota.dto";
+import { CustomError } from "@/core/error/customError.error";
+import { SuccessResponse } from "@/core/utils/success-response";
 
 export class PaymentController {
     public constructor(private readonly paymentRepository: PaymentRepository) {}

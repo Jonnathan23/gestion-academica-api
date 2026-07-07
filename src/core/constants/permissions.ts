@@ -1,4 +1,4 @@
-import { userRoles, clientRoles } from "@/core/interfaces";
+import { userRoles, clientRoles } from "@/core/interfaces/Roles.interfaces";
 
 export const systemPermissions = {
     // Feature: AdminDesk/students

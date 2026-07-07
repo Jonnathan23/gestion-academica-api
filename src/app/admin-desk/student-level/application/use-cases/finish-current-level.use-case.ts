@@ -1,10 +1,10 @@
-import { CustomError } from "@/core/error";
 import { studentModuleStatus } from "@/core/interfaces/contracts.interface";
-import type { UpdateStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos";
 import type { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/student-level.entity";
 import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-level/domain/projections/ContractDetails.projection";
-import type { StudentLevelRepository } from "@/app/admin-desk/student-level/domain/repositories/studentLevel.repository";
+import type { StudentLevelRepository } from "@/app/admin-desk/student-level/domain/repositories/student-level.repository";
 import type { LevelProgressionDomainService } from "@/app/admin-desk/student-level/domain/services/levelProgression.domain.service";
+import { CustomError } from "@/core/error/customError.error";
+import { UpdateStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos/update-student-level.dto";
 
 //* Props
 interface ValidateTargetLevelProps {

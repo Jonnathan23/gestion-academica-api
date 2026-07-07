@@ -1,12 +1,15 @@
 import { Sequelize } from "sequelize-typescript";
-
-import { ColorsAdapter } from "@/core/utils";
-import { User } from "@/data/models/shared";
-import { Student, Module, StudentModule } from "@/data/models/admin-desk";
-import { AttendanceSession, LessonLog, RetentionAlert } from "@/data/models/class-track";
 import PaymentQuota from "@/data/models/admin-desk/payment-quota.model";
 import PaymentPlan from "@/data/models/admin-desk/payment-plan.model";
 import { CustomPostgresDatabaseConnectionError } from "../errors/custom-postgres-database-error.error";
+import { ColorsAdapter } from "@/core/utils/adapters/colors";
+import User from "@/data/models/shared/user.model";
+import Student from "@/data/models/admin-desk/student.model";
+import Module from "@/data/models/admin-desk/module.model";
+import StudentModule from "@/data/models/admin-desk/student-module.model";
+import AttendanceSession from "@/data/models/class-track/attendance-session.model";
+import LessonLog from "@/data/models/class-track/lesson-log.model";
+import RetentionAlert from "@/data/models/class-track/retention-alert.model";
 
 interface DatabaseConnectionOptions {
     databaseUrl: string;

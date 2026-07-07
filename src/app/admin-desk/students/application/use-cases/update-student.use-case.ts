@@ -1,4 +1,6 @@
-import type { UpdateStudentDto, StudentEntity, StudentRepository } from "@/app/admin-desk/students/domain";
+import { UpdateStudentDto } from "@/app/admin-desk/students/domain/dtos/update-student.dto";
+import { StudentEntity } from "@/app/admin-desk/students/domain/entities/student.entity";
+import { StudentRepository } from "@/app/admin-desk/students/domain/repositories/student.repository";
 
 export interface UpdateStudentUseCase {
     execute(id: string, dto: UpdateStudentDto): Promise<StudentEntity>;

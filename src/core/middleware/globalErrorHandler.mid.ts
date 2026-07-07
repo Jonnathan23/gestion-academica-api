@@ -1,7 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
-
-import { CustomError } from "@/core/error";
 import type { DatabaseErrorHandler } from "@/core/interfaces/database-error-handler.interface";
+import { CustomError } from "@/core/error/customError.error";
 
 interface FormattedErrorResponse {
     message: string;

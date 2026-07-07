@@ -1,5 +1,5 @@
-import type { UserRoles } from "@/core/interfaces";
-import { Validators } from "@/core/utils";
+import type { UserRoles } from "@/core/interfaces/Roles.interfaces";
+import { Validators } from "@/core/utils/validators";
 
 export class RegisterUserDto {
     private constructor(

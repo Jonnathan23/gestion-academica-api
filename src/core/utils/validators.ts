@@ -1,5 +1,5 @@
 import { certificateType, type CertificateType } from "@/core/interfaces/students.interface";
-import { userRoles, type UserRoles } from "@/core/interfaces";
+import { userRoles, type UserRoles } from "@/core/interfaces/Roles.interfaces";
 
 export class Validators {
     public static isEmail(email: string): boolean {

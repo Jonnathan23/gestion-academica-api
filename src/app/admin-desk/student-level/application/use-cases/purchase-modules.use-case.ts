@@ -1,11 +1,10 @@
 import type { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
-import type { PurchaseModulesDto } from "@/app/admin-desk/student-level/domain/dtos";
 import { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/student-level.entity";
 import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-level/domain/projections/ContractDetails.projection";
-import type { StudentLevelRepository } from "@/app/admin-desk/student-level/domain/repositories/studentLevel.repository";
+import type { StudentLevelRepository } from "@/app/admin-desk/student-level/domain/repositories/student-level.repository";
 import type { LevelProgressionDomainService } from "@/app/admin-desk/student-level/domain/services/levelProgression.domain.service";
-
-import { CustomError } from "@/core/error";
+import { PurchaseModulesDto } from "@/app/admin-desk/student-level/domain/dtos/purchase-modules.dto";
+import { CustomError } from "@/core/error/customError.error";
 
 interface FetchDataToValidateProps {
     readonly studentId: string;

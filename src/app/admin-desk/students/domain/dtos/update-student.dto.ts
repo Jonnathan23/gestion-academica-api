@@ -1,5 +1,5 @@
 import type { CertificateType, StudentContractStatus } from "@/core/interfaces/students.interface";
-import { Validators } from "@/core/utils";
+import { Validators } from "@/core/utils/validators";
 
 export class UpdateStudentDto {
     private constructor(

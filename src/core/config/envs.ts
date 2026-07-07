@@ -1,5 +1,5 @@
 import { get } from "env-var";
-import { ColorsAdapter } from "@/core/utils"; // Aprovechamos tu adaptador de colores
+import { ColorsAdapter } from "@/core/utils/adapters/colors";
 
 interface EnvironmentVariables {
     listeningPort: number;

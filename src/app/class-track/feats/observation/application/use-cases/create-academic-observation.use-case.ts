@@ -1,4 +1,4 @@
-import type { AcademicObservationRepository } from "@/app/class-track/feats/observation/domain/repositories/academicObservation.repository";
+import type { AcademicObservationRepository } from "@/app/class-track/feats/observation/domain/repositories/academic-observation.repository";
 import type { CreateAcademicObservationDto } from "@/app/class-track/feats/observation/domain/dtos/create-academic-observation.dto";
 import type { AcademicObservationEntity } from "@/app/class-track/feats/observation/domain/entities/academic-observation.entity";
 

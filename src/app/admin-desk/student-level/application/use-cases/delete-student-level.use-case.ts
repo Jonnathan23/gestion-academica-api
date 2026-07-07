@@ -1,7 +1,7 @@
-import { CustomError } from "@/core/error";
 import type { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/student-level.entity";
-import type { StudentLevelRepository } from "@/app/admin-desk/student-level/domain/repositories/studentLevel.repository";
+import type { StudentLevelRepository } from "@/app/admin-desk/student-level/domain/repositories/student-level.repository";
 import type { LevelProgressionDomainService } from "@/app/admin-desk/student-level/domain/services/levelProgression.domain.service";
+import { CustomError } from "@/core/error/customError.error";
 
 interface ProcessSelfHealingProps {
     readonly currentContractsEntities: StudentLevelEntity[];

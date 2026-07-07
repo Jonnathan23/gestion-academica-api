@@ -2,17 +2,20 @@ import { describe, test, expect, beforeAll, afterAll } from "bun:test";
 import request from "supertest";
 import express from "express";
 
-import { AttendanceSessionRouter } from "@/app/class-track/feats/attendance/presentation/routes/attendanceSession.router";
+import { AttendanceSessionRouter } from "@/app/class-track/feats/attendance/presentation/routes/attendance-session.router";
 import { environmentVariables } from "@/core/config/envs";
 import { DatabaseConnection } from "@/data/config/db-postgresql";
 import { testGlobalErrorHandler } from "@/__test__/configTest";
-import { User } from "@/data/models/shared";
-import { Student, Module, StudentModule } from "@/data/models/admin-desk";
 import AttendanceSession from "@/data/models/class-track/attendance-session.model";
-import { JwtAdapter, BcryptAdapter } from "@/core/utils";
 import { AuthMiddleware } from "@/core/middleware/auth.mid";
 import { certificateType } from "@/data/models/admin-desk/student.model";
 import { headerConstants, clientContextValues } from "@/core/constants/client-context";
+import User from "@/data/models/shared/user.model";
+import Student from "@/data/models/admin-desk/student.model";
+import Module from "@/data/models/admin-desk/module.model";
+import StudentModule from "@/data/models/admin-desk/student-module.model";
+import { JwtAdapter } from "@/core/utils/adapters/jwt";
+import { BcryptAdapter } from "@/core/utils/adapters/bcrypt";
 
 // ------------------------------------------------------------------ //
 // Micro-application: only the Attendance router

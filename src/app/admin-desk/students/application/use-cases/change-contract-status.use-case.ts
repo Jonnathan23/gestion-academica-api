@@ -1,4 +1,6 @@
-import type { ChangeContractStatusDto, StudentEntity, StudentRepository } from "@/app/admin-desk/students/domain";
+import { ChangeContractStatusDto } from "@/app/admin-desk/students/domain/dtos/change-contract-status.dto";
+import { StudentEntity } from "@/app/admin-desk/students/domain/entities/student.entity";
+import { StudentRepository } from "@/app/admin-desk/students/domain/repositories/student.repository";
 
 export interface ChangeContractStatusUseCase {
     execute(id: string, dto: ChangeContractStatusDto): Promise<StudentEntity>;

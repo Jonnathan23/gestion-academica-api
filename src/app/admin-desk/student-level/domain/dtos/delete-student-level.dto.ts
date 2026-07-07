@@ -1,4 +1,4 @@
-import { Validators } from "@/core/utils";
+import { Validators } from "@/core/utils/validators";
 
 export class DeleteStudentLevelDto {
     private constructor(public readonly studentLevelId: string) {}

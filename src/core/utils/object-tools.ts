@@ -1,4 +1,4 @@
-import { CustomError } from "@/core/error";
+import { CustomError } from "@/core/error/customError.error";
 
 interface PickFieldsProps<T extends object, K extends keyof T> {
     objectToFilter: T;

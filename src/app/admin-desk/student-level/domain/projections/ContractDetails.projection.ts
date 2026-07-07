@@ -1,7 +1,7 @@
 import type { StudentModuleStatus } from "@/core/interfaces/contracts.interface";
 import type { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
-import type { StudentEntity } from "@/app/admin-desk/students/domain";
-import type { UserEntity } from "@/app/shared/identity/domain/entities";
+import { StudentEntity } from "@/app/admin-desk/students/domain/entities/student.entity";
+import { UserEntity } from "@/app/shared/identity/domain/entities/user.entity";
 
 export const moduleRelationFields: readonly (keyof ModuleEntity)[] = ["mo_id", "mo_name", "mo_level"] as const;
 

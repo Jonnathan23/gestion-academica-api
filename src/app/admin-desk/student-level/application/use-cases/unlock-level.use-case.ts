@@ -1,6 +1,6 @@
-import type { UpdateStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos";
 import type { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/student-level.entity";
-import type { StudentLevelRepository } from "@/app/admin-desk/student-level/domain/repositories/studentLevel.repository";
+import type { StudentLevelRepository } from "@/app/admin-desk/student-level/domain/repositories/student-level.repository";
+import { UpdateStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos/update-student-level.dto";
 
 export interface UnlockLevelUseCase {
     execute(dto: UpdateStudentLevelDto): Promise<StudentLevelEntity>;

@@ -1,7 +1,7 @@
 import type { StudentModuleStatus } from "@/core/interfaces/contracts.interface";
-import type { Module, StudentModule } from "@/data/models/admin-desk";
-
 import type { Transaction } from "sequelize";
+import Module from "@/data/models/admin-desk/module.model";
+import StudentModule from "@/data/models/admin-desk/student-module.model";
 
 export interface BulkCreateContractsProps {
     studentId: string;

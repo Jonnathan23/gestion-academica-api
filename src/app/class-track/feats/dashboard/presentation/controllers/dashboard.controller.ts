@@ -1,12 +1,11 @@
 import type { Request, Response, NextFunction } from "express";
-
-import { SuccessResponse } from "@/core/utils";
 import { GetDashboardSummaryUseCase } from "@/app/class-track/feats/dashboard/application/use-cases/get-dashboard-summary.use-case";
-import type { AttendanceSessionRepository } from "@/app/class-track/feats/attendance/domain/repositories/attendanceSession.repository";
+import type { AttendanceSessionRepository } from "@/app/class-track/feats/attendance/domain/repositories/attendance-session.repository";
 
 import type { DashboardSummaryProjection } from "@/app/class-track/feats/dashboard/domain/projections/Dashboard.projection";
 import type { StudentClassTrackRepository } from "@/app/class-track/core/students/domain/repositories/student.repository";
-import type { RetentionAlertRepository } from "@/app/class-track/feats/retention-alerts/domain/repositories/retentionAlert.repository";
+import type { RetentionAlertRepository } from "@/app/class-track/feats/retention-alerts/domain/repositories/retention-alert.repository";
+import { SuccessResponse } from "@/core/utils/success-response";
 
 export class DashboardController {
     public constructor(

@@ -1,7 +1,7 @@
-import { UserDataEntity } from "@/app/shared/identity/domain/entities";
-import { rolePermissionsMapping } from "@/core/constants";
-import { CustomError } from "@/core/error";
 import { userState } from "@/app/shared/identity/domain/interfaces/user.interfaces";
+import { UserDataEntity } from "@/app/shared/identity/domain/entities/user-data.entity";
+import { rolePermissionsMapping } from "@/core/constants/permissions";
+import { CustomError } from "@/core/error/customError.error";
 
 export const UserDataMapper = {
     userModelToEntity(object: { [key: string]: any }): UserDataEntity {

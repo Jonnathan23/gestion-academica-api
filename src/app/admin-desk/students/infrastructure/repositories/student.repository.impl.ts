@@ -1,13 +1,11 @@
 import type { StudentDataSource } from "@/app/admin-desk/students/domain/datasource/student.datasource";
-import type {
-    RegisterStudentDto,
-    UpdateStudentDto,
-    ChangeContractStatusDto,
-    SearchStudentsByCriteriaDto,
-    StudentEntity,
-} from "@/app/admin-desk/students/domain";
 import type { StudentRepository } from "@/app/admin-desk/students/domain/repositories/student.repository";
 import type { PaginatedResult } from "@/core/interfaces/paginated-result.interface";
+import { RegisterStudentDto } from "@/app/admin-desk/students/domain/dtos/register-student.dto";
+import { UpdateStudentDto } from "@/app/admin-desk/students/domain/dtos/update-student.dto";
+import { ChangeContractStatusDto } from "@/app/admin-desk/students/domain/dtos/change-contract-status.dto";
+import { SearchStudentsByCriteriaDto } from "@/app/admin-desk/students/domain/dtos/search-students-by-criteria.dto";
+import { StudentEntity } from "@/app/admin-desk/students/domain/entities/student.entity";
 
 export class StudentRepositoryImpl implements StudentRepository {
     public constructor(private readonly datasource: StudentDataSource) {}

@@ -1,9 +1,9 @@
 import { describe, test, expect, beforeAll, afterAll, mock } from "bun:test";
 import { CloseOrphanSessionsWorker } from "@/app/class-track/feats/attendance/presentation/workers/close-orphan-sessions.worker";
 import AttendanceSession from "@/data/models/class-track/attendance-session.model";
-import { Student } from "@/data/models/admin-desk";
 import { DatabaseConnection } from "@/data/config/db-postgresql";
 import { environmentVariables } from "@/core/config/envs";
+import Student from "@/data/models/admin-desk/student.model";
 
 // 1. Mock the node-cron module completely
 mock.module("node-cron", () => {

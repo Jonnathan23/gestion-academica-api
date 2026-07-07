@@ -1,4 +1,4 @@
-import type { UserRoles } from "@/core/interfaces";
+import type { UserRoles } from "@/core/interfaces/Roles.interfaces";
 
 export class UserEntity {
     public constructor(

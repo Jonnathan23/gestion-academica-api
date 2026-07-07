@@ -1,4 +1,4 @@
-import type { StudentEntity } from "@/app/admin-desk/students/domain";
+import { StudentEntity } from "@/app/admin-desk/students/domain/entities/student.entity";
 
 export const absentStudentRelationFields: readonly (keyof StudentEntity)[] = [
     "id",

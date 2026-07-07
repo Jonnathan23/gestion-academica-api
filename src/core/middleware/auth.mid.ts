@@ -1,9 +1,8 @@
 import type { Request, Response, NextFunction } from "express";
-
-import { CustomError } from "@/core/error";
-import { JwtAdapter } from "@/core/utils";
-import type { ClientRoles } from "@/core/interfaces";
 import { headerConstants, clientContextValues } from "@/core/constants/client-context";
+import { CustomError } from "@/core/error/customError.error";
+import { JwtAdapter } from "@/core/utils/adapters/jwt";
+import type { ClientRoles } from "@/core/interfaces/Roles.interfaces";
 
 export interface UserTokenPayload {
     id: string;

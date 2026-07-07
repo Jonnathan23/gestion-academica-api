@@ -1,5 +1,5 @@
 import { describe, test, expect } from "bun:test";
-import { CustomError } from "@/core/error";
+import { CustomError } from "@/core/error/customError.error";
 
 describe("CustomError Class Test Suite", () => {
     test("Should create a 400 Bad Request error correctly", () => {

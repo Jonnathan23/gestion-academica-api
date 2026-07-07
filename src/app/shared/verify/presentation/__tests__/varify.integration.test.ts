@@ -5,9 +5,9 @@ import cookieParser from "cookie-parser";
 
 import { VerifyRouter } from "@/app/shared/verify/presentation/verify.router";
 import { testGlobalErrorHandler } from "@/__test__/configTest";
-import { AuthMiddleware } from "@/core/middleware";
-import { JwtAdapter } from "@/core/utils";
 import { clientRoles, userRoles } from "@/core/interfaces/Roles.interfaces";
+import { AuthMiddleware } from "@/core/middleware/auth.mid";
+import { JwtAdapter } from "@/core/utils/adapters/jwt";
 
 // ------------------------------------------------------------------ //
 // Micro-application: only the Verify router

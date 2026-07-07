@@ -1,4 +1,4 @@
-import { Validators } from "@/core/utils";
+import { Validators } from "@/core/utils/validators";
 
 export class CreatePaymentPlanDto {
     private constructor(

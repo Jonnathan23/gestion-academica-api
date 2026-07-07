@@ -3,10 +3,12 @@ import { Router } from "express";
 import { StudentLevelDataSourceImpl } from "@/app/admin-desk/student-level/infrastructure/datasource/studentLevel.datasource.impl";
 import { StudentLevelRepositoryImpl } from "@/app/admin-desk/student-level/infrastructure/repositories/student-level.repository.impl";
 import { ContractController } from "@/app/admin-desk/student-level/presentation/controllers/contract.controller";
-import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
-import { systemPermissions } from "@/core/constants";
-import { InfoStudentsLevelRouter } from "@/app/admin-desk/student-level/presentation/infoStudentsLevel.router";
+import { InfoStudentsLevelRouter } from "@/app/admin-desk/student-level/presentation/info-students-level.router";
 import { LevelProgressionDomainServiceImpl } from "@/app/admin-desk/student-level/domain/services/levelProgression.domain.service";
+import { AuthMiddleware } from "@/core/middleware/auth.mid";
+import { RoleMiddleware } from "@/core/middleware/role.mid";
+import { VerifyUUID } from "@/core/middleware/verifyUuId.mid";
+import { systemPermissions } from "@/core/constants/permissions";
 
 export class ContractsRouter {
     public static get routes(): Router {

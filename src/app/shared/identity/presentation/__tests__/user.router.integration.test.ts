@@ -6,9 +6,10 @@ import { UserRouter } from "@/app/shared/identity/presentation/identity.router";
 import { environmentVariables } from "@/core/config/envs";
 import { DatabaseConnection } from "@/data/config/db-postgresql";
 import { testGlobalErrorHandler } from "@/__test__/configTest";
-import { User } from "@/data/models/shared";
-import { JwtAdapter, BcryptAdapter } from "@/core/utils";
 import { AuthMiddleware } from "@/core/middleware/auth.mid";
+import User from "@/data/models/shared/user.model";
+import { JwtAdapter } from "@/core/utils/adapters/jwt";
+import { BcryptAdapter } from "@/core/utils/adapters/bcrypt";
 
 // ------------------------------------------------------------------ //
 // Micro-application: real router + real error handler

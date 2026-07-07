@@ -6,12 +6,14 @@ import { LessonLogRoutes } from "@/app/class-track/feats/lesson-logs/presentatio
 import { environmentVariables } from "@/core/config/envs";
 import { DatabaseConnection } from "@/data/config/db-postgresql";
 import { testGlobalErrorHandler } from "@/__test__/configTest";
-import { User } from "@/data/models/shared";
-import { Student, Module, StudentModule } from "@/data/models/admin-desk";
 import AttendanceSession from "@/data/models/class-track/attendance-session.model";
 import { certificateType, studentContractStatus, studentProgressCategory } from "@/data/models/admin-desk/student.model";
 import { studentModuleStatus } from "@/core/interfaces/contracts.interface";
 import { attendanceSessionStatus } from "@/app/class-track/feats/attendance/domain/interfaces/attendance.interface";
+import User from "@/data/models/shared/user.model";
+import Student from "@/data/models/admin-desk/student.model";
+import Module from "@/data/models/admin-desk/module.model";
+import StudentModule from "@/data/models/admin-desk/student-module.model";
 
 // ------------------------------------------------------------------ //
 // Micro-application: only the Lesson Log router

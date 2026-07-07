@@ -1,5 +1,6 @@
-import type { CreateModuleDto, UpdateModuleDto } from "@/app/admin-desk/modules/domain/dtos";
 import type { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
+import { CreateModuleDto } from "@/app/admin-desk/modules/domain/dtos/create-module.dto";
+import { UpdateModuleDto } from "@/app/admin-desk/modules/domain/dtos/update-module.dto";
 
 export abstract class ModuleRepository {
     public abstract getAllModules(): Promise<ModuleEntity[]>;

@@ -3,9 +3,11 @@ import { Router } from "express";
 import { UserDataSourceImpl } from "@/app/shared/identity/infrastructure/datasources/user.datasource.impl";
 import { UserRepositoryImpl } from "@/app/shared/identity/infrastructure/repositories/user.repository.impl";
 import { UserController } from "@/app/shared/identity/presentation/controllers/user.controller";
-import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
-import { systemPermissions } from "@/core/constants";
-import { environmentVariables } from "@/core/config";
+import { AuthMiddleware } from "@/core/middleware/auth.mid";
+import { RoleMiddleware } from "@/core/middleware/role.mid";
+import { VerifyUUID } from "@/core/middleware/verifyUuId.mid";
+import { systemPermissions } from "@/core/constants/permissions";
+import { environmentVariables } from "@/core/config/envs";
 
 export class UserRouter {
     public static get routes(): Router {

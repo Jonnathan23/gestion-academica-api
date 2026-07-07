@@ -1,5 +1,5 @@
-import type { RegisterUserDto } from "@/app/shared/identity/domain/dtos";
 import type { UserRepository } from "@/app/shared/identity/domain/repositories/user.repository";
+import { RegisterUserDto } from "@/app/shared/identity/domain/dtos/register-user.dto";
 
 interface RegisterUserUseCase {
     execute(registerUserDto: RegisterUserDto): Promise<void>;

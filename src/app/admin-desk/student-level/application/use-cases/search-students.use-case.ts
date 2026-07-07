@@ -1,4 +1,4 @@
-import type { InfoStudentsLevelRepository } from "@/app/admin-desk/student-level/domain/repositories/infoStudentsLevel.repository";
+import type { InfoStudentsLevelRepository } from "@/app/admin-desk/student-level/domain/repositories/info-students-level.repository";
 import type { SearchStudentsLevelsDto } from "@/app/admin-desk/student-level/domain/dtos/search-students-levels.dto";
 import type { StudentSearchProjection } from "@/app/admin-desk/student-level/domain/projections/StudentSearch.projection";
 

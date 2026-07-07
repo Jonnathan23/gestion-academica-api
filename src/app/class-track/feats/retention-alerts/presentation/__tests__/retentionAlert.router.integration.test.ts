@@ -6,12 +6,13 @@ import { RetentionAlertRoutes } from "@/app/class-track/feats/retention-alerts/p
 import { environmentVariables } from "@/core/config/envs";
 import { DatabaseConnection } from "@/data/config/db-postgresql";
 import { testGlobalErrorHandler } from "@/__test__/configTest";
-import { User } from "@/data/models/shared";
-import { Student } from "@/data/models/admin-desk";
 import RetentionAlert from "@/data/models/class-track/retention-alert.model";
-import { JwtAdapter, BcryptAdapter } from "@/core/utils";
 import { AuthMiddleware } from "@/core/middleware/auth.mid";
 import { certificateType } from "@/data/models/admin-desk/student.model";
+import User from "@/data/models/shared/user.model";
+import Student from "@/data/models/admin-desk/student.model";
+import { JwtAdapter } from "@/core/utils/adapters/jwt";
+import { BcryptAdapter } from "@/core/utils/adapters/bcrypt";
 
 // ------------------------------------------------------------------ //
 

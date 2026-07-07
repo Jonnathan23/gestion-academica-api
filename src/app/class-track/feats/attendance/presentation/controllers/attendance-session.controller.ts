@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import type { AuthRequest } from "@/core/middleware/auth.mid";
-import type { AttendanceSessionRepository } from "@/app/class-track/feats/attendance/domain/repositories/attendanceSession.repository";
+import type { AttendanceSessionRepository } from "@/app/class-track/feats/attendance/domain/repositories/attendance-session.repository";
 
 import { StartAttendanceSessionUseCase } from "@/app/class-track/feats/attendance/application/use-cases/start-attendance-session.use-case";
 import { EndAttendanceSessionUseCase } from "@/app/class-track/feats/attendance/application/use-cases/end-attendance-session.use-case";

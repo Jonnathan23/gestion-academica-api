@@ -1,5 +1,5 @@
-import type { UpdateModuleDto } from "@/app/admin-desk/modules/domain/dtos";
 import type { ModuleRepository } from "@/app/admin-desk/modules/domain/repositories/module.repository";
+import { UpdateModuleDto } from "@/app/admin-desk/modules/domain/dtos/update-module.dto";
 
 interface UpdateModuleUseCase {
     execute(id: string, module: UpdateModuleDto): Promise<void>;

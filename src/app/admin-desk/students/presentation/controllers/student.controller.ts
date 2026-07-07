@@ -2,25 +2,21 @@ import type { Request, Response, NextFunction } from "express";
 
 import type { StudentRepository } from "@/app/admin-desk/students/domain/repositories/student.repository";
 import type { PaginatedResult } from "@/core/interfaces/paginated-result.interface";
-import {
-    RegisterStudentDto,
-    UpdateStudentDto,
-    ChangeContractStatusDto,
-    SearchStudentsByCriteriaDto,
-} from "@/app/admin-desk/students/domain";
-import {
-    RegisterStudent,
-    SearchStudents,
-    UpdateStudent,
-    ChangeContractStatus,
-    ToggleGraduated,
-    DeactivateStudent,
-    SearchStudentsByCriteria,
-} from "@/app/admin-desk/students/application";
-import { CustomError } from "@/core/error";
-import { SuccessResponse } from "@/core/utils";
 import type { StudentEntity } from "@/app/admin-desk/students/domain/entities/student.entity";
 import { GetAllStudents } from "@/app/admin-desk/students/application/use-cases/get-all-students.use-case";
+import { RegisterStudentDto } from "@/app/admin-desk/students/domain/dtos/register-student.dto";
+import { UpdateStudentDto } from "@/app/admin-desk/students/domain/dtos/update-student.dto";
+import { ChangeContractStatusDto } from "@/app/admin-desk/students/domain/dtos/change-contract-status.dto";
+import { SearchStudentsByCriteriaDto } from "@/app/admin-desk/students/domain/dtos/search-students-by-criteria.dto";
+import { RegisterStudent } from "@/app/admin-desk/students/application/use-cases/register-student.use-case";
+import { SearchStudents } from "@/app/admin-desk/students/application/use-cases/search-students.use-case";
+import { UpdateStudent } from "@/app/admin-desk/students/application/use-cases/update-student.use-case";
+import { ChangeContractStatus } from "@/app/admin-desk/students/application/use-cases/change-contract-status.use-case";
+import { ToggleGraduated } from "@/app/admin-desk/students/application/use-cases/toggle-graduated.use-case";
+import { DeactivateStudent } from "@/app/admin-desk/students/application/use-cases/deactivate-student.use-case";
+import { SearchStudentsByCriteria } from "@/app/admin-desk/students/application/use-cases/search-students-by-criteria.use-case";
+import { CustomError } from "@/core/error/customError.error";
+import { SuccessResponse } from "@/core/utils/success-response";
 
 export class StudentController {
     public constructor(private readonly studentRepository: StudentRepository) {}

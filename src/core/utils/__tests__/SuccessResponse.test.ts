@@ -1,7 +1,6 @@
 import type { Response } from "express";
 import { describe, test, expect, mock } from "bun:test";
-
-import { SuccessResponse } from "@/core/utils";
+import { SuccessResponse } from "@/core/utils/success-response";
 
 describe("SuccessResponse Utility Test Suite", () => {
     describe("OK method", () => {

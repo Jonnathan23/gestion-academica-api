@@ -3,8 +3,10 @@ import { Router } from "express";
 import { PaymentDataSourceImpl } from "@/app/admin-desk/payments/infrastructure/datasources/payment.datasource.impl";
 import { PaymentRepositoryImpl } from "@/app/admin-desk/payments/infrastructure/repositories/payment.repository";
 import { PaymentController } from "@/app/admin-desk/payments/presentation/controllers/payment.controller";
-import { systemPermissions } from "@/core/constants";
-import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
+import { systemPermissions } from "@/core/constants/permissions";
+import { AuthMiddleware } from "@/core/middleware/auth.mid";
+import { RoleMiddleware } from "@/core/middleware/role.mid";
+import { VerifyUUID } from "@/core/middleware/verifyUuId.mid";
 
 export class PaymentRouter {
     public static get routes(): Router {

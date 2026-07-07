@@ -1,5 +1,5 @@
-import type { CreateModuleDto } from "@/app/admin-desk/modules/domain/dtos";
 import type { ModuleRepository } from "@/app/admin-desk/modules/domain/repositories/module.repository";
+import { CreateModuleDto } from "@/app/admin-desk/modules/domain/dtos/create-module.dto";
 
 interface CreateModuleUseCase {
     execute(module: CreateModuleDto): Promise<void>;

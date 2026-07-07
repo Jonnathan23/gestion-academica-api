@@ -4,11 +4,11 @@ import cron from "node-cron";
 import { CalculateRetentionAlertsWorker } from "@/app/class-track/feats/retention-alerts/presentation/workers/calculate-retention-alerts.worker";
 import { environmentVariables } from "@/core/config/envs";
 import { DatabaseConnection } from "@/data/config/db-postgresql";
-import { Student } from "@/data/models/admin-desk";
 import AttendanceSession from "@/data/models/class-track/attendance-session.model";
 import RetentionAlert from "@/data/models/class-track/retention-alert.model";
 import { certificateType } from "@/data/models/admin-desk/student.model";
 import { attendanceSessionStatus } from "@/app/class-track/feats/attendance/domain/interfaces/attendance.interface";
+import Student from "@/data/models/admin-desk/student.model";
 
 // ------------------------------------------------------------------ //
 // Database connection

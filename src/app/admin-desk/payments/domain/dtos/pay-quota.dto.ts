@@ -1,5 +1,5 @@
-import { paymentMethod, type PaymentMethod } from "@/app/admin-desk/payments/domain/interfaces";
-import { Validators } from "@/core/utils";
+import { paymentMethod, type PaymentMethod } from "@/app/admin-desk/payments/domain/interfaces/payment-method.interface";
+import { Validators } from "@/core/utils/validators";
 
 export class PayQuotaDto {
     private constructor(

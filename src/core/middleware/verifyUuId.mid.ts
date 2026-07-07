@@ -1,5 +1,5 @@
-import { CustomError } from "@/core/error";
 import type { Request, Response, NextFunction } from "express";
+import { CustomError } from "@/core/error/customError.error";
 
 export class VerifyUUID {
     public static validate(request: Request, response: Response, next: NextFunction, identifier: string): void {

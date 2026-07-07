@@ -3,8 +3,10 @@ import { Router } from "express";
 import { StudentDataSourceImpl } from "@/app/admin-desk/students/infrastructure/datasource/student.datasource.impl";
 import { StudentRepositoryImpl } from "@/app/admin-desk/students/infrastructure/repositories/student.repository.impl";
 import { StudentController } from "@/app/admin-desk/students/presentation/controllers/student.controller";
-import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
-import { systemPermissions } from "@/core/constants";
+import { AuthMiddleware } from "@/core/middleware/auth.mid";
+import { RoleMiddleware } from "@/core/middleware/role.mid";
+import { VerifyUUID } from "@/core/middleware/verifyUuId.mid";
+import { systemPermissions } from "@/core/constants/permissions";
 
 export class StudentsRouter {
     public static get routes(): Router {

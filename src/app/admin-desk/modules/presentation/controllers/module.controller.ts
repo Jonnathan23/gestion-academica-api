@@ -1,11 +1,16 @@
 import type { Request, Response, NextFunction } from "express";
 
 import { ModuleRepository } from "@/app/admin-desk/modules/domain/repositories/module.repository";
-import { CreateModuleDto, UpdateModuleDto } from "@/app/admin-desk/modules/domain/dtos";
-import { CustomError } from "@/core/error";
-import { CreateModule, DeleteModule, GetAllModules, GetModuleById, UpdateModule } from "@/app/admin-desk/modules/application";
-import { SuccessResponse } from "@/core/utils";
 import { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
+import { CreateModuleDto } from "@/app/admin-desk/modules/domain/dtos/create-module.dto";
+import { UpdateModuleDto } from "@/app/admin-desk/modules/domain/dtos/update-module.dto";
+import { CustomError } from "@/core/error/customError.error";
+import { CreateModule } from "@/app/admin-desk/modules/application/use-cases/create-module.use-case";
+import { DeleteModule } from "@/app/admin-desk/modules/application/use-cases/delete-module.use-case";
+import { GetAllModules } from "@/app/admin-desk/modules/application/use-cases/get-all-modules.use-case";
+import { GetModuleById } from "@/app/admin-desk/modules/application/use-cases/get-module-by-id.use-case";
+import { UpdateModule } from "@/app/admin-desk/modules/application/use-cases/update-module.use-case";
+import { SuccessResponse } from "@/core/utils/success-response";
 
 export class ModuleController {
     public constructor(private readonly moduleRepository: ModuleRepository) {}

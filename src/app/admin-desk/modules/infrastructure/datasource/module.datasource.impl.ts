@@ -1,9 +1,10 @@
 import type { ModuleDataSource } from "@/app/admin-desk/modules/domain/datasource/module.datasource";
-import type { CreateModuleDto, UpdateModuleDto } from "@/app/admin-desk/modules/domain/dtos";
 import type { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
 import { ModuleMapper } from "@/app/admin-desk/modules/infrastructure/mappers/module.mapper";
-import { CustomError } from "@/core/error";
-import { Module } from "@/data/models/admin-desk";
+import { CreateModuleDto } from "@/app/admin-desk/modules/domain/dtos/create-module.dto";
+import { UpdateModuleDto } from "@/app/admin-desk/modules/domain/dtos/update-module.dto";
+import { CustomError } from "@/core/error/customError.error";
+import Module from "@/data/models/admin-desk/module.model";
 
 type ModuleEntityFromObject = typeof ModuleMapper.moduleModelToEntity;
 

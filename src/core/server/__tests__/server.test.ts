@@ -1,10 +1,9 @@
 import { describe, test, expect, mock, spyOn } from "bun:test";
 import { Router } from "express";
-import type { CorsConfig } from "@/core/config";
-
 import type { DatabaseErrorHandler } from "@/core/interfaces/database-error-handler.interface";
 import type { SwaggerConfiguration } from "@/core/config/swagger";
-import { Server } from "@/core/server";
+import { CorsConfig } from "@/core/config/cors";
+import { Server } from "@/core/server/server";
 
 describe("Server Class Test Suite", () => {
     test("Should initialize the server with the correct port and configurations", async () => {

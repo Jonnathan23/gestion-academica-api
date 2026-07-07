@@ -2,10 +2,11 @@ import { Router } from "express";
 
 import { ModuleDataSourceImpl } from "@/app/admin-desk/modules/infrastructure/datasource/module.datasource.impl";
 import { ModuleRepositoryImpl } from "@/app/admin-desk/modules/infrastructure/repositories/module.repository.impl";
-
-import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
-import { systemPermissions } from "@/core/constants";
 import { ModuleController } from "@/app/admin-desk/modules/presentation/controllers/module.controller";
+import { AuthMiddleware } from "@/core/middleware/auth.mid";
+import { RoleMiddleware } from "@/core/middleware/role.mid";
+import { VerifyUUID } from "@/core/middleware/verifyUuId.mid";
+import { systemPermissions } from "@/core/constants/permissions";
 
 export class ModulesRouter {
     public static get routes(): Router {

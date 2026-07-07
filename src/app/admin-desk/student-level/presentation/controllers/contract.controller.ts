@@ -6,15 +6,17 @@ import {
     PurchaseModules,
     UnlockLevel,
 } from "@/app/admin-desk/student-level/application/use-cases";
-import { DeleteStudentLevelDto, PurchaseModulesDto, UpdateStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos";
 import type { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/student-level.entity";
 import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-level/domain/projections/ContractDetails.projection";
 import { type LevelProgressionDomainService } from "@/app/admin-desk/student-level/domain/services/levelProgression.domain.service";
 import type { StudentLevelRepositoryImpl } from "@/app/admin-desk/student-level/infrastructure/repositories/student-level.repository.impl";
-import { CustomError } from "@/core/error";
 import type { AuthRequest } from "@/core/middleware/auth.mid";
-import { SuccessResponse } from "@/core/utils";
 import type { Request, Response, NextFunction } from "express";
+import { DeleteStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos/delete-student-level.dto";
+import { PurchaseModulesDto } from "@/app/admin-desk/student-level/domain/dtos/purchase-modules.dto";
+import { UpdateStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos/update-student-level.dto";
+import { CustomError } from "@/core/error/customError.error";
+import { SuccessResponse } from "@/core/utils/success-response";
 
 export class ContractController {
     public constructor(

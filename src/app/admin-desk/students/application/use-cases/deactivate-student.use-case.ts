@@ -1,4 +1,5 @@
-import type { StudentEntity, StudentRepository } from "@/app/admin-desk/students/domain";
+import { StudentEntity } from "@/app/admin-desk/students/domain/entities/student.entity";
+import { StudentRepository } from "@/app/admin-desk/students/domain/repositories/student.repository";
 
 export interface DeactivateStudentUseCase {
     execute(id: string): Promise<StudentEntity>;

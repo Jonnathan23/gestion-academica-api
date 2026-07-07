@@ -1,5 +1,5 @@
-import { Validators } from "@/core/utils";
 import type { CertificateType } from "@/data/models/admin-desk/student.model";
+import { Validators } from "@/core/utils/validators";
 
 export class RegisterStudentDto {
     private constructor(

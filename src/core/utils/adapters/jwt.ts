@@ -1,5 +1,5 @@
 import jwt, { type SignOptions } from "jsonwebtoken";
-import { environmentVariables } from "@/core/config";
+import { environmentVariables } from "@/core/config/envs";
 
 export class JwtAdapter {
     //*  TOKENS DE IDENTIDAD (Administradores, Profesores, Sistema)

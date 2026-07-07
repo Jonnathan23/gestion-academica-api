@@ -3,11 +3,12 @@ import { AttendanceSessionDatasourceImpl } from "@/app/class-track/feats/attenda
 import { AttendanceSessionRepositoryImpl } from "@/app/class-track/feats/attendance/infrastructure/repositories/attendance-session.repository.impl";
 
 import { AttendanceSessionController } from "@/app/class-track/feats/attendance/presentation/controllers/attendance-session.controller";
-import { RoleMiddleware, AuthMiddleware } from "@/core/middleware";
-import { systemPermissions } from "@/core/constants";
 import { StudentClassTrackDataSourceImpl } from "@/app/class-track/core/students/infrastructure/datasources/student.datasource.impl";
 import { StudentClassTrackRepositoryImpl } from "@/app/class-track/core/students/infrastructure/repositories/student.repository.impl";
 import { environmentVariables } from "@/core/config/envs";
+import { RoleMiddleware } from "@/core/middleware/role.mid";
+import { AuthMiddleware } from "@/core/middleware/auth.mid";
+import { systemPermissions } from "@/core/constants/permissions";
 
 export class AttendanceSessionRouter {
     public static get routes(): Router {

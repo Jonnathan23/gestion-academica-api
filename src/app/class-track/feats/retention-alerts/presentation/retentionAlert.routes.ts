@@ -1,10 +1,10 @@
 import { Router } from "express";
-
-import { RoleMiddleware, AuthMiddleware } from "@/core/middleware";
-import { systemPermissions } from "@/core/constants";
 import { RetentionAlertDatasourceImpl } from "@/app/class-track/feats/retention-alerts/infrastructure/datasource/retentionAlert.datasource.impl";
 import { RetentionAlertRepositoryImpl } from "@/app/class-track/feats/retention-alerts/infrastructure/repositories/retention-alert.repository.impl";
 import { RetentionAlertController } from "@/app/class-track/feats/retention-alerts/presentation/controllers/retention-alert.controller";
+import { RoleMiddleware } from "@/core/middleware/role.mid";
+import { AuthMiddleware } from "@/core/middleware/auth.mid";
+import { systemPermissions } from "@/core/constants/permissions";
 
 export class RetentionAlertRoutes {
     public static get routes(): Router {

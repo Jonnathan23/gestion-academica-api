@@ -1,8 +1,8 @@
 import cron from "node-cron";
-import { ColorsAdapter } from "@/core/utils";
 import { AttendanceSessionDatasourceImpl } from "@/app/class-track/feats/attendance/infrastructure/datasource/attendanceSession.datasource.impl";
 import { AttendanceSessionRepositoryImpl } from "@/app/class-track/feats/attendance/infrastructure/repositories/attendance-session.repository.impl";
 import { CloseOrphanSessionsUseCase } from "@/app/class-track/feats/attendance/application/use-cases/close-orphan-sessions.use-case";
+import { ColorsAdapter } from "@/core/utils/adapters/colors";
 
 export class CloseOrphanSessionsWorker {
     public static start(): void {

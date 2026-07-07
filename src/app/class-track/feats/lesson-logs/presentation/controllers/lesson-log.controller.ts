@@ -7,8 +7,8 @@ import { CreateLessonLogsUseCase } from "@/app/class-track/feats/lesson-logs/app
 import { GetLastLessonLogUseCase } from "@/app/class-track/feats/lesson-logs/application/use-cases/get-last-lesson-log.use-case";
 import { SuccessResponse } from "@/core/utils/success-response";
 import type { StudentClassTrackRepository } from "@/app/class-track/core/students/domain/repositories/student.repository";
-import type { AttendanceSessionRepository } from "@/app/class-track/feats/attendance/domain/repositories/attendanceSession.repository";
-import type { LessonLogRepository } from "@/app/class-track/feats/lesson-logs/domain/repositories/lessonLog.repository";
+import type { AttendanceSessionRepository } from "@/app/class-track/feats/attendance/domain/repositories/attendance-session.repository";
+import type { LessonLogRepository } from "@/app/class-track/feats/lesson-logs/domain/repositories/lesson-log.repository";
 
 export class LessonLogController {
     public constructor(

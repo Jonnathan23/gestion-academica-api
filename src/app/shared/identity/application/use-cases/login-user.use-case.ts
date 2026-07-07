@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import type { LoginUserDto } from "@/app/shared/identity/domain/dtos";
-import type { UserEntity } from "@/app/shared/identity/domain/entities";
 import type { UserRepository } from "@/app/shared/identity/domain/repositories/user.repository";
-import { rolePermissionsMapping } from "@/core/constants";
-import { CustomError } from "@/core/error";
-import type { UserTokenPayload } from "@/core/middleware";
-import { JwtAdapter } from "@/core/utils";
 import { userState, type UserState } from "../../domain/interfaces/user.interfaces";
+import { LoginUserDto } from "@/app/shared/identity/domain/dtos/login-user.dto";
+import { UserEntity } from "@/app/shared/identity/domain/entities/user.entity";
+import { rolePermissionsMapping } from "@/core/constants/permissions";
+import { CustomError } from "@/core/error/customError.error";
+import type { UserTokenPayload } from "@/core/middleware/auth.mid";
+import { JwtAdapter } from "@/core/utils/adapters/jwt";
 
 interface UserResponse {
     us_id: string;

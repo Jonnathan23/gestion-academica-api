@@ -2,14 +2,13 @@ import { Op, Sequelize } from "sequelize";
 import Student from "@/data/models/admin-desk/student.model";
 import StudentModule from "@/data/models/admin-desk/student-module.model";
 import Module from "@/data/models/admin-desk/module.model";
-import { CustomError } from "@/core/error";
-
 import type { InfoStudentsLevelDataSource } from "@/app/admin-desk/student-level/domain/datasource/infoStudentsLevel.datasource";
 import type { SearchStudentsLevelsDto } from "@/app/admin-desk/student-level/domain/dtos/search-students-levels.dto";
 import type { GetStudentTimelineDto } from "@/app/admin-desk/student-level/domain/dtos/get-student-timeline.dto";
 import type { StudentSearchProjection } from "@/app/admin-desk/student-level/domain/projections/StudentSearch.projection";
 import type { StudentTimelineProjection } from "@/app/admin-desk/student-level/domain/projections/StudentTimeline.projection";
 import { InfoStudentsLevelMapper } from "@/app/admin-desk/student-level/infrastructure/mappers/info-students-level.mapper";
+import { CustomError } from "@/core/error/customError.error";
 
 export class InfoStudentsLevelDataSourceImpl implements InfoStudentsLevelDataSource {
     public async searchStudents(dto: SearchStudentsLevelsDto): Promise<StudentSearchProjection[]> {

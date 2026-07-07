@@ -5,7 +5,7 @@ import {
     type TimelineEnrolledLevel,
     type TimelineAvailableModule,
 } from "@/app/admin-desk/student-level/domain/projections/StudentTimeline.projection";
-import { CustomError } from "@/core/error";
+import { CustomError } from "@/core/error/customError.error";
 
 export class InfoStudentsLevelMapper {
     public static studentSearchFromObject(object: { [key: string]: any }): StudentSearchProjection {

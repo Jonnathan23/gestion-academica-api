@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { AuthMiddleware } from "@/core/middleware";
 import { VerifyController } from "@/app/shared/verify/presentation/verify.controller";
+import { AuthMiddleware } from "@/core/middleware/auth.mid";
 
 export class VerifyRouter {
     public static get routes(): Router {

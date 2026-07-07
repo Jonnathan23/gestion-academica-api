@@ -1,10 +1,10 @@
 import cron from "node-cron";
-import { ColorsAdapter } from "@/core/utils";
 import { AttendanceSessionDatasourceImpl } from "@/app/class-track/feats/attendance/infrastructure/datasource/attendanceSession.datasource.impl";
 import { AttendanceSessionRepositoryImpl } from "@/app/class-track/feats/attendance/infrastructure/repositories/attendance-session.repository.impl";
 import { RetentionAlertDatasourceImpl } from "@/app/class-track/feats/retention-alerts/infrastructure/datasource/retentionAlert.datasource.impl";
 import { RetentionAlertRepositoryImpl } from "@/app/class-track/feats/retention-alerts/infrastructure/repositories/retention-alert.repository.impl";
 import { CalculateRetentionAlertsUseCase } from "@/app/class-track/feats/retention-alerts/application/use-cases/calculate-retention-alerts.use-case";
+import { ColorsAdapter } from "@/core/utils/adapters/colors";
 
 export class CalculateRetentionAlertsWorker {
     private static readonly thresholdDays: number = 10;

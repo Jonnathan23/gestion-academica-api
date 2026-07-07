@@ -6,14 +6,14 @@ import { ContractsRouter } from "@/app/admin-desk/student-level/presentation/stu
 import { UserRouter } from "@/app/shared/identity/presentation/identity.router";
 import { VerifyRouter } from "@/app/shared/verify/presentation/verify.router";
 import { PaymentRouter } from "@/app/admin-desk/payments/presentation/payment.router";
-import { AuthMiddleware } from "@/core/middleware";
 import { UserSegurityDataSourceImpl } from "@/app/shared/identity/infrastructure/datasources/user-segurity.datasource.impl";
-import { AttendanceSessionRouter } from "@/app/class-track/feats/attendance/presentation/routes/attendanceSession.router";
+import { AttendanceSessionRouter } from "@/app/class-track/feats/attendance/presentation/routes/attendance-session.router";
 
 import { DashboardRouter } from "@/app/class-track/feats/dashboard/presentation/routes/dashboard.router";
 import { StudentRouterClassTrack } from "@/app/class-track/core/students/presentation/routes/student.router";
 import { RetentionAlertRoutes } from "@/app/class-track/feats/retention-alerts/presentation/retentionAlert.routes";
 import { LessonLogRoutes } from "@/app/class-track/feats/lesson-logs/presentation/lessonLog.routes";
+import { AuthMiddleware } from "@/core/middleware/auth.mid";
 
 export class AppRouter {
     public static get routes(): Router {
