@@ -1,21 +1,21 @@
 import { Op, type FindOptions, type WhereOptions } from "sequelize";
-import RetentionAlert from "@/data/models/class-track/RetentionAlert.model";
-import Student from "@/data/models/admin-desk/Student.model";
+import RetentionAlert from "@/data/models/class-track/retention-alert.model";
+import Student from "@/data/models/admin-desk/student.model";
 import type { RetentionAlertDatasource } from "@/app/class-track/feats/retention-alerts/domain/datasource/retentionAlert.datasource";
 import {
     retentionAlertStatus,
     type RetentionAlertStatus,
-} from "@/app/class-track/feats/retention-alerts/domain/interfaces/RetentionAlert.interface";
+} from "@/app/class-track/feats/retention-alerts/domain/interfaces/retention-alert.interface";
 
 import { CustomError } from "@/core/error/customError.error";
 import type { RetentionAlertWithStudentProjection } from "@/app/class-track/feats/retention-alerts/domain/projections/RetentionAlertWithStudent.projection";
-import type { GetRetentionAlertsDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/GetRetentionAlerts.dto";
-import type { GetCountAlertsDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/GetCountAlerts.dto";
-import type { UpdateRetentionAlertDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/UpdateRetentionAlert.dto";
-import type { RetentionAlertEntity } from "@/app/class-track/feats/retention-alerts/domain/entities/RetentionAlert.entity";
-import { RetentionAlertWithStudentMapper } from "@/app/class-track/feats/retention-alerts/infrastructure/mappers/retentionAlertWithStudent.mapper";
-import { RetentionAlertMapper } from "@/app/class-track/feats/retention-alerts/infrastructure/mappers/retentionAlert.mapper";
-import type { PaginatedResult } from "@/core/interfaces/PaginatedResult.interface";
+import type { GetRetentionAlertsDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/get-retention-alerts.dto";
+import type { GetCountAlertsDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/get-count-alerts.dto";
+import type { UpdateRetentionAlertDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/update-retention-alert.dto";
+import type { RetentionAlertEntity } from "@/app/class-track/feats/retention-alerts/domain/entities/retention-alert.entity";
+import { RetentionAlertWithStudentMapper } from "@/app/class-track/feats/retention-alerts/infrastructure/mappers/retention-alert-with-student.mapper";
+import { RetentionAlertMapper } from "@/app/class-track/feats/retention-alerts/infrastructure/mappers/retention-alert.mapper";
+import type { PaginatedResult } from "@/core/interfaces/paginated-result.interface";
 
 export class RetentionAlertDatasourceImpl implements RetentionAlertDatasource {
     public async upsertAlert(studentId: string, daysAbsent: number): Promise<void> {

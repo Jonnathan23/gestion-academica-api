@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { AcademicObservationDatasourceImpl } from "@/app/class-track/feats/observation/infrastructure/datasource/academicObservation.datasource.impl";
-import { AcademicObservationRepositoryImpl } from "@/app/class-track/feats/observation/infrastructure/repositories/academicObservation.repository.impl";
+import { AcademicObservationRepositoryImpl } from "@/app/class-track/feats/observation/infrastructure/repositories/academic-observation.repository.impl";
 import { AcademicObservationController } from "@/app/class-track/feats/observation/presentation/academicObservation.controller";
 
 export class AcademicObservationRouter {

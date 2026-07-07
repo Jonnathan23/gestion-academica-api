@@ -1,4 +1,4 @@
-import type { StudentModuleStatus } from "@/core/interfaces/Contracts.interface";
+import type { StudentModuleStatus } from "@/core/interfaces/contracts.interface";
 
 export class LevelActiveForStudentProjection {
     public constructor(

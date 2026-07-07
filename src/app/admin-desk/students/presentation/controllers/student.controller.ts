@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 
 import type { StudentRepository } from "@/app/admin-desk/students/domain/repositories/student.repository";
-import type { PaginatedResult } from "@/core/interfaces/PaginatedResult.interface";
+import type { PaginatedResult } from "@/core/interfaces/paginated-result.interface";
 import {
     RegisterStudentDto,
     UpdateStudentDto,
@@ -19,8 +19,8 @@ import {
 } from "@/app/admin-desk/students/application";
 import { CustomError } from "@/core/error";
 import { SuccessResponse } from "@/core/utils";
-import type { StudentEntity } from "@/app/admin-desk/students/domain/entities/Student.entity";
-import { GetAllStudents } from "@/app/admin-desk/students/application/use-cases/getAllStudents.use-case";
+import type { StudentEntity } from "@/app/admin-desk/students/domain/entities/student.entity";
+import { GetAllStudents } from "@/app/admin-desk/students/application/use-cases/get-all-students.use-case";
 
 export class StudentController {
     public constructor(private readonly studentRepository: StudentRepository) {}

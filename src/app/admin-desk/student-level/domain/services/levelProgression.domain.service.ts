@@ -1,5 +1,5 @@
-import { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/StudentLevel.entity";
-import { studentModuleStatus } from "@/core/interfaces/Contracts.interface";
+import { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/student-level.entity";
+import { studentModuleStatus } from "@/core/interfaces/contracts.interface";
 
 export interface LevelProgressionDomainService {
     applySelfHealing(studentLevels: StudentLevelEntity[]): StudentLevelEntity[];

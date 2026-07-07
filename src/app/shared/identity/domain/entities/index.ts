@@ -1,2 +1,2 @@
-export * from "@/app/shared/identity/domain/entities/User.entity";
-export * from "@/app/shared/identity/domain/entities/UserData.entity";
+export * from "@/app/shared/identity/domain/entities/user.entity";
+export * from "@/app/shared/identity/domain/entities/user-data.entity";

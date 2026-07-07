@@ -4,15 +4,15 @@ import express from "express";
 
 import { AttendanceSessionRouter } from "@/app/class-track/feats/attendance/presentation/routes/attendanceSession.router";
 import { environmentVariables } from "@/core/config/envs";
-import { DatabaseConnection } from "@/data/config/dbPostgresql";
+import { DatabaseConnection } from "@/data/config/db-postgresql";
 import { testGlobalErrorHandler } from "@/__test__/configTest";
 import { User } from "@/data/models/shared";
 import { Student, Module, StudentModule } from "@/data/models/admin-desk";
-import AttendanceSession from "@/data/models/class-track/AttendanceSession.model";
+import AttendanceSession from "@/data/models/class-track/attendance-session.model";
 import { JwtAdapter, BcryptAdapter } from "@/core/utils";
 import { AuthMiddleware } from "@/core/middleware/auth.mid";
-import { certificateType } from "@/data/models/admin-desk/Student.model";
-import { headerConstants, clientContextValues } from "@/core/constants/ClientContext";
+import { certificateType } from "@/data/models/admin-desk/student.model";
+import { headerConstants, clientContextValues } from "@/core/constants/client-context";
 
 // ------------------------------------------------------------------ //
 // Micro-application: only the Attendance router

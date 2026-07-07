@@ -1,13 +1,13 @@
 import { Router } from "express";
 
-import { ModulesRouter } from "@/app/admin-desk/modules/presentation/router";
-import { StudentsRouter } from "@/app/admin-desk/students/presentation/router";
-import { ContractsRouter } from "@/app/admin-desk/student-level/presentation/router";
-import { UserRouter } from "@/app/shared/identity/presentation/router";
+import { ModulesRouter } from "@/app/admin-desk/modules/presentation/module.router";
+import { StudentsRouter } from "@/app/admin-desk/students/presentation/student.router";
+import { ContractsRouter } from "@/app/admin-desk/student-level/presentation/student-level.router";
+import { UserRouter } from "@/app/shared/identity/presentation/identity.router";
 import { VerifyRouter } from "@/app/shared/verify/presentation/verify.router";
-import { PaymentRouter } from "@/app/admin-desk/payments/presentation/router";
+import { PaymentRouter } from "@/app/admin-desk/payments/presentation/payment.router";
 import { AuthMiddleware } from "@/core/middleware";
-import { UserSegurityDataSourceImpl } from "@/app/shared/identity/infrastructure/datasources/userSegurity.datasource.impl";
+import { UserSegurityDataSourceImpl } from "@/app/shared/identity/infrastructure/datasources/user-segurity.datasource.impl";
 import { AttendanceSessionRouter } from "@/app/class-track/feats/attendance/presentation/routes/attendanceSession.router";
 
 import { DashboardRouter } from "@/app/class-track/feats/dashboard/presentation/routes/dashboard.router";

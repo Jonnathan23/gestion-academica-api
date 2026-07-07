@@ -1,8 +1,8 @@
 import { Router } from "express";
 
 import { InfoStudentsLevelDataSourceImpl } from "@/app/admin-desk/student-level/infrastructure/datasource/infoStudentsLevel.datasource.impl";
-import { InfoStudentsLevelRepositoryImpl } from "@/app/admin-desk/student-level/infrastructure/repositories/infoStudentsLevel.repository.impl";
-import { InfoStudentsLevelController } from "@/app/admin-desk/student-level/presentation/controllers/infoStudentsLevel.controller";
+import { InfoStudentsLevelRepositoryImpl } from "@/app/admin-desk/student-level/infrastructure/repositories/info-students-level.repository.impl";
+import { InfoStudentsLevelController } from "@/app/admin-desk/student-level/presentation/controllers/info-students-level.controller";
 
 import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
 import { systemPermissions } from "@/core/constants";

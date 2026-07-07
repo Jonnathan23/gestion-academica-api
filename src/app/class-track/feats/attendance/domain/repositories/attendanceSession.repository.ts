@@ -1,10 +1,10 @@
-import type { StartAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/StartAttendanceSession.dto";
-import type { EndAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/EndAttendanceSession.dto";
-import type { ApproveAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/ApproveAttendanceSession.dto";
-import type { AttendanceSessionEntity } from "@/app/class-track/feats/attendance/domain/entities/AttendanceSession.entity";
+import type { StartAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/start-attendance-session.dto";
+import type { EndAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/end-attendance-session.dto";
+import type { ApproveAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/approve-attendance-session.dto";
+import type { AttendanceSessionEntity } from "@/app/class-track/feats/attendance/domain/entities/attendance-session.entity";
 import type { AbsentStudentProjection } from "@/app/class-track/feats/attendance/domain/projections/AbsentStudent.projection";
 import type { StudentInClassProjection } from "@/app/class-track/core/students/domain/projections/StudentInClass.projection";
-import type { AttendanceSessionStatus } from "@/data/models/class-track/AttendanceSession.model";
+import type { AttendanceSessionStatus } from "@/data/models/class-track/attendance-session.model";
 
 export abstract class AttendanceSessionRepository {
     public abstract closeOrphanSessions(): Promise<number>;

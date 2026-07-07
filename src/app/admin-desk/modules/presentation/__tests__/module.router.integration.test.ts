@@ -3,9 +3,9 @@ import request from "supertest";
 import express from "express";
 import cookieParser from "cookie-parser";
 
-import { ModulesRouter } from "@/app/admin-desk/modules/presentation/router";
+import { ModulesRouter } from "@/app/admin-desk/modules/presentation/module.router";
 import { environmentVariables } from "@/core/config";
-import { DatabaseConnection } from "@/data/config/dbPostgresql";
+import { DatabaseConnection } from "@/data/config/db-postgresql";
 import { testGlobalErrorHandler } from "@/__test__/configTest";
 import { User } from "@/data/models/shared";
 import { JwtAdapter, BcryptAdapter } from "@/core/utils";

@@ -2,7 +2,7 @@ import { describe, test, expect, mock, spyOn } from "bun:test";
 import { Router } from "express";
 import type { CorsConfig } from "@/core/config";
 
-import type { DatabaseErrorHandler } from "@/core/interfaces/DatabaseErrorHandler.interface";
+import type { DatabaseErrorHandler } from "@/core/interfaces/database-error-handler.interface";
 import type { SwaggerConfiguration } from "@/core/config/swagger";
 import { Server } from "@/core/server";
 

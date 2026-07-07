@@ -1,3 +1,3 @@
-export * from "@/app/admin-desk/student-level/domain/dtos/PurchaseModules.dto";
-export * from "@/app/admin-desk/student-level/domain/dtos/UpdateStudentLevel.dto";
-export * from "@/app/admin-desk/student-level/domain/dtos/DeleteStudentLevel.dto";
+export * from "@/app/admin-desk/student-level/domain/dtos/purchase-modules.dto";
+export * from "@/app/admin-desk/student-level/domain/dtos/update-student-level.dto";
+export * from "@/app/admin-desk/student-level/domain/dtos/delete-student-level.dto";

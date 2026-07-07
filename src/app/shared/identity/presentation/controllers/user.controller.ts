@@ -1,20 +1,20 @@
 import type { Request, Response, NextFunction } from "express";
 
 //import { LoginUserDto, RegisterUserDto, UpdateUserDto } from "@/app/shared/identity/domain/dtos";
-import { RegisterUserDto } from "@/app/shared/identity/domain/dtos/RegisterUser.dto";
+import { RegisterUserDto } from "@/app/shared/identity/domain/dtos/register-user.dto";
 import { SuccessResponse } from "@/core/utils";
 import { CustomError } from "@/core/error";
 
 import type { UserRepository } from "@/app/shared/identity/domain/repositories/user.repository";
-import { RegisterUser } from "@/app/shared/identity/application/use-cases/registerUser.use-case";
-import { UpdateUser } from "@/app/shared/identity/application/use-cases/updateUser.use-case";
-import { UpdateUserDto } from "@/app/shared/identity/domain/dtos/UpdateUser.dto";
+import { RegisterUser } from "@/app/shared/identity/application/use-cases/register-user.use-case";
+import { UpdateUser } from "@/app/shared/identity/application/use-cases/update-user.use-case";
+import { UpdateUserDto } from "@/app/shared/identity/domain/dtos/update-user.dto";
 import { LoginUserDto } from "@/app/shared/identity/domain/dtos";
-import { LoginUser } from "@/app/shared/identity/application/use-cases/loginUser.use-case";
-import { ChangePassword } from "@/app/shared/identity/application/use-cases/changePassword.use-case";
-import { ChangeStateActive } from "@/app/shared/identity/application/use-cases/changeStateActive.use-case";
-import { FindAllUsers } from "@/app/shared/identity/application/use-cases/findAllUsers.use-case";
-import { FindUserById } from "@/app/shared/identity/application/use-cases/findUserById.use-case";
+import { LoginUser } from "@/app/shared/identity/application/use-cases/login-user.use-case";
+import { ChangePassword } from "@/app/shared/identity/application/use-cases/change-password.use-case";
+import { ChangeStateActive } from "@/app/shared/identity/application/use-cases/change-state-active.use-case";
+import { FindAllUsers } from "@/app/shared/identity/application/use-cases/find-all-users.use-case";
+import { FindUserById } from "@/app/shared/identity/application/use-cases/find-user-by-id.use-case";
 import type { UserDataEntity } from "@/app/shared/identity/domain/entities";
 
 export class UserController {

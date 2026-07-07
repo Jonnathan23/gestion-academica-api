@@ -3,9 +3,9 @@ import request from "supertest";
 import express from "express";
 import cookieParser from "cookie-parser";
 
-import { ContractsRouter } from "@/app/admin-desk/student-level/presentation/router";
+import { ContractsRouter } from "@/app/admin-desk/student-level/presentation/student-level.router";
 import { environmentVariables } from "@/core/config";
-import { DatabaseConnection } from "@/data/config/dbPostgresql";
+import { DatabaseConnection } from "@/data/config/db-postgresql";
 import { testGlobalErrorHandler } from "@/__test__/configTest";
 import { User } from "@/data/models/shared";
 import { Student, Module, StudentModule } from "@/data/models/admin-desk";

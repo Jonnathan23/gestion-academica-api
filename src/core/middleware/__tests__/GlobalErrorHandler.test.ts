@@ -1,7 +1,7 @@
 import { describe, test, expect, mock, spyOn, beforeEach } from "bun:test";
 import type { Request, Response, NextFunction } from "express";
 
-import type { DatabaseErrorHandler, FormattedErrorResponse } from "@/core/interfaces/DatabaseErrorHandler.interface";
+import type { DatabaseErrorHandler, FormattedErrorResponse } from "@/core/interfaces/database-error-handler.interface";
 import { CustomError } from "@/core/error";
 import { createGlobalErrorHandler } from "@/core/middleware";
 

@@ -1,4 +1,4 @@
-import { headerConstants } from "@/core/constants/ClientContext";
+import { headerConstants } from "@/core/constants/client-context";
 import type { CorsOptions } from "cors";
 
 interface CorsConfigurationOptions {

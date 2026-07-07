@@ -4,8 +4,8 @@ import {
     StudentLevelDetailsProjection,
     studentRelationFields,
 } from "@/app/admin-desk/student-level/domain/projections/ContractDetails.projection";
-import { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/StudentLevel.entity";
-import { pickFields } from "@/core/utils/objectTools";
+import { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/student-level.entity";
+import { pickFields } from "@/core/utils/object-tools";
 import { CustomError } from "@/core/error";
 import { ModuleMapper } from "@/app/admin-desk/modules/infrastructure/mappers/module.mapper";
 import { UserMapper } from "@/app/shared/identity/infrastructure/mappers/user.mapper";

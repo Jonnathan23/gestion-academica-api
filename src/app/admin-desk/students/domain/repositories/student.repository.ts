@@ -6,7 +6,7 @@ import type {
     StudentEntity,
 } from "@/app/admin-desk/students/domain";
 
-import type { PaginatedResult } from "@/core/interfaces/PaginatedResult.interface";
+import type { PaginatedResult } from "@/core/interfaces/paginated-result.interface";
 
 export abstract class StudentRepository {
     public abstract register(dto: RegisterStudentDto): Promise<StudentEntity>;

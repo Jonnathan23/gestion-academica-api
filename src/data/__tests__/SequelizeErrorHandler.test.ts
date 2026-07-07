@@ -10,7 +10,7 @@ import {
 
 import { describe, test, expect } from "bun:test";
 
-import { SequelizeErrorHandler } from "@/data/errors/SequelizeErrorHandler";
+import { SequelizeErrorHandler } from "@/data/errors/sequelize-error-handler.error";
 
 describe("SequelizeErrorHandler", () => {
     test("should return a generic safe message for ENOTFOUND errors", () => {

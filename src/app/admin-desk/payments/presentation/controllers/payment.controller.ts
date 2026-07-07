@@ -2,14 +2,14 @@ import type { NextFunction, Request, Response } from "express";
 import type { AuthRequest } from "@/core/middleware/auth.mid";
 
 import type { PaymentRepository } from "@/app/admin-desk/payments/domain/repositories/payment.repository";
-import { CreatePaymentPlanUseCase } from "@/app/admin-desk/payments/application/use-cases/createPayment.use-case";
-import { GetStudentPaymentPlansUseCase } from "@/app/admin-desk/payments/application/use-cases/getStudentPaymentPlans.use-case";
-import { ProcessQuotaPaymentUseCase } from "@/app/admin-desk/payments/application/use-cases/processQuotaPayment.use-case";
-import { RevertQuotaPaymentUseCase } from "@/app/admin-desk/payments/application/use-cases/revertQuotaPayment.use-case";
+import { CreatePaymentPlanUseCase } from "@/app/admin-desk/payments/application/use-cases/create-payment.use-case";
+import { GetStudentPaymentPlansUseCase } from "@/app/admin-desk/payments/application/use-cases/get-student-payment-plans.use-case";
+import { ProcessQuotaPaymentUseCase } from "@/app/admin-desk/payments/application/use-cases/process-quota-payment.use-case";
+import { RevertQuotaPaymentUseCase } from "@/app/admin-desk/payments/application/use-cases/revert-quota-payment.use-case";
 import { CreatePaymentPlanDto } from "@/app/admin-desk/payments/domain/dtos";
 import { PayQuotaDto } from "@/app/admin-desk/payments/domain/dtos";
-import { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/PaymentPlanEntity";
-import { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/PaymentQuotaEntity";
+import { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/payment-plan.entity";
+import { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/payment-quota.entity";
 import { CustomError } from "@/core/error";
 import { SuccessResponse } from "@/core/utils";
 

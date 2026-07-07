@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 
 import { SuccessResponse } from "@/core/utils";
-import { GetDashboardSummaryUseCase } from "@/app/class-track/feats/dashboard/application/use-cases/getDashboardSummary.use-case";
+import { GetDashboardSummaryUseCase } from "@/app/class-track/feats/dashboard/application/use-cases/get-dashboard-summary.use-case";
 import type { AttendanceSessionRepository } from "@/app/class-track/feats/attendance/domain/repositories/attendanceSession.repository";
 
 import type { DashboardSummaryProjection } from "@/app/class-track/feats/dashboard/domain/projections/Dashboard.projection";

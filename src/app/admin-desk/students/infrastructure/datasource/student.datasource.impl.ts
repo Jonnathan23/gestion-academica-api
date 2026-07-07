@@ -8,12 +8,12 @@ import type {
     SearchStudentsByCriteriaDto,
     StudentEntity,
 } from "@/app/admin-desk/students/domain";
-import { studentContractStatus, studentProgressCategory } from "@/core/interfaces/Students.interface";
+import { studentContractStatus, studentProgressCategory } from "@/core/interfaces/students.interface";
 import { StudentMapper } from "@/app/admin-desk/students/infrastructure/mappers/student.mapper";
 import { Student } from "@/data/models/admin-desk";
 import { CustomError } from "@/core/error";
 import { Validators } from "@/core/utils";
-import type { PaginatedResult } from "@/core/interfaces/PaginatedResult.interface";
+import type { PaginatedResult } from "@/core/interfaces/paginated-result.interface";
 
 export class StudentDataSourceImpl implements StudentDataSource {
     public async register(dto: RegisterStudentDto): Promise<StudentEntity> {

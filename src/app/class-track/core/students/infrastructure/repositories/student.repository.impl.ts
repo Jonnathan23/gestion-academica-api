@@ -1,5 +1,5 @@
 import type { StudentClassTrackDataSource } from "@/app/class-track/core/students/domain/datasources/student.datasource";
-import type { SearchStudentsDto } from "@/app/class-track/core/students/domain/dtos/SearchStudentDto.dto";
+import type { SearchStudentsDto } from "@/app/class-track/core/students/domain/dtos/search-student-dto.dto";
 import type { StudentClassTrackProjection } from "@/app/class-track/core/students/domain/projections/StudentClassTrack.projection";
 import type { StudentWithLevelActive } from "@/app/class-track/core/students/domain/projections/StudentWithLevelActive.projection";
 import type { StudentWithLevelActiveDetails } from "@/app/class-track/core/students/domain/projections/StudentWithLevelActiveDetails.projection";

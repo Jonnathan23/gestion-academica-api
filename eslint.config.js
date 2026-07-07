@@ -177,7 +177,7 @@ const eslintConfiguration = [
 
     // 5. Reglas estrictas exclusivas para diccionarios de constantes (Permisos)
     {
-        files: ["**/Permissions.ts", "**/*.permissions.ts"],
+        files: ["**/permissions.ts", "**/*.permissions.ts"],
         rules: {
             "@typescript-eslint/naming-convention": [
                 "error",

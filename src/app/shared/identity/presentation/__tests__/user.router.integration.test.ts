@@ -2,9 +2,9 @@ import { describe, test, expect, beforeAll, afterAll } from "bun:test";
 import request from "supertest";
 import express from "express";
 
-import { UserRouter } from "@/app/shared/identity/presentation/router";
+import { UserRouter } from "@/app/shared/identity/presentation/identity.router";
 import { environmentVariables } from "@/core/config/envs";
-import { DatabaseConnection } from "@/data/config/dbPostgresql";
+import { DatabaseConnection } from "@/data/config/db-postgresql";
 import { testGlobalErrorHandler } from "@/__test__/configTest";
 import { User } from "@/data/models/shared";
 import { JwtAdapter, BcryptAdapter } from "@/core/utils";

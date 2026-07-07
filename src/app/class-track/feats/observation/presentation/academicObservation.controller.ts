@@ -1,9 +1,9 @@
 import type { Request, Response, NextFunction } from "express";
 import type { AcademicObservationRepository } from "@/app/class-track/feats/observation/domain/repositories/academicObservation.repository";
-import { CreateAcademicObservationUseCase } from "@/app/class-track/feats/observation/application/use-cases/createAcademicObservation.use-case";
-import { CreateAcademicObservationDto } from "@/app/class-track/feats/observation/domain/dtos/CreateAcademicObservation.dto";
+import { CreateAcademicObservationUseCase } from "@/app/class-track/feats/observation/application/use-cases/create-academic-observation.use-case";
+import { CreateAcademicObservationDto } from "@/app/class-track/feats/observation/domain/dtos/create-academic-observation.dto";
 import { CustomError } from "@/core/error/customError.error";
-import { SuccessResponse } from "@/core/utils/SuccesResponse";
+import { SuccessResponse } from "@/core/utils/success-response";
 
 export class AcademicObservationController {
     public constructor(private readonly academicObservationRepository: AcademicObservationRepository) {}

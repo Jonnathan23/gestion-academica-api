@@ -1,5 +1,5 @@
-import type { CreateAcademicObservationDto } from "@/app/class-track/feats/observation/domain/dtos/CreateAcademicObservation.dto";
-import type { AcademicObservationEntity } from "@/app/class-track/feats/observation/domain/entities/AcademicObservation.entity";
+import type { CreateAcademicObservationDto } from "@/app/class-track/feats/observation/domain/dtos/create-academic-observation.dto";
+import type { AcademicObservationEntity } from "@/app/class-track/feats/observation/domain/entities/academic-observation.entity";
 
 export abstract class AcademicObservationDatasource {
     public abstract createObservation(dto: CreateAcademicObservationDto): Promise<AcademicObservationEntity>;

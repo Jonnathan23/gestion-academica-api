@@ -1,7 +1,7 @@
 import type { StudentLevelDataSource } from "@/app/admin-desk/student-level/domain/datasource/studentLevel.datasource";
 import type { UpdateStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos";
 import { StudentLevelMapper } from "@/app/admin-desk/student-level/infrastructure/mappers/contract.mapper";
-import type { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/StudentLevel.entity";
+import type { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/student-level.entity";
 import type { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
 import { ModuleMapper } from "@/app/admin-desk/modules/infrastructure/mappers/module.mapper";
 
@@ -9,7 +9,7 @@ import { StudentModule, Module, Student } from "@/data/models/admin-desk";
 import { User } from "@/data/models/shared";
 import { CustomError } from "@/core/error";
 import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-level/domain/projections/ContractDetails.projection";
-import { studentModuleStatus } from "@/core/interfaces/Contracts.interface";
+import { studentModuleStatus } from "@/core/interfaces/contracts.interface";
 
 export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
     //* Public methods

@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { AttendanceSessionDatasourceImpl } from "@/app/class-track/feats/attendance/infrastructure/datasource/attendanceSession.datasource.impl";
-import { AttendanceSessionRepositoryImpl } from "@/app/class-track/feats/attendance/infrastructure/repositories/attendanceSession.repository.impl";
+import { AttendanceSessionRepositoryImpl } from "@/app/class-track/feats/attendance/infrastructure/repositories/attendance-session.repository.impl";
 
-import { AttendanceSessionController } from "@/app/class-track/feats/attendance/presentation/controllers/attendanceSession.controller";
+import { AttendanceSessionController } from "@/app/class-track/feats/attendance/presentation/controllers/attendance-session.controller";
 import { RoleMiddleware, AuthMiddleware } from "@/core/middleware";
 import { systemPermissions } from "@/core/constants";
 import { StudentClassTrackDataSourceImpl } from "@/app/class-track/core/students/infrastructure/datasources/student.datasource.impl";

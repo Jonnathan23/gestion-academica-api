@@ -1,2 +1,2 @@
-export * from "@/app/admin-desk/payments/domain/dtos/CreatePaymentPlan.dto";
-export * from "@/app/admin-desk/payments/domain/dtos/PayQuota.dto";
+export * from "@/app/admin-desk/payments/domain/dtos/create-payment-plan.dto";
+export * from "@/app/admin-desk/payments/domain/dtos/pay-quota.dto";

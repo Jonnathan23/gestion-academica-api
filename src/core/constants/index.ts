@@ -1,1 +1,1 @@
-export * from "@/core/constants/Permissions";
+export * from "@/core/constants/permissions";

@@ -2,13 +2,13 @@ import { Transaction } from "sequelize";
 
 import type { PaymentDataSource } from "@/app/admin-desk/payments/domain/datasource";
 import type { CreatePaymentPlanDto, PayQuotaDto } from "@/app/admin-desk/payments/domain/dtos";
-import type { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/PaymentPlanEntity";
-import type { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/PaymentQuotaEntity";
+import type { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/payment-plan.entity";
+import type { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/payment-quota.entity";
 import { paymentPlanStatus, paymentQuotaStatus, type PaymentQuotaStatus } from "@/app/admin-desk/payments/domain/interfaces";
 import { PaymentMapper } from "@/app/admin-desk/payments/infrastructure/mappers/payment.mapper";
 import { CustomError } from "@/core/error";
-import PaymentPlanModel from "@/data/models/admin-desk/PaymentPlan.model";
-import PaymentQuotaModel from "@/data/models/admin-desk/PaymentQuota.model";
+import PaymentPlanModel from "@/data/models/admin-desk/payment-plan.model";
+import PaymentQuotaModel from "@/data/models/admin-desk/payment-quota.model";
 
 export class PaymentDataSourceImpl implements PaymentDataSource {
     public constructor() {}

@@ -3,11 +3,11 @@ import { AuthMiddleware, RoleMiddleware } from "@/core/middleware";
 import { systemPermissions } from "@/core/constants";
 import { DashboardController } from "@/app/class-track/feats/dashboard/presentation/controllers/dashboard.controller";
 import { AttendanceSessionDatasourceImpl } from "@/app/class-track/feats/attendance/infrastructure/datasource/attendanceSession.datasource.impl";
-import { AttendanceSessionRepositoryImpl } from "@/app/class-track/feats/attendance/infrastructure/repositories/attendanceSession.repository.impl";
+import { AttendanceSessionRepositoryImpl } from "@/app/class-track/feats/attendance/infrastructure/repositories/attendance-session.repository.impl";
 import { StudentClassTrackDataSourceImpl } from "@/app/class-track/core/students/infrastructure/datasources/student.datasource.impl";
 import { StudentClassTrackRepositoryImpl } from "@/app/class-track/core/students/infrastructure/repositories/student.repository.impl";
 import { RetentionAlertDatasourceImpl } from "@/app/class-track/feats/retention-alerts/infrastructure/datasource/retentionAlert.datasource.impl";
-import { RetentionAlertRepositoryImpl } from "@/app/class-track/feats/retention-alerts/infrastructure/repositories/retentionAlert.repository.impl";
+import { RetentionAlertRepositoryImpl } from "@/app/class-track/feats/retention-alerts/infrastructure/repositories/retention-alert.repository.impl";
 
 export class DashboardRouter {
     public static get routes(): Router {

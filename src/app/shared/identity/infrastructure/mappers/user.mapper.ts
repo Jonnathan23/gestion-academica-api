@@ -1,4 +1,4 @@
-import { UserEntity } from "@/app/shared/identity/domain/entities/User.entity";
+import { UserEntity } from "@/app/shared/identity/domain/entities/user.entity";
 import { CustomError } from "@/core/error";
 
 export const UserMapper = {

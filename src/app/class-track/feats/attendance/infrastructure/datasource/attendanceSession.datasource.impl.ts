@@ -1,20 +1,20 @@
 import { Op } from "sequelize";
-import AttendanceSession, { type AttendanceSessionStatus } from "@/data/models/class-track/AttendanceSession.model";
+import AttendanceSession, { type AttendanceSessionStatus } from "@/data/models/class-track/attendance-session.model";
 import { CustomError } from "@/core/error/customError.error";
 import { AttendanceSessionDatasource } from "@/app/class-track/feats/attendance/domain/datasource/attendanceSession.datasource";
-import type { StartAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/StartAttendanceSession.dto";
-import type { EndAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/EndAttendanceSession.dto";
-import type { ApproveAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/ApproveAttendanceSession.dto";
-import type { AttendanceSessionEntity } from "@/app/class-track/feats/attendance/domain/entities/AttendanceSession.entity";
+import type { StartAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/start-attendance-session.dto";
+import type { EndAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/end-attendance-session.dto";
+import type { ApproveAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/approve-attendance-session.dto";
+import type { AttendanceSessionEntity } from "@/app/class-track/feats/attendance/domain/entities/attendance-session.entity";
 import type { AbsentStudentProjection } from "@/app/class-track/feats/attendance/domain/projections/AbsentStudent.projection";
-import { AbsentStudentMapper } from "@/app/class-track/feats/attendance/infrastructure/mappers/absentStudent.mapper";
+import { AbsentStudentMapper } from "@/app/class-track/feats/attendance/infrastructure/mappers/absent-student.mapper";
 import { StudentInClassProjection } from "@/app/class-track/core/students/domain/projections/StudentInClass.projection";
-import { StudentInClassMapper } from "@/app/class-track/core/students/infrastructure/mappers/studentInClass.mapper";
-import { attendanceSessionStatus } from "@/app/class-track/feats/attendance/domain/interfaces/Attendance.interface";
-import Student from "@/data/models/admin-desk/Student.model";
-import { AttendanceSessionMapper } from "@/app/class-track/feats/attendance/infrastructure/mappers/attendanceSession.mapper";
-import StudentModule from "@/data/models/admin-desk/StudentModule.model";
-import { studentModuleStatus } from "@/core/interfaces/Contracts.interface";
+import { StudentInClassMapper } from "@/app/class-track/core/students/infrastructure/mappers/student-in-class.mapper";
+import { attendanceSessionStatus } from "@/app/class-track/feats/attendance/domain/interfaces/attendance.interface";
+import Student from "@/data/models/admin-desk/student.model";
+import { AttendanceSessionMapper } from "@/app/class-track/feats/attendance/infrastructure/mappers/attendance-session.mapper";
+import StudentModule from "@/data/models/admin-desk/student-module.model";
+import { studentModuleStatus } from "@/core/interfaces/contracts.interface";
 
 interface AbsentStudentQueryRow {
     at_se_student_id: string;

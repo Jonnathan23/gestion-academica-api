@@ -4,14 +4,14 @@ import express from "express";
 
 import { LessonLogRoutes } from "@/app/class-track/feats/lesson-logs/presentation/lessonLog.routes";
 import { environmentVariables } from "@/core/config/envs";
-import { DatabaseConnection } from "@/data/config/dbPostgresql";
+import { DatabaseConnection } from "@/data/config/db-postgresql";
 import { testGlobalErrorHandler } from "@/__test__/configTest";
 import { User } from "@/data/models/shared";
 import { Student, Module, StudentModule } from "@/data/models/admin-desk";
-import AttendanceSession from "@/data/models/class-track/AttendanceSession.model";
-import { certificateType, studentContractStatus, studentProgressCategory } from "@/data/models/admin-desk/Student.model";
-import { studentModuleStatus } from "@/core/interfaces/Contracts.interface";
-import { attendanceSessionStatus } from "@/app/class-track/feats/attendance/domain/interfaces/Attendance.interface";
+import AttendanceSession from "@/data/models/class-track/attendance-session.model";
+import { certificateType, studentContractStatus, studentProgressCategory } from "@/data/models/admin-desk/student.model";
+import { studentModuleStatus } from "@/core/interfaces/contracts.interface";
+import { attendanceSessionStatus } from "@/app/class-track/feats/attendance/domain/interfaces/attendance.interface";
 
 // ------------------------------------------------------------------ //
 // Micro-application: only the Lesson Log router

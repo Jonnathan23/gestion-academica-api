@@ -1,7 +1,7 @@
 import type { PaymentDataSource } from "@/app/admin-desk/payments/domain/datasource";
 import type { CreatePaymentPlanDto, PayQuotaDto } from "@/app/admin-desk/payments/domain/dtos";
-import type { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/PaymentPlanEntity";
-import type { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/PaymentQuotaEntity";
+import type { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/payment-plan.entity";
+import type { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/payment-quota.entity";
 import type { PaymentRepository } from "@/app/admin-desk/payments/domain/repositories/payment.repository";
 
 export class PaymentRepositoryImpl implements PaymentRepository {

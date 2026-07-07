@@ -7,7 +7,7 @@ import type {
     StudentEntity,
 } from "@/app/admin-desk/students/domain";
 import type { StudentRepository } from "@/app/admin-desk/students/domain/repositories/student.repository";
-import type { PaginatedResult } from "@/core/interfaces/PaginatedResult.interface";
+import type { PaginatedResult } from "@/core/interfaces/paginated-result.interface";
 
 export class StudentRepositoryImpl implements StudentRepository {
     public constructor(private readonly datasource: StudentDataSource) {}

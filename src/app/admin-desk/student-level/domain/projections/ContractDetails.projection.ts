@@ -1,4 +1,4 @@
-import type { StudentModuleStatus } from "@/core/interfaces/Contracts.interface";
+import type { StudentModuleStatus } from "@/core/interfaces/contracts.interface";
 import type { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
 import type { StudentEntity } from "@/app/admin-desk/students/domain";
 import type { UserEntity } from "@/app/shared/identity/domain/entities";
