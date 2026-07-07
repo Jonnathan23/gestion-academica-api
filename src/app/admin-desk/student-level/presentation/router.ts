@@ -14,7 +14,7 @@ export class ContractsRouter {
 
         const levelProgressionDomainService = new LevelProgressionDomainServiceImpl();
 
-        const studentLevelDataSource = new StudentLevelDataSourceImpl(levelProgressionDomainService);
+        const studentLevelDataSource = new StudentLevelDataSourceImpl();
         const studentLevelRepository = new StudentLevelRepositoryImpl(studentLevelDataSource);
         const contractController = new ContractController(studentLevelRepository, levelProgressionDomainService);
 
