@@ -3,6 +3,9 @@ import type { Optional } from "sequelize";
 
 import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from "sequelize-typescript";
 
+const MAX_DECIMAL_PAYMENT: number = 10;
+const PRECISION_DECIMAL_PAYMENT: number = 2;
+
 export const paymentQuotaStatus = {
     Pending: "PENDING",
     Partial: "PARTIAL",
@@ -55,70 +58,70 @@ class PaymentQuota extends Model<PaymentQuotaAttributes, PaymentQuotaCreationAtt
         unique: true,
         defaultValue: DataType.UUIDV4,
     })
-    declare pq_id: string;
+    declare public pq_id: string;
 
     @ForeignKey(() => PaymentPlan)
     @Column({
         type: DataType.UUID,
         allowNull: false,
     })
-    declare pq_payment_plan_id: string;
+    declare public pq_payment_plan_id: string;
 
     @Column({
         type: DataType.INTEGER,
         allowNull: false,
     })
-    declare pq_quota_number: number;
+    declare public pq_quota_number: number;
 
     @Column({
         type: DataType.ENUM(...Object.values(paymentMethod)),
         allowNull: true, // Es nulo hasta que el estudiante realice el pago
     })
-    declare pq_payment_method: PaymentMethod;
+    declare public pq_payment_method: PaymentMethod;
 
     @Column({
-        type: DataType.DECIMAL(10, 2),
+        type: DataType.DECIMAL(MAX_DECIMAL_PAYMENT, PRECISION_DECIMAL_PAYMENT),
         allowNull: false,
     })
-    declare pq_base_amount: number;
+    declare public pq_base_amount: number;
 
     @Column({
-        type: DataType.DECIMAL(10, 2),
-        allowNull: false,
-        defaultValue: 0.0,
-    })
-    declare pq_rollover_debt: number;
-
-    @Column({
-        type: DataType.DECIMAL(10, 2),
-        allowNull: false,
-    })
-    declare pq_total_expected: number;
-
-    @Column({
-        type: DataType.DECIMAL(10, 2),
+        type: DataType.DECIMAL(MAX_DECIMAL_PAYMENT, PRECISION_DECIMAL_PAYMENT),
         allowNull: false,
         defaultValue: 0.0,
     })
-    declare pq_amount_paid: number;
+    declare public pq_rollover_debt: number;
+
+    @Column({
+        type: DataType.DECIMAL(MAX_DECIMAL_PAYMENT, PRECISION_DECIMAL_PAYMENT),
+        allowNull: false,
+    })
+    declare public pq_total_expected: number;
+
+    @Column({
+        type: DataType.DECIMAL(MAX_DECIMAL_PAYMENT, PRECISION_DECIMAL_PAYMENT),
+        allowNull: false,
+        defaultValue: 0.0,
+    })
+    declare public pq_amount_paid: number;
 
     @Column({
         type: DataType.DATEONLY, // DATEONLY para evitar problemas de horas con los vencimientos
         allowNull: false,
     })
-    declare pq_due_date: Date;
+    declare public pq_due_date: Date;
 
     @Column({
         type: DataType.ENUM(...Object.values(paymentQuotaStatus)),
         allowNull: false,
         defaultValue: paymentQuotaStatus.Pending,
     })
-    declare pq_status: PaymentQuotaStatus;
+    declare public pq_status: PaymentQuotaStatus;
 
     //* Relaciones
 
     @BelongsTo(() => PaymentPlan, "pq_payment_plan_id")
-    declare payment_plan: PaymentPlan;
+    declare public payment_plan: PaymentPlan;
 }
 
 export default PaymentQuota;

@@ -4,7 +4,7 @@ import { type StudentContractStatus, type StudentProgressCategory } from "@/core
 import { CustomError } from "@/core/error";
 
 export class StudentMapper {
-    static studentModelToEntity(object: { [key: string]: any }): StudentEntity {
+    public static studentModelToEntity(object: { [key: string]: any }): StudentEntity {
         const {
             st_id,
             st_identification_card,

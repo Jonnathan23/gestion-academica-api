@@ -3,6 +3,6 @@ import type { LessonLogEntity } from "@/app/class-track/feats/lesson-logs/domain
 import type { GetLastLessonLogDto } from "@/app/class-track/feats/lesson-logs/domain/dtos/GetLastLessonLog.dto";
 
 export abstract class LessonLogRepository {
-    abstract createLessonLogs(dto: CreateLessonLogsDto): Promise<LessonLogEntity[]>;
-    abstract getLastLessonLog(dto: GetLastLessonLogDto): Promise<LessonLogEntity | null>;
+    public abstract createLessonLogs(dto: CreateLessonLogsDto): Promise<LessonLogEntity[]>;
+    public abstract getLastLessonLog(dto: GetLastLessonLogDto): Promise<LessonLogEntity | null>;
 }

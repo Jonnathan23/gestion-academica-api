@@ -9,7 +9,7 @@ import type { StudentClassTrackRepository } from "@/app/class-track/core/student
 import type { RetentionAlertRepository } from "@/app/class-track/feats/retention-alerts/domain/repositories/retentionAlert.repository";
 
 export class DashboardController {
-    constructor(
+    public constructor(
         private readonly attendanceRepository: AttendanceSessionRepository,
         private readonly retentionAlertRepository: RetentionAlertRepository,
         private readonly studentRepository: StudentClassTrackRepository,
@@ -26,6 +26,7 @@ export class DashboardController {
             .execute()
             .then((summary) => {
                 const successMessage = "Dashboard summary retrieved successfully";
+
                 SuccessResponse.ok<DashboardSummaryProjection>(res, successMessage, summary);
             })
             .catch((error) => {

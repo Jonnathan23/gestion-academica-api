@@ -3,7 +3,7 @@ import type { StudentInClassProjection } from "@/app/class-track/core/students/d
 import type { AttendanceSessionRepository } from "@/app/class-track/feats/attendance/domain/repositories/attendanceSession.repository";
 
 export class GetActiveSessionsUseCase {
-    constructor(private readonly attendanceSessionRepository: AttendanceSessionRepository) {}
+    public constructor(private readonly attendanceSessionRepository: AttendanceSessionRepository) {}
 
     public async executeInProgress(): Promise<StudentInClassProjection[]> {
         return this.attendanceSessionRepository.getActiveSessionsWithStudentDetails(attendanceSessionStatus.InProgress);

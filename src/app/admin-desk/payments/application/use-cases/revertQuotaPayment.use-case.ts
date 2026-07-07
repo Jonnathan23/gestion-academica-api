@@ -5,9 +5,9 @@ interface RevertQuotaPaymentUseCaseProps {
 }
 
 export class RevertQuotaPaymentUseCase implements RevertQuotaPaymentUseCaseProps {
-    constructor(private readonly paymentRepository: PaymentRepository) {}
+    public constructor(private readonly paymentRepository: PaymentRepository) {}
 
-    async execute(quotaId: string): Promise<boolean> {
+    public async execute(quotaId: string): Promise<boolean> {
         return await this.paymentRepository.revertQuotaPayment(quotaId);
     }
 }

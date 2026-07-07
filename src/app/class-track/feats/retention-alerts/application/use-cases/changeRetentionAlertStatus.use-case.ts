@@ -3,7 +3,7 @@ import { ChangeRetentionAlertStatusDto } from "@/app/class-track/feats/retention
 import { RetentionAlertEntity } from "@/app/class-track/feats/retention-alerts/domain/entities/RetentionAlert.entity";
 
 export class ChangeRetentionAlertStatusUseCase {
-    constructor(private readonly repository: RetentionAlertRepository) {}
+    public constructor(private readonly repository: RetentionAlertRepository) {}
 
     public execute(id: string, dto: ChangeRetentionAlertStatusDto): Promise<RetentionAlertEntity> {
         return this.repository.changeAlertStatus(id, dto.status);

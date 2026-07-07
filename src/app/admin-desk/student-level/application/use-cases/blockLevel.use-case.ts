@@ -7,9 +7,9 @@ export interface BlockLevelUseCase {
 }
 
 export class BlockLevel implements BlockLevelUseCase {
-    constructor(private readonly repository: StudentLevelRepository) {}
+    public constructor(private readonly repository: StudentLevelRepository) {}
 
-    execute(dto: UpdateStudentLevelDto): Promise<StudentLevelEntity> {
+    public execute(dto: UpdateStudentLevelDto): Promise<StudentLevelEntity> {
         return this.repository.blockLevel(dto);
     }
 }

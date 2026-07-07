@@ -40,51 +40,51 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
         unique: true,
         defaultValue: DataType.UUIDV4,
     })
-    declare us_id: string;
+    declare public us_id: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
         unique: true,
     })
-    declare us_full_name: string;
+    declare public us_full_name: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
         unique: true,
     })
-    declare us_email: string;
+    declare public us_email: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
     })
-    declare us_password_hash: string;
+    declare public us_password_hash: string;
 
     @Column({
         type: DataType.ENUM(...Object.values(userRoles)),
         allowNull: false,
     })
-    declare us_role: UserRoles;
+    declare public us_role: UserRoles;
 
     @Column({
         type: DataType.BOOLEAN,
         allowNull: false,
         defaultValue: true,
     })
-    declare us_is_active: boolean;
+    declare public us_is_active: boolean;
 
     //* Relaciones (Has Many)
 
     @HasMany(() => StudentModule, "st_mod_seller_id")
-    declare sold_modules: StudentModule[];
+    declare public sold_modules: StudentModule[];
 
     @HasMany(() => AttendanceSession, "at_se_teacher_id")
-    declare overseen_sessions: AttendanceSession[];
+    declare public overseen_sessions: AttendanceSession[];
 
     @HasMany(() => RetentionAlert, "re_al_user_id")
-    declare retention_alerts: RetentionAlert[];
+    declare public retention_alerts: RetentionAlert[];
 
     /* * Preparación para el nuevo módulo de facturación.
      * Un usuario (Asesor/Admin) puede generar múltiples planes de pago.

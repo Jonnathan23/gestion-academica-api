@@ -5,9 +5,9 @@ interface ChangeStateActiveUseCase {
 }
 
 export class ChangeStateActive implements ChangeStateActiveUseCase {
-    constructor(private readonly userRepository: UserRepository) {}
+    public constructor(private readonly userRepository: UserRepository) {}
 
-    async execute(id: string): Promise<void> {
+    public async execute(id: string): Promise<void> {
         await this.userRepository.changeStateActive(id);
     }
 }

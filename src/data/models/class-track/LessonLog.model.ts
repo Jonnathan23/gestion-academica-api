@@ -18,6 +18,9 @@ interface LessonLogCreationAttributes extends Optional<
     "le_lo_id" | "le_lo_oral_practice_score" | "le_lo_is_completed" | "le_lo_created_at" | "le_lo_updated_at"
 > {}
 
+const MAX_DECIMAL_ORAL_PRACTICE: number = 5;
+const PRECISION_DECIMAL_ORAL_PRACTICE: number = 2;
+
 @Table({
     tableName: "LessonLogs",
     timestamps: true,
@@ -32,17 +35,17 @@ class LessonLog extends Model<LessonLogAttributes, LessonLogCreationAttributes> 
         unique: true,
         defaultValue: DataType.UUIDV4,
     })
-    declare le_lo_id: string;
+    declare public le_lo_id: string;
 
     @ForeignKey(() => AttendanceSession)
     @Column({
         type: DataType.UUID,
         allowNull: false,
     })
-    declare le_lo_attendance_session_id: string;
+    declare public le_lo_attendance_session_id: string;
 
     @BelongsTo(() => AttendanceSession)
-    declare attendance_session: AttendanceSession;
+    declare public attendance_session: AttendanceSession;
 
     /**
      * Número de la lección impartida.
@@ -52,7 +55,7 @@ class LessonLog extends Model<LessonLogAttributes, LessonLogCreationAttributes> 
         type: DataType.INTEGER,
         allowNull: false,
     })
-    declare le_lo_lesson_number: number;
+    declare public le_lo_lesson_number: number;
 
     /**
      * Puntuación del oral practice.
@@ -60,10 +63,10 @@ class LessonLog extends Model<LessonLogAttributes, LessonLogCreationAttributes> 
      * Es nulo si la lección aún no se ha evaluado.
      */
     @Column({
-        type: DataType.DECIMAL(5, 2),
+        type: DataType.DECIMAL(MAX_DECIMAL_ORAL_PRACTICE, PRECISION_DECIMAL_ORAL_PRACTICE),
         allowNull: true,
     })
-    declare le_lo_oral_practice_score: number;
+    declare public le_lo_oral_practice_score: number;
 
     /**
      * Bandera para identificar rápidamente si la lección fue superada.
@@ -73,7 +76,7 @@ class LessonLog extends Model<LessonLogAttributes, LessonLogCreationAttributes> 
         allowNull: false,
         defaultValue: false,
     })
-    declare le_lo_is_completed: boolean;
+    declare public le_lo_is_completed: boolean;
 }
 
 export default LessonLog;

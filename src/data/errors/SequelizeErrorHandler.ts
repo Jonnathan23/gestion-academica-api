@@ -23,6 +23,7 @@ export class SequelizeErrorHandler implements DatabaseErrorHandler {
         if (error instanceof ForeignKeyConstraintError) {
             console.warn("⚠️ [Missing Validation]: Foreign key constraint violation caught by Database.");
             console.error("Error details:", error);
+
             return {
                 statusCode: 409,
                 errors: [
@@ -37,6 +38,7 @@ export class SequelizeErrorHandler implements DatabaseErrorHandler {
         if (error instanceof ValidationError) {
             console.warn("⚠️ [Missing Validation]: Null or type validation caught by Database.");
             console.error("Error details:", error);
+
             return {
                 statusCode: 400,
                 errors: [

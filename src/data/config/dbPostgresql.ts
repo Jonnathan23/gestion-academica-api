@@ -18,7 +18,7 @@ export class DatabaseConnection {
     private readonly sequelizeInstance: Sequelize;
     private readonly forceSynchronization: boolean;
 
-    constructor(options: DatabaseConnectionOptions) {
+    public constructor(options: DatabaseConnectionOptions) {
         const { databaseUrl, enableLogging = false, forceSynchronization = false } = options;
 
         this.sequelizeInstance = new Sequelize(databaseUrl, {
@@ -29,7 +29,7 @@ export class DatabaseConnection {
         this.forceSynchronization = forceSynchronization;
     }
 
-    async connect(): Promise<void> {
+    public async connect(): Promise<void> {
         console.info(ColorsAdapter.setYellow("Connecting to the database...\n"));
         try {
             await this.sequelizeInstance.authenticate();
@@ -43,11 +43,11 @@ export class DatabaseConnection {
         }
     }
 
-    async disconnect(): Promise<void> {
+    public async disconnect(): Promise<void> {
         await this.sequelizeInstance.close();
     }
 
-    getConnection(): Sequelize {
+    public getConnection(): Sequelize {
         return this.sequelizeInstance;
     }
 }

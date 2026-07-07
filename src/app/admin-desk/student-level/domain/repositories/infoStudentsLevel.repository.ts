@@ -4,6 +4,6 @@ import type { SearchStudentsLevelsDto } from "@/app/admin-desk/student-level/dom
 import type { GetStudentTimelineDto } from "@/app/admin-desk/student-level/domain/dtos/GetStudentTimeline.dto";
 
 export abstract class InfoStudentsLevelRepository {
-    abstract searchStudents(dto: SearchStudentsLevelsDto): Promise<StudentSearchProjection[]>;
-    abstract getStudentTimeline(dto: GetStudentTimelineDto): Promise<StudentTimelineProjection>;
+    public abstract searchStudents(dto: SearchStudentsLevelsDto): Promise<StudentSearchProjection[]>;
+    public abstract getStudentTimeline(dto: GetStudentTimelineDto): Promise<StudentTimelineProjection>;
 }

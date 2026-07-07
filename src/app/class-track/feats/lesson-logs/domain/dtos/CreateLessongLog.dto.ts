@@ -58,6 +58,7 @@ export class CreateLessonLogsDto {
 
         for (const lesson of lessonsStudied) {
             const [error, lessonDto] = LessonItemDto.create(lesson as Record<string, unknown>);
+
             if (error || !lessonDto) {
                 return [error, undefined];
             }
@@ -71,6 +72,7 @@ export class CreateLessonLogsDto {
         if (validLessons.length > 1) {
             for (let i = 0; i < validLessons.length - 1; i++) {
                 const prevLesson = validLessons[i]!;
+
                 if (!prevLesson.isCompleted) {
                     return [`Lesson ${prevLesson.lessonNumber} must be completed first`, undefined];
                 }
@@ -78,6 +80,7 @@ export class CreateLessonLogsDto {
         }
 
         const lastLesson = validLessons[validLessons.length - 1]!;
+
         if (!lastLesson.isCompleted && lastLesson.oralPracticeScore !== null) {
             return ["Incomplete lessons cannot have a score", undefined];
         }

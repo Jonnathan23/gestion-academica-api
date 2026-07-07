@@ -3,7 +3,7 @@ import type { GetStudentTimelineDto } from "@/app/admin-desk/student-level/domai
 import type { StudentTimelineProjection } from "@/app/admin-desk/student-level/domain/projections/StudentTimeline.projection";
 
 export class GetStudentTimelineUseCase {
-    constructor(private readonly repository: InfoStudentsLevelRepository) {}
+    public constructor(private readonly repository: InfoStudentsLevelRepository) {}
 
     public async execute(dto: GetStudentTimelineDto): Promise<StudentTimelineProjection> {
         return this.repository.getStudentTimeline(dto);

@@ -3,7 +3,7 @@ import type { UpdateRetentionAlertDto } from "@/app/class-track/feats/retention-
 import type { RetentionAlertEntity } from "@/app/class-track/feats/retention-alerts/domain/entities/RetentionAlert.entity";
 
 export class UpdateRetentionAlertUseCase {
-    constructor(private readonly repository: RetentionAlertRepository) {}
+    public constructor(private readonly repository: RetentionAlertRepository) {}
 
     public async execute(id: string, dto: UpdateRetentionAlertDto): Promise<RetentionAlertEntity> {
         return this.repository.updateAlertInfo(id, dto);

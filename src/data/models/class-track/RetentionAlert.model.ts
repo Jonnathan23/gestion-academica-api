@@ -58,85 +58,85 @@ class RetentionAlert extends Model<RetentionAlertAttributes, RetentionAlertCreat
         unique: true,
         defaultValue: DataType.UUIDV4,
     })
-    declare re_al_id: string;
+    declare public re_al_id: string;
 
     @ForeignKey(() => Student)
     @Column({
         type: DataType.UUID,
         allowNull: false,
     })
-    declare re_al_student_id: string;
+    declare public re_al_student_id: string;
 
     @BelongsTo(() => Student)
-    declare student: Student;
+    declare public student: Student;
 
     @ForeignKey(() => User)
     @Column({
         type: DataType.UUID,
         allowNull: true,
     })
-    declare re_al_user_id: string;
+    declare public re_al_user_id: string;
 
     @BelongsTo(() => User)
-    declare user: User;
+    declare public user: User;
 
     @Column({
         type: DataType.DATEONLY,
         allowNull: false,
     })
-    declare re_al_contact_date: Date;
+    declare public re_al_contact_date: Date;
 
     @Column({
         type: DataType.BOOLEAN,
         allowNull: false,
         defaultValue: false,
     })
-    declare re_al_has_responded: boolean;
+    declare public re_al_has_responded: boolean;
 
     @Column({
         type: DataType.INTEGER,
         allowNull: false,
         defaultValue: 0,
     })
-    declare re_al_days_absent: number;
+    declare public re_al_days_absent: number;
 
     @Column({
         type: DataType.BOOLEAN,
         allowNull: false,
         defaultValue: false,
     })
-    declare re_al_is_justified: boolean;
+    declare public re_al_is_justified: boolean;
 
     @Column({
         type: DataType.TEXT,
         allowNull: true,
     })
-    declare re_al_justification_reason: string;
+    declare public re_al_justification_reason: string;
 
     @Column({
         type: DataType.DATEONLY,
         allowNull: true,
     })
-    declare re_al_return_deadline: Date;
+    declare public re_al_return_deadline: Date;
 
     @Column({
         type: DataType.TEXT,
         allowNull: false,
     })
-    declare re_al_observations: string;
+    declare public re_al_observations: string;
 
     @Column({
         type: DataType.ENUM(...Object.values(retentionAlertStatus)),
         allowNull: false,
         defaultValue: retentionAlertStatus.Pending,
     })
-    declare re_al_status: RetentionAlertStatus;
+    declare public re_al_status: RetentionAlertStatus;
 
     @Column({
         type: DataType.DATEONLY,
         allowNull: true,
     })
-    declare re_al_resolution_date: Date;
+    declare public re_al_resolution_date: Date;
 }
 
 export default RetentionAlert;

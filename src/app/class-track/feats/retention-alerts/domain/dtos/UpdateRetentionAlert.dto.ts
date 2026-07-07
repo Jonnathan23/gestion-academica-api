@@ -28,6 +28,7 @@ export class UpdateRetentionAlertDto {
         }
 
         let parsedContactDate: Date | undefined = undefined;
+
         if (contactDate) {
             parsedContactDate = new Date(contactDate);
             if (isNaN(parsedContactDate.getTime())) {
@@ -36,6 +37,7 @@ export class UpdateRetentionAlertDto {
         }
 
         let parsedReturnDeadline: Date | undefined = undefined;
+
         if (returnDeadline) {
             parsedReturnDeadline = new Date(returnDeadline);
             if (isNaN(parsedReturnDeadline.getTime())) {

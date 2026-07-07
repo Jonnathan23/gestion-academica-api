@@ -1,5 +1,5 @@
 export class AcademicObservationEntity {
-    constructor(
+    public constructor(
         public readonly acObId: string,
         public readonly acObStudentId: string,
         public readonly acObTeacherId: string,

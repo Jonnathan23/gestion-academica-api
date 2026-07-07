@@ -12,7 +12,7 @@ import { ChangeRetentionAlertStatusDto } from "@/app/class-track/feats/retention
 import { ChangeRetentionAlertStatusUseCase } from "@/app/class-track/feats/retention-alerts/application/use-cases/changeRetentionAlertStatus.use-case";
 
 export class RetentionAlertController {
-    constructor(private readonly repository: RetentionAlertRepository) {}
+    public constructor(private readonly repository: RetentionAlertRepository) {}
 
     public getAlerts = (req: Request, res: Response, next: NextFunction) => {
         const [error, getRetentionAlertsDto] = GetRetentionAlertsDto.create(req.query);

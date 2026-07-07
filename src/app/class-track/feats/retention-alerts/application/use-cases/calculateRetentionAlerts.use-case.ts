@@ -4,13 +4,14 @@ import { CustomError } from "@/core/error/customError.error";
 
 export class CalculateRetentionAlertsUseCase {
     private readonly thresholdDays: number;
+    private readonly defaultDays: number = 10;
 
-    constructor(
+    public constructor(
         private readonly attendanceSessionRepository: AttendanceSessionRepository,
         private readonly retentionAlertRepository: RetentionAlertRepository,
-        thresholdDays: number = 10,
+        thresholdDays?: number,
     ) {
-        this.thresholdDays = thresholdDays;
+        this.thresholdDays = thresholdDays ?? this.defaultDays;
     }
 
     public async execute(): Promise<number> {

@@ -6,7 +6,7 @@ import type { StudentWithLevelActiveDetails } from "@/app/class-track/core/stude
 import type { StudentClassTrackRepository } from "@/app/class-track/core/students/domain/repositories/student.repository";
 
 export class StudentClassTrackRepositoryImpl implements StudentClassTrackRepository {
-    constructor(private readonly dataSource: StudentClassTrackDataSource) {}
+    public constructor(private readonly dataSource: StudentClassTrackDataSource) {}
 
     public findStudentWithLevelActiveDetails(studentId: string): Promise<StudentWithLevelActiveDetails> {
         return this.dataSource.findStudentWithLevelActiveDetails(studentId);

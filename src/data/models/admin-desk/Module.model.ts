@@ -27,30 +27,30 @@ class Module extends Model<ModuleAttributes, ModuleCreationAttributes> {
         unique: true,
         defaultValue: DataType.UUIDV4,
     })
-    declare mo_id: string;
+    declare public mo_id: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
         unique: true,
     })
-    declare mo_name: string;
+    declare public mo_name: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
     })
-    declare mo_description: string;
+    declare public mo_description: string;
 
     @Column({
         type: DataType.INTEGER,
         allowNull: false,
         unique: true,
     })
-    declare mo_level: number;
+    declare public mo_level: number;
 
     @HasMany(() => StudentModule)
-    declare student_modules: StudentModule[];
+    declare public student_modules: StudentModule[];
 }
 
 export default Module;

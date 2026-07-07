@@ -1,5 +1,5 @@
 export class PaymentQuotaEntity {
-    constructor(
+    public constructor(
         public id: string,
         public paymentPlanId: string,
         public quotaNumber: number,

@@ -8,7 +8,7 @@ import { retentionAlertStatus } from "@/app/class-track/feats/retention-alerts/d
 import { CustomError } from "@/core/error";
 
 export class GetDashboardSummaryUseCase {
-    constructor(
+    public constructor(
         private readonly attendanceRepository: AttendanceSessionRepository,
         private readonly retentionAlertRepository: RetentionAlertRepository,
         private readonly studentRepository: StudentClassTrackRepository,

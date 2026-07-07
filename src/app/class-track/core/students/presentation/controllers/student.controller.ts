@@ -9,7 +9,7 @@ import { SearchStudentsUseCase } from "@/app/class-track/core/students/applicati
 import type { StudentClassTrackProjection } from "@/app/class-track/core/students/domain/projections/StudentClassTrack.projection";
 
 export class StudentClassTrackController {
-    constructor(private readonly studentRepository: StudentClassTrackRepository) {}
+    public constructor(private readonly studentRepository: StudentClassTrackRepository) {}
 
     public searchStudents = (req: Request, res: Response, next: NextFunction) => {
         const [error, searchStudentsDto] = SearchStudentsDto.create(req.query);
@@ -22,6 +22,7 @@ export class StudentClassTrackController {
             .execute(searchStudentsDto!)
             .then((result) => {
                 const successMessage = "Students retrieved successfully";
+
                 SuccessResponse.ok<StudentClassTrackProjection[]>(res, successMessage, result);
             })
             .catch((error) => {

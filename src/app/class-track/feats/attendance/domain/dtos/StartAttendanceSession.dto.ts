@@ -14,6 +14,7 @@ export class StartAttendanceSessionDto {
         }
 
         let validEntryTime: Date;
+
         if (entryTime instanceof Date) {
             validEntryTime = entryTime;
         } else if (typeof entryTime === "string") {

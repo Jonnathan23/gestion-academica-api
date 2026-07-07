@@ -6,8 +6,9 @@ export class LoginUserDto {
         public readonly us_password_hash: string,
     ) {}
 
-    static create(object: { [key: string]: any }): [string?, LoginUserDto?] {
+    public static create(object: { [key: string]: any }): [string?, LoginUserDto?] {
         const { us_email, us_password_hash } = object;
+
         if (!us_email) return ["Missing email"];
         if (!us_password_hash) return ["Missing password"];
 

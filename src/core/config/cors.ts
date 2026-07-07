@@ -10,7 +10,7 @@ interface CorsConfigurationOptions {
 export class CorsConfig {
     public readonly corsOptions: CorsOptions;
 
-    constructor(options: CorsConfigurationOptions) {
+    public constructor(options: CorsConfigurationOptions) {
         const { frontendUrls, commandLineArgument, documentationUrl } = options;
 
         this.corsOptions = {

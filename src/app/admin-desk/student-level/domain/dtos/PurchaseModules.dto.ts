@@ -14,7 +14,7 @@ export class PurchaseModulesDto {
         public readonly moduleIds: string[],
     ) {}
 
-    static create(object: DtoParameters<PurchaseModulesDtoProps>): [string?, PurchaseModulesDto?] {
+    public static create(object: DtoParameters<PurchaseModulesDtoProps>): [string?, PurchaseModulesDto?] {
         const { studentId, sellerId, moduleIds } = object;
 
         if (!studentId) return ["Missing student"];
@@ -25,6 +25,7 @@ export class PurchaseModulesDto {
         if (!Validators.isUUID(sellerId)) return ["Invalid seller"];
 
         const uniqueModuleIds = new Set(moduleIds);
+
         if (uniqueModuleIds.size !== moduleIds.length) {
             return ["moduleIds array contains duplicate values"];
         }

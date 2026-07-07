@@ -21,7 +21,7 @@ export type SellerRelation = Pick<UserEntity, (typeof sellerRelationFields)[numb
 export type StudentRelation = Pick<StudentEntity, (typeof studentRelationFields)[number]>;
 
 export class StudentLevelDetailsProjection {
-    constructor(
+    public constructor(
         public readonly id: string,
         public readonly student: StudentRelation,
         public readonly module: ModuleRelation,

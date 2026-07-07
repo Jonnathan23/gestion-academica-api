@@ -10,7 +10,7 @@ export class SwaggerConfiguration {
     private readonly swaggerSpecification: object;
     private readonly userInterfaceOptions: SwaggerUserInterfaceOptions;
 
-    constructor() {
+    public constructor() {
         const swaggerOptions: Options = {
             definition: {
                 openapi: "3.0.0",

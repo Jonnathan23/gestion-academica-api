@@ -40,7 +40,7 @@ export interface FinishCurrentLevelUseCase {
 }
 
 export class FinishCurrentLevel implements FinishCurrentLevelUseCase {
-    constructor(
+    public constructor(
         private readonly repository: StudentLevelRepository,
         private readonly levelProgressionDomainService: LevelProgressionDomainService,
     ) {}
@@ -120,6 +120,7 @@ export class FinishCurrentLevel implements FinishCurrentLevelUseCase {
         const contractsToUpdate = this.levelProgressionDomainService.applySelfHealing(allContractsCombined);
 
         const finalContractsToUpdate = [...contractsToUpdate];
+
         if (!finalContractsToUpdate.some((c) => c.id === targetEntity.id)) {
             finalContractsToUpdate.push(targetEntity);
         }

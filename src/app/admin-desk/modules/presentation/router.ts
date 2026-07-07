@@ -8,7 +8,7 @@ import { systemPermissions } from "@/core/constants";
 import { ModuleController } from "@/app/admin-desk/modules/presentation/controllers/module.controller";
 
 export class ModulesRouter {
-    static get routes(): Router {
+    public static get routes(): Router {
         const router = Router();
 
         const moduleDatasource = new ModuleDataSourceImpl();

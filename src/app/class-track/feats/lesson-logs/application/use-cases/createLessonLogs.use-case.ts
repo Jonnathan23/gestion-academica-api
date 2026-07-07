@@ -12,7 +12,7 @@ import type { CreateLessonLogsDto } from "@/app/class-track/feats/lesson-logs/do
 import type { LessonLogEntity } from "@/app/class-track/feats/lesson-logs/domain/entities/LessonLog.entity";
 
 export class CreateLessonLogsUseCase {
-    constructor(
+    public constructor(
         private readonly repository: LessonLogRepository,
         private readonly studentRepository: StudentClassTrackRepository,
         private readonly attendanceSessionRepository: AttendanceSessionRepository,
@@ -20,6 +20,7 @@ export class CreateLessonLogsUseCase {
 
     public async execute(dto: CreateLessonLogsDto): Promise<LessonLogEntity[]> {
         await this.validate(dto);
+
         return await this.repository.createLessonLogs(dto);
     }
 
@@ -28,6 +29,7 @@ export class CreateLessonLogsUseCase {
 
         const studentId = await this.validationAttendanceSession(attendanceSessionId);
         const activeModuleLevel = await this.validationStudent(studentId);
+
         await this.validationRangeLessons(dto.lessonsStudied, activeModuleLevel);
     }
 
@@ -35,12 +37,14 @@ export class CreateLessonLogsUseCase {
         if (lessons.length === 0) return;
 
         const limits = MIN_MAX_LESSONS_MODULE.find((moduleLimit) => moduleLimit.level === activeModuleLevel);
+
         if (!limits) {
             throw CustomError.badRequest("Invalid active module level limits");
         }
 
         for (let i = 0; i < lessons.length; i++) {
             const currentLesson = lessons[i];
+
             if (!currentLesson) {
                 continue;
             }

@@ -6,6 +6,7 @@ out.log
 out2.log
 dist
 *.tgz
+eslint-report.json
 
 # code coverage
 coverage
@@ -41,3 +42,6 @@ test_output.txt
 
 #docs
 /docs/tests/*.md
+
+#scripts
+auto-fix-accessibility.js

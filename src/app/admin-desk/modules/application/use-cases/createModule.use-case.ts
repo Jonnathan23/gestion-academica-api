@@ -6,9 +6,9 @@ interface CreateModuleUseCase {
 }
 
 export class CreateModule implements CreateModuleUseCase {
-    constructor(private readonly moduleRepository: ModuleRepository) {}
+    public constructor(private readonly moduleRepository: ModuleRepository) {}
 
-    async execute(module: CreateModuleDto): Promise<void> {
+    public async execute(module: CreateModuleDto): Promise<void> {
         await this.moduleRepository.createModule(module);
     }
 }

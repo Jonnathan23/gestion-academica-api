@@ -16,10 +16,16 @@ import { JwtAdapter } from "@/core/utils/adapters/jwt";
 import { clientRoles, userRoles } from "@/core/interfaces/Roles.interfaces";
 
 export class AttendanceSessionController {
-    private readonly cookieStudentSessionName = "classTrackSession";
-    private readonly cookieStudentSessionMaxAge = 8 * 60 * 60 * 1000;
+    private readonly cookieStudentSessionName: string = "classTrackSession";
+    private readonly hoursCookieSessionTime: number = 8;
+    private readonly minutesCookieSessionTime: number = 60;
+    private readonly secondsCookieSessionTime: number = 60;
+    private readonly millisecondsCookieSessionTime: number = 1000;
 
-    constructor(
+    private readonly cookieStudentSessionMaxAge: number =
+        this.hoursCookieSessionTime * this.minutesCookieSessionTime * this.secondsCookieSessionTime * this.millisecondsCookieSessionTime;
+
+    public constructor(
         private readonly attendanceSessionRepository: AttendanceSessionRepository,
         private readonly studentProjectionRepository: StudentClassTrackRepository,
         private readonly useSecureCookies: boolean,

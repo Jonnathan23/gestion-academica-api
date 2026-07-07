@@ -31,37 +31,37 @@ export default class AcademicObservation extends Model<AcademicObservationAttrib
         primaryKey: true,
         defaultValue: DataType.UUIDV4,
     })
-    declare ac_ob_id: string;
+    declare public ac_ob_id: string;
 
     @ForeignKey(() => Student)
     @Column({
         type: DataType.UUID,
         allowNull: false,
     })
-    declare ac_ob_student_id: string;
+    declare public ac_ob_student_id: string;
 
     @BelongsTo(() => Student)
-    declare student: Student;
+    declare public student: Student;
 
     @ForeignKey(() => User)
     @Column({
         type: DataType.UUID,
         allowNull: false,
     })
-    declare ac_ob_teacher_id: string;
+    declare public ac_ob_teacher_id: string;
 
     @BelongsTo(() => User)
-    declare teacher: User;
+    declare public teacher: User;
 
     @Column({
         type: DataType.TEXT,
         allowNull: false,
     })
-    declare ac_ob_observation: string;
+    declare public ac_ob_observation: string;
 
     @Column({
         type: DataType.DATE,
         allowNull: true,
     })
-    declare ac_ob_deadline: Date;
+    declare public ac_ob_deadline: Date;
 }

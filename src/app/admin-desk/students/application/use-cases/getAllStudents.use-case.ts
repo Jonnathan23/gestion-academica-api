@@ -6,9 +6,9 @@ interface GetAllStudentsUseCase {
 }
 
 export class GetAllStudents implements GetAllStudentsUseCase {
-    constructor(private readonly studentRepository: StudentRepository) {}
+    public constructor(private readonly studentRepository: StudentRepository) {}
 
-    execute(): Promise<StudentEntity[]> {
+    public execute(): Promise<StudentEntity[]> {
         return this.studentRepository.getAllStudents();
     }
 }

@@ -10,7 +10,7 @@ import type { RetentionAlertStatus } from "@/data/models/class-track/RetentionAl
 import type { PaginatedResult } from "@/core/interfaces/PaginatedResult.interface";
 
 export class RetentionAlertRepositoryImpl implements RetentionAlertRepository {
-    constructor(private readonly datasource: RetentionAlertDatasource) {}
+    public constructor(private readonly datasource: RetentionAlertDatasource) {}
 
     public async upsertAlert(studentId: string, daysAbsent: number): Promise<void> {
         return this.datasource.upsertAlert(studentId, daysAbsent);

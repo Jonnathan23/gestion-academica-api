@@ -8,7 +8,7 @@ export class PayQuotaDto {
         public readonly paymentMethod: PaymentMethod,
     ) {}
 
-    static create(object: { [key: string]: any }): [string?, PayQuotaDto?] {
+    public static create(object: { [key: string]: any }): [string?, PayQuotaDto?] {
         const { quotaId, amountPaid, paymentMethod: method } = object;
 
         if (!quotaId || !Validators.isUUID(quotaId)) return ["Invalid or missing quotaId"];

@@ -5,9 +5,9 @@ interface DeleteModuleUseCase {
 }
 
 export class DeleteModule implements DeleteModuleUseCase {
-    constructor(private readonly moduleRepository: ModuleRepository) {}
+    public constructor(private readonly moduleRepository: ModuleRepository) {}
 
-    async execute(id: string): Promise<void> {
+    public async execute(id: string): Promise<void> {
         return await this.moduleRepository.deleteModule(id);
     }
 }

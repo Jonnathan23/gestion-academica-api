@@ -6,7 +6,7 @@ import type { StudentSearchProjection } from "@/app/admin-desk/student-level/dom
 import type { StudentTimelineProjection } from "@/app/admin-desk/student-level/domain/projections/StudentTimeline.projection";
 
 export class InfoStudentsLevelRepositoryImpl implements InfoStudentsLevelRepository {
-    constructor(private readonly dataSource: InfoStudentsLevelDataSource) {}
+    public constructor(private readonly dataSource: InfoStudentsLevelDataSource) {}
 
     public async searchStudents(dto: SearchStudentsLevelsDto): Promise<StudentSearchProjection[]> {
         return this.dataSource.searchStudents(dto);

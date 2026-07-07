@@ -10,6 +10,7 @@ export class SearchStudentsLevelsDto {
 
         if (limit !== undefined) {
             const parsedLimit = parseInt(limit, 10);
+
             if (isNaN(parsedLimit) || parsedLimit <= 0) {
                 return ["limit must be a positive integer"];
             }

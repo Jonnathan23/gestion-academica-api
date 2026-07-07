@@ -6,9 +6,9 @@ interface GetAllModulesUseCase {
 }
 
 export class GetAllModules implements GetAllModulesUseCase {
-    constructor(private readonly moduleRepository: ModuleRepository) {}
+    public constructor(private readonly moduleRepository: ModuleRepository) {}
 
-    async execute(): Promise<ModuleEntity[]> {
+    public async execute(): Promise<ModuleEntity[]> {
         return await this.moduleRepository.getAllModules();
     }
 }

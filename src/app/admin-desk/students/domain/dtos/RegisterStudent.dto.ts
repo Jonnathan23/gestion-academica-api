@@ -13,7 +13,7 @@ export class RegisterStudentDto {
         public readonly certificateType: CertificateType,
     ) {}
 
-    static create(object: { [key: string]: any }): [string?, RegisterStudentDto?] {
+    public static create(object: { [key: string]: any }): [string?, RegisterStudentDto?] {
         const { identificationCard, fullName, phoneNumber, email, dateOfBirth, nationality, certificateType, startDate } = object;
 
         if (!identificationCard) return ["Missing identificationCard"];
@@ -32,11 +32,13 @@ export class RegisterStudentDto {
         if (!Validators.isEmail(email)) return ["Invalid email"];
 
         const parsedBirthDate = new Date(dateOfBirth);
+
         if (isNaN(parsedBirthDate.getTime())) return ["Invalid dateOfBirth"];
 
         if (!Validators.isMinValidateAge(parsedBirthDate)) return ["Invalid dateOfBirth"];
 
         const parsedStartDate = new Date(startDate);
+
         if (isNaN(parsedStartDate.getTime())) return ["Invalid startDate"];
 
         if (!Validators.isCertificateType(certificateType)) return ["Invalid certificateType"];

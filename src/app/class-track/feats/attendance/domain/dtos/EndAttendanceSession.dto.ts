@@ -10,6 +10,7 @@ export class EndAttendanceSessionDto {
         if (!sessionId) return ["Missing sessionId"];
 
         let validExitTime = exitTime;
+
         if (!(exitTime instanceof Date) || isNaN(exitTime.getTime())) {
             validExitTime = new Date(exitTime);
             if (isNaN(validExitTime.getTime())) {

@@ -8,7 +8,7 @@ export class UpdateUserDto {
         public readonly us_role?: UserRoles,
     ) {}
 
-    get values() {
+    public get values() {
         const returnObject: { [key: string]: any } = {};
 
         if (this.us_full_name) returnObject.us_full_name = this.us_full_name;
@@ -18,8 +18,9 @@ export class UpdateUserDto {
         return returnObject;
     }
 
-    static create(object: { [key: string]: any }): [string?, UpdateUserDto?] {
+    public static create(object: { [key: string]: any }): [string?, UpdateUserDto?] {
         const { us_full_name, us_email, us_role } = object;
+
         if (!us_full_name && !us_email && !us_role) return ["No fields to update"];
 
         if (us_email !== undefined && !Validators.isEmail(us_email)) {

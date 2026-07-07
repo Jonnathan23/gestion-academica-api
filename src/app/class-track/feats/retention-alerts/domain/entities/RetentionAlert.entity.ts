@@ -1,7 +1,7 @@
 import type { RetentionAlertStatus } from "@/data/models/class-track/RetentionAlert.model";
 
 export class RetentionAlertEntity {
-    constructor(
+    public constructor(
         public readonly reAlId: string,
         public readonly reAlStudentId: string,
         public readonly reAlUserId: string | null,

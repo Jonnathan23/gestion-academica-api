@@ -5,7 +5,7 @@ export class CreateModuleDto {
         public readonly mo_level: number,
     ) {}
 
-    static create(object: { [key: string]: any }): [string?, CreateModuleDto?] {
+    public static create(object: { [key: string]: any }): [string?, CreateModuleDto?] {
         const { mo_name, mo_description, mo_level } = object;
         let parsedMoLevel = mo_level;
 

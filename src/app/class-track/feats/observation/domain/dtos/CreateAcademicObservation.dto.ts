@@ -14,6 +14,7 @@ export class CreateAcademicObservationDto {
         if (!observation) return ["Missing observation"];
 
         let validDeadline: Date | null = null;
+
         if (deadline) {
             validDeadline = deadline instanceof Date ? deadline : new Date(deadline);
             if (isNaN(validDeadline.getTime())) {

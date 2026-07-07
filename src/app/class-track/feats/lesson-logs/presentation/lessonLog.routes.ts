@@ -10,7 +10,7 @@ import { StudentClassTrackRepositoryImpl } from "@/app/class-track/core/students
 import { StudentClassTrackDataSourceImpl } from "@/app/class-track/core/students/infrastructure/datasources/student.datasource.impl";
 
 export class LessonLogRoutes {
-    static get routes(): Router {
+    public static get routes(): Router {
         const router = Router();
 
         const studentRepository = new StudentClassTrackRepositoryImpl(new StudentClassTrackDataSourceImpl());

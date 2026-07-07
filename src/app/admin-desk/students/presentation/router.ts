@@ -7,7 +7,7 @@ import { AuthMiddleware, RoleMiddleware, VerifyUUID } from "@/core/middleware";
 import { systemPermissions } from "@/core/constants";
 
 export class StudentsRouter {
-    static get routes(): Router {
+    public static get routes(): Router {
         const router = Router();
 
         const studentDatasource = new StudentDataSourceImpl();

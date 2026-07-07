@@ -19,10 +19,12 @@ export function pickFields<T extends object, K extends keyof T>({ objectToFilter
     }
 
     const result = {} as Pick<T, K>;
+
     fieldsToKeep.forEach((field) => {
         if (field in objectToFilter) {
             result[field] = objectToFilter[field];
         }
     });
+
     return result;
 }

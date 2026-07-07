@@ -6,9 +6,9 @@ interface GetStudentPaymentPlansUseCaseProps {
 }
 
 export class GetStudentPaymentPlansUseCase implements GetStudentPaymentPlansUseCaseProps {
-    constructor(private readonly paymentRepository: PaymentRepository) {}
+    public constructor(private readonly paymentRepository: PaymentRepository) {}
 
-    async execute(studentId: string): Promise<PaymentPlanEntity[]> {
+    public async execute(studentId: string): Promise<PaymentPlanEntity[]> {
         return await this.paymentRepository.getStudentPaymentPlans(studentId);
     }
 }

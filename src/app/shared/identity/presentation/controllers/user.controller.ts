@@ -18,12 +18,19 @@ import { FindUserById } from "@/app/shared/identity/application/use-cases/findUs
 import type { UserDataEntity } from "@/app/shared/identity/domain/entities";
 
 export class UserController {
-    constructor(
+    private readonly hoursCookie: number = 18;
+    private readonly minutesCookie: number = 60;
+    private readonly secondsCookie: number = 60;
+    private readonly millisecondsCookie: number = 1000;
+
+    private readonly maxAge = this.hoursCookie * this.minutesCookie * this.secondsCookie * this.millisecondsCookie;
+
+    public constructor(
         private readonly userRepository: UserRepository,
         private readonly useSecureCookies: boolean,
     ) {}
 
-    registerUser = (req: Request, res: Response, next: NextFunction) => {
+    public registerUser = (req: Request, res: Response, next: NextFunction) => {
         const [error, registerUserDto] = RegisterUserDto.create(req.body);
 
         if (error) throw CustomError.badRequest(error);
@@ -34,6 +41,7 @@ export class UserController {
             .execute(registerUserDto!)
             .then(() => {
                 const succesMessage = "User created successfully";
+
                 SuccessResponse.created(res, succesMessage);
             })
             .catch((error) => {
@@ -41,7 +49,7 @@ export class UserController {
             });
     };
 
-    update = (req: Request, res: Response, next: NextFunction) => {
+    public update = (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         const [error, updateUserDto] = UpdateUserDto.create(req.body);
 
@@ -54,6 +62,7 @@ export class UserController {
             .execute(id.toString(), updateUserDto!)
             .then(() => {
                 const succesMessage = "User updated successfully";
+
                 SuccessResponse.ok(res, succesMessage);
             })
             .catch((error) => {
@@ -61,7 +70,7 @@ export class UserController {
             });
     };
 
-    login = (req: Request, res: Response, next: NextFunction) => {
+    public login = (req: Request, res: Response, next: NextFunction) => {
         const [error, loginUserDto] = LoginUserDto.create(req.body);
 
         if (error) throw CustomError.badRequest(error);
@@ -75,7 +84,7 @@ export class UserController {
                     httpOnly: true,
                     secure: this.useSecureCookies,
                     sameSite: "lax",
-                    maxAge: 18 * 60 * 60 * 1000,
+                    maxAge: this.maxAge,
                 });
 
                 const successMessage = "User logged in successfully";
@@ -87,21 +96,24 @@ export class UserController {
             });
     };
 
-    logout = (req: Request, res: Response, _next: NextFunction) => {
+    public logout = (req: Request, res: Response, _next: NextFunction) => {
         //todo: realizar la lógica de desautenticación del usuario
         res.clearCookie("auth_token");
         const succesMessage = "User logged out successfully";
+
         SuccessResponse.ok(res, succesMessage);
     };
 
-    changePassword = (req: Request, res: Response, next: NextFunction) => {
+    public changePassword = (req: Request, res: Response, next: NextFunction) => {
         //TODO: refactorizar a un Dto con sus debidas validaciones
         const { id } = req.params;
         const { password } = req.body;
 
+        const minPasswordLength: number = 6;
+
         if (!id) throw CustomError.badRequest("User is required");
         if (!password) throw CustomError.badRequest("Password is required");
-        if (password.length < 6) throw CustomError.badRequest("Password must be at least 6 characters long");
+        if (password.length < minPasswordLength) throw CustomError.badRequest("Password must be at least 6 characters long");
 
         const changePassword = new ChangePassword(this.userRepository);
 
@@ -109,6 +121,7 @@ export class UserController {
             .execute(id.toString(), password)
             .then(() => {
                 const succesMessage = "Password changed successfully";
+
                 SuccessResponse.ok(res, succesMessage);
             })
             .catch((error) => {
@@ -116,7 +129,7 @@ export class UserController {
             });
     };
 
-    changeStateActive = (req: Request, res: Response, next: NextFunction) => {
+    public changeStateActive = (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
 
         if (!id) throw CustomError.badRequest("User is required");
@@ -127,6 +140,7 @@ export class UserController {
             .execute(id.toString())
             .then(() => {
                 const succesMessage = "State changed successfully";
+
                 SuccessResponse.ok(res, succesMessage);
             })
             .catch((error) => {
@@ -134,7 +148,7 @@ export class UserController {
             });
     };
 
-    findById = (req: Request, res: Response, next: NextFunction) => {
+    public findById = (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
 
         if (!id) throw CustomError.badRequest("User is required");
@@ -145,6 +159,7 @@ export class UserController {
             .execute(id.toString())
             .then((user) => {
                 const succesMessage = "User found successfully";
+
                 SuccessResponse.ok<UserDataEntity>(res, succesMessage, user);
             })
             .catch((error) => {
@@ -152,13 +167,14 @@ export class UserController {
             });
     };
 
-    findAll = (req: Request, res: Response, next: NextFunction) => {
+    public findAll = (req: Request, res: Response, next: NextFunction) => {
         const findAll = new FindAllUsers(this.userRepository);
 
         findAll
             .execute()
             .then((users) => {
                 const succesMessage = "Users found successfully";
+
                 SuccessResponse.ok<UserDataEntity[]>(res, succesMessage, users);
             })
             .catch((error) => {

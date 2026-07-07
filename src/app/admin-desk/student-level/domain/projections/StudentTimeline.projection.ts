@@ -26,7 +26,7 @@ export interface TimelineAvailableModule {
 }
 
 export class StudentTimelineProjection {
-    constructor(
+    public constructor(
         public readonly studentInfo: TimelineStudentInfo,
         public readonly enrolledLevels: TimelineEnrolledLevel[],
         public readonly availableModules: TimelineAvailableModule[],

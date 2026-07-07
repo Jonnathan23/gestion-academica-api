@@ -37,7 +37,7 @@ export interface PurchaseModulesUseCase {
 }
 
 export class PurchaseModules implements PurchaseModulesUseCase {
-    constructor(
+    public constructor(
         private readonly repository: StudentLevelRepository,
         private readonly levelProgressionDomainService: LevelProgressionDomainService,
     ) {}

@@ -14,6 +14,7 @@ export class ChangeRetentionAlertStatusDto {
         }
 
         const validStatuses = Object.values(retentionAlertStatus);
+
         if (!validStatuses.includes(status as RetentionAlertStatus)) {
             return [`Invalid status value`];
         }

@@ -6,9 +6,9 @@ interface UpdateUserUseCase {
 }
 
 export class UpdateUser implements UpdateUserUseCase {
-    constructor(private readonly userRepository: UserRepository) {}
+    public constructor(private readonly userRepository: UserRepository) {}
 
-    async execute(id: string, userDto: UpdateUserDto): Promise<void> {
+    public async execute(id: string, userDto: UpdateUserDto): Promise<void> {
         await this.userRepository.update(id, userDto);
     }
 }

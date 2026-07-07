@@ -34,10 +34,12 @@ export class CustomPostgresDatabaseConnectionError extends Error {
         if (error instanceof DatabaseError) return this.databaseKindErrors.UnexpectedError;
         if (error instanceof ConnectionError) {
             if ((error as any).parent?.code === "ENOTFOUND") return this.databaseKindErrors.HostNotFound;
+
             return this.databaseKindErrors.WrongUrl;
         }
         if (error instanceof UniqueConstraintError || error instanceof ForeignKeyConstraintError)
             return this.databaseKindErrors.PersistenceError;
+
         return this.databaseKindErrors.UnexpectedError;
     }
 

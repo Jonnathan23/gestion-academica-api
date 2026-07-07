@@ -21,6 +21,7 @@ import { StudentMapper } from "@/app/class-track/core/students/infrastructure/ma
 export class StudentClassTrackDataSourceImpl implements StudentClassTrackDataSource {
     public async searchStudents(dto: SearchStudentsDto): Promise<StudentClassTrackProjection[]> {
         const students = await this.fetchStudentsMatchingTerm(dto);
+
         return await this.convertArrayToProjection(students);
     }
 

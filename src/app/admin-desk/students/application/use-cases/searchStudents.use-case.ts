@@ -6,9 +6,9 @@ export interface SearchStudentsUseCase {
 }
 
 export class SearchStudents implements SearchStudentsUseCase {
-    constructor(private readonly repository: StudentRepository) {}
+    public constructor(private readonly repository: StudentRepository) {}
 
-    execute(query: string): Promise<StudentEntity[]> {
+    public execute(query: string): Promise<StudentEntity[]> {
         return this.repository.search(query);
     }
 }

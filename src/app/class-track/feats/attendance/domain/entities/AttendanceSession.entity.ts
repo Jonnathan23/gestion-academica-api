@@ -1,7 +1,7 @@
 import type { AttendanceSessionStatus } from "@/app/class-track/feats/attendance/domain/interfaces/Attendance.interface";
 
 export class AttendanceSessionEntity {
-    constructor(
+    public constructor(
         public readonly atSeId: string,
         public readonly atSeStudentId: string,
         public readonly atSeTeacherId: string | null,

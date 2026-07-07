@@ -2,6 +2,7 @@ import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-lev
 import type { UpdateStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos";
 import type { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/StudentLevel.entity";
 import type { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
+
 export abstract class StudentLevelRepository {
     public abstract saveProgressionTransaction(
         newContracts: StudentLevelEntity[],

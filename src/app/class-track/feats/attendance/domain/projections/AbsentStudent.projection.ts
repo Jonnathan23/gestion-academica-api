@@ -11,7 +11,7 @@ export const absentStudentRelationFields: readonly (keyof StudentEntity)[] = [
 export type AbsentStudentRelation = Pick<StudentEntity, (typeof absentStudentRelationFields)[number]>;
 
 export class AbsentStudentProjection {
-    constructor(
+    public constructor(
         public readonly student: AbsentStudentRelation,
         public readonly daysAbsent: number,
         public readonly lastAttendanceDate: Date,
