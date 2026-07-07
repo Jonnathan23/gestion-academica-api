@@ -31,8 +31,12 @@ export class StudentLevelRepositoryImpl implements StudentLevelRepository {
         return this.datasource.blockLevel(dto);
     }
 
-    public deleteStudentLevel(contractId: string): Promise<boolean> {
-        return this.datasource.deleteStudentLevel(contractId);
+    public getStudentIdByContract(contractId: string): Promise<string> {
+        return this.datasource.getStudentIdByContract(contractId);
+    }
+
+    public deleteProgressionTransaction(contractId: string, contractsToUpdate: StudentLevelEntity[]): Promise<boolean> {
+        return this.datasource.deleteProgressionTransaction(contractId, contractsToUpdate);
     }
 
     public buildContractEntities(currentContracts: StudentLevelDetailsProjection[]): StudentLevelEntity[] {

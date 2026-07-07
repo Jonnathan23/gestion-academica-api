@@ -72,7 +72,7 @@ export class ContractController {
 
         if (error) throw CustomError.badRequest(error);
 
-        const deleteStudentLevel = new DeleteStudentLevel(this.studentLevelRepository);
+        const deleteStudentLevel = new DeleteStudentLevel(this.studentLevelRepository, this.levelProgressionDomainService);
 
         deleteStudentLevel
             .execute(deleteStudentLevelDto!.studentLevelId)

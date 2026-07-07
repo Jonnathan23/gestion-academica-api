@@ -4,7 +4,6 @@ import { StudentLevelMapper } from "@/app/admin-desk/student-level/infrastructur
 import type { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entities/StudentLevel.entity";
 import type { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
 import { ModuleMapper } from "@/app/admin-desk/modules/infrastructure/mappers/module.mapper";
-import type { LevelProgressionDomainService } from "@/app/admin-desk/student-level/domain/services/levelProgression.domain.service";
 
 import { StudentModule, Module, Student } from "@/data/models/admin-desk";
 import { User } from "@/data/models/shared";
@@ -13,7 +12,7 @@ import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-lev
 import { studentModuleStatus } from "@/core/interfaces/Contracts.interface";
 
 export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
-    constructor(private readonly levelProgressionDomainService: LevelProgressionDomainService) {}
+    constructor() {}
 
     //* Public methods
     async getStudentContracts(studentId: string): Promise<StudentLevelDetailsProjection[]> {
@@ -119,12 +118,13 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
         return this.convertToEntity(targetLevel);
     }
 
-    async deleteStudentLevel(contractId: string): Promise<boolean> {
+    async getStudentIdByContract(contractId: string): Promise<string> {
         const targetContract = await this.fetchContractById(contractId);
-        const studentId = targetContract.st_mod_student_id;
+        return targetContract.st_mod_student_id;
+    }
 
-        const allStudentContracts = await this.fetchStudentContractsOrderedByName(studentId);
-        const remainingContracts = allStudentContracts.filter((contractItem) => contractItem.st_mod_id !== contractId);
+    async deleteProgressionTransaction(contractId: string, contractsToUpdate: StudentLevelEntity[]): Promise<boolean> {
+        const targetContract = await this.fetchContractById(contractId);
 
         const sequelize = StudentModule.sequelize;
         if (!sequelize) {
@@ -133,9 +133,6 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
 
         return await sequelize.transaction(async (transaction) => {
             await targetContract.destroy({ transaction });
-
-            const entities = await this.convertArrayToEntity(remainingContracts);
-            const contractsToUpdate = this.levelProgressionDomainService.applySelfHealing(entities);
 
             const updatePromises = contractsToUpdate.map((entity) => {
                 return StudentModule.update({ st_mod_status: entity.status }, { where: { st_mod_id: entity.id }, transaction });
