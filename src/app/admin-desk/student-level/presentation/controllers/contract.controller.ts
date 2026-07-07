@@ -138,7 +138,7 @@ export class ContractController {
 
         if (error) throw CustomError.badRequest(error);
 
-        const finishCurrentLevel = new FinishCurrentLevel(this.studentLevelRepository);
+        const finishCurrentLevel = new FinishCurrentLevel(this.studentLevelRepository, this.levelProgressionDomainService);
 
         finishCurrentLevel
             .execute(finishCurrentLevelDto!)

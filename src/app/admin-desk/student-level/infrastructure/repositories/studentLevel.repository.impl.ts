@@ -31,10 +31,6 @@ export class StudentLevelRepositoryImpl implements StudentLevelRepository {
         return this.datasource.blockLevel(dto);
     }
 
-    public finishCurrentLevel(dto: UpdateStudentLevelDto): Promise<StudentLevelEntity> {
-        return this.datasource.finishCurrentLevel(dto);
-    }
-
     public deleteStudentLevel(contractId: string): Promise<boolean> {
         return this.datasource.deleteStudentLevel(contractId);
     }

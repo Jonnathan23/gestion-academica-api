@@ -51,11 +51,9 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
 
                 created = await StudentModule.bulkCreate(recordsToInsert, { transaction });
 
-                // Mapeamos los UUIDs auto-generados a las entidades de memoria
                 created.forEach((record, index) => {
                     const originalEntity = newContracts[index];
                     if (originalEntity) {
-                        // Forzamos el setteo del ID generado si es que la entidad lo permite (en este caso by-pass readonly or create logic)
                         Object.defineProperty(originalEntity, "id", { value: record.st_mod_id, writable: false });
                     }
                 });
@@ -119,46 +117,6 @@ export class StudentLevelDataSourceImpl implements StudentLevelDataSource {
         await targetLevel.save();
 
         return this.convertToEntity(targetLevel);
-    }
-
-    async finishCurrentLevel(dto: UpdateStudentLevelDto): Promise<StudentLevelEntity> {
-        const { studentLevelId, studentId } = dto;
-
-        const studentsLevels = await this.fetchAllStudentContractsWithSellers(studentId);
-
-        const targetLevel = studentsLevels.find((studentModule) => studentModule.st_mod_id === studentLevelId);
-
-        if (!targetLevel) throw CustomError.notFound("Target level not found");
-
-        const previousLevelsAproved = studentsLevels.filter((studentModule) => studentModule.module.mo_level < targetLevel.module.mo_level);
-
-        const isAllPreviousLevelsApproved = previousLevelsAproved.every(
-            (studentModule) => studentModule.st_mod_status === studentModuleStatus.Approved,
-        );
-
-        if (!isAllPreviousLevelsApproved) throw CustomError.badRequest("Previous levels are not approved");
-
-        if (targetLevel.st_mod_status !== studentModuleStatus.Active) throw CustomError.badRequest("You can only finish active levels");
-
-        targetLevel.st_mod_status = studentModuleStatus.Approved;
-
-        const sequelize = StudentModule.sequelize;
-        if (!sequelize) throw CustomError.serviceUnavailable("Sequelize instance not found");
-
-        return await sequelize.transaction(async (transaction) => {
-            await targetLevel.save({ transaction });
-
-            const entities = await this.convertArrayToEntity(studentsLevels);
-            const contractsToUpdate = this.levelProgressionDomainService.applySelfHealing(entities);
-
-            const updatePromises = contractsToUpdate.map((entity) => {
-                return StudentModule.update({ st_mod_status: entity.status }, { where: { st_mod_id: entity.id }, transaction });
-            });
-
-            await Promise.all(updatePromises);
-
-            return this.convertToEntity(targetLevel);
-        });
     }
 
     async deleteStudentLevel(contractId: string): Promise<boolean> {

@@ -11,7 +11,7 @@ export abstract class StudentLevelRepository {
     public abstract getModulesByIds(moduleIds: string[]): Promise<ModuleEntity[]>;
     public abstract unlockLevel(dto: UpdateStudentLevelDto): Promise<StudentLevelEntity>;
     public abstract blockLevel(dto: UpdateStudentLevelDto): Promise<StudentLevelEntity>;
-    public abstract finishCurrentLevel(dto: UpdateStudentLevelDto): Promise<StudentLevelEntity>;
+
     public abstract deleteStudentLevel(studentLevelId: string): Promise<boolean>;
 
     public abstract buildContractEntities(currentContracts: StudentLevelDetailsProjection[]): StudentLevelEntity[];
