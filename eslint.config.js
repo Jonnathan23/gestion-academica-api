@@ -105,15 +105,16 @@ const eslintConfiguration = [
     {
         files: [
             "**/*.dto.ts",
+            "**/dtos/**/*.ts",
             "**/*.mapper.ts",
-            "**/*.mappers.ts",
+            "**/mappers/**/*.ts",
             //"**/*.datasource.ts",
             "**/*.datasource.impl.ts",
-            "**/*.datasources.ts",
+            "**/datasources/**/*.ts",
             "**/*.model.ts",
-            "**/*.models.ts",
+            "**/models/**/*.ts",
             "**/*.entity.ts",
-            "**/*.entities.ts",
+            "**/entities/**/*.ts",
             "**/*.error.ts",
             "**/*.integration.test.ts",
             "**/__tests__/**/*.ts",
@@ -162,7 +163,7 @@ const eslintConfiguration = [
     {
         files: [
             "**/*.dto.ts",
-            "**/*.dtos.ts",
+            "**/*.dtos/**/*.ts",
             "**/*.mapper.ts",
             "**/*.mappers.ts",
             "**/*.test.ts",

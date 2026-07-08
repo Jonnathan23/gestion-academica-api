@@ -7,6 +7,7 @@ import { AuthMiddleware } from "@/core/middleware/auth.mid";
 import { RoleMiddleware } from "@/core/middleware/role.mid";
 import { VerifyUUID } from "@/core/middleware/verifyUuId.mid";
 import { systemPermissions } from "@/core/constants/permissions";
+import { moduleValidators } from "@/app/admin-desk/modules/application/dtos/validators/di-validators";
 
 export class ModulesRouter {
     public static get routes(): Router {
@@ -14,7 +15,7 @@ export class ModulesRouter {
 
         const moduleDatasource = new ModuleDataSourceImpl();
         const moduleRespository = new ModuleRepositoryImpl(moduleDatasource);
-        const moduleController = new ModuleController(moduleRespository);
+        const moduleController = new ModuleController(moduleRespository, moduleValidators);
 
         router.use(AuthMiddleware.validateJWT);
         router.param("id", VerifyUUID.validate);

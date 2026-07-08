@@ -1,3 +1,6 @@
+import type { EntityValidator } from "@/core/utils/adapters/validators/interfaces/entity-validator.interface";
+import type { CreateModuleProps } from "@/app/admin-desk/modules/application/dtos/interfaces/create-module.interface";
+
 export class CreateModuleDto {
     private constructor(
         public readonly mo_name: string,
@@ -5,25 +8,9 @@ export class CreateModuleDto {
         public readonly mo_level: number,
     ) {}
 
-    public static create(object: { [key: string]: any }): [string?, CreateModuleDto?] {
-        const { mo_name, mo_description, mo_level } = object;
-        let parsedMoLevel = mo_level;
+    public static create(object: unknown, validator: EntityValidator<CreateModuleProps>): CreateModuleDto {
+        const data = validator.validate(object);
 
-        if (!mo_name) return ["Missing name"];
-        if (!mo_description) return ["Missing description"];
-        if (!mo_level) return ["Missing level"];
-
-        if (typeof mo_level === "string") {
-            parsedMoLevel = parseInt(mo_level);
-
-            if (isNaN(parsedMoLevel)) {
-                return ["Level must be a number"];
-            }
-        }
-
-        if (parsedMoLevel < 1) return ["Level must be greater than 0"];
-        if (parsedMoLevel > 6) return ["Level must be less than or equal to 6"];
-
-        return [undefined, new CreateModuleDto(mo_name, mo_description, parsedMoLevel)];
+        return new CreateModuleDto(data.mo_name, data.mo_description, data.mo_level);
     }
 }

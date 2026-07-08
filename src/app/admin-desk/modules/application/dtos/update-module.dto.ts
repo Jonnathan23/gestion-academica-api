@@ -1,3 +1,6 @@
+import type { EntityValidator } from "@/core/utils/adapters/validators/interfaces/entity-validator.interface";
+import type { UpdateModuleProps } from "@/app/admin-desk/modules/application/dtos/interfaces/update-module.interface";
+
 export class UpdateModuleDto {
     private constructor(
         public readonly mo_name?: string,
@@ -15,14 +18,9 @@ export class UpdateModuleDto {
         return returnObject;
     }
 
-    public static create(object: { [key: string]: any }): [string?, UpdateModuleDto?] {
-        const { mo_name, mo_description, mo_level } = object;
+    public static create(object: unknown, validator: EntityValidator<UpdateModuleProps>): UpdateModuleDto {
+        const data = validator.validate(object);
 
-        if (!mo_name && !mo_description && !mo_level) return ["Missing fields"];
-
-        if (mo_level && mo_level < 1) return ["Level must be greater than 0"];
-        if (mo_level && mo_level > 6) return ["Level must be less than or equal to 6"];
-
-        return [undefined, new UpdateModuleDto(mo_name, mo_description, mo_level)];
+        return new UpdateModuleDto(data.mo_name, data.mo_description, data.mo_level);
     }
 }

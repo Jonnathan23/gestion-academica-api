@@ -11,27 +11,32 @@ import { GetAllModules } from "@/app/admin-desk/modules/application/use-cases/ge
 import { GetModuleById } from "@/app/admin-desk/modules/application/use-cases/get-module-by-id.use-case";
 import { UpdateModule } from "@/app/admin-desk/modules/application/use-cases/update-module.use-case";
 import { SuccessResponse } from "@/core/utils/success-response";
+import type { ModuleValidators } from "@/app/admin-desk/modules/application/dtos/validators/interfaces/module-validators.interface";
 
 export class ModuleController {
-    public constructor(private readonly moduleRepository: ModuleRepository) {}
+    public constructor(
+        private readonly moduleRepository: ModuleRepository,
+        private readonly validators: ModuleValidators,
+    ) {}
 
     public createModule = (req: Request, res: Response, next: NextFunction) => {
-        const [error, createModuleDto] = CreateModuleDto.create(req.body);
+        try {
+            const createModuleDto = CreateModuleDto.create(req.body, this.validators.createModuleValidator);
+            const createModule = new CreateModule(this.moduleRepository);
 
-        if (error) throw CustomError.badRequest(error);
+            createModule
+                .execute(createModuleDto!)
+                .then(() => {
+                    const successMessage = "Module created successfully";
 
-        const createModule = new CreateModule(this.moduleRepository);
-
-        createModule
-            .execute(createModuleDto!)
-            .then(() => {
-                const successMessage = "Module created successfully";
-
-                SuccessResponse.created(res, successMessage);
-            })
-            .catch((error) => {
-                next(error);
-            });
+                    SuccessResponse.created(res, successMessage);
+                })
+                .catch((error) => {
+                    next(error);
+                });
+        } catch (error) {
+            next(error);
+        }
     };
 
     public getAllModules = (req: Request, res: Response, next: NextFunction) => {
@@ -69,25 +74,29 @@ export class ModuleController {
     };
 
     public updateModule = (req: Request, res: Response, next: NextFunction) => {
-        const { id } = req.params;
+        try {
+            const { id } = req.params;
 
-        const [error, updateModuleDto] = UpdateModuleDto.create(req.body);
+            if (!id) {
+                throw CustomError.badRequest("Module is required");
+            }
 
-        if (!id) throw CustomError.badRequest("Module is required");
-        if (error) throw CustomError.badRequest(error);
+            const updateModuleDto = UpdateModuleDto.create(req.body, this.validators.updateModuleValidator);
+            const updateModule = new UpdateModule(this.moduleRepository);
 
-        const updateModule = new UpdateModule(this.moduleRepository);
+            updateModule
+                .execute(id.toString(), updateModuleDto)
+                .then(() => {
+                    const successMessage = "Module updated successfully";
 
-        updateModule
-            .execute(id.toString(), updateModuleDto!)
-            .then(() => {
-                const successMessage = "Module updated successfully";
-
-                SuccessResponse.ok(res, successMessage);
-            })
-            .catch((error) => {
-                next(error);
-            });
+                    SuccessResponse.ok(res, successMessage);
+                })
+                .catch((error) => {
+                    next(error);
+                });
+        } catch (error) {
+            next(error);
+        }
     };
 
     public deleteModule = (req: Request, res: Response, next: NextFunction) => {
