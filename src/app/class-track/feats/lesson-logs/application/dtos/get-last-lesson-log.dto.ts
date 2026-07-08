@@ -1,19 +1,12 @@
-import { Validators } from "@/core/utils/validators";
+import type { EntityValidator } from "@/core/utils/adapters/validators/interfaces/entity-validator.interface";
+import type { GetLastLessonLogProps } from "@/app/class-track/feats/lesson-logs/application/dtos/interfaces/get-last-lesson-log.interface";
 
 export class GetLastLessonLogDto {
     private constructor(public readonly studentId: string) {}
 
-    public static create(object: Record<string, unknown>): [string?, GetLastLessonLogDto?] {
-        const { studentId } = object;
+    public static create(object: Record<string, unknown>, validator: EntityValidator<GetLastLessonLogProps>): GetLastLessonLogDto {
+        const validatedData = validator.validate(object);
 
-        if (!studentId || typeof studentId !== "string") {
-            return ["studentId is missing or invalid", undefined];
-        }
-
-        if (!Validators.isUUID(studentId)) {
-            return ["studentId must be a valid UUID", undefined];
-        }
-
-        return [undefined, new GetLastLessonLogDto(studentId)];
+        return new GetLastLessonLogDto(validatedData.studentId);
     }
 }

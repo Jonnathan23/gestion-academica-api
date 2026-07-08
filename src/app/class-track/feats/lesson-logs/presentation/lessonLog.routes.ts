@@ -9,6 +9,8 @@ import { AttendanceSessionDatasourceImpl } from "@/app/class-track/feats/attenda
 import { StudentClassTrackRepositoryImpl } from "@/app/class-track/core/students/infrastructure/repositories/student.repository.impl";
 import { StudentClassTrackDataSourceImpl } from "@/app/class-track/core/students/infrastructure/datasources/student.datasource.impl";
 
+import { lessonLogsValidators } from "@/app/class-track/feats/lesson-logs/application/dtos/validators/di-validators";
+
 export class LessonLogRoutes {
     public static get routes(): Router {
         const router = Router();
@@ -18,7 +20,7 @@ export class LessonLogRoutes {
 
         const datasource = new LessonLogDataSourceImpl();
         const repository = new LessonLogRepositoryImpl(datasource);
-        const controller = new LessonLogController(repository, studentRepository, attendanceSessionRepository);
+        const controller = new LessonLogController(repository, studentRepository, attendanceSessionRepository, lessonLogsValidators);
 
         //TODO: Proteger las rutas con middlewares
 
