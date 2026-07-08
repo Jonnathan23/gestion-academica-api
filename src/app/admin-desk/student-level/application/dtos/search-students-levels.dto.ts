@@ -1,24 +1,19 @@
+import type { SearchStudentsLevelsProps } from "@/app/admin-desk/student-level/application/dtos/interfaces/search-students-levels.interface";
+import type { EntityValidator } from "@/core/utils/adapters/validators/interfaces/entity-validator.interface";
+
 export class SearchStudentsLevelsDto {
     private constructor(
         public readonly searchTerm: string,
         public readonly limit: number,
     ) {}
 
-    public static create(object: { [key: string]: any }): [string?, SearchStudentsLevelsDto?] {
-        const { searchTerm, limit } = object;
-        let finalLimit = 10;
+    public static create(object: Record<string, unknown>, validator: EntityValidator<SearchStudentsLevelsProps>): SearchStudentsLevelsDto {
+        const validatedData = validator.validate(object);
 
-        if (limit !== undefined) {
-            const parsedLimit = parseInt(limit, 10);
+        const defaultLimit = 10;
+        const limit = validatedData.limit ?? defaultLimit;
+        const searchTerm = validatedData.searchTerm ? String(validatedData.searchTerm).trim() : "";
 
-            if (isNaN(parsedLimit) || parsedLimit <= 0) {
-                return ["limit must be a positive integer"];
-            }
-            finalLimit = parsedLimit;
-        }
-
-        const finalSearchTerm = searchTerm ? String(searchTerm).trim() : "";
-
-        return [undefined, new SearchStudentsLevelsDto(finalSearchTerm, finalLimit)];
+        return new SearchStudentsLevelsDto(searchTerm, limit);
     }
 }

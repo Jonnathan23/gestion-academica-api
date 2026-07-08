@@ -1,15 +1,12 @@
-import { Validators } from "@/core/utils/validators";
+import type { DeleteStudentLevelProps } from "@/app/admin-desk/student-level/application/dtos/interfaces/delete-student-level.interface";
+import type { EntityValidator } from "@/core/utils/adapters/validators/interfaces/entity-validator.interface";
 
 export class DeleteStudentLevelDto {
     private constructor(public readonly studentLevelId: string) {}
 
-    public static create(object: { [key: string]: any }): [string?, DeleteStudentLevelDto?] {
-        const { studentLevelId } = object;
+    public static create(object: Record<string, unknown>, validator: EntityValidator<DeleteStudentLevelProps>): DeleteStudentLevelDto {
+        const validatedData = validator.validate(object);
 
-        if (!studentLevelId) return ["Missing studentLevelId"];
-
-        if (!Validators.isUUID(studentLevelId)) return ["Invalid studentLevelId format"];
-
-        return [undefined, new DeleteStudentLevelDto(studentLevelId)];
+        return new DeleteStudentLevelDto(validatedData.studentLevelId);
     }
 }

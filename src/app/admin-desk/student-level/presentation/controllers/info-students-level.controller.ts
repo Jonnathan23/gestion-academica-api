@@ -7,47 +7,51 @@ import { SearchStudentsUseCase } from "@/app/admin-desk/student-level/applicatio
 import { GetStudentTimelineUseCase } from "@/app/admin-desk/student-level/application/use-cases/get-student-timeline.use-case";
 import type { StudentSearchProjection } from "@/app/admin-desk/student-level/domain/projections/StudentSearch.projection";
 import type { StudentTimelineProjection } from "@/app/admin-desk/student-level/domain/projections/StudentTimeline.projection";
-import { CustomError } from "@/core/error/customError.error";
+
 import { SuccessResponse } from "@/core/utils/success-response";
+import type { StudentLevelValidators } from "@/app/admin-desk/student-level/application/dtos/validators/interfaces/student-level-validators.interface";
 
 export class InfoStudentsLevelController {
-    public constructor(private readonly repository: InfoStudentsLevelRepository) {}
+    public constructor(
+        private readonly repository: InfoStudentsLevelRepository,
+        private readonly validators: StudentLevelValidators,
+    ) {}
 
     public searchStudents = (req: Request, res: Response, next: NextFunction) => {
-        const [error, dto] = SearchStudentsLevelsDto.create(req.query);
+        try {
+            const dto = SearchStudentsLevelsDto.create(req.query, this.validators.searchStudentsLevelsValidator);
 
-        if (error) {
-            throw CustomError.badRequest(error);
+            const useCase = new SearchStudentsUseCase(this.repository);
+
+            useCase
+                .execute(dto)
+                .then((result) => {
+                    SuccessResponse.ok<StudentSearchProjection[]>(res, "Students retrieved successfully", result);
+                })
+                .catch((error) => {
+                    next(error);
+                });
+        } catch (error) {
+            next(error);
         }
-
-        const useCase = new SearchStudentsUseCase(this.repository);
-
-        useCase
-            .execute(dto!)
-            .then((result) => {
-                SuccessResponse.ok<StudentSearchProjection[]>(res, "Students retrieved successfully", result);
-            })
-            .catch((error) => {
-                next(error);
-            });
     };
 
     public getStudentTimeline = (req: Request, res: Response, next: NextFunction) => {
-        const [error, dto] = GetStudentTimelineDto.create(req.params);
+        try {
+            const dto = GetStudentTimelineDto.create(req.params, this.validators.getStudentTimelineValidator);
 
-        if (error) {
-            throw CustomError.badRequest(error);
+            const useCase = new GetStudentTimelineUseCase(this.repository);
+
+            useCase
+                .execute(dto)
+                .then((result) => {
+                    SuccessResponse.ok<StudentTimelineProjection>(res, "Student timeline retrieved successfully", result);
+                })
+                .catch((error) => {
+                    next(error);
+                });
+        } catch (error) {
+            next(error);
         }
-
-        const useCase = new GetStudentTimelineUseCase(this.repository);
-
-        useCase
-            .execute(dto!)
-            .then((result) => {
-                SuccessResponse.ok<StudentTimelineProjection>(res, "Student timeline retrieved successfully", result);
-            })
-            .catch((error) => {
-                next(error);
-            });
     };
 }

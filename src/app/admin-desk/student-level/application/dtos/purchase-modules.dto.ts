@@ -1,11 +1,5 @@
-import type { DtoParameters } from "@/core/types/Parameters.type";
-import { Validators } from "@/core/utils/validators";
-
-interface PurchaseModulesDtoProps extends Record<string, unknown> {
-    studentId: string;
-    sellerId: string;
-    moduleIds: string[];
-}
+import type { PurchaseModulesProps } from "@/app/admin-desk/student-level/application/dtos/interfaces/purchase-modules.interface";
+import type { EntityValidator } from "@/core/utils/adapters/validators/interfaces/entity-validator.interface";
 
 export class PurchaseModulesDto {
     private constructor(
@@ -14,28 +8,9 @@ export class PurchaseModulesDto {
         public readonly moduleIds: string[],
     ) {}
 
-    public static create(object: DtoParameters<PurchaseModulesDtoProps>): [string?, PurchaseModulesDto?] {
-        const { studentId, sellerId, moduleIds } = object;
+    public static create(object: Record<string, unknown>, validator: EntityValidator<PurchaseModulesProps>): PurchaseModulesDto {
+        const validatedData = validator.validate(object);
 
-        if (!studentId) return ["Missing student"];
-        if (!sellerId) return ["Missing seller"];
-        if (!moduleIds || !Array.isArray(moduleIds) || moduleIds.length === 0) return ["module must be a non-empty array"];
-
-        if (!Validators.isUUID(studentId)) return ["Invalid student"];
-        if (!Validators.isUUID(sellerId)) return ["Invalid seller"];
-
-        const uniqueModuleIds = new Set(moduleIds);
-
-        if (uniqueModuleIds.size !== moduleIds.length) {
-            return ["moduleIds array contains duplicate values"];
-        }
-
-        for (const currentModuleId of moduleIds) {
-            if (!Validators.isUUID(currentModuleId)) {
-                return [`Invalid moduleId format`];
-            }
-        }
-
-        return [undefined, new PurchaseModulesDto(studentId, sellerId, moduleIds)];
+        return new PurchaseModulesDto(validatedData.studentId, validatedData.sellerId, validatedData.moduleIds);
     }
 }

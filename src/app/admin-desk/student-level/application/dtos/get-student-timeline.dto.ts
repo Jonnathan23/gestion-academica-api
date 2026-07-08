@@ -1,16 +1,12 @@
+import type { GetStudentTimelineProps } from "@/app/admin-desk/student-level/application/dtos/interfaces/get-student-timeline.interface";
+import type { EntityValidator } from "@/core/utils/adapters/validators/interfaces/entity-validator.interface";
+
 export class GetStudentTimelineDto {
     private constructor(public readonly studentId: string) {}
 
-    public static create(object: { [key: string]: any }): [string?, GetStudentTimelineDto?] {
-        const { studentId } = object;
+    public static create(object: Record<string, unknown>, validator: EntityValidator<GetStudentTimelineProps>): GetStudentTimelineDto {
+        const validatedData = validator.validate(object);
 
-        if (!studentId) return ["Missing studentId"];
-
-        // Basic UUID validation (or any string depending on actual rules)
-        if (typeof studentId !== "string" || studentId.trim().length === 0) {
-            return ["Invalid studentId"];
-        }
-
-        return [undefined, new GetStudentTimelineDto(studentId)];
+        return new GetStudentTimelineDto(validatedData.studentId);
     }
 }

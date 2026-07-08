@@ -7,6 +7,7 @@ import { AuthMiddleware } from "@/core/middleware/auth.mid";
 import { RoleMiddleware } from "@/core/middleware/role.mid";
 import { VerifyUUID } from "@/core/middleware/verifyUuId.mid";
 import { systemPermissions } from "@/core/constants/permissions";
+import { studentLevelValidators } from "@/app/admin-desk/student-level/application/dtos/validators/di-validators";
 
 export class InfoStudentsLevelRouter {
     public static get routes(): Router {
@@ -14,7 +15,7 @@ export class InfoStudentsLevelRouter {
 
         const dataSource = new InfoStudentsLevelDataSourceImpl();
         const repository = new InfoStudentsLevelRepositoryImpl(dataSource);
-        const controller = new InfoStudentsLevelController(repository);
+        const controller = new InfoStudentsLevelController(repository, studentLevelValidators);
 
         // Required middleware for all routes in this module
         router.use(AuthMiddleware.validateJWT);

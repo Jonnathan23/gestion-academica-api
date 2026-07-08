@@ -1,4 +1,5 @@
-import { Validators } from "@/core/utils/validators";
+import type { UpdateStudentLevelProps } from "@/app/admin-desk/student-level/application/dtos/interfaces/update-student-level.interface";
+import type { EntityValidator } from "@/core/utils/adapters/validators/interfaces/entity-validator.interface";
 
 export class UpdateStudentLevelDto {
     private constructor(
@@ -7,7 +8,7 @@ export class UpdateStudentLevelDto {
     ) {}
 
     public get values() {
-        const returnObject: { [key: string]: any } = {};
+        const returnObject: Record<string, unknown> = {};
 
         if (this.studentLevelId) {
             returnObject.studentLevelId = this.studentLevelId;
@@ -18,15 +19,9 @@ export class UpdateStudentLevelDto {
         return returnObject;
     }
 
-    public static create(object: { [key: string]: any }): [string?, UpdateStudentLevelDto?] {
-        const { studentLevelId, studentId } = object;
+    public static create(object: Record<string, unknown>, validator: EntityValidator<UpdateStudentLevelProps>): UpdateStudentLevelDto {
+        const validatedData = validator.validate(object);
 
-        if (!studentLevelId) return ["Missing student level ID"];
-        if (!studentId) return ["Missing student ID"];
-
-        if (!Validators.isUUID(studentLevelId)) return ["Invalid student level ID format"];
-        if (!Validators.isUUID(studentId)) return ["Invalid student ID format"];
-
-        return [undefined, new UpdateStudentLevelDto(studentLevelId, studentId)];
+        return new UpdateStudentLevelDto(validatedData.studentLevelId, validatedData.studentId);
     }
 }

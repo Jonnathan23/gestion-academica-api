@@ -9,6 +9,7 @@ import { AuthMiddleware } from "@/core/middleware/auth.mid";
 import { RoleMiddleware } from "@/core/middleware/role.mid";
 import { VerifyUUID } from "@/core/middleware/verifyUuId.mid";
 import { systemPermissions } from "@/core/constants/permissions";
+import { studentLevelValidators } from "@/app/admin-desk/student-level/application/dtos/validators/di-validators";
 
 export class ContractsRouter {
     public static get routes(): Router {
@@ -18,7 +19,7 @@ export class ContractsRouter {
 
         const studentLevelDataSource = new StudentLevelDataSourceImpl();
         const studentLevelRepository = new StudentLevelRepositoryImpl(studentLevelDataSource);
-        const contractController = new ContractController(studentLevelRepository, levelProgressionDomainService);
+        const contractController = new ContractController(studentLevelRepository, levelProgressionDomainService, studentLevelValidators);
 
         // Required middleware for all routes in this module
         router.use(AuthMiddleware.validateJWT);
