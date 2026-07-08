@@ -1,5 +1,6 @@
 import type { UserRoles } from "@/core/interfaces/Roles.interfaces";
-import { Validators } from "@/core/utils/validators";
+import type { RegisterUserProps } from "@/app/shared/identity/application/dtos/interfaces/register-user.interface";
+import type { EntityValidator } from "@/core/utils/adapters/validators/interfaces/entity-validator.interface";
 
 export class RegisterUserDto {
     private constructor(
@@ -9,18 +10,14 @@ export class RegisterUserDto {
         public readonly us_role: UserRoles,
     ) {}
 
-    public static create(object: { [key: string]: any }): [string?, RegisterUserDto?] {
-        const { us_full_name, us_email, us_password_hash, us_role } = object;
+    public static create(object: Record<string, unknown>, validator: EntityValidator<RegisterUserProps>): RegisterUserDto {
+        const validatedData = validator.validate(object);
 
-        if (!us_full_name) return ["Missing name"];
-        if (!us_email) return ["Missing email"];
-        if (!us_password_hash) return ["Missing password"];
-        if (!us_role) return ["Missing role"];
-
-        if (!Validators.isEmail(us_email)) return ["Invalid email"];
-        if (!Validators.isStrongPassword(us_password_hash)) return ["Invalid password"];
-        if (!Validators.isRole(us_role)) return ["Invalid role"];
-
-        return [undefined, new RegisterUserDto(us_full_name, us_email, us_password_hash, us_role)];
+        return new RegisterUserDto(
+            validatedData.us_full_name,
+            validatedData.us_email,
+            validatedData.us_password_hash,
+            validatedData.us_role,
+        );
     }
 }

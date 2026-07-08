@@ -1,4 +1,5 @@
-import { Validators } from "@/core/utils/validators";
+import type { LoginUserProps } from "@/app/shared/identity/application/dtos/interfaces/login-user.interface";
+import type { EntityValidator } from "@/core/utils/adapters/validators/interfaces/entity-validator.interface";
 
 export class LoginUserDto {
     private constructor(
@@ -6,15 +7,9 @@ export class LoginUserDto {
         public readonly us_password_hash: string,
     ) {}
 
-    public static create(object: { [key: string]: any }): [string?, LoginUserDto?] {
-        const { us_email, us_password_hash } = object;
+    public static create(object: Record<string, unknown>, validator: EntityValidator<LoginUserProps>): LoginUserDto {
+        const validatedData = validator.validate(object);
 
-        if (!us_email) return ["Missing email"];
-        if (!us_password_hash) return ["Missing password"];
-
-        if (!Validators.isEmail(us_email)) return ["Invalid email"];
-        if (!Validators.isStrongPassword(us_password_hash)) return ["Invalid password"];
-
-        return [undefined, new LoginUserDto(us_email, us_password_hash)];
+        return new LoginUserDto(validatedData.us_email, validatedData.us_password_hash);
     }
 }

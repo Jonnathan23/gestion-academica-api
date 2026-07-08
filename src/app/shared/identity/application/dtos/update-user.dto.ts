@@ -1,5 +1,6 @@
 import type { UserRoles } from "@/core/interfaces/Roles.interfaces";
-import { Validators } from "@/core/utils/validators";
+import type { UpdateUserProps } from "@/app/shared/identity/application/dtos/interfaces/update-user.interface";
+import type { EntityValidator } from "@/core/utils/adapters/validators/interfaces/entity-validator.interface";
 
 export class UpdateUserDto {
     private constructor(
@@ -9,7 +10,7 @@ export class UpdateUserDto {
     ) {}
 
     public get values() {
-        const returnObject: { [key: string]: any } = {};
+        const returnObject: Record<string, unknown> = {};
 
         if (this.us_full_name) returnObject.us_full_name = this.us_full_name;
         if (this.us_email) returnObject.us_email = this.us_email;
@@ -18,19 +19,9 @@ export class UpdateUserDto {
         return returnObject;
     }
 
-    public static create(object: { [key: string]: any }): [string?, UpdateUserDto?] {
-        const { us_full_name, us_email, us_role } = object;
+    public static create(object: Record<string, unknown>, validator: EntityValidator<UpdateUserProps>): UpdateUserDto {
+        const validatedData = validator.validate(object);
 
-        if (!us_full_name && !us_email && !us_role) return ["No fields to update"];
-
-        if (us_email !== undefined && !Validators.isEmail(us_email)) {
-            return ["Invalid email"];
-        }
-
-        if (us_role !== undefined && !Validators.isRole(us_role)) {
-            return ["Invalid role"];
-        }
-
-        return [undefined, new UpdateUserDto(us_full_name, us_email, us_role)];
+        return new UpdateUserDto(validatedData.us_full_name, validatedData.us_email, validatedData.us_role);
     }
 }

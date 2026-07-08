@@ -8,6 +8,7 @@ import { RoleMiddleware } from "@/core/middleware/role.mid";
 import { VerifyUUID } from "@/core/middleware/verifyUuId.mid";
 import { systemPermissions } from "@/core/constants/permissions";
 import { environmentVariables } from "@/core/config/envs";
+import { identityValidators } from "@/app/shared/identity/application/dtos/validators/di-validators";
 
 export class UserRouter {
     public static get routes(): Router {
@@ -18,7 +19,7 @@ export class UserRouter {
         const userRespository = new UserRepositoryImpl(userDatasource);
 
         const useSecureCookies = environmentVariables.secureCookies;
-        const userController = new UserController(userRespository, useSecureCookies);
+        const userController = new UserController(userRespository, useSecureCookies, identityValidators);
 
         router.param("id", VerifyUUID.validate);
 

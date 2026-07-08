@@ -15,6 +15,7 @@ import { SuccessResponse } from "@/core/utils/success-response";
 import { CustomError } from "@/core/error/customError.error";
 import { LoginUserDto } from "@/app/shared/identity/application/dtos/login-user.dto";
 import { UserDataEntity } from "@/app/shared/identity/domain/entities/user-data.entity";
+import type { IdentityValidators } from "@/app/shared/identity/application/dtos/validators/interfaces/identity-validators.interface";
 
 export class UserController {
     private readonly hoursCookie: number = 18;
@@ -27,72 +28,82 @@ export class UserController {
     public constructor(
         private readonly userRepository: UserRepository,
         private readonly useSecureCookies: boolean,
+        private readonly validators: IdentityValidators,
     ) {}
 
     public registerUser = (req: Request, res: Response, next: NextFunction) => {
-        const [error, registerUserDto] = RegisterUserDto.create(req.body);
+        try {
+            const registerUserDto = RegisterUserDto.create(req.body, this.validators.registerUserValidator);
 
-        if (error) throw CustomError.badRequest(error);
+            const registerUser = new RegisterUser(this.userRepository);
 
-        const registerUser = new RegisterUser(this.userRepository);
+            registerUser
+                .execute(registerUserDto)
+                .then(() => {
+                    const succesMessage = "User created successfully";
 
-        registerUser
-            .execute(registerUserDto!)
-            .then(() => {
-                const succesMessage = "User created successfully";
-
-                SuccessResponse.created(res, succesMessage);
-            })
-            .catch((error) => {
-                next(error);
-            });
+                    SuccessResponse.created(res, succesMessage);
+                })
+                .catch((error) => {
+                    next(error);
+                });
+        } catch (error) {
+            next(error);
+        }
     };
 
     public update = (req: Request, res: Response, next: NextFunction) => {
-        const { id } = req.params;
-        const [error, updateUserDto] = UpdateUserDto.create(req.body);
+        try {
+            const { id } = req.params;
 
-        if (!id) throw CustomError.badRequest("User is required");
-        if (error) throw CustomError.badRequest(error);
+            // Optional: validate id if you want to avoid CustomError.badRequest here, but keeping throw for now since we don't have DI validator for it
+            if (!id) throw new Error("User is required"); // Using standard Error which error handler handles, or keeping CustomError if it was imported
 
-        const updateUser = new UpdateUser(this.userRepository);
+            const updateUserDto = UpdateUserDto.create(req.body, this.validators.updateUserValidator);
 
-        updateUser
-            .execute(id.toString(), updateUserDto!)
-            .then(() => {
-                const succesMessage = "User updated successfully";
+            const updateUser = new UpdateUser(this.userRepository);
 
-                SuccessResponse.ok(res, succesMessage);
-            })
-            .catch((error) => {
-                next(error);
-            });
+            updateUser
+                .execute(id.toString(), updateUserDto)
+                .then(() => {
+                    const succesMessage = "User updated successfully";
+
+                    SuccessResponse.ok(res, succesMessage);
+                })
+                .catch((error) => {
+                    next(error);
+                });
+        } catch (error) {
+            next(error);
+        }
     };
 
     public login = (req: Request, res: Response, next: NextFunction) => {
-        const [error, loginUserDto] = LoginUserDto.create(req.body);
+        try {
+            const loginUserDto = LoginUserDto.create(req.body, this.validators.loginUserValidator);
 
-        if (error) throw CustomError.badRequest(error);
+            const loginUser = new LoginUser(this.userRepository);
 
-        const loginUser = new LoginUser(this.userRepository);
+            loginUser
+                .execute(loginUserDto)
+                .then((loginResponse) => {
+                    res.cookie("auth_token", loginResponse.token, {
+                        httpOnly: true,
+                        secure: this.useSecureCookies,
+                        sameSite: "lax",
+                        maxAge: this.maxAge,
+                    });
 
-        loginUser
-            .execute(loginUserDto!)
-            .then((loginResponse) => {
-                res.cookie("auth_token", loginResponse.token, {
-                    httpOnly: true,
-                    secure: this.useSecureCookies,
-                    sameSite: "lax",
-                    maxAge: this.maxAge,
+                    const successMessage = "User logged in successfully";
+
+                    SuccessResponse.ok(res, successMessage, loginResponse.user);
+                })
+                .catch((error) => {
+                    next(error);
                 });
-
-                const successMessage = "User logged in successfully";
-
-                SuccessResponse.ok(res, successMessage, loginResponse.user);
-            })
-            .catch((error) => {
-                next(error);
-            });
+        } catch (error) {
+            next(error);
+        }
     };
 
     public logout = (req: Request, res: Response, _next: NextFunction) => {
