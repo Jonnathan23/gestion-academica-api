@@ -47,6 +47,8 @@ const VALID_PLAN_PAYLOAD = {
     firstQuotaDueDate: "2024-04-01T00:00:00.000Z",
 };
 
+import { AuthMiddleware } from "@/core/middleware/auth.mid";
+
 // ------------------------------------------------------------------ //
 // Test suite
 // ------------------------------------------------------------------ //
@@ -59,6 +61,11 @@ describe("Integration Tests: Payments Router", () => {
 
     beforeAll(async () => {
         await testDatabase.connect();
+
+        AuthMiddleware.configure(async (userId: string) => {
+            const user = await User.findByPk(userId);
+            return user ? user.us_is_active : false;
+        });
 
         // 1. Inject Admin user (Authorized)
         const hashedAdminPassword = await BcryptAdapter.hash(TEST_PASSWORD);
@@ -158,6 +165,7 @@ describe("Integration Tests: Payments Router", () => {
                 .set("Authorization", `Bearer ${adminToken}`)
                 .send(VALID_PLAN_PAYLOAD);
 
+            console.log(res.body);
             expect(res.status).toBe(201);
             expect(res.body.success).toBe(true);
             expect(res.body.data.totalAmount).toBe(VALID_PLAN_PAYLOAD.totalAmount);

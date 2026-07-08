@@ -7,6 +7,7 @@ import { systemPermissions } from "@/core/constants/permissions";
 import { AuthMiddleware } from "@/core/middleware/auth.mid";
 import { RoleMiddleware } from "@/core/middleware/role.mid";
 import { VerifyUUID } from "@/core/middleware/verifyUuId.mid";
+import { paymentValidators } from "@/app/admin-desk/payments/application/dtos/validators/di-validators";
 
 export class PaymentRouter {
     public static get routes(): Router {
@@ -15,7 +16,7 @@ export class PaymentRouter {
         // 1. Inyección de Dependencias
         const paymentDataSource = new PaymentDataSourceImpl();
         const paymentRepository = new PaymentRepositoryImpl(paymentDataSource);
-        const paymentController = new PaymentController(paymentRepository);
+        const paymentController = new PaymentController(paymentRepository, paymentValidators);
 
         // 2. Middlewares Globales del Router
         router.use(AuthMiddleware.validateJWT);

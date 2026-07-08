@@ -1,5 +1,6 @@
-import { paymentMethod, type PaymentMethod } from "@/app/admin-desk/payments/domain/interfaces/payment-method.interface";
-import { Validators } from "@/core/utils/validators";
+import type { PaymentMethod } from "@/app/admin-desk/payments/domain/interfaces/payment-method.interface";
+import type { PayQuotaProps } from "@/app/admin-desk/payments/application/dtos/interfaces/pay-quota.interface";
+import type { EntityValidator } from "@/core/utils/adapters/validators/interfaces/entity-validator.interface";
 
 export class PayQuotaDto {
     private constructor(
@@ -8,17 +9,9 @@ export class PayQuotaDto {
         public readonly paymentMethod: PaymentMethod,
     ) {}
 
-    public static create(object: { [key: string]: any }): [string?, PayQuotaDto?] {
-        const { quotaId, amountPaid, paymentMethod: method } = object;
+    public static create(object: Record<string, unknown>, validator: EntityValidator<PayQuotaProps>): PayQuotaDto {
+        const validatedData = validator.validate(object);
 
-        if (!quotaId || !Validators.isUUID(quotaId)) return ["Invalid or missing quotaId"];
-
-        if (!amountPaid || amountPaid <= 0) return ["amountPaid must be greater than 0"];
-
-        if (!method || !Object.values(paymentMethod).includes(method as any)) {
-            return ["Invalid paymentMethod. Must be CASH, TRANSFER, CreditCard or MIXED"];
-        }
-
-        return [undefined, new PayQuotaDto(quotaId, amountPaid, method)];
+        return new PayQuotaDto(validatedData.quotaId, validatedData.amountPaid, validatedData.paymentMethod);
     }
 }

@@ -1,4 +1,5 @@
-import { Validators } from "@/core/utils/validators";
+import type { CreatePaymentPlanProps } from "@/app/admin-desk/payments/application/dtos/interfaces/create-payment-plan.interface";
+import type { EntityValidator } from "@/core/utils/adapters/validators/interfaces/entity-validator.interface";
 
 export class CreatePaymentPlanDto {
     private constructor(
@@ -11,29 +12,20 @@ export class CreatePaymentPlanDto {
         public readonly firstQuotaDueDate: Date,
     ) {}
 
-    public static create(object: { [key: string]: any }): [string?, CreatePaymentPlanDto?] {
-        const { studentId, sellerId, enrollmentFee, totalAmount, isSinglePayment, numberOfQuotas, firstQuotaDueDate } = object;
+    public static create(object: Record<string, unknown>, validator: EntityValidator<CreatePaymentPlanProps>): CreatePaymentPlanDto {
+        const validatedData = validator.validate(object);
 
-        if (!studentId || !Validators.isUUID(studentId)) return ["Invalid or missing studentId"];
-        if (!sellerId || !Validators.isUUID(sellerId)) return ["Invalid or missing sellerId"];
+        const finalNumberOfQuotas = validatedData.isSinglePayment ? 1 : validatedData.numberOfQuotas || 1;
+        const parsedDueDate = new Date(validatedData.firstQuotaDueDate);
 
-        if (enrollmentFee === undefined || enrollmentFee < 0) return ["enrollmentFee must be 0 or greater"];
-        if (!totalAmount || totalAmount <= 0) return ["totalAmount must be greater than 0"];
-
-        if (isSinglePayment === undefined) return ["Missing isSinglePayment boolean flag"];
-
-        const finalNumberOfQuotas = isSinglePayment ? 1 : numberOfQuotas;
-
-        if (!finalNumberOfQuotas || finalNumberOfQuotas < 1) return ["numberOfQuotas must be at least 1"];
-
-        if (!firstQuotaDueDate) return ["Missing firstQuotaDueDate"];
-        const parsedDueDate = new Date(firstQuotaDueDate);
-
-        if (isNaN(parsedDueDate.getTime())) return ["Invalid firstQuotaDueDate format"];
-
-        return [
-            undefined,
-            new CreatePaymentPlanDto(studentId, sellerId, enrollmentFee, totalAmount, isSinglePayment, finalNumberOfQuotas, parsedDueDate),
-        ];
+        return new CreatePaymentPlanDto(
+            validatedData.studentId,
+            validatedData.sellerId,
+            validatedData.enrollmentFee,
+            validatedData.totalAmount,
+            validatedData.isSinglePayment,
+            finalNumberOfQuotas,
+            parsedDueDate,
+        );
     }
 }

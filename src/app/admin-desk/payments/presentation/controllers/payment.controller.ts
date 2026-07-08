@@ -10,34 +10,42 @@ import { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/pay
 import { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/payment-quota.entity";
 import { CreatePaymentPlanDto } from "@/app/admin-desk/payments/application/dtos/create-payment-plan.dto";
 import { PayQuotaDto } from "@/app/admin-desk/payments/application/dtos/pay-quota.dto";
-import { CustomError } from "@/core/error/customError.error";
 import { SuccessResponse } from "@/core/utils/success-response";
+import type { PaymentValidators } from "@/app/admin-desk/payments/application/dtos/validators/interfaces/payment-validators.interface";
 
 export class PaymentController {
-    public constructor(private readonly paymentRepository: PaymentRepository) {}
+    public constructor(
+        private readonly paymentRepository: PaymentRepository,
+        private readonly validators: PaymentValidators,
+    ) {}
 
     public createPaymentPlan = (req: Request, res: Response, next: NextFunction) => {
-        const { studentId } = req.params;
-        const sellerId = (req as AuthRequest).userSession?.id;
+        try {
+            const { studentId } = req.params;
+            const sellerId = (req as AuthRequest).userSession?.id;
 
-        const [error, createPaymentPlanDto] = CreatePaymentPlanDto.create({
-            ...req.body,
-            studentId,
-            sellerId,
-        });
+            const createPaymentPlanDto = CreatePaymentPlanDto.create(
+                {
+                    ...req.body,
+                    studentId,
+                    sellerId,
+                },
+                this.validators.createPaymentPlanValidator,
+            );
 
-        if (error) throw CustomError.badRequest(error);
+            const createPaymentPlan = new CreatePaymentPlanUseCase(this.paymentRepository);
 
-        const createPaymentPlan = new CreatePaymentPlanUseCase(this.paymentRepository);
-
-        createPaymentPlan
-            .execute(createPaymentPlanDto!)
-            .then((paymentPlan) => {
-                SuccessResponse.created<PaymentPlanEntity>(res, "Payment plan created successfully", paymentPlan);
-            })
-            .catch((error) => {
-                next(error);
-            });
+            createPaymentPlan
+                .execute(createPaymentPlanDto)
+                .then((paymentPlan) => {
+                    SuccessResponse.created<PaymentPlanEntity>(res, "Payment plan created successfully", paymentPlan);
+                })
+                .catch((error) => {
+                    next(error);
+                });
+        } catch (error) {
+            next(error);
+        }
     };
 
     public getStudentPaymentPlans = (req: Request, res: Response, next: NextFunction) => {
@@ -56,25 +64,30 @@ export class PaymentController {
     };
 
     public processQuotaPayment = (req: Request, res: Response, next: NextFunction) => {
-        const { quotaId } = req.params;
+        try {
+            const { quotaId } = req.params;
 
-        const [error, payQuotaDto] = PayQuotaDto.create({
-            ...req.body,
-            quotaId,
-        });
+            const payQuotaDto = PayQuotaDto.create(
+                {
+                    ...req.body,
+                    quotaId,
+                },
+                this.validators.payQuotaValidator,
+            );
 
-        if (error) throw CustomError.badRequest(error);
+            const processQuotaPayment = new ProcessQuotaPaymentUseCase(this.paymentRepository);
 
-        const processQuotaPayment = new ProcessQuotaPaymentUseCase(this.paymentRepository);
-
-        processQuotaPayment
-            .execute(payQuotaDto!)
-            .then((updatedQuota) => {
-                SuccessResponse.ok<PaymentQuotaEntity>(res, "Payment processed successfully", updatedQuota);
-            })
-            .catch((error) => {
-                next(error);
-            });
+            processQuotaPayment
+                .execute(payQuotaDto)
+                .then((updatedQuota) => {
+                    SuccessResponse.ok<PaymentQuotaEntity>(res, "Payment processed successfully", updatedQuota);
+                })
+                .catch((error) => {
+                    next(error);
+                });
+        } catch (error) {
+            next(error);
+        }
     };
 
     public revertQuotaPayment = (req: Request, res: Response, next: NextFunction) => {
