@@ -1,8 +1,7 @@
-import {
-    retentionAlertStatus,
-    type RetentionAlertStatus,
-} from "@/app/class-track/feats/retention-alerts/domain/interfaces/retention-alert.interface";
-import { studentContractStatus, type StudentContractStatus } from "@/data/models/admin-desk/student.model";
+import type { EntityValidator } from "@/core/utils/adapters/validators/interfaces/entity-validator.interface";
+import type { GetRetentionAlertsProps } from "@/app/class-track/feats/retention-alerts/application/dtos/interfaces/get-retention-alerts.interface";
+import type { RetentionAlertStatus } from "@/app/class-track/feats/retention-alerts/domain/interfaces/retention-alert.interface";
+import type { StudentContractStatus } from "@/data/models/admin-desk/student.model";
 
 export class GetRetentionAlertsDto {
     private constructor(
@@ -15,51 +14,39 @@ export class GetRetentionAlertsDto {
         public readonly isJustified?: boolean,
     ) {}
 
-    public static create(props: { [key: string]: any }): [string?, GetRetentionAlertsDto?] {
-        const { status, page, limit, studentParameter, contractStatus, daysAbsent, isJustified } = props;
+    public static create(props: Record<string, unknown>, validator: EntityValidator<GetRetentionAlertsProps>): GetRetentionAlertsDto {
+        const validatedData = validator.validate(props);
 
-        if (status) {
-            const validStatuses = Object.values(retentionAlertStatus);
+        const parsedPage = typeof validatedData.page === "string" ? parseInt(validatedData.page) : validatedData.page;
 
-            if (!validStatuses.includes(status as RetentionAlertStatus)) {
-                return [`Invalid status value`];
-            }
+        let parsedLimit: number | undefined;
+
+        if (validatedData.limit !== undefined) {
+            parsedLimit = typeof validatedData.limit === "string" ? parseInt(validatedData.limit) : validatedData.limit;
+        } else {
+            parsedLimit = 10;
         }
 
-        if (contractStatus) {
-            const validContractStatuses = Object.values(studentContractStatus);
+        let parsedDaysAbsent: number | undefined;
 
-            if (!validContractStatuses.includes(contractStatus as StudentContractStatus)) {
-                return [`Invalid contractStatus value`];
-            }
+        if (validatedData.daysAbsent !== undefined) {
+            parsedDaysAbsent = typeof validatedData.daysAbsent === "string" ? parseInt(validatedData.daysAbsent) : validatedData.daysAbsent;
         }
 
-        const parsedPage = page ? parseInt(page) : undefined;
+        let parsedIsJustified: boolean | undefined;
 
-        if (parsedPage === undefined || isNaN(parsedPage) || parsedPage <= 0) {
-            return [`page parameter is required and must be a valid positive number`];
+        if (validatedData.isJustified !== undefined) {
+            parsedIsJustified = validatedData.isJustified === "true" || validatedData.isJustified === true;
         }
 
-        let parsedLimit = limit ? parseInt(limit) : 10;
-        let parsedDaysAbsent = daysAbsent !== undefined ? parseInt(daysAbsent) : undefined;
-        let parsedIsJustified = isJustified !== undefined ? isJustified === "true" || isJustified === true : undefined;
-
-        if (isNaN(parsedLimit) || parsedLimit <= 0) parsedLimit = 10;
-        if (daysAbsent !== undefined && isNaN(parsedDaysAbsent as number)) {
-            return [`Invalid daysAbsent value`];
-        }
-
-        return [
-            undefined,
-            new GetRetentionAlertsDto(
-                status as RetentionAlertStatus,
-                parsedPage,
-                parsedLimit,
-                studentParameter,
-                contractStatus as StudentContractStatus,
-                parsedDaysAbsent,
-                parsedIsJustified,
-            ),
-        ];
+        return new GetRetentionAlertsDto(
+            validatedData.status,
+            parsedPage,
+            parsedLimit,
+            validatedData.studentParameter,
+            validatedData.contractStatus,
+            parsedDaysAbsent,
+            parsedIsJustified,
+        );
     }
 }

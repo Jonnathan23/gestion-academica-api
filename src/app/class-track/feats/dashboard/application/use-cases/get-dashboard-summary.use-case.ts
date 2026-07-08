@@ -5,7 +5,7 @@ import type { StudentClassTrackRepository } from "@/app/class-track/core/student
 import type { RetentionAlertRepository } from "@/app/class-track/feats/retention-alerts/domain/repositories/retention-alert.repository";
 import { GetCountAlertsDto } from "@/app/class-track/feats/retention-alerts/application/dtos/get-count-alerts.dto";
 import { retentionAlertStatus } from "@/app/class-track/feats/retention-alerts/domain/interfaces/retention-alert.interface";
-import { CustomError } from "@/core/error/customError.error";
+import { retentionAlertsValidators } from "@/app/class-track/feats/retention-alerts/application/dtos/validators/di-validators";
 
 export class GetDashboardSummaryUseCase {
     public constructor(
@@ -15,12 +15,14 @@ export class GetDashboardSummaryUseCase {
     ) {}
 
     public async execute(): Promise<DashboardSummaryProjection> {
-        const [error, getCountPendingAlertsDto] = GetCountAlertsDto.create({ status: retentionAlertStatus.Pending });
-        const [error2, getCountInProgressAlertsDto] = GetCountAlertsDto.create({ status: retentionAlertStatus.InProgress });
-
-        if (error || !getCountPendingAlertsDto || error2 || !getCountInProgressAlertsDto) {
-            throw CustomError.badRequest("Invalid status for getCountAlertsDto");
-        }
+        const getCountPendingAlertsDto = GetCountAlertsDto.create(
+            { status: retentionAlertStatus.Pending },
+            retentionAlertsValidators.getCountAlertsValidator,
+        );
+        const getCountInProgressAlertsDto = GetCountAlertsDto.create(
+            { status: retentionAlertStatus.InProgress },
+            retentionAlertsValidators.getCountAlertsValidator,
+        );
 
         const [studentsInClass, pendingCheckouts, pendingAlertsCount, inProgressAlertsCount, activeContractsCount] = await Promise.all([
             this.attendanceRepository.getActiveSessionsWithStudentDetails(attendanceSessionStatus.InProgress),

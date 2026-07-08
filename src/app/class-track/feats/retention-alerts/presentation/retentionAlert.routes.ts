@@ -5,6 +5,7 @@ import { RetentionAlertController } from "@/app/class-track/feats/retention-aler
 import { RoleMiddleware } from "@/core/middleware/role.mid";
 import { AuthMiddleware } from "@/core/middleware/auth.mid";
 import { systemPermissions } from "@/core/constants/permissions";
+import { retentionAlertsValidators } from "@/app/class-track/feats/retention-alerts/application/dtos/validators/di-validators";
 
 export class RetentionAlertRoutes {
     public static get routes(): Router {
@@ -12,7 +13,7 @@ export class RetentionAlertRoutes {
 
         const datasource = new RetentionAlertDatasourceImpl();
         const repository = new RetentionAlertRepositoryImpl(datasource);
-        const controller = new RetentionAlertController(repository);
+        const controller = new RetentionAlertController(repository, retentionAlertsValidators);
 
         router.get(
             "/",

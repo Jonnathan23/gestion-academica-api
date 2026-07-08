@@ -1,7 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 
 import { SuccessResponse } from "@/core/utils/success-response";
-import { CustomError } from "@/core/error/customError.error";
 
 import type { RetentionAlertRepository } from "@/app/class-track/feats/retention-alerts/domain/repositories/retention-alert.repository";
 import { GetRetentionAlertsDto } from "@/app/class-track/feats/retention-alerts/application/dtos/get-retention-alerts.dto";
@@ -10,54 +9,63 @@ import { UpdateRetentionAlertDto } from "@/app/class-track/feats/retention-alert
 import { UpdateRetentionAlertUseCase } from "@/app/class-track/feats/retention-alerts/application/use-cases/update-retention-alert.use-case";
 import { ChangeRetentionAlertStatusDto } from "@/app/class-track/feats/retention-alerts/application/dtos/change-retention-alert-status.dto";
 import { ChangeRetentionAlertStatusUseCase } from "@/app/class-track/feats/retention-alerts/application/use-cases/change-retention-alert-status.use-case";
+import type { RetentionAlertsValidators } from "@/app/class-track/feats/retention-alerts/application/dtos/validators/interfaces/retention-alerts-validators.interface";
 
 export class RetentionAlertController {
-    public constructor(private readonly repository: RetentionAlertRepository) {}
+    public constructor(
+        private readonly repository: RetentionAlertRepository,
+        private readonly validators: RetentionAlertsValidators,
+    ) {}
 
-    public getAlerts = (req: Request, res: Response, next: NextFunction) => {
-        const [error, getRetentionAlertsDto] = GetRetentionAlertsDto.create(req.query);
+    public getAlerts = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const getRetentionAlertsDto = GetRetentionAlertsDto.create(
+                req.query as Record<string, unknown>,
+                this.validators.getRetentionAlertsValidator,
+            );
+            const useCase = new GetRetentionAlertsUseCase(this.repository);
 
-        if (error || !getRetentionAlertsDto) {
-            return next(CustomError.badRequest(error || "Invalid request parameters"));
+            const paginatedResult = await useCase.execute(getRetentionAlertsDto);
+
+            return SuccessResponse.ok(res, "Retention alerts fetched successfully", paginatedResult);
+        } catch (error) {
+            next(error);
         }
-
-        const useCase = new GetRetentionAlertsUseCase(this.repository);
-
-        useCase
-            .execute(getRetentionAlertsDto)
-            .then((paginatedResult) => SuccessResponse.ok(res, "Retention alerts fetched successfully", paginatedResult))
-            .catch((err) => next(err));
     };
 
-    public updateAlertInfo = (req: Request, res: Response, next: NextFunction) => {
-        const id = req.params.id as string;
-        const [error, updateRetentionAlertDto] = UpdateRetentionAlertDto.create(req.body);
+    public updateAlertInfo = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const id = req.params.id as string;
+            const updateRetentionAlertDto = UpdateRetentionAlertDto.create(
+                req.body as Record<string, unknown>,
+                this.validators.updateRetentionAlertValidator,
+            );
 
-        if (error || !updateRetentionAlertDto) {
-            return next(CustomError.badRequest(error || "Invalid request body"));
+            const useCase = new UpdateRetentionAlertUseCase(this.repository);
+
+            const alert = await useCase.execute(id, updateRetentionAlertDto);
+
+            return SuccessResponse.ok(res, "Retention alert updated successfully", alert);
+        } catch (error) {
+            next(error);
         }
-
-        const useCase = new UpdateRetentionAlertUseCase(this.repository);
-
-        useCase
-            .execute(id, updateRetentionAlertDto)
-            .then((alert) => SuccessResponse.ok(res, "Retention alert updated successfully", alert))
-            .catch((err) => next(err));
     };
 
-    public changeStatus = (req: Request, res: Response, next: NextFunction) => {
-        const id = req.params.id as string;
-        const [error, changeRetentionAlertStatusDto] = ChangeRetentionAlertStatusDto.create(req.body);
+    public changeStatus = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const id = req.params.id as string;
+            const changeRetentionAlertStatusDto = ChangeRetentionAlertStatusDto.create(
+                req.body as Record<string, unknown>,
+                this.validators.changeRetentionAlertStatusValidator,
+            );
 
-        if (error || !changeRetentionAlertStatusDto) {
-            return next(CustomError.badRequest(error || "Invalid status update request"));
+            const useCase = new ChangeRetentionAlertStatusUseCase(this.repository);
+
+            const alert = await useCase.execute(id, changeRetentionAlertStatusDto);
+
+            return SuccessResponse.ok(res, "Retention alert status changed successfully", alert);
+        } catch (error) {
+            next(error);
         }
-
-        const useCase = new ChangeRetentionAlertStatusUseCase(this.repository);
-
-        useCase
-            .execute(id, changeRetentionAlertStatusDto)
-            .then((alert) => SuccessResponse.ok(res, "Retention alert status changed successfully", alert))
-            .catch((err) => next(err));
     };
 }

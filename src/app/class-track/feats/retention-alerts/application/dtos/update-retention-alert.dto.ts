@@ -1,3 +1,6 @@
+import type { EntityValidator } from "@/core/utils/adapters/validators/interfaces/entity-validator.interface";
+import type { UpdateRetentionAlertProps } from "@/app/class-track/feats/retention-alerts/application/dtos/interfaces/update-retention-alert.interface";
+
 export class UpdateRetentionAlertDto {
     private constructor(
         public readonly hasResponded: boolean,
@@ -8,53 +11,19 @@ export class UpdateRetentionAlertDto {
         public readonly returnDeadline?: Date,
     ) {}
 
-    public static create(props: { [key: string]: any }): [string?, UpdateRetentionAlertDto?] {
-        const { hasResponded, isJustified, observations, contactDate, justificationReason, returnDeadline } = props;
+    public static create(props: Record<string, unknown>, validator: EntityValidator<UpdateRetentionAlertProps>): UpdateRetentionAlertDto {
+        const validatedData = validator.validate(props);
 
-        if (hasResponded === undefined || typeof hasResponded !== "boolean") {
-            return ["Invalid 'hasResponded' property"];
-        }
+        const parsedContactDate = validatedData.contactDate ? new Date(validatedData.contactDate) : undefined;
+        const parsedReturnDeadline = validatedData.returnDeadline ? new Date(validatedData.returnDeadline) : undefined;
 
-        if (isJustified === undefined || typeof isJustified !== "boolean") {
-            return ["Invalid 'isJustified' property"];
-        }
-
-        if (observations === undefined || typeof observations !== "string") {
-            return ["Invalid 'observations' property"];
-        }
-
-        if (isJustified && (!justificationReason || typeof justificationReason !== "string")) {
-            return ["'justificationReason' is required when 'isJustified' is true"];
-        }
-
-        let parsedContactDate: Date | undefined = undefined;
-
-        if (contactDate) {
-            parsedContactDate = new Date(contactDate);
-            if (isNaN(parsedContactDate.getTime())) {
-                return ["Invalid 'contactDate' format"];
-            }
-        }
-
-        let parsedReturnDeadline: Date | undefined = undefined;
-
-        if (returnDeadline) {
-            parsedReturnDeadline = new Date(returnDeadline);
-            if (isNaN(parsedReturnDeadline.getTime())) {
-                return ["Invalid 'returnDeadline' format"];
-            }
-        }
-
-        return [
-            undefined,
-            new UpdateRetentionAlertDto(
-                hasResponded,
-                isJustified,
-                observations,
-                parsedContactDate,
-                justificationReason,
-                parsedReturnDeadline,
-            ),
-        ];
+        return new UpdateRetentionAlertDto(
+            validatedData.hasResponded,
+            validatedData.isJustified,
+            validatedData.observations,
+            parsedContactDate,
+            validatedData.justificationReason,
+            parsedReturnDeadline,
+        );
     }
 }
