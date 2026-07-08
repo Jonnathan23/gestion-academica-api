@@ -4,7 +4,7 @@ import { CustomError } from "@/core/error/customError.error";
 
 import { SuccessResponse } from "@/core/utils/success-response";
 import type { StudentClassTrackRepository } from "@/app/class-track/core/students/domain/repositories/student.repository";
-import { SearchStudentsDto } from "@/app/class-track/core/students/domain/dtos/search-student-dto.dto";
+import { SearchStudentsDto } from "@/app/class-track/core/students/application/dtos/search-student-dto.dto";
 import { SearchStudentsUseCase } from "@/app/class-track/core/students/application/use-cases/search-students.use-case";
 import type { StudentClassTrackProjection } from "@/app/class-track/core/students/domain/projections/StudentClassTrack.projection";
 

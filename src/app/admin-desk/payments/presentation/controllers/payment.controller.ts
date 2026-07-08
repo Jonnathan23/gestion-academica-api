@@ -8,8 +8,8 @@ import { ProcessQuotaPaymentUseCase } from "@/app/admin-desk/payments/applicatio
 import { RevertQuotaPaymentUseCase } from "@/app/admin-desk/payments/application/use-cases/revert-quota-payment.use-case";
 import { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/payment-plan.entity";
 import { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/payment-quota.entity";
-import { CreatePaymentPlanDto } from "@/app/admin-desk/payments/domain/dtos/create-payment-plan.dto";
-import { PayQuotaDto } from "@/app/admin-desk/payments/domain/dtos/pay-quota.dto";
+import { CreatePaymentPlanDto } from "@/app/admin-desk/payments/application/dtos/create-payment-plan.dto";
+import { PayQuotaDto } from "@/app/admin-desk/payments/application/dtos/pay-quota.dto";
 import { CustomError } from "@/core/error/customError.error";
 import { SuccessResponse } from "@/core/utils/success-response";
 

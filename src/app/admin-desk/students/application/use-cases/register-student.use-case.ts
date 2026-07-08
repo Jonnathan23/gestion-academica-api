@@ -1,4 +1,4 @@
-import type { RegisterStudentDto } from "@/app/admin-desk/students/domain/dtos/register-student.dto";
+import type { RegisterStudentDto } from "@/app/admin-desk/students/application/dtos/register-student.dto";
 import type { StudentEntity } from "@/app/admin-desk/students/domain/entities/student.entity";
 import type { StudentRepository } from "@/app/admin-desk/students/domain/repositories/student.repository";
 

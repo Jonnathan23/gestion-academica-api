@@ -6,7 +6,7 @@ import type { AttendanceSessionRepository } from "@/app/class-track/feats/attend
 import { attendanceSessionStatus } from "@/app/class-track/feats/attendance/domain/interfaces/attendance.interface";
 
 import type { LessonLogRepository } from "@/app/class-track/feats/lesson-logs/domain/repositories/lesson-log.repository";
-import type { CreateLessonLogsDto } from "@/app/class-track/feats/lesson-logs/domain/dtos/create-lessong-log.dto";
+import type { CreateLessonLogsDto } from "@/app/class-track/feats/lesson-logs/application/dtos/create-lessong-log.dto";
 import type { LessonLogEntity } from "@/app/class-track/feats/lesson-logs/domain/entities/lesson-log.entity";
 import { CustomError } from "@/core/error/customError.error";
 

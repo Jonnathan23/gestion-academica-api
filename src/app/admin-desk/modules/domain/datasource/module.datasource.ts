@@ -1,6 +1,6 @@
 import type { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
-import { UpdateModuleDto } from "@/app/admin-desk/modules/domain/dtos/update-module.dto";
-import { CreateModuleDto } from "@/app/admin-desk/modules/domain/dtos/create-module.dto";
+import { UpdateModuleDto } from "@/app/admin-desk/modules/application/dtos/update-module.dto";
+import { CreateModuleDto } from "@/app/admin-desk/modules/application/dtos/create-module.dto";
 
 export abstract class ModuleDataSource {
     public abstract getAllModules(): Promise<ModuleEntity[]>;

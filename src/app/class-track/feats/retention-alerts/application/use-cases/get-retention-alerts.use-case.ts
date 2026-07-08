@@ -1,5 +1,5 @@
 import type { RetentionAlertRepository } from "@/app/class-track/feats/retention-alerts/domain/repositories/retention-alert.repository";
-import type { GetRetentionAlertsDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/get-retention-alerts.dto";
+import type { GetRetentionAlertsDto } from "@/app/class-track/feats/retention-alerts/application/dtos/get-retention-alerts.dto";
 import type { RetentionAlertWithStudentProjection } from "@/app/class-track/feats/retention-alerts/domain/projections/RetentionAlertWithStudent.projection";
 
 import type { PaginatedResult } from "@/core/interfaces/paginated-result.interface";

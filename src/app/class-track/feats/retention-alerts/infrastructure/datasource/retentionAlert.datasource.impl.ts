@@ -9,9 +9,9 @@ import {
 
 import { CustomError } from "@/core/error/customError.error";
 import type { RetentionAlertWithStudentProjection } from "@/app/class-track/feats/retention-alerts/domain/projections/RetentionAlertWithStudent.projection";
-import type { GetRetentionAlertsDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/get-retention-alerts.dto";
-import type { GetCountAlertsDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/get-count-alerts.dto";
-import type { UpdateRetentionAlertDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/update-retention-alert.dto";
+import type { GetRetentionAlertsDto } from "@/app/class-track/feats/retention-alerts/application/dtos/get-retention-alerts.dto";
+import type { GetCountAlertsDto } from "@/app/class-track/feats/retention-alerts/application/dtos/get-count-alerts.dto";
+import type { UpdateRetentionAlertDto } from "@/app/class-track/feats/retention-alerts/application/dtos/update-retention-alert.dto";
 import type { RetentionAlertEntity } from "@/app/class-track/feats/retention-alerts/domain/entities/retention-alert.entity";
 import { RetentionAlertWithStudentMapper } from "@/app/class-track/feats/retention-alerts/infrastructure/mappers/retention-alert-with-student.mapper";
 import { RetentionAlertMapper } from "@/app/class-track/feats/retention-alerts/infrastructure/mappers/retention-alert.mapper";

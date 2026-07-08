@@ -1,5 +1,5 @@
 import type { PaginatedResult } from "@/core/interfaces/paginated-result.interface";
-import { SearchStudentsByCriteriaDto } from "@/app/admin-desk/students/domain/dtos/search-students-by-criteria.dto";
+import { SearchStudentsByCriteriaDto } from "@/app/admin-desk/students/application/dtos/search-students-by-criteria.dto";
 import { StudentEntity } from "@/app/admin-desk/students/domain/entities/student.entity";
 import { StudentRepository } from "@/app/admin-desk/students/domain/repositories/student.repository";
 

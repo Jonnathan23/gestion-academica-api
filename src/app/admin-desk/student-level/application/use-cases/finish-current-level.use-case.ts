@@ -4,7 +4,7 @@ import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-lev
 import type { StudentLevelRepository } from "@/app/admin-desk/student-level/domain/repositories/student-level.repository";
 import type { LevelProgressionDomainService } from "@/app/admin-desk/student-level/domain/services/levelProgression.domain.service";
 import { CustomError } from "@/core/error/customError.error";
-import { UpdateStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos/update-student-level.dto";
+import { UpdateStudentLevelDto } from "@/app/admin-desk/student-level/application/dtos/update-student-level.dto";
 
 //* Props
 interface ValidateTargetLevelProps {

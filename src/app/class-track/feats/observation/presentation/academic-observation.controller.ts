@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import type { AcademicObservationRepository } from "@/app/class-track/feats/observation/domain/repositories/academic-observation.repository";
 import { CreateAcademicObservationUseCase } from "@/app/class-track/feats/observation/application/use-cases/create-academic-observation.use-case";
-import { CreateAcademicObservationDto } from "@/app/class-track/feats/observation/domain/dtos/create-academic-observation.dto";
+import { CreateAcademicObservationDto } from "@/app/class-track/feats/observation/application/dtos/create-academic-observation.dto";
 import { CustomError } from "@/core/error/customError.error";
 import { SuccessResponse } from "@/core/utils/success-response";
 

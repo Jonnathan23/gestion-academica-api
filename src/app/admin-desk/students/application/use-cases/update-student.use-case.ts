@@ -1,4 +1,4 @@
-import { UpdateStudentDto } from "@/app/admin-desk/students/domain/dtos/update-student.dto";
+import { UpdateStudentDto } from "@/app/admin-desk/students/application/dtos/update-student.dto";
 import { StudentEntity } from "@/app/admin-desk/students/domain/entities/student.entity";
 import { StudentRepository } from "@/app/admin-desk/students/domain/repositories/student.repository";
 

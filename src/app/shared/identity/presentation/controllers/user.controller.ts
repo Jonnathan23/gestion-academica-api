@@ -1,11 +1,11 @@
 import type { Request, Response, NextFunction } from "express";
 
 //import { LoginUserDto, RegisterUserDto, UpdateUserDto } from "@/app/shared/identity/domain/dtos";
-import { RegisterUserDto } from "@/app/shared/identity/domain/dtos/register-user.dto";
+import { RegisterUserDto } from "@/app/shared/identity/application/dtos/register-user.dto";
 import type { UserRepository } from "@/app/shared/identity/domain/repositories/user.repository";
 import { RegisterUser } from "@/app/shared/identity/application/use-cases/register-user.use-case";
 import { UpdateUser } from "@/app/shared/identity/application/use-cases/update-user.use-case";
-import { UpdateUserDto } from "@/app/shared/identity/domain/dtos/update-user.dto";
+import { UpdateUserDto } from "@/app/shared/identity/application/dtos/update-user.dto";
 import { LoginUser } from "@/app/shared/identity/application/use-cases/login-user.use-case";
 import { ChangePassword } from "@/app/shared/identity/application/use-cases/change-password.use-case";
 import { ChangeStateActive } from "@/app/shared/identity/application/use-cases/change-state-active.use-case";
@@ -13,7 +13,7 @@ import { FindAllUsers } from "@/app/shared/identity/application/use-cases/find-a
 import { FindUserById } from "@/app/shared/identity/application/use-cases/find-user-by-id.use-case";
 import { SuccessResponse } from "@/core/utils/success-response";
 import { CustomError } from "@/core/error/customError.error";
-import { LoginUserDto } from "@/app/shared/identity/domain/dtos/login-user.dto";
+import { LoginUserDto } from "@/app/shared/identity/application/dtos/login-user.dto";
 import { UserDataEntity } from "@/app/shared/identity/domain/entities/user-data.entity";
 
 export class UserController {

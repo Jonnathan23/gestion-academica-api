@@ -1,8 +1,8 @@
 import type { Request, Response, NextFunction } from "express";
 
 import { CustomError } from "@/core/error/customError.error";
-import { CreateLessonLogsDto } from "@/app/class-track/feats/lesson-logs/domain/dtos/create-lessong-log.dto";
-import { GetLastLessonLogDto } from "@/app/class-track/feats/lesson-logs/domain/dtos/get-last-lesson-log.dto";
+import { CreateLessonLogsDto } from "@/app/class-track/feats/lesson-logs/application/dtos/create-lessong-log.dto";
+import { GetLastLessonLogDto } from "@/app/class-track/feats/lesson-logs/application/dtos/get-last-lesson-log.dto";
 import { CreateLessonLogsUseCase } from "@/app/class-track/feats/lesson-logs/application/use-cases/create-lesson-logs.use-case";
 import { GetLastLessonLogUseCase } from "@/app/class-track/feats/lesson-logs/application/use-cases/get-last-lesson-log.use-case";
 import { SuccessResponse } from "@/core/utils/success-response";

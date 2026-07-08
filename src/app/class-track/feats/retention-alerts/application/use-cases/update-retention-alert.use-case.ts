@@ -1,5 +1,5 @@
 import type { RetentionAlertRepository } from "@/app/class-track/feats/retention-alerts/domain/repositories/retention-alert.repository";
-import type { UpdateRetentionAlertDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/update-retention-alert.dto";
+import type { UpdateRetentionAlertDto } from "@/app/class-track/feats/retention-alerts/application/dtos/update-retention-alert.dto";
 import type { RetentionAlertEntity } from "@/app/class-track/feats/retention-alerts/domain/entities/retention-alert.entity";
 
 export class UpdateRetentionAlertUseCase {

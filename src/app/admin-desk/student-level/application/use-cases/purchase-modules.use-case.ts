@@ -3,7 +3,7 @@ import { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/entiti
 import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-level/domain/projections/ContractDetails.projection";
 import type { StudentLevelRepository } from "@/app/admin-desk/student-level/domain/repositories/student-level.repository";
 import type { LevelProgressionDomainService } from "@/app/admin-desk/student-level/domain/services/levelProgression.domain.service";
-import { PurchaseModulesDto } from "@/app/admin-desk/student-level/domain/dtos/purchase-modules.dto";
+import { PurchaseModulesDto } from "@/app/admin-desk/student-level/application/dtos/purchase-modules.dto";
 import { CustomError } from "@/core/error/customError.error";
 
 interface FetchDataToValidateProps {

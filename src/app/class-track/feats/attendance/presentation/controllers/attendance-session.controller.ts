@@ -5,9 +5,9 @@ import type { AttendanceSessionRepository } from "@/app/class-track/feats/attend
 import { StartAttendanceSessionUseCase } from "@/app/class-track/feats/attendance/application/use-cases/start-attendance-session.use-case";
 import { EndAttendanceSessionUseCase } from "@/app/class-track/feats/attendance/application/use-cases/end-attendance-session.use-case";
 import { ApproveAttendanceSessionUseCase } from "@/app/class-track/feats/attendance/application/use-cases/approve-attendance-session.use-case";
-import { StartAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/start-attendance-session.dto";
-import { EndAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/end-attendance-session.dto";
-import { ApproveAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/approve-attendance-session.dto";
+import { StartAttendanceSessionDto } from "@/app/class-track/feats/attendance/application/dtos/start-attendance-session.dto";
+import { EndAttendanceSessionDto } from "@/app/class-track/feats/attendance/application/dtos/end-attendance-session.dto";
+import { ApproveAttendanceSessionDto } from "@/app/class-track/feats/attendance/application/dtos/approve-attendance-session.dto";
 import { CustomError } from "@/core/error/customError.error";
 import { SuccessResponse } from "@/core/utils/success-response";
 import { GetActiveSessionsUseCase } from "@/app/class-track/feats/attendance/application/use-cases/get-all-active-sessions.use-case";

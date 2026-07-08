@@ -4,11 +4,11 @@ import { SuccessResponse } from "@/core/utils/success-response";
 import { CustomError } from "@/core/error/customError.error";
 
 import type { RetentionAlertRepository } from "@/app/class-track/feats/retention-alerts/domain/repositories/retention-alert.repository";
-import { GetRetentionAlertsDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/get-retention-alerts.dto";
+import { GetRetentionAlertsDto } from "@/app/class-track/feats/retention-alerts/application/dtos/get-retention-alerts.dto";
 import { GetRetentionAlertsUseCase } from "@/app/class-track/feats/retention-alerts/application/use-cases/get-retention-alerts.use-case";
-import { UpdateRetentionAlertDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/update-retention-alert.dto";
+import { UpdateRetentionAlertDto } from "@/app/class-track/feats/retention-alerts/application/dtos/update-retention-alert.dto";
 import { UpdateRetentionAlertUseCase } from "@/app/class-track/feats/retention-alerts/application/use-cases/update-retention-alert.use-case";
-import { ChangeRetentionAlertStatusDto } from "@/app/class-track/feats/retention-alerts/domain/dtos/change-retention-alert-status.dto";
+import { ChangeRetentionAlertStatusDto } from "@/app/class-track/feats/retention-alerts/application/dtos/change-retention-alert-status.dto";
 import { ChangeRetentionAlertStatusUseCase } from "@/app/class-track/feats/retention-alerts/application/use-cases/change-retention-alert-status.use-case";
 
 export class RetentionAlertController {

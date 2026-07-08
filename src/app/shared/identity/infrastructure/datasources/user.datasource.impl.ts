@@ -1,9 +1,9 @@
 import type { UserDataSource } from "@/app/shared/identity/domain/datasource/user.datasource";
 import { UserMapper } from "@/app/shared/identity/infrastructure/mappers/user.mapper";
 import { UserDataMapper } from "@/app/shared/identity/infrastructure/mappers/user-data.mapper";
-import { LoginUserDto } from "@/app/shared/identity/domain/dtos/login-user.dto";
-import { RegisterUserDto } from "@/app/shared/identity/domain/dtos/register-user.dto";
-import { UpdateUserDto } from "@/app/shared/identity/domain/dtos/update-user.dto";
+import { LoginUserDto } from "@/app/shared/identity/application/dtos/login-user.dto";
+import { RegisterUserDto } from "@/app/shared/identity/application/dtos/register-user.dto";
+import { UpdateUserDto } from "@/app/shared/identity/application/dtos/update-user.dto";
 import { UserDataEntity } from "@/app/shared/identity/domain/entities/user-data.entity";
 import { UserEntity } from "@/app/shared/identity/domain/entities/user.entity";
 import { CustomError } from "@/core/error/customError.error";

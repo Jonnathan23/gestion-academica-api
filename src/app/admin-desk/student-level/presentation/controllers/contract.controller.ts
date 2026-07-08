@@ -12,9 +12,9 @@ import { type LevelProgressionDomainService } from "@/app/admin-desk/student-lev
 import type { StudentLevelRepositoryImpl } from "@/app/admin-desk/student-level/infrastructure/repositories/student-level.repository.impl";
 import type { AuthRequest } from "@/core/middleware/auth.mid";
 import type { Request, Response, NextFunction } from "express";
-import { DeleteStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos/delete-student-level.dto";
-import { PurchaseModulesDto } from "@/app/admin-desk/student-level/domain/dtos/purchase-modules.dto";
-import { UpdateStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos/update-student-level.dto";
+import { DeleteStudentLevelDto } from "@/app/admin-desk/student-level/application/dtos/delete-student-level.dto";
+import { PurchaseModulesDto } from "@/app/admin-desk/student-level/application/dtos/purchase-modules.dto";
+import { UpdateStudentLevelDto } from "@/app/admin-desk/student-level/application/dtos/update-student-level.dto";
 import { CustomError } from "@/core/error/customError.error";
 import { SuccessResponse } from "@/core/utils/success-response";
 

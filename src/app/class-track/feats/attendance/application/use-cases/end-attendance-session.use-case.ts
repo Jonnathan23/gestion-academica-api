@@ -1,5 +1,5 @@
 import { AttendanceSessionRepository } from "@/app/class-track/feats/attendance/domain/repositories/attendance-session.repository";
-import type { EndAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/end-attendance-session.dto";
+import type { EndAttendanceSessionDto } from "@/app/class-track/feats/attendance/application/dtos/end-attendance-session.dto";
 import type { AttendanceSessionEntity } from "@/app/class-track/feats/attendance/domain/entities/attendance-session.entity";
 
 export class EndAttendanceSessionUseCase {

@@ -1,4 +1,4 @@
-import { ChangeContractStatusDto } from "@/app/admin-desk/students/domain/dtos/change-contract-status.dto";
+import { ChangeContractStatusDto } from "@/app/admin-desk/students/application/dtos/change-contract-status.dto";
 import { StudentEntity } from "@/app/admin-desk/students/domain/entities/student.entity";
 import { StudentRepository } from "@/app/admin-desk/students/domain/repositories/student.repository";
 

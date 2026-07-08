@@ -1,6 +1,6 @@
 import type { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/payment-quota.entity";
 import type { PaymentRepository } from "@/app/admin-desk/payments/domain/repositories/payment.repository";
-import { PayQuotaDto } from "@/app/admin-desk/payments/domain/dtos/pay-quota.dto";
+import { PayQuotaDto } from "@/app/admin-desk/payments/application/dtos/pay-quota.dto";
 
 interface ProcessQuotaPaymentUseCaseProps {
     execute(dto: PayQuotaDto): Promise<PaymentQuotaEntity>;

@@ -1,6 +1,6 @@
 import { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/payment-plan.entity";
 import type { PaymentRepository } from "@/app/admin-desk/payments/domain/repositories/payment.repository";
-import { CreatePaymentPlanDto } from "@/app/admin-desk/payments/domain/dtos/create-payment-plan.dto";
+import { CreatePaymentPlanDto } from "@/app/admin-desk/payments/application/dtos/create-payment-plan.dto";
 import { paymentPlanStatus } from "@/app/admin-desk/payments/domain/interfaces/payment-plan-status.interface";
 
 interface CreatePaymentPlanUseCaseProps {

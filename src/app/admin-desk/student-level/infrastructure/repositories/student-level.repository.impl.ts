@@ -3,7 +3,7 @@ import type { StudentLevelEntity } from "@/app/admin-desk/student-level/domain/e
 import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-level/domain/projections/ContractDetails.projection";
 import type { StudentLevelRepository } from "@/app/admin-desk/student-level/domain/repositories/student-level.repository";
 import type { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
-import { UpdateStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos/update-student-level.dto";
+import { UpdateStudentLevelDto } from "@/app/admin-desk/student-level/application/dtos/update-student-level.dto";
 
 export class StudentLevelRepositoryImpl implements StudentLevelRepository {
     public constructor(private readonly datasource: StudentLevelDataSource) {}

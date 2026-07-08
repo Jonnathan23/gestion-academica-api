@@ -1,6 +1,6 @@
 import AcademicObservation from "@/data/models/class-track/academic-observation-attributes.model";
 import type { AcademicObservationDatasource } from "@/app/class-track/feats/observation/domain/datasource/academicObservation.datasource";
-import type { CreateAcademicObservationDto } from "@/app/class-track/feats/observation/domain/dtos/create-academic-observation.dto";
+import type { CreateAcademicObservationDto } from "@/app/class-track/feats/observation/application/dtos/create-academic-observation.dto";
 import type { AcademicObservationEntity } from "@/app/class-track/feats/observation/domain/entities/academic-observation.entity";
 import { AcademicObservationMapper } from "@/app/class-track/feats/observation/infrastructure/mappers/academic-observation.mapper";
 

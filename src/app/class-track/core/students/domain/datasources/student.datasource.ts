@@ -1,4 +1,4 @@
-import type { SearchStudentsDto } from "@/app/class-track/core/students/domain/dtos/search-student-dto.dto";
+import type { SearchStudentsDto } from "@/app/class-track/core/students/application/dtos/search-student-dto.dto";
 
 import type { StudentClassTrackProjection } from "@/app/class-track/core/students/domain/projections/StudentClassTrack.projection";
 import type { StudentWithLevelActive } from "@/app/class-track/core/students/domain/projections/StudentWithLevelActive.projection";

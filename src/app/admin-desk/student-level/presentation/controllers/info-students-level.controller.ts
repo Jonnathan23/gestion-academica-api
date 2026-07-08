@@ -1,8 +1,8 @@
 import type { Request, Response, NextFunction } from "express";
 
 import type { InfoStudentsLevelRepository } from "@/app/admin-desk/student-level/domain/repositories/info-students-level.repository";
-import { SearchStudentsLevelsDto } from "@/app/admin-desk/student-level/domain/dtos/search-students-levels.dto";
-import { GetStudentTimelineDto } from "@/app/admin-desk/student-level/domain/dtos/get-student-timeline.dto";
+import { SearchStudentsLevelsDto } from "@/app/admin-desk/student-level/application/dtos/search-students-levels.dto";
+import { GetStudentTimelineDto } from "@/app/admin-desk/student-level/application/dtos/get-student-timeline.dto";
 import { SearchStudentsUseCase } from "@/app/admin-desk/student-level/application/use-cases/search-students.use-case";
 import { GetStudentTimelineUseCase } from "@/app/admin-desk/student-level/application/use-cases/get-student-timeline.use-case";
 import type { StudentSearchProjection } from "@/app/admin-desk/student-level/domain/projections/StudentSearch.projection";

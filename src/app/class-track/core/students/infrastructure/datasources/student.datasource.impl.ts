@@ -12,7 +12,7 @@ import type { StudentWithLevelActiveDetails } from "@/app/class-track/core/stude
 import type { StudentWithLevelActive } from "@/app/class-track/core/students/domain/projections/StudentWithLevelActive.projection";
 import type { StudentClassTrackProjection } from "@/app/class-track/core/students/domain/projections/StudentClassTrack.projection";
 import type { StudentClassTrackDataSource } from "@/app/class-track/core/students/domain/datasources/student.datasource";
-import type { SearchStudentsDto } from "@/app/class-track/core/students/domain/dtos/search-student-dto.dto";
+import type { SearchStudentsDto } from "@/app/class-track/core/students/application/dtos/search-student-dto.dto";
 
 import { StudentWithLevelActiveDetailsProjectionMapper } from "@/app/class-track/core/students/infrastructure/mappers/active-student-details-projection.mapper";
 import { StudentWithLevelActiveProjectionMapper } from "@/app/class-track/core/students/infrastructure/mappers/active-student-projection.mapper";

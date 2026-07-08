@@ -1,6 +1,6 @@
 import { AttendanceSessionRepository } from "@/app/class-track/feats/attendance/domain/repositories/attendance-session.repository";
 
-import type { StartAttendanceSessionDto } from "@/app/class-track/feats/attendance/domain/dtos/start-attendance-session.dto";
+import type { StartAttendanceSessionDto } from "@/app/class-track/feats/attendance/application/dtos/start-attendance-session.dto";
 import type { AttendanceSessionEntity } from "@/app/class-track/feats/attendance/domain/entities/attendance-session.entity";
 import { CustomError } from "@/core/error/customError.error";
 import type { StudentClassTrackRepository } from "@/app/class-track/core/students/domain/repositories/student.repository";

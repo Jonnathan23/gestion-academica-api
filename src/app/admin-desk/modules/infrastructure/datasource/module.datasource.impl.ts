@@ -1,8 +1,8 @@
 import type { ModuleDataSource } from "@/app/admin-desk/modules/domain/datasource/module.datasource";
 import type { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
 import { ModuleMapper } from "@/app/admin-desk/modules/infrastructure/mappers/module.mapper";
-import { CreateModuleDto } from "@/app/admin-desk/modules/domain/dtos/create-module.dto";
-import { UpdateModuleDto } from "@/app/admin-desk/modules/domain/dtos/update-module.dto";
+import { CreateModuleDto } from "@/app/admin-desk/modules/application/dtos/create-module.dto";
+import { UpdateModuleDto } from "@/app/admin-desk/modules/application/dtos/update-module.dto";
 import { CustomError } from "@/core/error/customError.error";
 import Module from "@/data/models/admin-desk/module.model";
 

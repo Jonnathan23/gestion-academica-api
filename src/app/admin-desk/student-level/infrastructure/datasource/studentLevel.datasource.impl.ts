@@ -5,7 +5,7 @@ import type { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/modu
 import { ModuleMapper } from "@/app/admin-desk/modules/infrastructure/mappers/module.mapper";
 import type { StudentLevelDetailsProjection } from "@/app/admin-desk/student-level/domain/projections/ContractDetails.projection";
 import { studentModuleStatus } from "@/core/interfaces/contracts.interface";
-import { UpdateStudentLevelDto } from "@/app/admin-desk/student-level/domain/dtos/update-student-level.dto";
+import { UpdateStudentLevelDto } from "@/app/admin-desk/student-level/application/dtos/update-student-level.dto";
 import StudentModule from "@/data/models/admin-desk/student-module.model";
 import Module from "@/data/models/admin-desk/module.model";
 import Student from "@/data/models/admin-desk/student.model";

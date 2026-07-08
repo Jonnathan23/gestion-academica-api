@@ -1,6 +1,6 @@
 import { CustomError } from "@/core/error/customError.error";
 import type { LessonLogRepository } from "@/app/class-track/feats/lesson-logs/domain/repositories/lesson-log.repository";
-import type { GetLastLessonLogDto } from "@/app/class-track/feats/lesson-logs/domain/dtos/get-last-lesson-log.dto";
+import type { GetLastLessonLogDto } from "@/app/class-track/feats/lesson-logs/application/dtos/get-last-lesson-log.dto";
 import type { LessonLogEntity } from "@/app/class-track/feats/lesson-logs/domain/entities/lesson-log.entity";
 
 export class GetLastLessonLogUseCase {

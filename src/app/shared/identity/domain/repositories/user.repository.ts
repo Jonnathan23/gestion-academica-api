@@ -1,6 +1,6 @@
-import { LoginUserDto } from "@/app/shared/identity/domain/dtos/login-user.dto";
-import { RegisterUserDto } from "@/app/shared/identity/domain/dtos/register-user.dto";
-import { UpdateUserDto } from "@/app/shared/identity/domain/dtos/update-user.dto";
+import { LoginUserDto } from "@/app/shared/identity/application/dtos/login-user.dto";
+import { RegisterUserDto } from "@/app/shared/identity/application/dtos/register-user.dto";
+import { UpdateUserDto } from "@/app/shared/identity/application/dtos/update-user.dto";
 import { UserDataEntity } from "@/app/shared/identity/domain/entities/user-data.entity";
 import { UserEntity } from "@/app/shared/identity/domain/entities/user.entity";
 

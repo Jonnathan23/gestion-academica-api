@@ -2,8 +2,8 @@ import type { Request, Response, NextFunction } from "express";
 
 import { ModuleRepository } from "@/app/admin-desk/modules/domain/repositories/module.repository";
 import { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
-import { CreateModuleDto } from "@/app/admin-desk/modules/domain/dtos/create-module.dto";
-import { UpdateModuleDto } from "@/app/admin-desk/modules/domain/dtos/update-module.dto";
+import { CreateModuleDto } from "@/app/admin-desk/modules/application/dtos/create-module.dto";
+import { UpdateModuleDto } from "@/app/admin-desk/modules/application/dtos/update-module.dto";
 import { CustomError } from "@/core/error/customError.error";
 import { CreateModule } from "@/app/admin-desk/modules/application/use-cases/create-module.use-case";
 import { DeleteModule } from "@/app/admin-desk/modules/application/use-cases/delete-module.use-case";

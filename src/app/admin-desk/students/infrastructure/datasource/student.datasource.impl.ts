@@ -4,10 +4,10 @@ import type { StudentDataSource } from "@/app/admin-desk/students/domain/datasou
 import { studentContractStatus, studentProgressCategory } from "@/core/interfaces/students.interface";
 import { StudentMapper } from "@/app/admin-desk/students/infrastructure/mappers/student.mapper";
 import type { PaginatedResult } from "@/core/interfaces/paginated-result.interface";
-import { RegisterStudentDto } from "@/app/admin-desk/students/domain/dtos/register-student.dto";
-import { UpdateStudentDto } from "@/app/admin-desk/students/domain/dtos/update-student.dto";
-import { ChangeContractStatusDto } from "@/app/admin-desk/students/domain/dtos/change-contract-status.dto";
-import { SearchStudentsByCriteriaDto } from "@/app/admin-desk/students/domain/dtos/search-students-by-criteria.dto";
+import { RegisterStudentDto } from "@/app/admin-desk/students/application/dtos/register-student.dto";
+import { UpdateStudentDto } from "@/app/admin-desk/students/application/dtos/update-student.dto";
+import { ChangeContractStatusDto } from "@/app/admin-desk/students/application/dtos/change-contract-status.dto";
+import { SearchStudentsByCriteriaDto } from "@/app/admin-desk/students/application/dtos/search-students-by-criteria.dto";
 import { StudentEntity } from "@/app/admin-desk/students/domain/entities/student.entity";
 import Student from "@/data/models/admin-desk/student.model";
 import { CustomError } from "@/core/error/customError.error";
