@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize-typescript";
 import PaymentQuota from "@/data/models/admin-desk/payment-quota.model";
 import PaymentPlan from "@/data/models/admin-desk/payment-plan.model";
-import { CustomPostgresDatabaseConnectionError } from "../errors/custom-postgres-database-error.error";
+import { CustomPostgresDatabaseConnectionError } from "@/data/errors/custom-postgres-database-error.error";
 import { ColorsAdapter } from "@/core/utils/adapters/colors";
 import User from "@/data/models/shared/user.model";
 import Student from "@/data/models/admin-desk/student.model";

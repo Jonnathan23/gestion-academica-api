@@ -1,4 +1,4 @@
-import { PaymentQuotaEntity } from "./payment-quota.entity";
+import { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/payment-quota.entity";
 import { paymentQuotaStatus } from "@/app/admin-desk/payments/domain/interfaces/payment-quota-status.interface";
 
 export class PaymentPlanEntity {

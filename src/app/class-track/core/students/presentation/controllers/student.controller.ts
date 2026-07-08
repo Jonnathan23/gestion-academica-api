@@ -1,32 +1,33 @@
 import type { Request, Response, NextFunction } from "express";
 
-import { CustomError } from "@/core/error/customError.error";
-
 import { SuccessResponse } from "@/core/utils/success-response";
 import type { StudentClassTrackRepository } from "@/app/class-track/core/students/domain/repositories/student.repository";
 import { SearchStudentsDto } from "@/app/class-track/core/students/application/dtos/search-student-dto.dto";
 import { SearchStudentsUseCase } from "@/app/class-track/core/students/application/use-cases/search-students.use-case";
 import type { StudentClassTrackProjection } from "@/app/class-track/core/students/domain/projections/StudentClassTrack.projection";
+import type { StudentsValidators } from "@/app/class-track/core/students/application/dtos/validators/interfaces/students-validators.interface";
 
 export class StudentClassTrackController {
-    public constructor(private readonly studentRepository: StudentClassTrackRepository) {}
+    public constructor(
+        private readonly studentRepository: StudentClassTrackRepository,
+        private readonly validators: StudentsValidators,
+    ) {}
 
-    public searchStudents = (req: Request, res: Response, next: NextFunction) => {
-        const [error, searchStudentsDto] = SearchStudentsDto.create(req.query);
+    public searchStudents = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const searchStudentsDto = SearchStudentsDto.create(
+                req.query as Record<string, unknown>,
+                this.validators.searchStudentsValidator,
+            );
 
-        if (error) throw CustomError.badRequest(error);
+            const useCaseInstance = new SearchStudentsUseCase(this.studentRepository);
 
-        const useCaseInstance = new SearchStudentsUseCase(this.studentRepository);
+            const result = await useCaseInstance.execute(searchStudentsDto);
+            const successMessage = "Students retrieved successfully";
 
-        useCaseInstance
-            .execute(searchStudentsDto!)
-            .then((result) => {
-                const successMessage = "Students retrieved successfully";
-
-                SuccessResponse.ok<StudentClassTrackProjection[]>(res, successMessage, result);
-            })
-            .catch((error) => {
-                next(error);
-            });
+            return SuccessResponse.ok<StudentClassTrackProjection[]>(res, successMessage, result);
+        } catch (error) {
+            next(error);
+        }
     };
 }

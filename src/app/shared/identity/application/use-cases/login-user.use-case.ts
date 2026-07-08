@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import type { UserRepository } from "@/app/shared/identity/domain/repositories/user.repository";
-import { userState, type UserState } from "../../domain/interfaces/user.interfaces";
+import { userState, type UserState } from "@/app/shared/identity/domain/interfaces/user.interfaces";
 import { LoginUserDto } from "@/app/shared/identity/application/dtos/login-user.dto";
 import { UserEntity } from "@/app/shared/identity/domain/entities/user.entity";
 import { rolePermissionsMapping } from "@/core/constants/permissions";

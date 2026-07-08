@@ -40,6 +40,17 @@ const eslintConfiguration = [
             ...typescriptEslintPlugin.configs.recommended.rules,
 
             "no-console": ["warn", { allow: ["warn", "error", "info"] }],
+            "no-restricted-imports": [
+                "error",
+                {
+                    patterns: [
+                        {
+                            group: ["./*", "../*"],
+                            message: "Las rutas relativas están prohibidas. Usa rutas absolutas con el alias '@/' (ej. '@/data/...').",
+                        },
+                    ],
+                },
+            ],
             "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
 
             "@typescript-eslint/no-magic-numbers": [

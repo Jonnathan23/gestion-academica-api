@@ -1,38 +1,25 @@
+import type { EntityValidator } from "@/core/utils/adapters/validators/interfaces/entity-validator.interface";
+import type { SearchStudentsProps } from "@/app/class-track/core/students/application/dtos/interfaces/search-students.interface";
+
 export class SearchStudentsDto {
     private constructor(
         public readonly searchTerm: string,
         public readonly limit: number,
     ) {}
 
-    public static create(object: { [key: string]: unknown }): [string?, SearchStudentsDto?] {
-        const { searchTerm, limit } = object;
+    public static create(props: Record<string, unknown>, validator: EntityValidator<SearchStudentsProps>): SearchStudentsDto {
+        const validatedData = validator.validate(props);
 
-        if (!searchTerm) {
-            return ["Missing searchTerm parameter"];
-        }
-
-        if (typeof searchTerm !== "string") {
-            return ["searchTerm must be a string"];
-        }
-
-        const trimmedTerm = searchTerm.trim();
-
-        if (trimmedTerm.length < 2) {
-            return ["searchTerm must be at least 2 characters long to perform a search"];
-        }
+        const trimmedTerm = validatedData.searchTerm.trim();
 
         let parsedLimit = 10;
 
-        if (limit !== undefined && limit !== null) {
-            const limitNumber = Number(limit);
-
-            if (Number.isNaN(limitNumber) || limitNumber <= 0) {
-                return ["limit must be a valid positive number"];
-            }
+        if (validatedData.limit !== undefined && validatedData.limit !== null) {
+            const limitNumber = typeof validatedData.limit === "string" ? Number(validatedData.limit) : validatedData.limit;
 
             parsedLimit = limitNumber > 50 ? 50 : limitNumber;
         }
 
-        return [undefined, new SearchStudentsDto(trimmedTerm, parsedLimit)];
+        return new SearchStudentsDto(trimmedTerm, parsedLimit);
     }
 }
