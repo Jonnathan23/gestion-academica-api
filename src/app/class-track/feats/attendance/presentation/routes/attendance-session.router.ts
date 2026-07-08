@@ -9,6 +9,7 @@ import { environmentVariables } from "@/core/config/envs";
 import { RoleMiddleware } from "@/core/middleware/role.mid";
 import { AuthMiddleware } from "@/core/middleware/auth.mid";
 import { systemPermissions } from "@/core/constants/permissions";
+import { attendanceValidators } from "@/app/class-track/feats/attendance/application/dtos/validators/di-validators";
 
 export class AttendanceSessionRouter {
     public static get routes(): Router {
@@ -21,7 +22,12 @@ export class AttendanceSessionRouter {
         const studentClassTrackRepository = new StudentClassTrackRepositoryImpl(studentClassTrackDataSource);
 
         const useSecureCookies = environmentVariables.secureCookies;
-        const controller = new AttendanceSessionController(attendanceRepository, studentClassTrackRepository, useSecureCookies);
+        const controller = new AttendanceSessionController(
+            attendanceRepository,
+            studentClassTrackRepository,
+            useSecureCookies,
+            attendanceValidators,
+        );
 
         router.post("/check-in", AuthMiddleware.extractSharedPayload, controller.checkIn);
 

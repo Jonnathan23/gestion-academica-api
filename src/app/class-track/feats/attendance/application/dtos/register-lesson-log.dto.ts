@@ -1,3 +1,6 @@
+import type { RegisterLessonLogProps } from "@/app/class-track/feats/attendance/application/dtos/interfaces/register-lesson-log.interface";
+import type { EntityValidator } from "@/core/utils/adapters/validators/interfaces/entity-validator.interface";
+
 export class RegisterLessonLogDto {
     private constructor(
         public readonly attendanceSessionId: string,
@@ -6,14 +9,14 @@ export class RegisterLessonLogDto {
         public readonly activeModule: string,
     ) {}
 
-    public static create(object: { [key: string]: any }): [string?, RegisterLessonLogDto?] {
-        const { attendanceSessionId, lessonNumber, notes, activeModule } = object;
+    public static create(object: Record<string, unknown>, validator: EntityValidator<RegisterLessonLogProps>): RegisterLessonLogDto {
+        const validatedData = validator.validate(object);
 
-        if (!attendanceSessionId) return ["Missing attendanceSessionId"];
-        if (!lessonNumber) return ["Missing lessonNumber"];
-        if (!notes) return ["Missing notes"];
-        if (!activeModule) return ["Missing activeModule"];
-
-        return [undefined, new RegisterLessonLogDto(attendanceSessionId, lessonNumber, notes, activeModule)];
+        return new RegisterLessonLogDto(
+            validatedData.attendanceSessionId,
+            validatedData.lessonNumber,
+            validatedData.notes,
+            validatedData.activeModule,
+        );
     }
 }

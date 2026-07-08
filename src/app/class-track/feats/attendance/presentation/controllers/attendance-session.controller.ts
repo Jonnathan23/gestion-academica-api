@@ -14,6 +14,7 @@ import { GetActiveSessionsUseCase } from "@/app/class-track/feats/attendance/app
 import type { StudentClassTrackRepository } from "@/app/class-track/core/students/domain/repositories/student.repository";
 import { JwtAdapter } from "@/core/utils/adapters/jwt";
 import { clientRoles, userRoles } from "@/core/interfaces/Roles.interfaces";
+import type { AttendanceValidators } from "@/app/class-track/feats/attendance/application/dtos/validators/interfaces/attendance-validators.interface";
 
 export class AttendanceSessionController {
     private readonly cookieStudentSessionName: string = "classTrackSession";
@@ -29,56 +30,61 @@ export class AttendanceSessionController {
         private readonly attendanceSessionRepository: AttendanceSessionRepository,
         private readonly studentProjectionRepository: StudentClassTrackRepository,
         private readonly useSecureCookies: boolean,
+        private readonly attendanceValidators: AttendanceValidators,
     ) {}
 
     //* Metodos publicos
 
     public checkIn = (req: Request, res: Response, next: NextFunction) => {
-        const [error, startDto] = StartAttendanceSessionDto.create(req.body);
+        try {
+            const startDto = StartAttendanceSessionDto.create(req.body, this.attendanceValidators.startAttendanceSessionValidator);
 
-        if (error || !startDto) {
-            return next(CustomError.badRequest(error || "Invalid request data"));
+            const isSystemUser =
+                (req as AuthRequest).userSession?.role === userRoles.TEACHER ||
+                (req as AuthRequest).userSession?.role === userRoles.AcademicDirector;
+
+            if (isSystemUser) {
+                return this.handleTeacherCheckIn(startDto, res, next);
+            }
+
+            this.handleStudentCheckIn(startDto, res, next);
+        } catch (error) {
+            next(error);
         }
-
-        const isSystemUser =
-            (req as AuthRequest).userSession?.role === userRoles.TEACHER ||
-            (req as AuthRequest).userSession?.role === userRoles.AcademicDirector;
-
-        if (isSystemUser) {
-            return this.handleTeacherCheckIn(startDto, res, next);
-        }
-
-        this.handleStudentCheckIn(startDto, res, next);
     };
 
     public checkOut = (req: Request, res: Response, next: NextFunction) => {
-        const [error, endDto] = EndAttendanceSessionDto.create(req.body);
+        try {
+            const endDto = EndAttendanceSessionDto.create(req.body, this.attendanceValidators.endAttendanceSessionValidator);
 
-        if (error || !endDto) {
-            return next(CustomError.badRequest(error || "Invalid request data"));
+            const isSystemUser = !!(req as AuthRequest).userSession;
+
+            if (isSystemUser) {
+                return this.handleTeacherCheckOut(endDto, res, next);
+            }
+
+            this.handleStudentCheckOut(endDto, req as AuthRequest, res, next);
+        } catch (error) {
+            next(error);
         }
-
-        const isSystemUser = !!(req as AuthRequest).userSession;
-
-        if (isSystemUser) {
-            return this.handleTeacherCheckOut(endDto, res, next);
-        }
-
-        this.handleStudentCheckOut(endDto, req as AuthRequest, res, next);
     };
 
     public approve = (req: Request, res: Response, next: NextFunction) => {
-        const teacherId = (req as AuthRequest).userSession?.id;
-        const [error, approveDto] = ApproveAttendanceSessionDto.create(req.body, teacherId!.toString());
+        try {
+            const teacherId = (req as AuthRequest).userSession?.id;
+            const approveDto = ApproveAttendanceSessionDto.create(
+                req.body,
+                teacherId!.toString(),
+                this.attendanceValidators.approveAttendanceSessionValidator,
+            );
 
-        if (error || !approveDto) {
-            return next(CustomError.badRequest(error || "Invalid request data"));
+            new ApproveAttendanceSessionUseCase(this.attendanceSessionRepository)
+                .execute(approveDto)
+                .then((session) => SuccessResponse.ok(res, "Check-out approved successfully", session))
+                .catch((error) => next(error));
+        } catch (error) {
+            next(error);
         }
-
-        new ApproveAttendanceSessionUseCase(this.attendanceSessionRepository)
-            .execute(approveDto)
-            .then((session) => SuccessResponse.ok(res, "Check-out approved successfully", session))
-            .catch((error) => next(error));
     };
 
     public getActiveSessionsInProgress = (req: Request, res: Response, next: NextFunction) => {

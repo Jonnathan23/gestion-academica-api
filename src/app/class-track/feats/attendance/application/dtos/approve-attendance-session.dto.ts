@@ -1,4 +1,5 @@
-import { Validators } from "@/core/utils/validators";
+import type { ApproveAttendanceSessionProps } from "@/app/class-track/feats/attendance/application/dtos/interfaces/approve-attendance-session.interface";
+import type { EntityValidator } from "@/core/utils/adapters/validators/interfaces/entity-validator.interface";
 
 export class ApproveAttendanceSessionDto {
     private constructor(
@@ -6,15 +7,13 @@ export class ApproveAttendanceSessionDto {
         public readonly teacherId: string,
     ) {}
 
-    public static create(object: { [key: string]: any }, teacherId: string): [string?, ApproveAttendanceSessionDto?] {
-        const { sessionId } = object;
+    public static create(
+        object: Record<string, unknown>,
+        teacherId: string,
+        validator: EntityValidator<ApproveAttendanceSessionProps>,
+    ): ApproveAttendanceSessionDto {
+        const validatedData = validator.validate({ ...object, teacherId });
 
-        if (!sessionId) return ["Invalid session"];
-        if (!Validators.isUUID(sessionId)) return ["Invalid session"];
-
-        if (!teacherId) return ["Missing teacher"];
-        if (!Validators.isUUID(teacherId)) return ["Invalid teacher"];
-
-        return [undefined, new ApproveAttendanceSessionDto(sessionId, teacherId)];
+        return new ApproveAttendanceSessionDto(validatedData.sessionId, validatedData.teacherId);
     }
 }
