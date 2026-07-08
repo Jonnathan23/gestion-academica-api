@@ -1,5 +1,6 @@
 import type { CertificateType, StudentContractStatus } from "@/core/interfaces/students.interface";
-import { Validators } from "@/core/utils/validators";
+import type { UpdateStudentProps } from "@/app/admin-desk/students/application/dtos/interfaces/update-student.interface";
+import type { EntityValidator } from "@/core/utils/adapters/validators/interfaces/entity-validator.interface";
 
 export class UpdateStudentDto {
     private constructor(
@@ -17,7 +18,7 @@ export class UpdateStudentDto {
     ) {}
 
     public get value() {
-        const returnObject: { [key: string]: any } = {};
+        const returnObject: Record<string, unknown> = {};
 
         if (this.identificationCard) returnObject.st_identification_card = this.identificationCard;
         if (this.fullName) returnObject.st_full_name = this.fullName;
@@ -34,57 +35,28 @@ export class UpdateStudentDto {
         return returnObject;
     }
 
-    public static create(object: { [key: string]: any }): [string?, UpdateStudentDto?] {
-        const {
-            identificationCard,
-            fullName,
-            phoneNumber,
-            email,
+    public static create(object: Record<string, unknown>, validator: EntityValidator<UpdateStudentProps>): UpdateStudentDto {
+        const validatedData = validator.validate(object);
+
+        const startDate = validatedData.startDate ? new Date(validatedData.startDate) : undefined;
+        const dateOfBirth = validatedData.dateOfBirth ? new Date(validatedData.dateOfBirth) : undefined;
+        let isGraduated: boolean | undefined = undefined;
+
+        if (validatedData.isGraduated !== undefined) {
+            isGraduated = validatedData.isGraduated === "true" || validatedData.isGraduated === true;
+        }
+
+        return new UpdateStudentDto(
+            validatedData.identificationCard,
+            validatedData.fullName,
+            validatedData.phoneNumber,
+            validatedData.email,
             startDate,
             dateOfBirth,
-            nationality,
-            certificateType,
-            contractStatus,
+            validatedData.nationality,
+            validatedData.certificateType,
+            validatedData.contractStatus,
             isGraduated,
-        } = object;
-
-        if (
-            !identificationCard &&
-            !fullName &&
-            !phoneNumber &&
-            !email &&
-            !startDate &&
-            !dateOfBirth &&
-            !nationality &&
-            !certificateType &&
-            !contractStatus &&
-            isGraduated === undefined
-        )
-            return ["No data provided to update"];
-
-        if (identificationCard && identificationCard.length !== 10) return ["Invalid identificationCard"];
-        if (phoneNumber && phoneNumber.length !== 10) return ["Invalid phoneNumber"];
-
-        if (identificationCard && !Validators.isIdentificationCard(identificationCard)) return ["Invalid identificationCard"];
-        if (phoneNumber && !Validators.isPhoneNumber(phoneNumber)) return ["Invalid phoneNumber"];
-
-        if (startDate && !Validators.isDate(startDate)) return ["Invalid startDate"];
-        if (dateOfBirth && !Validators.isDate(dateOfBirth)) return ["Invalid dateOfBirth"];
-
-        return [
-            undefined,
-            new UpdateStudentDto(
-                identificationCard,
-                fullName,
-                phoneNumber,
-                email,
-                startDate,
-                dateOfBirth,
-                nationality,
-                certificateType,
-                contractStatus,
-                isGraduated,
-            ),
-        ];
+        );
     }
 }

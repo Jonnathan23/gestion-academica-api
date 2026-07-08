@@ -1,11 +1,6 @@
-import {
-    certificateType,
-    type CertificateType,
-    studentContractStatus,
-    type StudentContractStatus,
-    studentProgressCategory,
-    type StudentProgressCategory,
-} from "@/core/interfaces/students.interface";
+import type { CertificateType, StudentContractStatus, StudentProgressCategory } from "@/core/interfaces/students.interface";
+import type { SearchStudentsByCriteriaProps } from "@/app/admin-desk/students/application/dtos/interfaces/search-students-by-criteria.interface";
+import type { EntityValidator } from "@/core/utils/adapters/validators/interfaces/entity-validator.interface";
 
 export class SearchStudentsByCriteriaDto {
     private constructor(
@@ -18,60 +13,26 @@ export class SearchStudentsByCriteriaDto {
         public readonly st_progress_category?: StudentProgressCategory,
     ) {}
 
-    public static create(props: { [key: string]: any }): [string?, SearchStudentsByCriteriaDto?] {
-        const { page, searchTerm, st_nationality, st_certificate_type, st_is_graduated, st_contract_status, st_progress_category } = props;
-
-        if (page === undefined || page === null) {
-            return ["El parámetro 'page' es requerido"];
-        }
-
-        let parsedPage = parseInt(page);
-
-        if (isNaN(parsedPage) || parsedPage <= 0) {
-            return ["El parámetro 'page' debe ser un número entero mayor a 0"];
-        }
-
-        if (st_certificate_type) {
-            const validCertTypes = Object.values(certificateType);
-
-            if (!validCertTypes.includes(st_certificate_type as CertificateType)) {
-                return ["Valor inválido para 'st_certificate_type'"];
-            }
-        }
-
-        if (st_contract_status) {
-            const validStatuses = Object.values(studentContractStatus);
-
-            if (!validStatuses.includes(st_contract_status as StudentContractStatus)) {
-                return ["Valor inválido para 'st_contract_status'"];
-            }
-        }
-
-        if (st_progress_category) {
-            const validCategories = Object.values(studentProgressCategory);
-
-            if (!validCategories.includes(st_progress_category as StudentProgressCategory)) {
-                return ["Valor inválido para 'st_progress_category'"];
-            }
-        }
+    public static create(
+        props: Record<string, unknown>,
+        validator: EntityValidator<SearchStudentsByCriteriaProps>,
+    ): SearchStudentsByCriteriaDto {
+        const validatedData = validator.validate(props);
 
         let parsedIsGraduated: boolean | undefined = undefined;
 
-        if (st_is_graduated !== undefined && st_is_graduated !== "") {
-            parsedIsGraduated = st_is_graduated === "true" || st_is_graduated === true;
+        if (validatedData.st_is_graduated !== undefined && validatedData.st_is_graduated !== "") {
+            parsedIsGraduated = validatedData.st_is_graduated === "true" || validatedData.st_is_graduated === true;
         }
 
-        return [
-            undefined,
-            new SearchStudentsByCriteriaDto(
-                parsedPage,
-                searchTerm,
-                st_nationality,
-                st_certificate_type as CertificateType,
-                parsedIsGraduated,
-                st_contract_status as StudentContractStatus,
-                st_progress_category as StudentProgressCategory,
-            ),
-        ];
+        return new SearchStudentsByCriteriaDto(
+            Number(validatedData.page),
+            validatedData.searchTerm,
+            validatedData.st_nationality,
+            validatedData.st_certificate_type,
+            parsedIsGraduated,
+            validatedData.st_contract_status,
+            validatedData.st_progress_category,
+        );
     }
 }

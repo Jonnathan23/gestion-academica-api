@@ -7,6 +7,7 @@ import { AuthMiddleware } from "@/core/middleware/auth.mid";
 import { RoleMiddleware } from "@/core/middleware/role.mid";
 import { VerifyUUID } from "@/core/middleware/verifyUuId.mid";
 import { systemPermissions } from "@/core/constants/permissions";
+import { studentValidators } from "@/app/admin-desk/students/application/dtos/validators/di-validators";
 
 export class StudentsRouter {
     public static get routes(): Router {
@@ -14,7 +15,7 @@ export class StudentsRouter {
 
         const studentDatasource = new StudentDataSourceImpl();
         const studentRepository = new StudentRepositoryImpl(studentDatasource);
-        const studentController = new StudentController(studentRepository);
+        const studentController = new StudentController(studentRepository, studentValidators);
 
         // Protect all routes
         router.param("id", VerifyUUID.validate);
