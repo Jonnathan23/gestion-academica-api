@@ -11,7 +11,7 @@ import { GetAllModules } from "@/app/admin-desk/modules/application/use-cases/ge
 import { GetModuleById } from "@/app/admin-desk/modules/application/use-cases/get-module-by-id.use-case";
 import { UpdateModule } from "@/app/admin-desk/modules/application/use-cases/update-module.use-case";
 import { SuccessResponse } from "@/core/utils/success-response";
-import type { ModuleValidators } from "@/app/admin-desk/modules/application/dtos/validators/interfaces/module-validators.interface";
+import type { ModuleValidators } from "@/app/admin-desk/modules/application/dtos/interfaces/module-validators.interface";
 
 export class ModuleController {
     public constructor(

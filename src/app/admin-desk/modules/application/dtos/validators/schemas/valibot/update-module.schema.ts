@@ -1,18 +1,21 @@
-import * as v from "valibot";
+import { pipe, object, optional, string, unknown, transform, number, minValue, maxValue, check } from "valibot";
 
-export const updateModuleSchema = v.pipe(
-    v.object({
-        mo_name: v.optional(v.string()),
-        mo_description: v.optional(v.string()),
-        mo_level: v.optional(
-            v.pipe(
-                v.unknown(),
-                v.transform((input) => Number(input)),
-                v.number(),
-                v.minValue(1, "Level must be greater than 0"),
-                v.maxValue(6, "Level must be less than or equal to 6"),
+const minLevel = 1;
+const maxLevel = 6;
+
+export const updateModuleSchema = pipe(
+    object({
+        mo_name: optional(string()),
+        mo_description: optional(string()),
+        mo_level: optional(
+            pipe(
+                unknown(),
+                transform((input) => Number(input)),
+                number(),
+                minValue(minLevel, `Level must be greater than ${minLevel}`),
+                maxValue(maxLevel, `Level must be less than or equal to ${maxLevel}`),
             ),
         ),
     }),
-    v.check((data) => Object.values(data).some((val) => val !== undefined), "Missing fields"),
+    check((data) => Object.values(data).some((val) => val !== undefined), "Missing fields"),
 );
