@@ -1,4 +1,4 @@
-import type { RetentionAlertStatus } from "@/app/class-track/feats/retention-alerts/domain/interfaces/RetentionAlert.interface";
+import type { RetentionAlertStatus } from "@/app/class-track/feats/retention-alerts/domain/interfaces/retention-alert.interface";
 
 export interface BasicStudentInfo {
     id: string;
@@ -9,7 +9,7 @@ export interface BasicStudentInfo {
 }
 
 export class RetentionAlertWithStudentProjection {
-    constructor(
+    public constructor(
         public readonly id: string,
         public readonly contactDate: Date | null,
         public readonly hasResponded: boolean,

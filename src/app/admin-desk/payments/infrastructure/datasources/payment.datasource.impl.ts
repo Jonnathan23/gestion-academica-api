@@ -1,21 +1,22 @@
 import { Transaction } from "sequelize";
-
-import type { PaymentDataSource } from "@/app/admin-desk/payments/domain/datasource";
-import type { CreatePaymentPlanDto, PayQuotaDto } from "@/app/admin-desk/payments/domain/dtos";
-import type { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/PaymentPlanEntity";
-import type { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/PaymentQuotaEntity";
-import { paymentPlanStatus, paymentQuotaStatus, type PaymentQuotaStatus } from "@/app/admin-desk/payments/domain/interfaces";
+import type { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/payment-plan.entity";
+import type { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/payment-quota.entity";
 import { PaymentMapper } from "@/app/admin-desk/payments/infrastructure/mappers/payment.mapper";
-import { CustomError } from "@/core/error";
-import PaymentPlanModel from "@/data/models/admin-desk/PaymentPlan.model";
-import PaymentQuotaModel from "@/data/models/admin-desk/PaymentQuota.model";
+import PaymentPlanModel from "@/data/models/admin-desk/payment-plan.model";
+import PaymentQuotaModel from "@/data/models/admin-desk/payment-quota.model";
+import { PaymentDataSource } from "@/app/admin-desk/payments/domain/datasource/payment.datasource";
+import { CreatePaymentPlanDto } from "@/app/admin-desk/payments/application/dtos/create-payment-plan.dto";
+import { PayQuotaDto } from "@/app/admin-desk/payments/application/dtos/pay-quota.dto";
+import { paymentPlanStatus } from "@/app/admin-desk/payments/domain/interfaces/payment-plan-status.interface";
+import { paymentQuotaStatus, type PaymentQuotaStatus } from "@/app/admin-desk/payments/domain/interfaces/payment-quota-status.interface";
+import { CustomError } from "@/core/error/customError.error";
 
 export class PaymentDataSourceImpl implements PaymentDataSource {
-    constructor() {}
+    public constructor() {}
 
     //* PUBLIC METHODS (ORCHESTRATORS)
 
-    async createPaymentPlan(dto: CreatePaymentPlanDto, generatedQuotas: PaymentQuotaEntity[]): Promise<PaymentPlanEntity> {
+    public async createPaymentPlan(dto: CreatePaymentPlanDto, generatedQuotas: PaymentQuotaEntity[]): Promise<PaymentPlanEntity> {
         return await PaymentPlanModel.sequelize!.transaction(async (transaction) => {
             const createdPlan = await this._insertPaymentPlan(dto, transaction);
             const createdQuotas = await this._insertGeneratedQuotas(createdPlan.pp_id, generatedQuotas, transaction);
@@ -27,7 +28,7 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
         });
     }
 
-    async getStudentPaymentPlans(studentId: string): Promise<PaymentPlanEntity[]> {
+    public async getStudentPaymentPlans(studentId: string): Promise<PaymentPlanEntity[]> {
         const plans = await PaymentPlanModel.findAll({
             where: { pp_student_id: studentId },
             include: [
@@ -45,7 +46,7 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
         return plans.map((plan) => PaymentMapper.planEntityFromObject(plan.toJSON()));
     }
 
-    async processQuotaPayment(dto: PayQuotaDto): Promise<PaymentQuotaEntity> {
+    public async processQuotaPayment(dto: PayQuotaDto): Promise<PaymentQuotaEntity> {
         return await PaymentQuotaModel.sequelize!.transaction(async (transaction) => {
             const currentQuota = await this._findAndValidateQuotaForPayment(dto.quotaId, dto.amountPaid, transaction);
 
@@ -62,7 +63,7 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
         });
     }
 
-    async revertQuotaPayment(quotaId: string): Promise<boolean> {
+    public async revertQuotaPayment(quotaId: string): Promise<boolean> {
         return await PaymentQuotaModel.sequelize!.transaction(async (transaction) => {
             const currentQuota = await this._findQuotaOrThrow(quotaId, transaction);
 
@@ -116,9 +117,11 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
 
     private async _findQuotaOrThrow(quotaId: string, transaction: Transaction): Promise<PaymentQuotaModel> {
         const quota = await PaymentQuotaModel.findByPk(quotaId, { transaction });
+
         if (!quota) {
             throw CustomError.notFound("Payment Quota not found");
         }
+
         return quota;
     }
 
@@ -134,6 +137,7 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
         }
 
         const expectedAmount = Number(quota.pq_total_expected);
+
         if (amountPaid > expectedAmount) {
             throw CustomError.badRequest(`Amount paid cannot exceed the expected total of $${expectedAmount}`);
         }
@@ -176,6 +180,7 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
         if (nextQuota) {
             const newRollover = Number(nextQuota.pq_rollover_debt) + remainingDebt;
             const newExpected = Number(nextQuota.pq_base_amount) + newRollover;
+
             await nextQuota.update(
                 {
                     pq_rollover_debt: newRollover,
@@ -185,6 +190,7 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
             );
         } else {
             const nextMonthDate = new Date(currentQuota.pq_due_date);
+
             nextMonthDate.setMonth(nextMonthDate.getMonth() + 1);
 
             await PaymentQuotaModel.create(
@@ -234,6 +240,7 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
                 await nextQuota.destroy({ transaction });
             } else {
                 const newExpected = currentBase + newRollover;
+
                 await nextQuota.update(
                     {
                         pq_rollover_debt: newRollover,

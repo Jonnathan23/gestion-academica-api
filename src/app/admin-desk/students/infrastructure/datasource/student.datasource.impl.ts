@@ -1,25 +1,24 @@
 import { Op } from "sequelize";
 
 import type { StudentDataSource } from "@/app/admin-desk/students/domain/datasource/student.datasource";
-import type {
-    RegisterStudentDto,
-    UpdateStudentDto,
-    ChangeContractStatusDto,
-    SearchStudentsByCriteriaDto,
-    StudentEntity,
-} from "@/app/admin-desk/students/domain";
-import { studentContractStatus, studentProgressCategory } from "@/core/interfaces/Students.interface";
+import { studentContractStatus, studentProgressCategory } from "@/core/interfaces/students.interface";
 import { StudentMapper } from "@/app/admin-desk/students/infrastructure/mappers/student.mapper";
-import { Student } from "@/data/models/admin-desk";
-import { CustomError } from "@/core/error";
-import { Validators } from "@/core/utils";
-import type { PaginatedResult } from "@/core/interfaces/PaginatedResult.interface";
+import type { PaginatedResult } from "@/core/interfaces/paginated-result.interface";
+import { RegisterStudentDto } from "@/app/admin-desk/students/application/dtos/register-student.dto";
+import { UpdateStudentDto } from "@/app/admin-desk/students/application/dtos/update-student.dto";
+import { ChangeContractStatusDto } from "@/app/admin-desk/students/application/dtos/change-contract-status.dto";
+import { SearchStudentsByCriteriaDto } from "@/app/admin-desk/students/application/dtos/search-students-by-criteria.dto";
+import { StudentEntity } from "@/app/admin-desk/students/domain/entities/student.entity";
+import Student from "@/data/models/admin-desk/student.model";
+import { CustomError } from "@/core/error/customError.error";
+import { Validators } from "@/core/utils/validators";
 
 export class StudentDataSourceImpl implements StudentDataSource {
-    async register(dto: RegisterStudentDto): Promise<StudentEntity> {
+    public async register(dto: RegisterStudentDto): Promise<StudentEntity> {
         const { identificationCard, fullName, phoneNumber, email, dateOfBirth, nationality, certificateType, startDate } = dto;
 
         const studentExist = await Student.findOne({ where: { st_identification_card: identificationCard } });
+
         if (studentExist) {
             throw CustomError.badRequest("Student already exists with that identification card");
         }
@@ -41,7 +40,7 @@ export class StudentDataSourceImpl implements StudentDataSource {
         return StudentMapper.studentModelToEntity(newStudent);
     }
 
-    async search(searchQuery: string): Promise<StudentEntity[]> {
+    public async search(searchQuery: string): Promise<StudentEntity[]> {
         const isUuidValid = Validators.isUUID(searchQuery);
 
         const searchConditions: any[] = [
@@ -60,7 +59,7 @@ export class StudentDataSourceImpl implements StudentDataSource {
         return students.map((student) => StudentMapper.studentModelToEntity(student));
     }
 
-    async searchByCriteria(dto: SearchStudentsByCriteriaDto): Promise<PaginatedResult<StudentEntity>> {
+    public async searchByCriteria(dto: SearchStudentsByCriteriaDto): Promise<PaginatedResult<StudentEntity>> {
         const { page, searchTerm, st_nationality, st_certificate_type, st_is_graduated, st_contract_status, st_progress_category } = dto;
 
         const limit = 10;
@@ -108,13 +107,15 @@ export class StudentDataSourceImpl implements StudentDataSource {
         return paginatedResult;
     }
 
-    async getAllStudents(): Promise<StudentEntity[]> {
+    public async getAllStudents(): Promise<StudentEntity[]> {
         const students = await Student.findAll();
+
         return students.map((student) => StudentMapper.studentModelToEntity(student));
     }
 
-    async update(id: string, dto: UpdateStudentDto): Promise<StudentEntity> {
+    public async update(id: string, dto: UpdateStudentDto): Promise<StudentEntity> {
         const student = await Student.findByPk(id);
+
         if (!student) throw CustomError.notFound("Student not found");
 
         await student.update(dto.value);
@@ -122,9 +123,10 @@ export class StudentDataSourceImpl implements StudentDataSource {
         return StudentMapper.studentModelToEntity(student);
     }
 
-    async changeContractStatus(id: string, dto: ChangeContractStatusDto): Promise<StudentEntity> {
+    public async changeContractStatus(id: string, dto: ChangeContractStatusDto): Promise<StudentEntity> {
         const { contractStatus } = dto;
         const student = await Student.findByPk(id);
+
         if (!student) throw CustomError.notFound("Student not found");
 
         await student.update({ st_contract_status: contractStatus });
@@ -132,8 +134,9 @@ export class StudentDataSourceImpl implements StudentDataSource {
         return StudentMapper.studentModelToEntity(student);
     }
 
-    async toggleGraduated(id: string): Promise<StudentEntity> {
+    public async toggleGraduated(id: string): Promise<StudentEntity> {
         const student = await Student.findByPk(id);
+
         if (!student) throw CustomError.notFound("Student not found");
 
         await student.update({ st_is_graduated: !student.st_is_graduated });
@@ -141,8 +144,9 @@ export class StudentDataSourceImpl implements StudentDataSource {
         return StudentMapper.studentModelToEntity(student);
     }
 
-    async deactivate(id: string): Promise<StudentEntity> {
+    public async deactivate(id: string): Promise<StudentEntity> {
         const student = await Student.findByPk(id);
+
         if (!student) throw CustomError.notFound("Student not found");
 
         await student.update({ st_contract_status: studentContractStatus.Inactive });

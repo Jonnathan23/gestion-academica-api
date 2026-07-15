@@ -1,28 +1,29 @@
 import type { ModuleDataSource } from "@/app/admin-desk/modules/domain/datasource/module.datasource";
-import type { CreateModuleDto, UpdateModuleDto } from "@/app/admin-desk/modules/domain/dtos";
 import type { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
 import type { ModuleRepository } from "@/app/admin-desk/modules/domain/repositories/module.repository";
+import { CreateModuleDto } from "@/app/admin-desk/modules/application/dtos/create-module.dto";
+import { UpdateModuleDto } from "@/app/admin-desk/modules/application/dtos/update-module.dto";
 
 export class ModuleRepositoryImpl implements ModuleRepository {
-    constructor(private readonly moduleDataSource: ModuleDataSource) {}
+    public constructor(private readonly moduleDataSource: ModuleDataSource) {}
 
-    getAllModules(): Promise<ModuleEntity[]> {
+    public getAllModules(): Promise<ModuleEntity[]> {
         return this.moduleDataSource.getAllModules();
     }
 
-    getModuleById(moduleId: string): Promise<ModuleEntity> {
+    public getModuleById(moduleId: string): Promise<ModuleEntity> {
         return this.moduleDataSource.getModuleById(moduleId);
     }
 
-    createModule(module: CreateModuleDto): Promise<void> {
+    public createModule(module: CreateModuleDto): Promise<void> {
         return this.moduleDataSource.createModule(module);
     }
 
-    updateModule(id: string, module: UpdateModuleDto): Promise<void> {
+    public updateModule(id: string, module: UpdateModuleDto): Promise<void> {
         return this.moduleDataSource.updateModule(id, module);
     }
 
-    deleteModule(id: string): Promise<void> {
+    public deleteModule(id: string): Promise<void> {
         return this.moduleDataSource.deleteModule(id);
     }
 }

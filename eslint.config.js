@@ -40,7 +40,42 @@ const eslintConfiguration = [
             ...typescriptEslintPlugin.configs.recommended.rules,
 
             "no-console": ["warn", { allow: ["warn", "error", "info"] }],
+            "no-restricted-imports": [
+                "error",
+                {
+                    patterns: [
+                        {
+                            group: ["./*", "../*"],
+                            message: "Las rutas relativas están prohibidas. Usa rutas absolutas con el alias '@/' (ej. '@/data/...').",
+                        },
+                    ],
+                },
+            ],
             "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+
+            "@typescript-eslint/no-magic-numbers": [
+                "warn",
+                {
+                    ignoreEnums: true,
+                    ignoreNumericLiteralTypes: true,
+                    ignoreReadonlyClassProperties: true,
+                    ignore: [-1, 0, 1],
+                },
+            ],
+            "@typescript-eslint/explicit-member-accessibility": [
+                "error",
+                {
+                    accessibility: "explicit",
+                },
+            ],
+            "padding-line-between-statements": [
+                "error",
+                { blankLine: "always", prev: "import", next: "*" },
+                { blankLine: "any", prev: "import", next: "import" },
+                { blankLine: "always", prev: "*", next: "return" },
+                { blankLine: "always", prev: ["const", "let", "var"], next: "*" },
+                { blankLine: "any", prev: ["const", "let", "var"], next: ["const", "let", "var"] },
+            ],
 
             "@typescript-eslint/naming-convention": [
                 "error",
@@ -81,15 +116,16 @@ const eslintConfiguration = [
     {
         files: [
             "**/*.dto.ts",
+            "**/dtos/**/*.ts",
             "**/*.mapper.ts",
-            "**/*.mappers.ts",
+            "**/mappers/**/*.ts",
             //"**/*.datasource.ts",
             "**/*.datasource.impl.ts",
-            "**/*.datasources.ts",
+            "**/datasources/**/*.ts",
             "**/*.model.ts",
-            "**/*.models.ts",
+            "**/models/**/*.ts",
             "**/*.entity.ts",
-            "**/*.entities.ts",
+            "**/entities/**/*.ts",
             "**/*.error.ts",
             "**/*.integration.test.ts",
             "**/__tests__/**/*.ts",
@@ -138,7 +174,7 @@ const eslintConfiguration = [
     {
         files: [
             "**/*.dto.ts",
-            "**/*.dtos.ts",
+            "**/*.dtos/**/*.ts",
             "**/*.mapper.ts",
             "**/*.mappers.ts",
             "**/*.test.ts",
@@ -147,12 +183,13 @@ const eslintConfiguration = [
         ],
         rules: {
             "@typescript-eslint/no-explicit-any": "off",
+            "@typescript-eslint/no-magic-numbers": "off",
         },
     },
 
     // 5. Reglas estrictas exclusivas para diccionarios de constantes (Permisos)
     {
-        files: ["**/Permissions.ts", "**/*.permissions.ts"],
+        files: ["**/permissions.ts", "**/*.permissions.ts"],
         rules: {
             "@typescript-eslint/naming-convention": [
                 "error",

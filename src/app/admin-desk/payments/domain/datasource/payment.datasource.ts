@@ -1,13 +1,14 @@
-import type { CreatePaymentPlanDto, PayQuotaDto } from "@/app/admin-desk/payments/domain/dtos";
-import type { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/PaymentPlanEntity";
-import type { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/PaymentQuotaEntity";
+import type { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/payment-plan.entity";
+import type { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/payment-quota.entity";
+import { CreatePaymentPlanDto } from "@/app/admin-desk/payments/application/dtos/create-payment-plan.dto";
+import { PayQuotaDto } from "@/app/admin-desk/payments/application/dtos/pay-quota.dto";
 
 export abstract class PaymentDataSource {
-    abstract createPaymentPlan(dto: CreatePaymentPlanDto, generatedQuotas: PaymentQuotaEntity[]): Promise<PaymentPlanEntity>;
+    public abstract createPaymentPlan(dto: CreatePaymentPlanDto, generatedQuotas: PaymentQuotaEntity[]): Promise<PaymentPlanEntity>;
 
-    abstract getStudentPaymentPlans(studentId: string): Promise<PaymentPlanEntity[]>;
+    public abstract getStudentPaymentPlans(studentId: string): Promise<PaymentPlanEntity[]>;
 
-    abstract processQuotaPayment(dto: PayQuotaDto): Promise<PaymentQuotaEntity>;
+    public abstract processQuotaPayment(dto: PayQuotaDto): Promise<PaymentQuotaEntity>;
 
-    abstract revertQuotaPayment(quotaId: string): Promise<boolean>;
+    public abstract revertQuotaPayment(quotaId: string): Promise<boolean>;
 }

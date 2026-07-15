@@ -1,26 +1,27 @@
 import { Op } from "sequelize";
 
-import Student, { studentContractStatus } from "@/data/models/admin-desk/Student.model";
-import StudentModule from "@/data/models/admin-desk/StudentModule.model";
-import Module from "@/data/models/admin-desk/Module.model";
+import Student, { studentContractStatus } from "@/data/models/admin-desk/student.model";
+import StudentModule from "@/data/models/admin-desk/student-module.model";
+import Module from "@/data/models/admin-desk/module.model";
 
-import { studentModuleStatus } from "@/core/interfaces/Contracts.interface";
+import { studentModuleStatus } from "@/core/interfaces/contracts.interface";
 import { CustomError } from "@/core/error/customError.error";
-import { Validators } from "@/core/utils/Validators";
+import { Validators } from "@/core/utils/validators";
 
 import type { StudentWithLevelActiveDetails } from "@/app/class-track/core/students/domain/projections/StudentWithLevelActiveDetails.projection";
 import type { StudentWithLevelActive } from "@/app/class-track/core/students/domain/projections/StudentWithLevelActive.projection";
 import type { StudentClassTrackProjection } from "@/app/class-track/core/students/domain/projections/StudentClassTrack.projection";
 import type { StudentClassTrackDataSource } from "@/app/class-track/core/students/domain/datasources/student.datasource";
-import type { SearchStudentsDto } from "@/app/class-track/core/students/domain/dtos/SearchStudentDto.dto";
+import type { SearchStudentsDto } from "@/app/class-track/core/students/application/dtos/search-student-dto.dto";
 
-import { StudentWithLevelActiveDetailsProjectionMapper } from "@/app/class-track/core/students/infrastructure/mappers/activeStudentDetailsProjection.mapper";
-import { StudentWithLevelActiveProjectionMapper } from "@/app/class-track/core/students/infrastructure/mappers/activeStudentProjection.mapper";
+import { StudentWithLevelActiveDetailsProjectionMapper } from "@/app/class-track/core/students/infrastructure/mappers/active-student-details-projection.mapper";
+import { StudentWithLevelActiveProjectionMapper } from "@/app/class-track/core/students/infrastructure/mappers/active-student-projection.mapper";
 import { StudentMapper } from "@/app/class-track/core/students/infrastructure/mappers/student.mapper";
 
 export class StudentClassTrackDataSourceImpl implements StudentClassTrackDataSource {
     public async searchStudents(dto: SearchStudentsDto): Promise<StudentClassTrackProjection[]> {
         const students = await this.fetchStudentsMatchingTerm(dto);
+
         return await this.convertArrayToProjection(students);
     }
 

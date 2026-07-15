@@ -1,12 +1,15 @@
-import type { LoginUserDto, RegisterUserDto, UpdateUserDto } from "@/app/shared/identity/domain/dtos";
-import type { UserDataEntity, UserEntity } from "@/app/shared/identity/domain/entities";
+import { LoginUserDto } from "@/app/shared/identity/application/dtos/login-user.dto";
+import { RegisterUserDto } from "@/app/shared/identity/application/dtos/register-user.dto";
+import { UpdateUserDto } from "@/app/shared/identity/application/dtos/update-user.dto";
+import { UserDataEntity } from "@/app/shared/identity/domain/entities/user-data.entity";
+import { UserEntity } from "@/app/shared/identity/domain/entities/user.entity";
 
 export abstract class UserRepository {
-    abstract create(user: RegisterUserDto): Promise<UserEntity>;
-    abstract login(user: LoginUserDto): Promise<UserEntity>;
-    abstract update(id: string, user: UpdateUserDto): Promise<void>;
-    abstract changePassword(id: string, password: string): Promise<void>;
-    abstract changeStateActive(id: string): Promise<void>;
-    abstract findById(id: string): Promise<UserDataEntity>;
-    abstract findAll(): Promise<UserDataEntity[]>;
+    public abstract create(user: RegisterUserDto): Promise<UserEntity>;
+    public abstract login(user: LoginUserDto): Promise<UserEntity>;
+    public abstract update(id: string, user: UpdateUserDto): Promise<void>;
+    public abstract changePassword(id: string, password: string): Promise<void>;
+    public abstract changeStateActive(id: string): Promise<void>;
+    public abstract findById(id: string): Promise<UserDataEntity>;
+    public abstract findAll(): Promise<UserDataEntity[]>;
 }

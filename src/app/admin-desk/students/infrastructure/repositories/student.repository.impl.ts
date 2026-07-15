@@ -1,46 +1,44 @@
 import type { StudentDataSource } from "@/app/admin-desk/students/domain/datasource/student.datasource";
-import type {
-    RegisterStudentDto,
-    UpdateStudentDto,
-    ChangeContractStatusDto,
-    SearchStudentsByCriteriaDto,
-    StudentEntity,
-} from "@/app/admin-desk/students/domain";
 import type { StudentRepository } from "@/app/admin-desk/students/domain/repositories/student.repository";
-import type { PaginatedResult } from "@/core/interfaces/PaginatedResult.interface";
+import type { PaginatedResult } from "@/core/interfaces/paginated-result.interface";
+import { RegisterStudentDto } from "@/app/admin-desk/students/application/dtos/register-student.dto";
+import { UpdateStudentDto } from "@/app/admin-desk/students/application/dtos/update-student.dto";
+import { ChangeContractStatusDto } from "@/app/admin-desk/students/application/dtos/change-contract-status.dto";
+import { SearchStudentsByCriteriaDto } from "@/app/admin-desk/students/application/dtos/search-students-by-criteria.dto";
+import { StudentEntity } from "@/app/admin-desk/students/domain/entities/student.entity";
 
 export class StudentRepositoryImpl implements StudentRepository {
-    constructor(private readonly datasource: StudentDataSource) {}
+    public constructor(private readonly datasource: StudentDataSource) {}
 
-    async register(dto: RegisterStudentDto): Promise<StudentEntity> {
+    public async register(dto: RegisterStudentDto): Promise<StudentEntity> {
         return this.datasource.register(dto);
     }
 
-    async search(query: string): Promise<StudentEntity[]> {
+    public async search(query: string): Promise<StudentEntity[]> {
         return this.datasource.search(query);
     }
 
-    async searchByCriteria(dto: SearchStudentsByCriteriaDto): Promise<PaginatedResult<StudentEntity>> {
+    public async searchByCriteria(dto: SearchStudentsByCriteriaDto): Promise<PaginatedResult<StudentEntity>> {
         return this.datasource.searchByCriteria(dto);
     }
 
-    getAllStudents(): Promise<StudentEntity[]> {
+    public getAllStudents(): Promise<StudentEntity[]> {
         return this.datasource.getAllStudents();
     }
 
-    update(id: string, dto: UpdateStudentDto): Promise<StudentEntity> {
+    public update(id: string, dto: UpdateStudentDto): Promise<StudentEntity> {
         return this.datasource.update(id, dto);
     }
 
-    changeContractStatus(id: string, dto: ChangeContractStatusDto): Promise<StudentEntity> {
+    public changeContractStatus(id: string, dto: ChangeContractStatusDto): Promise<StudentEntity> {
         return this.datasource.changeContractStatus(id, dto);
     }
 
-    toggleGraduated(id: string): Promise<StudentEntity> {
+    public toggleGraduated(id: string): Promise<StudentEntity> {
         return this.datasource.toggleGraduated(id);
     }
 
-    deactivate(id: string): Promise<StudentEntity> {
+    public deactivate(id: string): Promise<StudentEntity> {
         return this.datasource.deactivate(id);
     }
 }

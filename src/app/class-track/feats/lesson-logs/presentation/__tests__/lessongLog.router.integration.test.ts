@@ -4,14 +4,16 @@ import express from "express";
 
 import { LessonLogRoutes } from "@/app/class-track/feats/lesson-logs/presentation/lessonLog.routes";
 import { environmentVariables } from "@/core/config/envs";
-import { DatabaseConnection } from "@/data/config/dbPostgresql";
+import { DatabaseConnection } from "@/data/config/db-postgresql";
 import { testGlobalErrorHandler } from "@/__test__/configTest";
-import { User } from "@/data/models/shared";
-import { Student, Module, StudentModule } from "@/data/models/admin-desk";
-import AttendanceSession from "@/data/models/class-track/AttendanceSession.model";
-import { certificateType, studentContractStatus, studentProgressCategory } from "@/data/models/admin-desk/Student.model";
-import { studentModuleStatus } from "@/core/interfaces/Contracts.interface";
-import { attendanceSessionStatus } from "@/app/class-track/feats/attendance/domain/interfaces/Attendance.interface";
+import AttendanceSession from "@/data/models/class-track/attendance-session.model";
+import { certificateType, studentContractStatus, studentProgressCategory } from "@/data/models/admin-desk/student.model";
+import { studentModuleStatus } from "@/core/interfaces/contracts.interface";
+import { attendanceSessionStatus } from "@/app/class-track/feats/attendance/domain/interfaces/attendance.interface";
+import User from "@/data/models/shared/user.model";
+import Student from "@/data/models/admin-desk/student.model";
+import Module from "@/data/models/admin-desk/module.model";
+import StudentModule from "@/data/models/admin-desk/student-module.model";
 
 // ------------------------------------------------------------------ //
 // Micro-application: only the Lesson Log router
@@ -281,6 +283,13 @@ describe("Integration Tests: LessonLog Router", () => {
 
             expect(res.status).toBe(400);
             expect(res.body.errors[0].message).toContain("Student has no active contract");
+        });
+    });
+
+    describe("GET /api/lesson-log/student/:studentId/last", () => {
+        test("[200] Get last lesson log should return successfully", async () => {
+            const res = await request(testingApp).get(`/api/lesson-log/student/${studentA2Id}/last`);
+            expect([200, 404]).toContain(res.status); // 404 if no logs yet, but covers the DTO
         });
     });
 });

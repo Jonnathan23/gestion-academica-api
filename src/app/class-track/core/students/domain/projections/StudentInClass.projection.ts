@@ -1,7 +1,7 @@
-import type { AttendanceSessionStatus } from "@/app/class-track/feats/attendance/domain/interfaces/Attendance.interface";
+import type { AttendanceSessionStatus } from "@/app/class-track/feats/attendance/domain/interfaces/attendance.interface";
 
 export class StudentInClassProjection {
-    constructor(
+    public constructor(
         public readonly sessionId: string,
         public readonly studentId: string,
         public readonly fullName: string,

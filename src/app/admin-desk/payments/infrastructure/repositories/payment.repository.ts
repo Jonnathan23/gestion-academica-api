@@ -1,25 +1,26 @@
-import type { PaymentDataSource } from "@/app/admin-desk/payments/domain/datasource";
-import type { CreatePaymentPlanDto, PayQuotaDto } from "@/app/admin-desk/payments/domain/dtos";
-import type { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/PaymentPlanEntity";
-import type { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/PaymentQuotaEntity";
+import type { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/payment-plan.entity";
+import type { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/payment-quota.entity";
 import type { PaymentRepository } from "@/app/admin-desk/payments/domain/repositories/payment.repository";
+import { PaymentDataSource } from "@/app/admin-desk/payments/domain/datasource/payment.datasource";
+import { CreatePaymentPlanDto } from "@/app/admin-desk/payments/application/dtos/create-payment-plan.dto";
+import { PayQuotaDto } from "@/app/admin-desk/payments/application/dtos/pay-quota.dto";
 
 export class PaymentRepositoryImpl implements PaymentRepository {
-    constructor(private readonly datasource: PaymentDataSource) {}
+    public constructor(private readonly datasource: PaymentDataSource) {}
 
-    async createPaymentPlan(dto: CreatePaymentPlanDto, generatedQuotas: PaymentQuotaEntity[]): Promise<PaymentPlanEntity> {
+    public async createPaymentPlan(dto: CreatePaymentPlanDto, generatedQuotas: PaymentQuotaEntity[]): Promise<PaymentPlanEntity> {
         return this.datasource.createPaymentPlan(dto, generatedQuotas);
     }
 
-    async getStudentPaymentPlans(studentId: string): Promise<PaymentPlanEntity[]> {
+    public async getStudentPaymentPlans(studentId: string): Promise<PaymentPlanEntity[]> {
         return this.datasource.getStudentPaymentPlans(studentId);
     }
 
-    async processQuotaPayment(dto: PayQuotaDto): Promise<PaymentQuotaEntity> {
+    public async processQuotaPayment(dto: PayQuotaDto): Promise<PaymentQuotaEntity> {
         return this.datasource.processQuotaPayment(dto);
     }
 
-    async revertQuotaPayment(quotaId: string): Promise<boolean> {
+    public async revertQuotaPayment(quotaId: string): Promise<boolean> {
         return this.datasource.revertQuotaPayment(quotaId);
     }
 }

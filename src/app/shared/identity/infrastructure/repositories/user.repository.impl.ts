@@ -1,36 +1,39 @@
 import type { UserDataSource } from "@/app/shared/identity/domain/datasource/user.datasource";
-import type { RegisterUserDto, LoginUserDto, UpdateUserDto } from "@/app/shared/identity/domain/dtos";
-import type { UserDataEntity, UserEntity } from "@/app/shared/identity/domain/entities";
 import type { UserRepository } from "@/app/shared/identity/domain/repositories/user.repository";
+import { RegisterUserDto } from "@/app/shared/identity/application/dtos/register-user.dto";
+import { LoginUserDto } from "@/app/shared/identity/application/dtos/login-user.dto";
+import { UpdateUserDto } from "@/app/shared/identity/application/dtos/update-user.dto";
+import { UserDataEntity } from "@/app/shared/identity/domain/entities/user-data.entity";
+import { UserEntity } from "@/app/shared/identity/domain/entities/user.entity";
 
 export class UserRepositoryImpl implements UserRepository {
-    constructor(private readonly userDataSource: UserDataSource) {}
+    public constructor(private readonly userDataSource: UserDataSource) {}
 
-    create(user: RegisterUserDto): Promise<UserEntity> {
+    public create(user: RegisterUserDto): Promise<UserEntity> {
         return this.userDataSource.create(user);
     }
 
-    login(user: LoginUserDto): Promise<UserEntity> {
+    public login(user: LoginUserDto): Promise<UserEntity> {
         return this.userDataSource.login(user);
     }
 
-    update(id: string, user: UpdateUserDto): Promise<void> {
+    public update(id: string, user: UpdateUserDto): Promise<void> {
         return this.userDataSource.update(id, user);
     }
 
-    changePassword(id: string, password: string): Promise<void> {
+    public changePassword(id: string, password: string): Promise<void> {
         return this.userDataSource.changePassword(id, password);
     }
 
-    changeStateActive(id: string): Promise<void> {
+    public changeStateActive(id: string): Promise<void> {
         return this.userDataSource.changeStateActive(id);
     }
 
-    findById(id: string): Promise<UserDataEntity> {
+    public findById(id: string): Promise<UserDataEntity> {
         return this.userDataSource.findById(id);
     }
 
-    findAll(): Promise<UserDataEntity[]> {
+    public findAll(): Promise<UserDataEntity[]> {
         return this.userDataSource.findAll();
     }
 }

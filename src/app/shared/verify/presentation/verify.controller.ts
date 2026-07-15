@@ -1,6 +1,6 @@
 import type { Response } from "express";
-import { SuccessResponse } from "@/core/utils";
-import type { AuthRequest } from "@/core/middleware";
+import { SuccessResponse } from "@/core/utils/success-response";
+import type { AuthRequest } from "@/core/middleware/auth.mid";
 
 export class VerifyController {
     public verifyUser = (req: AuthRequest, res: Response) => {

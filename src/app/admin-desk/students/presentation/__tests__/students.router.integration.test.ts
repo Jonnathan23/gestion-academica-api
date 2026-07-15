@@ -2,15 +2,16 @@ import { describe, test, expect, beforeAll, afterAll } from "bun:test";
 import request from "supertest";
 import express from "express";
 
-import { StudentsRouter } from "@/app/admin-desk/students/presentation/router";
+import { StudentsRouter } from "@/app/admin-desk/students/presentation/student.router";
 import { environmentVariables } from "@/core/config/envs";
-import { DatabaseConnection } from "@/data/config/dbPostgresql";
+import { DatabaseConnection } from "@/data/config/db-postgresql";
 import { testGlobalErrorHandler } from "@/__test__/configTest";
-import { User } from "@/data/models/shared";
-import { Student } from "@/data/models/admin-desk";
-import { JwtAdapter, BcryptAdapter } from "@/core/utils";
 import { AuthMiddleware } from "@/core/middleware/auth.mid";
-import { certificateType } from "@/data/models/admin-desk/Student.model";
+import { certificateType } from "@/data/models/admin-desk/student.model";
+import User from "@/data/models/shared/user.model";
+import Student from "@/data/models/admin-desk/student.model";
+import { JwtAdapter } from "@/core/utils/adapters/jwt";
+import { BcryptAdapter } from "@/core/utils/adapters/bcrypt";
 
 // ------------------------------------------------------------------ //
 // Micro-application: only the Students router (no other routes needed)

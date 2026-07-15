@@ -1,5 +1,5 @@
 import { ModuleEntity } from "@/app/admin-desk/modules/domain/entities/module.entity";
-import { CustomError } from "@/core/error";
+import { CustomError } from "@/core/error/customError.error";
 
 export const ModuleMapper = {
     moduleModelToEntity(object: { [key: string]: any }): ModuleEntity {

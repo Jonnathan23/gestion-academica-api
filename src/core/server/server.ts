@@ -2,12 +2,11 @@ import express, { Router } from "express";
 import cors from "cors";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
-
-import { ColorsAdapter } from "@/core/utils";
-import type { CorsConfig } from "@/core/config";
-import type { DatabaseErrorHandler } from "@/core/interfaces";
-import { createGlobalErrorHandler } from "@/core/middleware";
 import type { SwaggerConfiguration } from "@/core/config/swagger";
+import { ColorsAdapter } from "@/core/utils/adapters/colors";
+import { CorsConfig } from "@/core/config/cors";
+import type { DatabaseErrorHandler } from "@/core/interfaces/database-error-handler.interface";
+import { createGlobalErrorHandler } from "@/core/middleware/globalErrorHandler.mid";
 
 interface ServerProps {
     port: number;
@@ -25,7 +24,9 @@ export class Server {
     private readonly databaseErrorHandler: DatabaseErrorHandler;
     private readonly documentation?: SwaggerConfiguration;
 
-    constructor({ port = 4000, routes, cors, databaseErrorHandler, documentation }: ServerProps) {
+    private readonly defaultPort = 4000;
+
+    public constructor({ port = this.defaultPort, routes, cors, databaseErrorHandler, documentation }: ServerProps) {
         this.port = port;
         this.routes = routes;
         this.cors = cors;
@@ -33,7 +34,7 @@ export class Server {
         this.documentation = documentation;
     }
 
-    async start() {
+    public async start() {
         // Middlewares
         this.app.use(morgan("dev"));
         this.app.use(express.json());
@@ -42,6 +43,7 @@ export class Server {
         this.app.use(cookieParser());
 
         const corsOptions = this.cors.corsOptions;
+
         this.app.use(cors(corsOptions));
 
         if (this.documentation) {

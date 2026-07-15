@@ -109,7 +109,7 @@ describe("JwtAdapter", () => {
         test("should return null for a structurally-valid but expired token", async () => {
             // We need the real JwtSeed to craft an expired token that would
             // otherwise be valid. Import it from the real config.
-            const { environmentVariables } = await import("@/core/config");
+            const { environmentVariables } = await import("@/core/config/envs");
             const expiredToken = jwt.sign({ ...validPayload }, environmentVariables.JwtSeed, { expiresIn: -1 });
 
             const result = await JwtAdapter.validateToken<UserTokenPayload>(expiredToken);

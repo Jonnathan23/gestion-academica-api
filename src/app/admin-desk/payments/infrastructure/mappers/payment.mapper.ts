@@ -1,6 +1,6 @@
-import { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/PaymentPlanEntity";
-import { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/PaymentQuotaEntity";
-import { CustomError } from "@/core/error";
+import { PaymentPlanEntity } from "@/app/admin-desk/payments/domain/entities/payment-plan.entity";
+import { PaymentQuotaEntity } from "@/app/admin-desk/payments/domain/entities/payment-quota.entity";
+import { CustomError } from "@/core/error/customError.error";
 
 export class PaymentMapper {
     public static quotaEntityFromObject(object: { [key: string]: any }): PaymentQuotaEntity {

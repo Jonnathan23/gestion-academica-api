@@ -1,5 +1,5 @@
 export class StudentSearchProjection {
-    constructor(
+    public constructor(
         public readonly id: string,
         public readonly identificationCard: string,
         public readonly fullName: string,

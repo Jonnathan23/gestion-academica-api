@@ -5,7 +5,7 @@ export interface ModuleInfo {
 }
 
 export class StudentWithLevelActiveDetails {
-    constructor(
+    public constructor(
         public readonly studentId: string,
         public readonly fullName: string,
         public readonly activeModule: string,

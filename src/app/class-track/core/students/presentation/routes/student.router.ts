@@ -1,10 +1,11 @@
 import { StudentClassTrackDataSourceImpl } from "@/app/class-track/core/students/infrastructure/datasources/student.datasource.impl";
 import { StudentClassTrackRepositoryImpl } from "@/app/class-track/core/students/infrastructure/repositories/student.repository.impl";
 import { StudentClassTrackController } from "@/app/class-track/core/students/presentation/controllers/student.controller";
-import { systemPermissions } from "@/core/constants/Permissions";
-import { RoleMiddleware } from "@/core/middleware";
+import { studentsValidators } from "@/app/class-track/core/students/application/dtos/validators/di-validators";
+import { systemPermissions } from "@/core/constants/permissions";
 import { AuthMiddleware } from "@/core/middleware/auth.mid";
 import { Router } from "express";
+import { RoleMiddleware } from "@/core/middleware/role.mid";
 
 export class StudentRouterClassTrack {
     public static get routes(): Router {
@@ -12,7 +13,7 @@ export class StudentRouterClassTrack {
 
         const dataSource = new StudentClassTrackDataSourceImpl();
         const repository = new StudentClassTrackRepositoryImpl(dataSource);
-        const controller = new StudentClassTrackController(repository);
+        const controller = new StudentClassTrackController(repository, studentsValidators);
 
         router.get(
             "/search",

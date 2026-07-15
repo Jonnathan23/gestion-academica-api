@@ -1,5 +1,5 @@
 import { get } from "env-var";
-import { ColorsAdapter } from "@/core/utils"; // Aprovechamos tu adaptador de colores
+import { ColorsAdapter } from "@/core/utils/adapters/colors";
 
 interface EnvironmentVariables {
     listeningPort: number;
@@ -15,6 +15,7 @@ interface EnvironmentVariables {
 }
 
 let validatedEnvs: EnvironmentVariables;
+const positionArgv = 2;
 
 try {
     validatedEnvs = {
@@ -26,7 +27,7 @@ try {
         documentationUrl: get("DOCUMENTATION_URL").asString() ?? "",
         JwtSeed: get("JWT_SEED").required().asString(),
         JwtStudentSeed: get("JWT_STUDENT_SEED").required().asString(),
-        argumentValue: process.argv[2] ?? "",
+        argumentValue: process.argv[positionArgv] ?? "",
         secureCookies: get("USE_SECURE_COOKIES").default("false").asBool(),
     };
 } catch (error: unknown) {

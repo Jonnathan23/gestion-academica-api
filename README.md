@@ -1,130 +1,66 @@
-# AdminDesk & ClassTrack API 🎓
+# Gestión Académica API
 
-API backend para gestionar el ecosistema académico y operativo de un instituto educativo. Cuenta con un diseño Modular, dividido en dos dominios principales: **AdminDesk** (gestión académica y comercial) y **ClassTrack** (operaciones diarias, asistencia y rendimiento estudiantil).
+API para la gestión académica, construida con TypeScript y utilizando los principios de Clean Architecture. Provee los servicios necesarios para la administración de estudiantes, contratos, módulos y pagos de la institución.
 
-## 🚀 Inicio
-
-### Requisitos Previos
-
-- Instalar [Bun](https://bun.sh/)
-- Instalar Docker & Docker Compose [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-
-### 1. Instalar Dependencias (Local)
-
-Si planeas ejecutar el proyecto localmente fuera de Docker, instala las dependencias:
+## Instalación de dependencias
 
 ```bash
-bun install
+pnpm install
 ```
 
-### 2. ⚙️ Configuración de Entornos y Variables
+## Habilitar Husky
 
-El sistema utiliza **Docker** para ejecutar sus servicios, pero te ofrece dos modalidades de trabajo:
+```bash
+pnpx husky install
+```
 
-1. **Full Docker:** Dockerizar tanto el backend como la base de datos.
-2. **Híbrido (Database-Only):** Dockerizar solo la base de datos y ejecutar el backend localmente de forma nativa.
+_(Normalmente se ejecuta automáticamente al instalar las dependencias si existe un script `prepare`)_
 
-Para que no existan conflictos de red entre tu máquina y los contenedores, los puertos y dominios cambian. Por ello, debes crear **cuatro archivos de entorno** basándote en las variables declaradas en [`.env.template`](.env.template).
+## Crear envs
 
-Aunque todos comparten variables base como `PORT` o `JwtSeed`, su responsabilidad principal radica en configurar correctamente `DATABASE_URL` y `NODE_ENV`:
+Copia el archivo de plantilla para crear tus archivos de variables de entorno:
 
-- **`.env` (Full Docker - Desarrollo):** Utilizado por Docker Compose para levantar toda el API.
-    - **DATABASE_URL:** Apunta a la red interna de Docker usando el nombre del servicio (ej. _postgresql://user:password@postgres-db-dev:5432/bd_name_).
-    - **NODE_ENV:** **development**.
-
-- **`.env.local` (Híbrido - Desarrollo):** Utilizado cuando desarrollas corriendo Bun en tu terminal, atacando al contenedor de la BD expuesto a tu SO.
-    - **DATABASE_URL:** Apunta a tu máquina local y al puerto expuesto (ej. _postgresql://user:password@localhost:5433/bd_name_).
-    - **NODE_ENV:** **development**.
-
-- **`.env.test` (Full Docker - Testing):** Utilizado para levantar el ecosistema aislado de pruebas dentro de Docker.
-    - **DATABASE_URL:** Apunta al contenedor de pruebas dentro de la red Docker (ej. _postgres://usuario:password@postgres-db-test:5432/bd_test_).
-    - **NODE_ENV:** **test**.
-- **`.env.test.local` (Híbrido - Testing):** Utilizado cuando ejecutas los tests de integración localmente (`bun test`), conectándote a la BD de pruebas dockerizada.
-    - **DATABASE_URL:** Apunta a `localhost` y al puerto de pruebas (ej. _postgres://usuario:password@localhost:5434/data_base_name_test_).
-    - **NODE_ENV:** **test**.
+```bash
+cp .env.template .env.local
+cp .env.template .env.test
+```
 
 ---
 
-## 🚀 Modos de Ejecución y Scripts
+## Scripts de Utilidad (Testing y Clean Code)
 
-Dependiendo del entorno que hayas elegido arriba, ejecuta la aplicación usando los scripts de nuestro `package.json`.
+**Testing:**
 
-### Opción A: Full Docker (Recomendado)
+- `bun run test`: Ejecuta la suite de pruebas.
+- `bun run test:coverage`: Ejecuta las pruebas y muestra el reporte de cobertura.
+- `bun run test:local`: Ejecuta las pruebas utilizando las variables de entorno de `.env.test.local`.
+- `bun run test:coverage:local`: Ejecuta pruebas con reporte de cobertura para el entorno local.
 
-Levanta todo el ecosistema (PostgreSQL y el backend Bun) en contenedores. Garantiza consistencia total.
+**Clean Code (Linting y Formateo):**
 
-- **Modo Desarrollo:** Levanta la BD y el servidor, leyendo automáticamente el archivo .env
-
-    ```bash
-    bun run docker:dev
-    ```
-
-- **Modo Testing:** Levanta la BD y el servidor, leyendo automáticamente el archivo .env.test (es de un solo uso, no persiste datos)
-
-    ```bash
-    bun run docker:test
-    ```
-
-- **Limpiar el entorno:** bun run docker:down o bun run docker:down:test para eliminar redes y contenedores.
-
-### Opción B: Híbrido (Database-only)
-
-Si prefieres la velocidad del runtime nativo en tu máquina para depurar más rápido, pero quieres mantener la base de datos contenida para no ensuciar tu SO.
-
-1.  Levantar únicamente la Base de Datos:
-    Debes inicializar el servicio de BD explícitamente desde Docker Compose:
-    - **Para desarrollo:**
-        ```bash
-        docker compose -f docker-compose-dev.yml up postgres-db-dev -d
-        ```
-    - **Para testing:** (asegúrate de levantar la base de datos correcta según tu docker-compose-test.yml)
-        ```bash
-        docker compose -f docker-compose-test.yml up postgres-db-test -d
-        ```
-2.  Ejecutar el Backend o Tests Localmente:
-    Una vez las bases de datos están listas en el fondo, utiliza los scripts locales. Estos inyectan el flag --env-file para forzar a Bun a ignorar su comportamiento por defecto y conectarse a los puertos localhost:
-
-        * **bun run dev:local:** Inicia el entorno de desarrollo leyendo .env.local.
-        * **bun run test:local:** Ejecuta las pruebas de integración con bun:test, leyendo .env.test.local.
-        * **bun run test:coverage:local:** Genera el reporte de cobertura leyendo las credenciales locales de prueba.
+- `bun run lint`: Ejecuta ESLint en el código TypeScript (`src/**/*.ts`).
+- `bun run lint:fs`: Verifica convenciones de nombres de archivos con `ls-lint`.
+- `bun run lint:editorconfig`: Revisa el cumplimiento de las reglas de `.editorconfig`.
+- `bun run lint:fix`: Intenta corregir automáticamente los problemas detectados por ESLint.
+- `bun run format`: Formatea el código fuente utilizando Prettier.
+- `bun run typecheck`: Verifica los tipos de TypeScript sin emitir código compilado.
 
 ---
 
-## 🛠️ Tecnologías Utilizadas
+## Base de datos
 
-Este proyecto está construido centrándose el tipado estricto, el alto rendimiento y las buenas prácticas de código:
+### Iniciar base de datos
 
-- **Runtime & Package Manager:** [Bun](http://bun.com) (v1.3+)
-- **Language:** TypeScript
-- **Architecture:** Clean Architecture & Screaming Architecture
-- **Framework:** Express.js
-- **Database:** PostgreSQL
-- **ORM:** Sequelize (via `sequelize-typescript`)
-- **API Documentation:** Swagger UI
+Para iniciar la base de datos debes tener docker instalado y luego ejecutar el siguiente comando:
 
-**Nota:**
+```bash
+docker compose --env-file .env.local -f docker-compose.prod.yml up --build
+```
 
-> Recuerda: Gracias a la arquitectura se puede cambiar de base de datos sin afectar el resto del proyecto.
-> Solo se debería modificar la capa de infraestructura e inyectar las dependencias correspondientes en cada módulo.
-> Por lo tanto, si en el futuro desea cambiar de base de datos (por ejemplo, a MongoDB),
-> no será necesario modificar las capas de dominio o aplicación.
+### Base de datos para pruebas
 
-## 📂 Project Structure
+Para iniciar la base de datos de test debes tener docker instalado y luego ejecutar el siguiente comando:
 
-The source code follows the Screaming Architecture pattern, making the business features immediately visible:
-
-- `src/app/AdminDesk/` - Core features for student enrollment, contracts, and module catalogs.
-- `src/app/ClassTrack/` - Core features for daily attendance check-ins, lesson logs, and retention alerts.
-- `src/app/Shared/` - Transversal domains (e.g., Identity and Authentication).
-- `src/core/` - Global infrastructure, server configuration, and environment setup.
-
-## 📝 Documentación
-
-📝 **Arquitectura y Diseño del Proyecto:**
-[architecture.md](docs/architecture.md)
-
-📝 **Documentación y ejemplo del flujo de trabajo en:**
-[workflow.md](docs/workflow.md)
-
-📝 **Documentación de los endpoints de la API:**
-[AdminDesk](docs/admin-desk/admin-desk-endpoints.md)
+```bash
+docker compose --env-file .env.test -f docker-compose.test.yml up --build
+```

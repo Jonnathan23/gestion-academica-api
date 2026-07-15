@@ -1,8 +1,7 @@
 import type { Response, NextFunction } from "express";
-
-import { CustomError } from "@/core/error";
-import type { AuthRequest } from "@/core/middleware";
-import { rolePermissionsMapping, type SystemPermission } from "@/core/constants";
+import { CustomError } from "@/core/error/customError.error";
+import type { AuthRequest } from "@/core/middleware/auth.mid";
+import { rolePermissionsMapping, type SystemPermission } from "@/core/constants/permissions";
 
 export class RoleMiddleware {
     /**

@@ -2,15 +2,16 @@ import { describe, test, expect, beforeAll } from "bun:test";
 import request from "supertest";
 import express from "express";
 
-import { PaymentRouter } from "@/app/admin-desk/payments/presentation/router";
+import { PaymentRouter } from "@/app/admin-desk/payments/presentation/payment.router";
 import { environmentVariables } from "@/core/config/envs";
-import { DatabaseConnection } from "@/data/config/dbPostgresql";
+import { DatabaseConnection } from "@/data/config/db-postgresql";
 import { testGlobalErrorHandler } from "@/__test__/configTest";
-import { User } from "@/data/models/shared";
-import { Student } from "@/data/models/admin-desk";
-import { JwtAdapter, BcryptAdapter } from "@/core/utils";
-import { userRoles } from "@/core/interfaces";
-import PaymentQuota from "@/data/models/admin-desk/PaymentQuota.model";
+import PaymentQuota from "@/data/models/admin-desk/payment-quota.model";
+import User from "@/data/models/shared/user.model";
+import Student from "@/data/models/admin-desk/student.model";
+import { JwtAdapter } from "@/core/utils/adapters/jwt";
+import { BcryptAdapter } from "@/core/utils/adapters/bcrypt";
+import { userRoles } from "@/core/interfaces/Roles.interfaces";
 
 // ------------------------------------------------------------------ //
 // Micro-application: only the Payments router
@@ -46,6 +47,8 @@ const VALID_PLAN_PAYLOAD = {
     firstQuotaDueDate: "2024-04-01T00:00:00.000Z",
 };
 
+import { AuthMiddleware } from "@/core/middleware/auth.mid";
+
 // ------------------------------------------------------------------ //
 // Test suite
 // ------------------------------------------------------------------ //
@@ -58,6 +61,11 @@ describe("Integration Tests: Payments Router", () => {
 
     beforeAll(async () => {
         await testDatabase.connect();
+
+        AuthMiddleware.configure(async (userId: string) => {
+            const user = await User.findByPk(userId);
+            return user ? user.us_is_active : false;
+        });
 
         // 1. Inject Admin user (Authorized)
         const hashedAdminPassword = await BcryptAdapter.hash(TEST_PASSWORD);
@@ -157,6 +165,7 @@ describe("Integration Tests: Payments Router", () => {
                 .set("Authorization", `Bearer ${adminToken}`)
                 .send(VALID_PLAN_PAYLOAD);
 
+            console.log(res.body);
             expect(res.status).toBe(201);
             expect(res.body.success).toBe(true);
             expect(res.body.data.totalAmount).toBe(VALID_PLAN_PAYLOAD.totalAmount);

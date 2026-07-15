@@ -1,5 +1,5 @@
 import jwt, { type SignOptions } from "jsonwebtoken";
-import { environmentVariables } from "@/core/config";
+import { environmentVariables } from "@/core/config/envs";
 
 export class JwtAdapter {
     //*  TOKENS DE IDENTIDAD (Administradores, Profesores, Sistema)
@@ -17,6 +17,7 @@ export class JwtAdapter {
 
     public static async validateToken<T>(token: string): Promise<T | null> {
         const jwtSeed = environmentVariables.JwtSeed;
+
         return new Promise((resolve) => {
             jwt.verify(token, jwtSeed, (error, decoded) => {
                 if (error) return resolve(null);
@@ -40,6 +41,7 @@ export class JwtAdapter {
 
     public static async validateStudentToken<T>(token: string): Promise<T | null> {
         const jwtStudentSeed = environmentVariables.JwtStudentSeed;
+
         return new Promise((resolve) => {
             jwt.verify(token, jwtStudentSeed, (error, decoded) => {
                 if (error) return resolve(null);

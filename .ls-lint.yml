@@ -1,39 +1,50 @@
 ls:
-    # Regla universal: No importa la carpeta, importa el tipo de archivo.
+    # Regla universal: Carpetas en kebab-case y archivos base en kebab-case
     src/**:
         .dir: kebab-case
-        .ts: camelCase | PascalCase
-        
-        # Tipos e Interfaces
-        .interface.ts: PascalCase
-        .type.ts: PascalCase
-        
-        # Capa Domain
-        .dto.ts: PascalCase
-        .model.ts: PascalCase
-        .projection.ts: PascalCase        
-        .datasource.ts: camelCase
-        .repository.ts: camelCase
-        
-        # Capa Infrastructure
-        .datasource.impl.ts: camelCase
-        .repository.impl.ts: camelCase
-        .mapper.ts: camelCase
-        
-        # Capa Application
-        .use-case.ts: camelCase
-        
-        # Capa Presentation
-        .controller.ts: camelCase
-        .worker.ts: camelCase
-        .routes.ts: camelCase
+        .ts: kebab-case
 
-    # Excepciones específicas que mantienen su flexibilidad
-    src/data/config/**:
-        .ts: camelCase | PascalCase
+    # Capa Domain
+    "src/**/dtos/**":
+        .dto.ts: kebab-case
+    "src/**/entities/**":
+        .entity.ts: kebab-case
+    "src/**/interfaces/**":
+        .interface.ts: kebab-case
+    "src/**/repositories/**":
+        .repository.ts: kebab-case
+    "src/**/datasources/**":
+        .datasource.ts: kebab-case
+    "src/**/models/**":
+        .model.ts: kebab-case
+    "src/**/errors/**":
+        .error.ts: kebab-case
 
-    src/data/models/**:
-        .model.ts: PascalCase
+    # Capa Infrastructure
+    "src/**/mappers/**":
+        .mapper.ts: kebab-case
+    "src/**/infrastructure/**/datasources/**":
+        .datasource.impl.ts: kebab-case
+    "src/**/infrastructure/**/repositories/**":
+        .repository.impl.ts: kebab-case
+
+    # Capa Application (Casos de uso)
+    "src/**/use-cases/**":
+        .use-case.ts: kebab-case
+
+    # Capa Presentation
+    "src/**/controllers/**":
+        .controller.ts: kebab-case
+    "src/**/workers/**":
+        .worker.ts: kebab-case
+    "src/**/presentation/**":
+        .controller.ts: kebab-case
+        .router.ts: kebab-case
+        .worker.ts: kebab-case
+
+    # Archivos de la capa general o sin subcarpetas concretas
+    "src/**/config/**":
+        .ts: kebab-case
 
 ignore:
     - node_modules
@@ -43,5 +54,6 @@ ignore:
     - .vscode
     - scripts
     - .agents
+    - src/**/index.ts
     - src/**/__tests__
     - src/**/__test__

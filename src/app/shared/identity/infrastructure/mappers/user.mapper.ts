@@ -1,5 +1,5 @@
-import { UserEntity } from "@/app/shared/identity/domain/entities/User.entity";
-import { CustomError } from "@/core/error";
+import { UserEntity } from "@/app/shared/identity/domain/entities/user.entity";
+import { CustomError } from "@/core/error/customError.error";
 
 export const UserMapper = {
     userModelToEntity(object: { [key: string]: any }): UserEntity {
