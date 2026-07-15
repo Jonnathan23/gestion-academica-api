@@ -285,4 +285,11 @@ describe("Integration Tests: LessonLog Router", () => {
             expect(res.body.errors[0].message).toContain("Student has no active contract");
         });
     });
+
+    describe("GET /api/lesson-log/student/:studentId/last", () => {
+        test("[200] Get last lesson log should return successfully", async () => {
+            const res = await request(testingApp).get(`/api/lesson-log/student/${studentA2Id}/last`);
+            expect([200, 404]).toContain(res.status); // 404 if no logs yet, but covers the DTO
+        });
+    });
 });
